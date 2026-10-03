@@ -1,1 +1,27 @@
-{"updated": "2026-10-03", "cards": [], "dig": []}
+{
+  "updated": "2026-10-03",
+  "cards": [
+    {
+      "id": "selfcheck01",
+      "ch": "test",
+      "title": "自检测试卡-应被立即清除",
+      "date": "2026-10-03",
+      "date2": "10月3日",
+      "read": false,
+      "sum": "仅用于验证推送链路",
+      "tags": [
+        "selfcheck"
+      ],
+      "star": false,
+      "lead": "验证",
+      "body": [
+        "链路测试",
+        "将被还原"
+      ],
+      "rel": [
+        "无"
+      ]
+    }
+  ],
+  "dig": []
+}
