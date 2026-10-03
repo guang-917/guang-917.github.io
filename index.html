@@ -473,7 +473,7 @@ function switchTab(v){
   for(var j=0;j<tabs.length;j++)tabs[j].classList.toggle("on",tabs[j].getAttribute("data-tab")===v);
   // 头部
   var meta=TAB_META[v];
-  hdrTitle.textContent=meta[0];hdrSub.textContent=meta[1];
+  hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
   if(v==="tree"&&treeMode==="map")renderMap(mapFocus);
   if(v==="channels"){chanDrill=false;document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
   setBk(false);
@@ -498,10 +498,21 @@ backBtn.addEventListener("click",function(){
 document.addEventListener("scroll",function(){hdr.classList.toggle("scrolled",window.scrollY>6);},true);
 
 /* ====================== 渲染：今日 ====================== */
+/* 今日页只显示「今天推送」的卡片；历史卡片去「学习频道」翻 */
+function todayStr(){
+  var d=new Date();
+  var y=d.getFullYear(),m=('0'+(d.getMonth()+1)).slice(-2),day=('0'+d.getDate()).slice(-2);
+  return y+'-'+m+'-'+day;
+}
+function todaySub(){
+  var d=new Date();var w=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+  return '今天 · '+(d.getMonth()+1)+'月'+d.getDate()+'日 '+w;
+}
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
-  for(var i=0;i<CARDS.length;i++){
-    var c=CARDS[i],m=CH_META[c.ch];
+  var list=CARDS.filter(function(c){return c.date===todayStr();});
+  for(var i=0;i<list.length;i++){
+    var c=list[i],m=CH_META[c.ch];
     h.push('<div class="card" data-id="'+esc(c.id)+'" data-type="card">'
       +'<div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<span class="chip '+m.c+'">'+m.n+'</span>'
@@ -511,14 +522,15 @@ function renderToday(){
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'
       +lpHTML(c.id)+'</div>');
   }
+  if(!list.length)h.push('<div class="empty">今天还没新推送 · 去「学习频道」翻历史 →</div>');
   box.innerHTML=h.join("");
-  updateProgress();
+  updateProgress(list);
 }
-function updateProgress(){
-  var total=CARDS.length,done=0;
-  for(var i=0;i<CARDS.length;i++)if(CARDS[i].read)done++;
+function updateProgress(list){
+  var total=list.length,done=0;
+  for(var i=0;i<list.length;i++)if(list[i].read)done++;
   document.getElementById("pTxt").textContent=done+" / "+total+" 已完成";
-  document.getElementById("pFill").style.width=Math.round(done/total*100)+"%";
+  document.getElementById("pFill").style.width=total?Math.round(done/total*100)+"%":"0%";
 }
 
 /* 长按面板 HTML */
@@ -540,7 +552,7 @@ function renderChannels(){
 }
 function renderChanList(ch){
   var m=CH_META[ch];
-  document.getElementById("chanList").innerHTML='<p class="sub">默认显示今天，下滑自动加载历史 · 点卡片进入全屏</p>'
+  document.getElementById("chanList").innerHTML='<p class="sub">这个频道的全部推送都在这里，含历史 · 点卡片进入全屏</p>'
     +'<div id="clBody"></div>';
   var body=document.getElementById("clBody");var h=[];
   for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(c.ch!==ch)continue;
@@ -549,7 +561,7 @@ function renderChanList(ch){
       +(c.tags&&c.tags.length?'<div class="tags">'+c.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>':'')
       +'<div class="meta"><span>'+esc(c.date2)+'</span></div>'+lpHTML(c.id)+'</div>');
   }
-  if(!h.length)h.push('<div class="empty">这个频道今天还没有新内容。</div>');
+  if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
   body.innerHTML=h.join("");
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
@@ -845,7 +857,8 @@ function toast(msg){var el=document.getElementById("toast");el.textContent=msg;e
 
 /* ====================== 初始 ====================== */
 renderToday();renderChannels();renderTree();renderDig();
-document.getElementById("hdrSub").textContent="今天 · 10月3日 周六";
+TAB_META.today[1]=todaySub();
+document.getElementById("hdrSub").textContent=TAB_META.today[1];
 
 /* ====================== 拉取每日推送（feed.json） ======================
    启动后去仓库根目录拉 feed.json：拉到就用远程内容（每日推送会更新它），
