@@ -194,6 +194,8 @@ body{
 .reader .note{background:var(--gold-soft);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--ink-2);line-height:1.7;margin:14px 0}
 .reader .rel{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .reader .rel span{font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 11px;color:var(--ink-2)}
+.reader .fullbtn{display:block;text-align:center;background:#e8604c;color:#fff;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;text-decoration:none;margin:14px 0 2px}
+.reader .fullbtn:active{opacity:.85}
 .reader .donebtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 36px);max-width:488px;background:var(--data);color:#fff;border:none;border-radius:13px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px -8px color-mix(in srgb,var(--data) 70%,transparent);transition:transform .15s var(--spring),opacity .3s}
 .reader .donebtn:active{transform:translateX(-50%) scale(.97)}
 .reader .donebtn.hide{opacity:0;pointer-events:none}
@@ -649,6 +651,7 @@ function openReader(data,srcRect){
   var body='<p class="lead">'+esc(data.lead||"")+'</p>';
   if(data.body)for(var i=0;i<data.body.length;i++)body+='<p>'+esc(data.body[i])+'</p>';
   if(data.note)body+='<div class="note">'+esc(data.note)+'</div>';
+  if(data.link)body+='<a class="fullbtn" href="'+esc(data.link)+'" target="_blank" rel="noopener">📖 打开完整学习卡（含发音跟读）</a>';
   if(data.rel&&data.rel.length)body+='<h4>相关延伸</h4><div class="rel">'+data.rel.map(function(r){return '<span>'+esc(r)+'</span>';}).join('')+'</div>';
   document.getElementById("readerBody").innerHTML=body;
   rsc.scrollTop=0;
@@ -739,7 +742,7 @@ document.getElementById("wrap").addEventListener("click",function(e){
   if(card&&!e.target.closest(".lp")){
     var rid=card.getBoundingClientRect();lastRect={left:rid.left,top:rid.top,width:rid.width,height:rid.height};
     var c=getCard(card.getAttribute("data-id"));
-    if(c){openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,note:"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}
+    if(c){openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}
   }
 });
 
