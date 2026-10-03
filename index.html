@@ -869,6 +869,77 @@ loadFeed();
     if(pull>=THRESH) doRefresh(); else reset();
   });
 })();
+
+/* ====================== 左边缘侧滑回退 ======================
+   逻辑（思维链）：
+   ① goBack() 统一出口：关阅读器→关抽屉→退出频道下钻→回今日→已在今日则提示/退桌面
+   ② 只认左边缘(<=22px)起手、向右滑的水平手势，避免与下拉刷新/长按冲突
+   ③ 跟手位移做视觉反馈；松手过阈值(60px)才回退，否则弹回
+   ④ 已在今日首页时，先提示，2秒内再侧滑一次才尝试退回桌面 */
+(function(){
+  var EDGE=22, THRESH=60, DISARM=2000;
+  var sx=0, engaged=false, dirX=0, layer=null, armed=false, armT=null;
+  function topLayer(){
+    if(reader.classList.contains("on")) return reader;
+    if(sheet.classList.contains("on")) return sheet;
+    return document.getElementById("wrap");
+  }
+  function clearAllNudge(){
+    ["wrap","reader","sheet"].forEach(function(id){var L=document.getElementById(id);if(L){L.style.transition="";L.style.transform="";}});
+  }
+  function goBack(){
+    if(reader.classList.contains("on")){ closeReader(); return; }
+    if(sheet.classList.contains("on")){ closeSheet(); return; }
+    if(curView==="channels"&&chanDrill){
+      chanDrill=false;
+      document.getElementById("chanPortal").style.display="";
+      document.getElementById("chanList").style.display="none";
+      hdrSub.textContent=TAB_META.channels[1]; setBk(false); window.scrollTo(0,0); return;
+    }
+    if(curView!=="today"){ switchTab("today"); return; }
+    // 已在今日首页：先提示，二次侧滑退桌面
+    if(armed){ doHomeExit(); }
+    else { armed=true; toast("再侧滑一次，将退到桌面"); clearTimeout(armT); armT=setTimeout(function(){armed=false;},DISARM); }
+  }
+  function doHomeExit(){
+    armed=false; clearTimeout(armT);
+    // PWA 中 JS 无法直接关闭 App；history.back() 在多数情况下让独立窗口退回系统桌面
+    if(window.history.length>1){ history.back(); } else { try{window.close();}catch(e){} }
+  }
+  document.addEventListener("touchstart",function(e){
+    if(engaged) return;
+    var t=e.touches[0];
+    if(t.clientX>EDGE) return;            // 只在左边缘起手
+    sx=t.clientX; engaged=true; dirX=0; layer=null;
+  },{passive:true});
+  document.addEventListener("touchmove",function(e){
+    if(!engaged) return;
+    var t=e.touches[0], dx=t.clientX-sx;
+    var dyy=t.clientY-sy;
+    if(dirX===0){
+      if(Math.abs(dx)>Math.abs(dyy)&&Math.abs(dx)>8){ dirX=1; layer=topLayer(); }
+      else if(Math.abs(dyy)>=Math.abs(dx)){ engaged=false; return; } // 纵向滚动，放弃
+    }
+    if(dirX!==1) return;
+    if(dx<=0){ if(layer){layer.style.transition="none";layer.style.transform="";} return; }
+    e.preventDefault();
+    layer.style.transition="none";
+    layer.style.transform="translateX("+Math.min(dx,90)+"px)";
+  },{passive:false});
+  document.addEventListener("touchend",function(e){
+    if(!engaged) return; engaged=false;
+    if(dirX!==1) return;
+    var dx=(e.changedTouches?e.changedTouches[0].clientX:0)-sx;
+    if(layer){
+      layer.style.transition="transform .26s cubic-bezier(.22,1,.36,1)";
+      if(dx>=THRESH){ layer.style.transform=""; goBack(); }
+      else { layer.style.transform=""; }
+    }
+    layer=null; dirX=0;
+    setTimeout(clearAllNudge,300);
+  });
+  document.addEventListener("touchcancel",function(){ engaged=false; dirX=0; });
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('SW注册失败',e);});});}
