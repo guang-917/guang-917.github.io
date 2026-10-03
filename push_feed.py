@@ -8,6 +8,9 @@
 
 用法（在定时任务里调用）：
       python3 push_feed.py /workspace/feed_new.json
+      python3 push_feed.py /workspace/feed_new.json /workspace/card_full.html cards/jp02.html
+      # 第2、3个参数可选：若提供，会先把本地完整 HTML 学习卡上传到仓库对应路径
+      #（已存在同路径文件则覆盖更新），再推送卡片。App 卡片的 link 字段指向它。
 
 其中 feed_new.json 形如：
       {"card": {"id":"ai02","ch":"ai","title":"...","date":"2026-10-04","date2":"10月4日",
@@ -71,6 +74,43 @@ def gh_put(tok, sha, feed):
         return json.load(r)
 
 
+def gh_put_file(tok, repo_path, local_file):
+    """把本地文件上传/覆盖到仓库指定路径（Contents API，已存在则带 sha 覆盖）。"""
+    api = "https://api.github.com/repos/%s/%s/contents/%s" % (OWNER, REPO, repo_path)
+    sha = None
+    try:
+        req = urllib.request.Request(api, headers={
+            "Authorization": "Bearer " + tok,
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "kb-pusher",
+        })
+        with urllib.request.urlopen(req, timeout=30) as r:
+            sha = json.load(r).get("sha")
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            print("读取仓库文件 %s 失败: HTTP %d" % (repo_path, e.code))
+            return False
+    except Exception as e:
+        print("读取仓库文件 %s 异常: %r" % (repo_path, e))
+        return False
+    with open(local_file, "rb") as f:
+        content = base64.b64encode(f.read()).decode("ascii")
+    payload = {"message": "自动推送完整学习卡: " + repo_path, "content": content}
+    if sha:
+        payload["sha"] = sha
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(api, data=data, headers={
+        "Authorization": "Bearer " + tok,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json",
+        "User-Agent": "kb-pusher",
+    }, method="PUT")
+    with urllib.request.urlopen(req, timeout=30) as r:
+        resp = json.load(r)
+    print("OK 完整卡已上传 ->", resp.get("content", {}).get("html_url", ""))
+    return True
+
+
 def main():
     if len(sys.argv) < 2:
         print("用法: python3 push_feed.py <新卡片.json>")
@@ -92,6 +132,16 @@ def main():
     else:
         card = new
         dig_add = None
+
+    # 可选第2、3参数：先上传完整 HTML 学习卡，再推卡片
+    if len(sys.argv) >= 3:
+        local_html = sys.argv[2]
+        repo_html = sys.argv[3] if len(sys.argv) >= 4 else ("cards/%s.html" % card.get("id", "card"))
+        if os.path.exists(local_html):
+            if not gh_put_file(tok, repo_html, local_html):
+                print("警告: 完整学习卡上传失败，卡片 link 将指向不存在的页面。")
+        else:
+            print("警告: 完整学习卡文件不存在: %s（卡片仍会推送，但 link 将 404）" % local_html)
 
     # 读当前 feed.json（拿 sha；404 说明还没建，用空壳）
     try:
