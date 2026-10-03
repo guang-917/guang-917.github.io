@@ -889,7 +889,7 @@ loadFeed();
    ④ 已在今日首页时，先提示，2秒内再侧滑一次才尝试退回桌面 */
 (function(){
   var EDGE=22, THRESH=60, DISARM=2000;
-  var sx=0, engaged=false, dirX=0, layer=null, armed=false, armT=null;
+  var sx=0, sy=0, engaged=false, dirX=0, layer=null, armed=false, armT=null;
   function topLayer(){
     if(reader.classList.contains("on")) return reader;
     if(sheet.classList.contains("on")) return sheet;
@@ -921,7 +921,7 @@ loadFeed();
     if(engaged) return;
     var t=e.touches[0];
     if(t.clientX>EDGE) return;            // 只在左边缘起手
-    sx=t.clientX; engaged=true; dirX=0; layer=null;
+    sx=t.clientX; sy=t.clientY; engaged=true; dirX=0; layer=null;
   },{passive:true});
   document.addEventListener("touchmove",function(e){
     if(!engaged) return;
