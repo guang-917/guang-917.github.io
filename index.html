@@ -246,6 +246,14 @@ body{
 .star.on svg{fill:currentColor}
 .lp .acts button{display:flex;align-items:center;justify-content:center;gap:7px}
 .lp .acts .ic svg{width:17px;height:17px}
+/* ---------- 下拉刷新 / 刷新按钮 ---------- */
+.ptr{height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink-3);font-size:12.5px;letter-spacing:.05em}
+.ptr .ptr-ic{display:inline-flex}
+.ptr .ptr-ic svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s cubic-bezier(.22,1,.36,1)}
+.ptr.go .ptr-ic{transform:rotate(180deg)}
+.ptr .ptr-ic.spin{animation:ptrspin .8s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
+#refreshBtn:active{transform:scale(.86)}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-apple.png">
@@ -256,12 +264,14 @@ body{
     <button class="bk" id="backBtn"><span class="ic"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></span></button>
     <div class="tt"><b id="hdrTitle">知识工作台</b><span id="hdrSub">今天 · 10月3日 周六</span></div>
     <button class="tbtn" id="themeBtn" title="切换深色"><span class="ic" id="themeIc"></span></button>
+    <button class="tbtn" id="refreshBtn" title="刷新推送"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></span></button>
   </div>
 </div>
 
 <div class="wrap" id="wrap">
   <!-- 今日 -->
   <section class="view active" data-view="today">
+    <div id="ptr" class="ptr"><span class="ptr-ic"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg></span><span class="ptr-tx">下拉刷新</span></div>
     <div class="pbar">
       <div class="pt"><span>今日进度</span><b id="pTxt">3 / 4 已完成</b></div>
       <div class="track"><i id="pFill" style="width:75%"></i></div>
@@ -805,7 +815,7 @@ document.getElementById("hdrSub").textContent=TAB_META.today[1];
    启动后去仓库根目录拉 feed.json：拉到就用远程内容（每日推送会更新它），
    拉不到（首次/离线）就保留下面内置的兜底内容，绝不白屏。
    feed.json 不在 service worker 缓存清单里，每次都走网络，保证刷得出新内容。 */
-(function loadFeed(){
+function loadFeed(onDone){
   fetch('feed.json?v='+Date.now(),{cache:'no-store'})
     .then(function(r){if(!r.ok)throw new Error('feed 404');return r.json();})
     .then(function(d){
@@ -813,7 +823,48 @@ document.getElementById("hdrSub").textContent=TAB_META.today[1];
       if(d&&Array.isArray(d.dig)&&d.dig.length){DIG=d.dig;}
       renderToday();renderChannels();renderDig();
     })
-    .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */});
+    .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
+    .then(function(){ if(onDone)onDone(); });
+}
+loadFeed();
+
+/* ====================== 下拉刷新 / 手动刷新 ====================== */
+(function(){
+  var ptr=document.getElementById('ptr');
+  var ptrTx=ptr.querySelector('.ptr-tx');
+  var ptrIc=ptr.querySelector('.ptr-ic');
+  var MAXP=72, THRESH=52;
+  var startY=0, pull=0, active=false, busy=false;
+  function todayActive(){var v=document.querySelector('.view[data-view="today"]');return v&&v.classList.contains('active');}
+  function reset(){ptr.style.transition='height .22s cubic-bezier(.22,1,.36,1)';ptr.style.height='0px';ptr.classList.remove('go');ptrIc.classList.remove('spin');ptrTx.textContent='下拉刷新';}
+  function doRefresh(){
+    if(busy)return; busy=true;
+    ptr.style.transition='height .2s'; ptr.style.height=THRESH+'px'; ptr.classList.add('go');
+    ptrTx.textContent='刷新中…'; ptrIc.classList.add('spin');
+    loadFeed(function(){ busy=false; reset(); if(typeof toast==='function')toast('已拉取最新推送'); });
+  }
+  var rb=document.getElementById('refreshBtn'); if(rb) rb.addEventListener('click', doRefresh);
+  document.addEventListener('touchstart', function(e){
+    if(busy||!todayActive()||window.scrollY>0) return;
+    if(e.target.closest('.card,.reader,.sheet,.tab,button')) return;
+    startY=e.touches[0].clientY; pull=0; active=true;
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    if(!active||busy) return;
+    var dy=e.touches[0].clientY-startY;
+    if(dy<=0||window.scrollY>0){ active=false; return; }
+    e.preventDefault();
+    pull=Math.min(dy*0.5, MAXP);
+    ptr.style.transition='none';
+    ptr.style.height=pull+'px';
+    var over=pull>=THRESH;
+    ptr.classList.toggle('go', over);
+    ptrTx.textContent= over?'松开刷新':'下拉刷新';
+  }, {passive:false});
+  document.addEventListener('touchend', function(){
+    if(!active) return; active=false;
+    if(pull>=THRESH) doRefresh(); else reset();
+  });
 })();
 </script>
 <script>
