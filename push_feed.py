@@ -170,7 +170,16 @@ def main():
     if dig_add:
         dg = feed.get("dig", [])
         dg = [x for x in dig_add if isinstance(x, dict)] + dg
-        feed["dig"] = dg
+        # 去重：同频道+同问题只保留一条（历史数据曾出现完全重复的 dig）
+        seen = set()
+        uniq = []
+        for x in dg:
+            key = (x.get("ch"), x.get("q"))
+            if key in seen:
+                continue
+            seen.add(key)
+            uniq.append(x)
+        feed["dig"] = uniq
 
     feed["updated"] = datetime.date.today().isoformat()
 
