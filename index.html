@@ -699,9 +699,19 @@ document.getElementById("readerBody").addEventListener("click",function(e){
   if(!rel)return;
   var title=rel.textContent.trim(), m=null;
   for(var i=0;i<CARDS.length;i++){if(CARDS[i].title===title){m=CARDS[i];break;}}
-  if(!m){toast("暂无对应卡片");return;}
-  var rect=rel.getBoundingClientRect();
-  openReader({id:m.id,title:m.title,lead:m.lead,body:m.body,rel:m.rel,link:m.link,note:m.note||"相关数据：可在「待挖掘」找延伸方向。"},rect);
+  if(m){ // 有同名卡：直接打开
+    var rect=rel.getBoundingClientRect();
+    openReader({id:m.id,title:m.title,lead:m.lead,body:m.body,rel:m.rel,link:m.link,note:m.note||"相关数据：可在「待挖掘」找延伸方向。"},rect);
+    return;
+  }
+  // 没有同名卡：打开本卡完整学习页（含延伸/复习内容），保证点击必有反应、有内容
+  var cur = readTarget ? getCard(readTarget) : null;
+  if(cur && cur.link){
+    window.open(cur.link, "_blank", "noopener");
+    toast("已在新窗口打开完整学习卡");
+  } else {
+    toast("暂无对应卡片");
+  }
 });
 var lastRect=null;
 function startReadTimer(){
