@@ -846,6 +846,21 @@ function toast(msg){var el=document.getElementById("toast");el.textContent=msg;e
 /* ====================== 初始 ====================== */
 renderToday();renderChannels();renderTree();renderDig();
 document.getElementById("hdrSub").textContent="今天 · 10月3日 周六";
+
+/* ====================== 拉取每日推送（feed.json） ======================
+   启动后去仓库根目录拉 feed.json：拉到就用远程内容（每日推送会更新它），
+   拉不到（首次/离线）就保留下面内置的兜底内容，绝不白屏。
+   feed.json 不在 service worker 缓存清单里，每次都走网络，保证刷得出新内容。 */
+(function loadFeed(){
+  fetch('feed.json?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('feed 404');return r.json();})
+    .then(function(d){
+      if(d&&Array.isArray(d.cards)&&d.cards.length){CARDS=d.cards;}
+      if(d&&Array.isArray(d.dig)&&d.dig.length){DIG=d.dig;}
+      renderToday();renderChannels();renderDig();
+    })
+    .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */});
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('SW注册失败',e);});});}
