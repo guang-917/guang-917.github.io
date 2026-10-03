@@ -697,7 +697,7 @@ doneBtn.addEventListener("click",function(){
 document.getElementById("readerBody").addEventListener("click",function(e){
   var rel=e.target.closest(".relitem");
   if(!rel)return;
-  var title=rel.getAttribute("data-rel"), m=null;
+  var title=rel.textContent.trim(), m=null;
   for(var i=0;i<CARDS.length;i++){if(CARDS[i].title===title){m=CARDS[i];break;}}
   if(!m){toast("暂无对应卡片");return;}
   var rect=rel.getBoundingClientRect();
