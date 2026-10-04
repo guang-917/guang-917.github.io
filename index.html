@@ -152,12 +152,60 @@ body{
 /* 地图 */
 .mapwrap{position:relative;height:62vh;background:var(--card-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
 #mapSvg{width:100%;height:100%;display:block;touch-action:none}
-#mapSvg .edge-dep{stroke:var(--data);stroke-width:2;fill:none;opacity:.55}
-#mapSvg .edge-same{stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:4 4;fill:none;opacity:.5}
+#mapSvg .edge-mesh{stroke:var(--ink-2);stroke-width:2;fill:none;opacity:.5}
+#mapSvg .edge-mesh.hl{stroke:var(--ai);stroke-width:3;opacity:.95}
+#mapSvg .ncirc.hl{stroke:var(--ai);stroke-width:3.5}
 #mapSvg .ncirc{cursor:pointer;transition:r .2s}
 #mapSvg text{font-size:12px;fill:var(--ink);font-family:inherit;pointer-events:none}
 .mapfocus{position:absolute;left:12px;top:12px;font-size:12px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:80%}
 .mapfocus b{color:var(--ink)}
+
+/* 知识树频道选择 */
+.chpills{max-width:520px;margin:6px auto 2px;padding:0 16px;display:flex;gap:8px}
+.chpills button{flex:1;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:13px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.chpills button.on{background:var(--card-2);color:var(--ink);border-color:var(--ink-3)}
+.chpills button .dotc{width:8px;height:8px;border-radius:50%}
+.chpills button .dotc.data{background:var(--data)}
+.chpills button .dotc.ai{background:var(--ai)}
+.chpills button .dotc.jp{background:var(--jp)}
+/* 主题节点 */
+.topic{margin-bottom:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow-sm);overflow:hidden}
+.topic .th{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
+.topic .th .nd{width:13px;height:13px;border-radius:50%;flex:none;border:2px solid var(--ink-3)}
+.topic.has .th .nd{background:var(--data);border-color:var(--data);box-shadow:0 0 0 4px color-mix(in srgb,var(--data) 16%,transparent)}
+.topic .th .nm{font-family:var(--serif);font-size:15px;font-weight:600;flex:1}
+.topic .th .cnt{font-size:12px;color:var(--ink-3);margin-right:8px}
+.topic .th .tg{transition:transform .3s var(--glide);color:var(--ink-3)}
+.topic.open .th .tg{transform:rotate(90deg)}
+.topic .body{max-height:0;overflow:hidden;transition:max-height .4s var(--glide)}
+.topic.open .body{max-height:1600px}
+.topic .body .pad{padding:0 14px 14px}
+.topic .tsum{font-size:13px;color:var(--ink-2);line-height:1.7;background:var(--card-2);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.topic .gap{font-size:12.5px;color:var(--ink-3);padding:4px 2px 10px}
+.topic .mesh{font-size:12px;color:var(--ink-2);margin:6px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.topic .mesh .arrow{color:var(--ink-3)}
+.topic .mesh .mt{background:var(--ai-soft);color:var(--ai);border-radius:8px;padding:3px 9px}
+.topic .cardrow{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
+.topic .cardrow .dot{margin-top:7px;flex:none}
+.topic .cardrow .ct{flex:1;min-width:0}
+.topic .cardrow .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
+.topic .cardrow .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
+.topic .cardrow .meta{font-size:11px;color:var(--ink-3);margin-top:4px}
+/* 编辑抽屉 */
+.edtabs{display:flex;gap:8px;margin:6px 0 12px}
+.edtabs button{flex:1;padding:9px 0;border-radius:10px;border:1px solid var(--line);background:var(--card-2);color:var(--ink-2);font-size:13px;cursor:pointer}
+.edtabs button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.edrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line-2)}
+.edrow .nm{flex:1;font-size:14px}
+.edrow input{flex:1;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 11px;font-size:13px;color:var(--ink)}
+.edrow .del{color:var(--jp);font-size:13px;cursor:pointer;padding:6px 8px;flex:none}
+.edadd{display:flex;gap:8px;margin-top:8px}
+.edadd input{flex:1;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 11px;font-size:13px;color:var(--ink)}
+.edadd button{background:var(--data);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;flex:none}
+.edhint{font-size:12px;color:var(--ink-3);line-height:1.7;margin:2px 0 10px}
+.edmesh{display:flex;align-items:center;gap:8px;margin:10px 0;flex-wrap:wrap}
+.edmesh select{flex:1;min-width:110px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 11px;font-size:13px;color:var(--ink)}
+.edmesh button{background:var(--ai);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;flex:none}
 
 /* ---------- 待挖掘 ---------- */
 .dgrp{margin-bottom:16px}
@@ -301,6 +349,15 @@ body{
 
   <!-- 知识树 -->
   <section class="view" data-view="tree">
+    <div class="chpills" id="treeChPills">
+      <button data-ch="data"><span class="dotc data"></span>数据</button>
+      <button data-ch="ai"><span class="dotc ai"></span>AI</button>
+      <button data-ch="jp"><span class="dotc jp"></span>日语</button>
+    </div>
+    <div class="sub" style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <span id="treeHint">按主题梳理知识结构</span>
+      <button class="filter" id="treeEdit">✎ 编辑</button>
+    </div>
     <div class="seg">
       <button id="segList" class="on"><span class="ic"><svg viewBox="0 0 24 24"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg> 列表</button>
       <button id="segMap"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3.5 4 6v14l5-2.5 6 2.5 5-2.5V3.5L14 6 9 3.5z"/><path d="M9 3.5v14"/><path d="M14 6v14"/></svg> 地图</button>
@@ -312,12 +369,11 @@ body{
         <div class="mapfocus" id="mapFocus"></div>
       </div>
       <div class="legend">
-        <span><i style="background:var(--data)"></i>已学</span>
-        <span><i style="background:var(--ai)"></i>新学(本周)</span>
-        <span><i style="background:var(--gold)"></i>需学(我标记)</span>
-        <span><i style="background:var(--ink-3)"></i>待学</span>
+        <span><i style="background:var(--data)"></i>已充实(有卡)</span>
+        <span><i style="background:transparent;border:1.5px solid var(--ink-3)"></i>待充实(缺口)</span>
+        <span><i style="background:var(--ai)"></i>延伸连线</span>
       </div>
-      <p class="sub">实线＝谁依赖谁（先学→后学）· 虚线＝易混近亲。点任意节点，以它为中心展开周围两圈。</p>
+      <p class="sub">点任意主题节点可置中为圆心，查看它的延伸与已学卡片；灰色空心＝该补的知识缺口。</p>
     </div>
   </section>
 
@@ -395,28 +451,66 @@ var CARDS=[];
 /* 待挖掘（按频道分组 + 推荐理由） */
 var DIG=[];
 
-/* 知识树：由真实卡片动态生成（删除写死示例骨架，不再显示假数据） */
-var NODES={},EDGES=[],TREES=[];
-function buildTreeData(){
-  var byCh={};
-  CARDS.forEach(function(c){var ch=normCh(c.ch);(byCh[ch]=byCh[ch]||[]).push(c);});
-  var CHNAME={data:"数据知识",ai:"AI 知识",jp:"日语学习"};
-  var trees=[],nodes={},edges=[],heads=[];
-  Object.keys(byCh).forEach(function(ch){
-    var list=byCh[ch].slice().sort(function(a,b){return (a.date||"").localeCompare(b.date||"");});
-    var ids=[];
-    list.forEach(function(c,i){
-      nodes[c.id]={t:c.title||c.id,ch:ch,state:(c.read?"done":"new")};
-      ids.push(c.id);
-      if(i>0)edges.push({a:list[i-1].id,b:c.id,k:"dep"});
-    });
-    if(ids.length){trees.push({ch:ch,name:CHNAME[ch]||ch,nodes:ids});heads.push(ids[0]);}
+/* 知识树：按频道聚合的「主题节点」模型
+   - 主题来自预设种子（也支持用户在 App 内编辑、本地持久化）
+   - 卡片按 标题/标签/摘要 关键词自动归入主题
+   - 主题间「延伸」由用户定义，存本地，画成网状（无跨频道连线） */
+var SEED_TOPICS={
+  data:[
+    {id:"t_data_gov",name:"数据治理",kw:["治理","数据治理"]},
+    {id:"t_data_sec",name:"数据安全",kw:["安全","隐私","泄露","加密"]},
+    {id:"t_data_trade",name:"数据交易",kw:["交易","交易所","流通","挂牌"]},
+    {id:"t_data_quality",name:"数据质量",kw:["质量","清洗","核验"]}
+  ],
+  ai:[
+    {id:"t_ai_base",name:"AI 基础概念",kw:["模型","概念","算法","基础","神经网络","训练","大模型"]},
+    {id:"t_ai_app",name:"AI 应用落地",kw:["应用","落地","场景","Agent","智能体","工作流"]},
+    {id:"t_ai_comp",name:"AI 合规",kw:["合规","法律","监管","版权","伦理"]}
+  ],
+  jp:[
+    {id:"t_jp_gojuon",name:"五十音图",kw:["五十音","あ行","か行","さ行","た行","な行","假名","行","清音"]},
+    {id:"t_jp_kaiwa",name:"日常对话",kw:["对话","会話","招呼","礼貌","寒暄","自我介绍"]},
+    {id:"t_jp_culture",name:"日本文化",kw:["文化","礼仪","习俗","礼节","禁忌"]}
+  ]
+};
+var LS_TOPICS="kb_topics",LS_MESH="kb_mesh";
+function loadTopics(){try{var s=JSON.parse(localStorage.getItem(LS_TOPICS)||"{}");if(s&&typeof s==="object"&&Object.keys(s).length)return s;}catch(e){}
+  // 首次：写入预设种子
+  var seed={data:SEED_TOPICS.data.slice(),ai:SEED_TOPICS.ai.slice(),jp:SEED_TOPICS.jp.slice()};
+  saveTopics(seed);return seed;}
+function saveTopics(o){try{localStorage.setItem(LS_TOPICS,JSON.stringify(o));}catch(e){}}
+function loadMesh(){try{var s=JSON.parse(localStorage.getItem(LS_MESH)||"{}");if(s&&typeof s==="object")return s;}catch(e){}return {data:[],ai:[],jp:[]};}
+function saveMesh(o){try{localStorage.setItem(LS_MESH,JSON.stringify(o));}catch(e){}}
+var TOPICS={},MESH={};
+TOPICS=loadTopics();MESH=loadMesh();
+/* 卡片归入主题：标题/标签/摘要 命中任一关键词（或主题名）即归入 */
+function matchTopicIds(ch,card){
+  var text=((card.title||"")+" "+(card.tags?card.tags.join(" "):"")+" "+(card.sum||"")).toLowerCase();
+  var ids=[];
+  (TOPICS[ch]||[]).forEach(function(t){
+    var hit=t.name&&text.indexOf(String(t.name).toLowerCase())>=0;
+    if(!hit&&t.kw)(t.kw||[]).forEach(function(k){if(String(k).toLowerCase()&&text.indexOf(String(k).toLowerCase())>=0)hit=true;});
+    if(hit)ids.push(t.id);
   });
-  // 各频道起点用「同层」虚线相连，让地图能一眼看到全貌（否则各频道是孤立链）
-  for(var i=1;i<heads.length;i++)edges.push({a:heads[i-1],b:heads[i],k:"same"});
-  NODES=nodes;EDGES=edges;TREES=trees;
-  return {trees:trees,nodes:nodes,edges:edges};
+  return ids;
 }
+/* 构建某频道的主题结构（含命中卡片、凝练摘要、延伸连线、未分类卡片） */
+function buildChannelTree(ch){
+  var topics=(TOPICS[ch]||[]).map(function(t){return Object.assign({},t);});
+  var cardByTopic={};
+  CARDS.forEach(function(c){if(normCh(c.ch)!==ch)return;var ids=matchTopicIds(ch,c);
+    ids.forEach(function(tid){(cardByTopic[tid]=cardByTopic[tid]||[]).push(c);});});
+  topics.forEach(function(t){t.cards=cardByTopic[t.id]||[];t.hasCards=t.cards.length>0;
+    var parts=t.cards.map(function(c){return c.sum;}).filter(Boolean);
+    t.summary=parts.join("　").slice(0,160);
+    var tagSet={};t.cards.forEach(function(c){(c.tags||[]).forEach(function(g){tagSet[g]=1;});});
+    t.tags=Object.keys(tagSet);
+  });
+  var unmatched=CARDS.filter(function(c){if(normCh(c.ch)!==ch)return false;return matchTopicIds(ch,c).length===0;});
+  var edges=(MESH[ch]||[]).filter(function(e){return e.a!==e.b;});
+  return {ch:ch,topics:topics,unmatched:unmatched,edges:edges};
+}
+function topicById(data,id){for(var i=0;i<data.topics.length;i++)if(data.topics[i].id===id)return data.topics[i];return null;}
 
 /* ====================== 工具 ====================== */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -445,7 +539,7 @@ function switchTab(v){
   // 头部
   var meta=TAB_META[v];
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
-  if(v==="tree"&&treeMode==="map")renderMap(mapFocus);
+  if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
   if(v==="channels"){chanDrill=false;document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
   setBk(false);
   window.scrollTo(0,0);
@@ -569,65 +663,84 @@ function doSearch(q){
 }
 
 /* ====================== 渲染：知识树 ====================== */
-var treeMode="list",mapFocus=null;
+var treeMode="list",mapFocus=null,treeCh="data";
+function initTreeCh(){
+  var order=["data","ai","jp"];
+  for(var i=0;i<order.length;i++){if(CARDS.some(function(c){return normCh(c.ch)===order[i];})){treeCh=order[i];return;}}
+}
+function renderTreePills(){
+  document.querySelectorAll("#treeChPills [data-ch]").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-ch")===treeCh);});
+}
+function cardRowHTML(c){
+  return '<div class="cardrow" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span>'
+    +'<div class="ct"><b>'+esc(c.title)+'</b>'+(c.sum?'<p>'+esc(c.sum)+'</p>':'')+'<div class="meta">'+(c.date2||'')+'</div></div>'
+    +(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>';
+}
 function renderTree(){
-  buildTreeData();
-  var box=document.getElementById("treeList");var h=[];
-  for(var i=0;i<TREES.length;i++){var tr=TREES[i];
-    h.push('<div class="tree open" id="tr-'+i+'"><div class="th" onclick="toggleTree('+i+')">'
-      +'<span class="ic">'+ICON[CH_META[tr.ch].ic]+'</span>'
-      +'<span class="nm">'+esc(tr.name)+'</span>'
-      +'<span class="cnt">'+tr.nodes.length+' 节点</span>'
-      +'<span class="tg" style="color:var(--ink-3)">›</span></div><div class="body">');
-    for(var j=0;j<tr.nodes.length;j++){var n=NODES[tr.nodes[j]];
-      h.push('<div class="node '+n.state+'" data-node="'+esc(tr.nodes[j])+'"><span class="nd"></span><span class="lab">'+esc(n.t)+(n.state==="todo"?"（待学）":"")+'</span></div>');
-    }
-    h.push('</div></div>');
+  var box=document.getElementById("treeList");
+  var data=buildChannelTree(treeCh),h=[];
+  if(!data.topics.length&&!data.unmatched.length){box.innerHTML='<div class="empty">这个频道还没有内容，去「今日」学一张卡吧。</div>';return;}
+  h.push('<div class="sub" style="margin:2px 0 10px">点主题展开凝练摘要与已学卡片；灰色空心＝待充实（该补的知识缺口）。</div>');
+  data.topics.forEach(function(t){
+    var mesh=(data.edges||[]).filter(function(e){return e.a===t.id||e.b===t.id;})
+      .map(function(e){var oid=e.a===t.id?e.b:e.a;var o=topicById(data,oid);return o?o.name:null;}).filter(Boolean);
+    h.push('<div class="topic'+(t.hasCards?' has':'')+'" id="tp-'+esc(t.id)+'">'
+      +'<div class="th" data-topic="'+esc(t.id)+'"><span class="nd"></span>'
+      +'<span class="nm">'+esc(t.name)+'</span>'
+      +'<span class="cnt">'+(t.hasCards?t.cards.length+' 张':'待充实')+'</span>'
+      +'<span class="tg">›</span></div>'
+      +'<div class="body"><div class="pad">'
+      +(t.hasCards?('<div class="tsum">'+esc(t.summary||'（暂无摘要）')+(t.tags&&t.tags.length?'<br><span style="color:var(--ink-3);font-size:11.5px">关键词：'+t.tags.map(esc).join('、')+'</span>':'')+'</div>')
+                 :'<div class="gap">还没学相关卡片，这是个待补的知识缺口。</div>')
+      +(mesh.length?'<div class="mesh"><span class="arrow">↳ 延伸：</span>'+mesh.map(function(mn){return '<span class="mt">'+esc(mn)+'</span>';}).join('')+'</div>':'')
+      +(t.cards||[]).map(function(c){return cardRowHTML(c);}).join('')
+      +'</div></div></div>');
+  });
+  if(data.unmatched.length){
+    h.push('<div class="topic" id="tp-__unmatched__"><div class="th" data-topic="__unmatched__"><span class="nd" style="border-color:var(--ink-3)"></span>'
+      +'<span class="nm" style="color:var(--ink-2)">未分类卡片</span><span class="cnt">'+data.unmatched.length+' 张</span><span class="tg">›</span></div>'
+      +'<div class="body"><div class="pad">'+(data.unmatched.map(function(c){return cardRowHTML(c);}).join(''))+'</div></div></div>');
   }
   box.innerHTML=h.join("");
 }
-function toggleTree(i){document.getElementById("tr-"+i).classList.toggle("open");}
+function toggleTopic(id){var el=document.getElementById("tp-"+id);if(el)el.classList.toggle("open");}
 
-/* 地图（聚焦模式） */
+/* 地图（主题网状，聚焦模式） */
 function renderMap(focus){
-  buildTreeData();
   if(focus)mapFocus=focus;
-  if(!mapFocus||!NODES[mapFocus])mapFocus=TREES.length?TREES[0].nodes[0]:null;
-  if(!mapFocus){document.getElementById("mapSvg").innerHTML="";document.getElementById("mapFocus").innerHTML="暂无知识节点，先去「今日」学一张卡吧。";return;}
-  var svg=document.getElementById("mapSvg");var W=360,H=520;
-  // 收集两圈邻居
-  function nb(id){var s={};s[id]=0;var q=[id],d={};d[id]=0;
-    while(q.length){var x=q.shift();for(var i=0;i<EDGES.length;i++){var e=EDGES[i];
-      var o=(e.a===x)?e.b:(e.b===x?e.a:null);if(o&&d[x]<2&&d[o]===undefined){d[o]=d[x]+1;s[o]=d[o];q.push(o);}}}
-    return {set:s,dist:d};}
-  var reach=nb(mapFocus);
-  var keys=Object.keys(reach.set);
-  // 布局：焦点居中，其余环形
-  var cx=W/2,cy=H/2;var rings={1:[],2:[]};
-  for(var k=0;k<keys.length;k++){var idk=keys[k];if(idk===mapFocus)continue;rings[reach.dist[idk]].push(idk);}
-  var pos={};pos[mapFocus]={x:cx,y:cy};
-  function ringPos(arr,r){var n=arr.length;var rad=(r===1?115:215);
-    for(var i=0;i<n;i++){var ang=-Math.PI/2+2*Math.PI*i/n + (r===2?Math.PI/n:0);
+  var data=buildChannelTree(treeCh);
+  if(!mapFocus||!topicById(data,mapFocus))mapFocus=data.topics.length?data.topics[0].id:null;
+  var svg=document.getElementById("mapSvg");
+  if(!data.topics.length){svg.innerHTML="";document.getElementById("mapFocus").innerHTML="该频道暂无主题，点右上「编辑」添加。";return;}
+  var W=360,H=520,cx=W/2,cy=H/2;
+  var col={data:"var(--data)",ai:"var(--ai)",jp:"var(--jp)"};
+  var pos={};
+  function layout(centerId,others){
+    if(centerId)pos[centerId]={x:cx,y:cy};
+    var m=others.length,rad=185;
+    for(var i=0;i<m;i++){var ang=-Math.PI/2+2*Math.PI*i/m;
       var x=cx+rad*Math.cos(ang),y=cy+rad*Math.sin(ang);
-      x=Math.max(45,Math.min(W-45,x));y=Math.max(55,Math.min(H-45,y));
-      pos[arr[i]]={x:x,y:y};}}
-  ringPos(rings[1],1);ringPos(rings[2],2);
-  var s='';
-  // 边
-  for(var i=0;i<EDGES.length;i++){var e=EDGES[i];
-    if(pos[e.a]&&pos[e.b]){s+='<line class="edge-'+(e.k==="dep"?"dep":"same")+'" x1="'+pos[e.a].x.toFixed(1)+'" y1="'+pos[e.a].y.toFixed(1)+'" x2="'+pos[e.b].x.toFixed(1)+'" y2="'+pos[e.b].y.toFixed(1)+'"/>';}}
-  // 节点
-  var col={done:"var(--data)",new:"var(--ai)",need:"var(--gold)",todo:"var(--ink-3)"};
-  for(var kk=0;kk<keys.length;kk++){var idk=keys[kk];var n=NODES[idk];var p=pos[idk];var r=(idk===mapFocus)?18:13;
-    s+='<circle class="ncirc" data-ncirc="'+esc(idk)+'" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+r+'" fill="'+(col[n.state]||col.todo)+'" stroke="var(--card)" stroke-width="2.5"/>';
-    s+='<text x="'+p.x.toFixed(1)+'" y="'+(p.y+r+13).toFixed(1)+'" text-anchor="middle">'+esc(n.t)+'</text>';
+      x=Math.max(50,Math.min(W-50,x));y=Math.max(60,Math.min(H-50,y));
+      pos[others[i]]={x:x,y:y};}
   }
-  svg.innerHTML=s;
-  var f=NODES[mapFocus];
-  document.getElementById("mapFocus").innerHTML='<b>中心：'+esc(f.t)+'</b> · 点周围节点可切换中心';
-  svg.querySelectorAll("[data-ncirc]").forEach(function(circ){
-    circ.addEventListener("click",function(){renderMap(circ.getAttribute("data-ncirc"));});
+  if(mapFocus){layout(mapFocus,data.topics.filter(function(t){return t.id!==mapFocus;}).map(function(t){return t.id;}));}
+  else layout(null,data.topics.map(function(t){return t.id;}));
+  var s='';
+  (data.edges||[]).forEach(function(e){if(pos[e.a]&&pos[e.b]){
+    var hl=mapFocus&&(e.a===mapFocus||e.b===mapFocus);
+    s+='<line class="edge-mesh'+(hl?' hl':'')+'" x1="'+pos[e.a].x.toFixed(1)+'" y1="'+pos[e.a].y.toFixed(1)+'" x2="'+pos[e.b].x.toFixed(1)+'" y2="'+pos[e.b].y.toFixed(1)+'"/>';}});
+  data.topics.forEach(function(t){var p=pos[t.id];if(!p)return;var r=(t.id===mapFocus)?20:15;
+    var fill=t.hasCards?col[treeCh]:"transparent";
+    s+='<circle class="ncirc'+(mapFocus===t.id?' hl':'')+'" data-ncirc="'+esc(t.id)+'" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+r+'" fill="'+fill+'" stroke="'+col[treeCh]+'" stroke-width="2.5"/>';
+    s+='<text x="'+p.x.toFixed(1)+'" y="'+(p.y+r+14).toFixed(1)+'" text-anchor="middle">'+esc(t.name)+'</text>';
   });
+  svg.innerHTML=s;
+  var f=topicById(data,mapFocus);
+  if(f){
+    var mesh=(data.edges||[]).filter(function(e){return e.a===f.id||e.b===f.id;}).map(function(e){var oid=e.a===f.id?e.b:e.a;return topicById(data,oid);}).filter(Boolean).map(function(o){return o.name;});
+    document.getElementById("mapFocus").innerHTML='<b>'+esc(f.name)+'</b>'+(f.hasCards?(' · 已学 '+f.cards.length+' 张'):' · 待充实')+(mesh.length?'<br>延伸：'+mesh.join('、'):'');
+  }
+  svg.querySelectorAll("[data-ncirc]").forEach(function(circ){circ.addEventListener("click",function(){renderMap(circ.getAttribute("data-ncirc"));});});
 }
 document.getElementById("segList").addEventListener("click",function(){
   treeMode="list";this.classList.add("on");document.getElementById("segMap").classList.remove("on");
@@ -637,16 +750,73 @@ document.getElementById("segMap").addEventListener("click",function(){
   treeMode="map";this.classList.add("on");document.getElementById("segList").classList.remove("on");
   document.getElementById("treeList").style.display="none";document.getElementById("treeMap").style.display="";renderMap(mapFocus);
 });
-
-/* 知识树节点点击 → 打开真实卡片（节点即卡片） */
-document.getElementById("treeList").addEventListener("click",function(e){
-  var nd=e.target.closest("[data-node]");if(!nd)return;
-  var id=nd.getAttribute("data-node");var c=getCard(id);
-  if(c){var rect=nd.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
-    openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:c.note||"相关数据：可在「待挖掘」找延伸方向。"},lastRect);return;}
-  var n=NODES[id];
-  openReader({title:n?n.t:id,lead:"这是知识树上的一个节点。",body:["当前状态："+((n&&{done:"已学",new:"本周新学",need:"我已标记需学",todo:"待学"}[n.state])||"待学")+"。","想纵深？点下方相关概念，或去「待挖掘」看系统推荐的下一钻方向。"],rel:[],note:"知识树不是打卡计数，而是你看清自己「学了什么、怎么连起来」的地图。"});
+document.getElementById("treeChPills").addEventListener("click",function(e){
+  var b=e.target.closest("[data-ch]");if(!b)return;treeCh=b.getAttribute("data-ch");mapFocus=null;
+  renderTreePills();renderTree();if(treeMode==="map")renderMap();
 });
+document.getElementById("treeEdit").addEventListener("click",openTreeEditor);
+
+/* 知识树点击：主题展开 / 卡片打开 / 标星 */
+document.getElementById("treeList").addEventListener("click",function(e){
+  var star=e.target.closest(".star");
+  if(star){var sc=star.closest(".cardrow");if(sc){var sid=sc.getAttribute("data-id");var c=getCard(sid);if(!c)return;var on=!c.star;setStar(sid,on);star.classList.toggle("on",on);toast(on?"已标星":"已取消标星");}return;}
+  var th=e.target.closest("[data-topic]");if(th){toggleTopic(th.getAttribute("data-topic"));return;}
+  var cr=e.target.closest(".cardrow[data-id]");
+  if(cr){var c=getCard(cr.getAttribute("data-id"));
+    if(c){var rect=cr.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
+      openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:c.note||"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}return;}
+});
+
+/* ====================== 知识树编辑器（App 内，本地持久化） ====================== */
+function openTreeEditor(){
+  var tab="topic";
+  function draw(){
+    var ch=treeCh,topics=TOPICS[ch]||[],mesh=MESH[ch]||[],html='';
+    html+='<div class="sh">编辑 · '+esc(CH_META[ch].n)+' 知识树</div>'
+      +'<div class="edtabs"><button data-et="topic" class="'+(tab==="topic"?"on":"")+'">主题</button><button data-et="mesh" class="'+(tab==="mesh"?"on":"")+'">延伸连线</button></div>';
+    if(tab==="topic"){
+      html+='<p class="edhint">主题是知识的「收纳盒」。卡片会按名称/关键词自动归入；改名字会同时改自动归卡规则（下方空主题＝待补缺口）。</p>';
+      topics.forEach(function(t){html+='<div class="edrow"><input data-tedit="'+esc(t.id)+'" value="'+esc(t.name)+'"><span class="del" data-tdel="'+esc(t.id)+'">删除</span></div>';});
+      html+='<div class="edadd"><input id="newTopic" placeholder="新主题名，如：数据资产"><button id="addTopic">添加</button></div>';
+    }else{
+      html+='<p class="edhint">连线表达「学完 A，建议延伸 B」或「A 与 B 相关」——你自定义的网状补充方向。</p>';
+      if(topics.length<2){html+='<div class="empty">至少 2 个主题才能连线，先去「主题」添加一个。</div>';}
+      else{
+        html+='<div class="edmesh"><select id="meshA">'+topics.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>';}).join('')+'</select>'
+          +'<span style="color:var(--ink-3)">→</span>'
+          +'<select id="meshB">'+topics.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>';}).join('')+'</select>'
+          +'<button id="addMesh">连</button></div>';
+        if(mesh.length)html+='<div style="margin-top:6px">'+mesh.map(function(e){var a=topicById({topics:topics},e.a),b=topicById({topics:topics},e.b);return (a&&b)?'<div class="edrow"><span class="nm">'+esc(a.name)+' → '+esc(b.name)+'</span><span class="del" data-mdel="'+esc(e.a)+'|'+esc(e.b)+'">删</span></div>':'';}).join('')+'</div>';
+        else html+='<div class="gap" style="color:var(--ink-3);font-size:12.5px;margin-top:8px">还没有延伸线。</div>';
+      }
+    }
+    document.getElementById("sheetBody").innerHTML=html;
+    var et=document.querySelector(".edtabs");
+    if(et)et.addEventListener("click",function(ev){var b=ev.target.closest("[data-et]");if(b){tab=b.getAttribute("data-et");draw();}});
+    if(tab==="topic"){
+      document.querySelectorAll("[data-tedit]").forEach(function(inp){inp.addEventListener("change",function(){var id=inp.getAttribute("data-tedit");var t=topics.find(function(x){return x.id===id;});if(t){t.name=inp.value.trim()||t.name;saveTopics(TOPICS);renderTree();if(treeMode==="map")renderMap();}});});
+      document.querySelectorAll("[data-tdel]").forEach(function(btn){btn.addEventListener("click",function(){var id=btn.getAttribute("data-tdel");
+        TOPICS[ch]=TOPICS[ch].filter(function(x){return x.id!==id;});
+        MESH[ch]=MESH[ch].filter(function(e){return e.a!==id&&e.b!==id;});
+        saveTopics(TOPICS);saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});});
+      var addBtn=document.getElementById("addTopic");
+      if(addBtn)addBtn.addEventListener("click",function(){var v=document.getElementById("newTopic").value.trim();if(!v)return;
+        TOPICS[ch]=TOPICS[ch]||[];TOPICS[ch].push({id:"t_"+ch+"_"+Date.now().toString(36),name:v,kw:[v]});
+        saveTopics(TOPICS);draw();renderTree();if(treeMode==="map")renderMap();});
+    }else if(topics.length>=2){
+      var addMeshBtn=document.getElementById("addMesh");
+      if(addMeshBtn)addMeshBtn.addEventListener("click",function(){var a=document.getElementById("meshA").value,b=document.getElementById("meshB").value;
+        if(a===b){toast("不能连自己");return;}
+        if((MESH[ch]||[]).some(function(e){return (e.a===a&&e.b===b)||(e.a===b&&e.b===a);})){toast("已有这条线");return;}
+        MESH[ch]=MESH[ch]||[];MESH[ch].push({a:a,b:b});saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});
+      document.querySelectorAll("[data-mdel]").forEach(function(btn){btn.addEventListener("click",function(){var p=btn.getAttribute("data-mdel").split("|");
+        MESH[ch]=MESH[ch].filter(function(e){return !(e.a===p[0]&&e.b===p[1])&&!(e.a===p[1]&&e.b===p[0]);});
+        saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});});
+    }
+  }
+  draw();
+  sheetMask.classList.add("on");sheet.classList.add("on");
+}
 
 /* ====================== 渲染：待挖掘 ====================== */
 function renderDig(){
@@ -872,7 +1042,7 @@ var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on");},1600);}
 
 /* ====================== 初始 ====================== */
-renderToday();renderChannels();renderTree();renderDig();
+initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 
@@ -894,7 +1064,9 @@ function loadFeed(onDone){
         if(s.tags&&s.tags[c.id])c.tags=s.tags[c.id];
       });
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
-      renderToday();renderChannels();renderDig();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderMap();
+      renderToday();renderChannels();renderDig();
+      if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
+      renderTreePills();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderMap();
     })
     .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
     .then(function(){ if(onDone)onDone(); });
