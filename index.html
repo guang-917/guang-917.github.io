@@ -540,7 +540,7 @@ function switchTab(v){
   var meta=TAB_META[v];
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
   if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
-  if(v==="channels"){chanDrill=false;document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
+  if(v==="channels"){chanDrill=false;renderChannels();document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
   setBk(false);
   window.scrollTo(0,0);
 }
@@ -609,10 +609,12 @@ function lpHTML(id){
 /* ====================== 渲染：频道门户 ====================== */
 function renderChannels(){
   var box=document.getElementById("chanPortal");var h=[];var chs=["ai","data","jp"];
-  var prog={ai:"第01期 · 2 个主题",data:"5 个概念 · 转行线",jp:"な行 · 每天两张"};
   for(var i=0;i<chs.length;i++){var c=chs[i],m=CH_META[c];
+    var nc=0;CARDS.forEach(function(x){if(normCh(x.ch)===c)nc++;});
+    var nt=(TOPICS[c]||[]).length;
+    var prog=(nc>0?nc+" 张卡":"待充实")+" · "+nt+" 个主题";
     h.push('<div class="card chan" data-chan="'+c+'"><div class="ic '+m.c+'">'+ICON[m.ic]+'</div>'
-      +'<div class="ct"><b>'+m.n+'</b><span>'+prog[c]+'</span></div><div class="ar">›</div></div>');
+      +'<div class="ct"><b>'+m.n+'</b><span>'+prog+'</span></div><div class="ar">›</div></div>');
   }
   box.innerHTML=h.join("");
 }
