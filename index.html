@@ -662,6 +662,17 @@ function renderDig(){
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
 var doneBtn=document.getElementById("doneBtn"),readTimer=null,readAccum=0,readTarget=null,readRAF=null;
+/* 已读状态本地持久化：App 是静态 PWA、无法回写 feed.json，
+   故用 localStorage 记录每张卡的已读，刷新/重开不丢（方向一） */
+var READ_KEY="kb_read";
+function loadReadState(){try{return JSON.parse(localStorage.getItem(READ_KEY)||"{}")||{};}catch(e){return {};}}
+function saveReadState(map){try{localStorage.setItem(READ_KEY,JSON.stringify(map));}catch(e){}}
+function setRead(id,val){
+  var m=loadReadState();
+  if(val)m[id]=true; else delete m[id];
+  saveReadState(m);
+  var c=getCard(id); if(c)c.read=!!val;
+}
 function openReader(data,srcRect){
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
@@ -713,7 +724,7 @@ function closeReader(){
 }
 document.getElementById("readerClose").addEventListener("click",closeReader);
 doneBtn.addEventListener("click",function(){
-  if(readTarget){var c=getCard(readTarget);if(c){c.read=true;refreshRead();}}
+  if(readTarget){setRead(readTarget,true);refreshRead();}
   markReadVisual(readTarget);
   toast("已标记为已读");
   setTimeout(closeReader,300);
@@ -733,7 +744,7 @@ function startReadTimer(){
   var tick=function(){
     if(document.visibilityState==="visible"&&curView){readAccum+=1;
       if(readAccum>=300){ // 5分钟
-        var c=getCard(readTarget);if(c&&!c.read){c.read=true;refreshRead();markReadVisual(readTarget);toast("停留够久，已自动标记已读");}
+        var c=getCard(readTarget);if(c&&!c.read){c.read=true;setRead(readTarget,true);refreshRead();markReadVisual(readTarget);toast("停留够久，已自动标记已读");}
         stopReadTimer();return;
       }
     }
@@ -742,7 +753,7 @@ function startReadTimer(){
   readRAF=setTimeout(tick,1000);
 }
 function stopReadTimer(){if(readRAF){clearTimeout(readRAF);readRAF=null;}}
-function refreshRead(){updateProgress(CARDS);}
+function refreshRead(){var list=CARDS.filter(function(c){return c.date===todayStr();});updateProgress(list);}
 function markReadVisual(id){
   if(!id)return;
   var el=document.querySelector('.card[data-id="'+cssEsc(id)+'"] .dot');
@@ -861,6 +872,9 @@ function loadFeed(onDone){
     .then(function(d){
       if(d&&Array.isArray(d.cards)&&d.cards.length){CARDS=d.cards;}
       if(d&&Array.isArray(d.dig)&&d.dig.length){DIG=d.dig;}
+      // 用本地持久化的已读状态回填（刷新/重开后仍记得学过哪些）
+      var rs=loadReadState();
+      CARDS.forEach(function(c){ if(rs[c.id])c.read=true; });
       renderToday();renderChannels();renderDig();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderMap();
     })
     .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
