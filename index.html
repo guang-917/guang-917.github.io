@@ -285,6 +285,14 @@ body{
 .recCard .ct{flex:1;min-width:0}
 .recCard .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
 .recCard .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
+/* 紧凑问答列表 + 关注专题 */
+.qrow{display:flex;align-items:center;gap:9px;padding:11px 2px;border-top:1px solid var(--line-2);cursor:pointer}
+.qrow .qdot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--ink-3)}
+.qrow .qdot.done{background:var(--data)}
+.qrow .qtitle{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qrow .qchev{color:var(--ink-3);font-size:16px;flex:none}
+.qfull{padding:6px 2px 12px 17px;font-size:13px;line-height:1.7;color:var(--ink-2)}
+.qfull .qa{color:var(--data);margin-top:4px}
 
 /* ---------- 底部抽屉 ---------- */
 .sheet-mask{position:fixed;inset:0;background:rgba(20,18,14,.32);z-index:55;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -413,16 +421,16 @@ body{
 
   <!-- 问答 / 兴趣 -->
   <section class="view" data-view="qa">
-    <p class="sub">你问过的问题、搜过的词，都记在这里＝"我感兴趣"。点「导出兴趣清单」复制给我一次，我就能让定时任务按这些兴趣深挖推送。</p>
+    <p class="sub">每张卡里随时提问，问题跟随卡片。作答后我会把问题凝练成"专题"存后台，作为日后推送的重点关注对象。</p>
     <div class="qaWrap">
-      <div class="qsec"><div class="qsh">我的问题（<span id="qaCount">0</span>）· 待云端作答</div><div id="qaAll"></div></div>
+      <div class="qsec"><div class="qsh">我关注的专题</div><div id="focusAll" class="chips"></div></div>
+      <div class="qsec"><div class="qsh">我的问题（<span id="qaCount">0</span>）· 点开看问答</div><div id="qaAll"></div></div>
       <div class="qsec"><div class="qsh">我感兴趣的词</div><div id="intAll" class="chips"></div></div>
       <div class="qsec"><div class="qsh">为你推荐（按兴趣匹配已有卡片）</div><div id="recAll"></div></div>
-      <button class="filter" id="exportInt" style="margin-top:6px">导出兴趣清单</button>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="filter" id="syncAI">同步给 AI（作答 + 更新云端）</button>
         <button class="filter" id="backupBtn">备份到文件</button>
         <button class="filter" id="restoreBtn">从文件恢复</button>
-        <button class="filter" id="syncCloudBtn">全部知识导出（贴给 AI 同步云端）</button>
         <input type="file" id="restoreFile" accept="application/json" style="display:none">
       </div>
     </div>
@@ -936,11 +944,18 @@ function loadCloudKB(){
       if(d.local){var s=loadLocal();for(var k in d.local){s[k]=Object.assign({},s[k],d.local[k]);}saveLocal(s);}
       if(d.topics){TOPICS=mergeTopics(d.topics);saveTopics(TOPICS);}
       if(d.mesh){MESH=mergeMeshObj(d.mesh);saveMesh(MESH);}
+      if(d.focus)mergeFocus(d.focus);
       renderTree();updateQaBdg();
     }).catch(function(){});
 }
+/* 关注专题（凝练标题，作答后生成，存后台当推送重点） */
+var LS_FOC="kb_focus";
+function loadFocus(){try{return JSON.parse(localStorage.getItem(LS_FOC)||"[]")||[];}catch(e){return [];}}
+function saveFocus(a){try{localStorage.setItem(LS_FOC,JSON.stringify(a));}catch(e){}}
+function addFocus(title,fromQ,ch){if(!title)return;var a=loadFocus();if(a.some(function(x){return x.title===title;}))return;a.unshift({title:title,fromQ:fromQ||"",ch:ch||"",ts:Date.now()});if(a.length>50)a=a.slice(0,50);saveFocus(a);}
+function mergeFocus(server){if(!server||!server.length)return;var local=loadFocus(),byT={};local.forEach(function(x){byT[x.title]=x;});server.forEach(function(s){byT[s.title]=s;});saveFocus(Object.keys(byT).map(function(k){return byT[k];}));}
 /* 本地备份 / 恢复 + 同步云端导出 */
-function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH};}
+function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
 function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}renderTree();updateQaBdg();toast('已从文件恢复');}
 function updateQaBdg(){
@@ -963,8 +978,13 @@ function renderQA(){
   var qs=loadQA();
   document.getElementById("qaCount").textContent=qs.length;
   document.getElementById("qaAll").innerHTML=qs.length?qs.map(function(it){
-    return '<div class="qitem"><div class="qc">卡片：'+esc(it.cardTitle||"(已失效)")+'</div><div class="qq">问：'+esc(it.q)+'</div>'+(it.a?('<div class="qa">答：'+esc(it.a)+'</div>'):'<div class="qpend">待云端作答</div>')+'</div>';
+    var done=!!it.a;
+    return '<div class="qrow" data-qid="'+esc(it.id)+'"><span class="qdot'+(done?' done':'')+'"></span>'
+      +'<span class="qtitle">'+esc(it.title||it.q)+'</span><span class="qchev">›</span>'
+      +'<div class="qfull" style="display:none">问：'+esc(it.q)+'<br>'+(it.a?('答：'+esc(it.a)):'<span style="color:var(--ink-3)">待云端作答</span>')+'</div></div>';
   }).join(""):'<div class="qempty">还没问过问题。打开任意卡片，在底部「问答」区随时提问。</div>';
+  var foc=loadFocus();
+  document.getElementById("focusAll").innerHTML=foc.length?foc.map(function(x){return '<span>'+esc(x.title)+'</span>';}).join(""):'<span style="color:var(--ink-3);font-size:12px">作答后，问题会凝练成专题出现在这里</span>';
   var ints=loadInt();
   document.getElementById("intAll").innerHTML=ints.length?ints.map(function(x){return '<span>'+esc(x.term)+'</span>';}).join(""):'<div class="qempty">搜索或提问时，相关词会自动记成"我感兴趣"。</div>';
   var rec=interestRelated();
@@ -978,21 +998,17 @@ document.getElementById("qaSend").addEventListener("click",function(){
   if(!readTarget){toast("没有对应卡片");return;}
   addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，下次推送会作答");
 });
-document.getElementById("exportInt").addEventListener("click",function(){
-  var ints=loadInt().map(function(x){return x.term;});
-  var qs=loadQA().filter(function(x){return !x.a;}).map(function(x){return (x.cardTitle||"")+"："+x.q;});
-  var txt="【我的兴趣词】\n"+(ints.join("、")||"（暂无）")+"\n\n【待回答的问题】\n"+(qs.join("\n")||"（无");
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(function(){toast("已复制，贴给 AI 即可");},function(){toast("复制失败，长按选择手动复制");});
-  }else{toast("请长按选择下方文本复制：\n"+txt);}
+document.getElementById("qaAll").addEventListener("click",function(e){
+  var row=e.target.closest(".qrow");if(!row)return;
+  var full=row.querySelector(".qfull");if(full)full.style.display=full.style.display==="none"?"block":"none";
 });
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
 document.getElementById("restoreFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{restoreKB(JSON.parse(rd.result));}catch(err){toast("解析失败");}};rd.readAsText(f);e.target.value="";});
-document.getElementById("syncCloudBtn").addEventListener("click",function(){
+document.getElementById("syncAI").addEventListener("click",function(){
   var txt=JSON.stringify(allKB());
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("已复制全部知识，贴给 AI 即可同步云端");},function(){toast("复制失败，长按选择手动复制");});}
-  else{toast("请长按选择下方文本复制：\n"+txt);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("已复制全部知识，贴给 AI 即可作答 + 更新云端");},function(){toast("复制失败，长按选择手动复制");});}
+  else{toast("复制失败，请长按选择手动复制："+txt);}
 });
 document.getElementById("recAll").addEventListener("click",function(e){
   var cr=e.target.closest(".recCard[data-id]");if(!cr)return;
