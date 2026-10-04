@@ -901,6 +901,21 @@ function interestRelated(){
   });
   return out.slice(0,15);
 }
+/* 答案回填：feed.json 里带原题(q)的「答案卡」推下来后，按问题原文匹配本地问答记录，自动填回答案 */
+function backfillAnswers(){
+  var qa=loadQA(); if(!qa.length)return;
+  var byQ={}; qa.forEach(function(it){byQ[it.q.trim().toLowerCase()]=it;});
+  var changed=false;
+  CARDS.forEach(function(c){
+    if(!c.q)return;
+    var key=c.q.trim().toLowerCase();
+    if(byQ[key]){
+      var ans=Array.isArray(c.body)?c.body.join("\n"):(c.note||c.sum||"");
+      if(byQ[key].a!==ans){byQ[key].a=ans;changed=true;}
+    }
+  });
+  if(changed)saveQA(qa);
+}
 function updateQaBdg(){
   var n=loadQA().length;
   var b=document.getElementById("qaBdg");if(b)b.textContent=n;
@@ -1198,6 +1213,7 @@ function loadFeed(onDone){
         if(s.star&&s.star[c.id])c.star=true;
         if(s.tags&&s.tags[c.id])c.tags=s.tags[c.id];
       });
+      backfillAnswers();
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
       renderToday();renderChannels();renderDig();
       if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
