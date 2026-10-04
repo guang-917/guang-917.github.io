@@ -106,6 +106,11 @@ body{
 .card .meta{font-size:11.5px;color:var(--ink-3);margin-top:10px;display:flex;gap:10px;align-items:center}
 .card .star{margin-left:auto;font-size:14px;color:var(--ink-3)}
 .card .star.on{color:var(--gold)}
+/* 已读卡片视觉弱化 + 只看未读筛选 */
+.card.done{opacity:.5}
+.card.done .sum,.card.done h3{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+.filter{margin-left:auto;font-size:12px;color:var(--ink-3);background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .15s}
+.filter.on{background:var(--ai);color:#fff;border-color:var(--ai)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .tags span{font-size:11px;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line);padding:2px 8px;border-radius:6px}
 
@@ -281,6 +286,7 @@ body{
     <div class="pbar">
       <div class="pt"><span>今日进度</span><b id="pTxt">3 / 4 已完成</b></div>
       <div class="track"><i id="pFill" style="width:75%"></i></div>
+      <button class="filter" id="hideReadBtn" title="只看未读">只看未读</button>
     </div>
     <div id="todayList"></div>
   </section>
@@ -476,9 +482,10 @@ function todaySub(){
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
   var list=CARDS.filter(function(c){return c.date===todayStr();});
+  if(HIDE_READ)list=list.filter(function(c){return !c.read;});
   for(var i=0;i<list.length;i++){
     var c=list[i],m=chMeta(c.ch);
-    h.push('<div class="card" data-id="'+esc(c.id)+'" data-type="card">'
+    h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card">'
       +'<div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<span class="chip '+m.c+'">'+m.n+'</span>'
       +'<h3>'+esc(c.title)+'</h3></div>'
@@ -487,7 +494,7 @@ function renderToday(){
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'
       +lpHTML(c.id)+'</div>');
   }
-  if(!list.length)h.push('<div class="empty">今天还没新推送 · 去「学习频道」翻历史 →</div>');
+  if(!list.length)h.push('<div class="empty">'+(HIDE_READ?'未读的都看完啦 · 关掉「只看未读」看全部':'今天还没新推送 · 去「学习频道」翻历史 →')+'</div>');
   box.innerHTML=h.join("");
   updateProgress(list);
 }
@@ -515,22 +522,23 @@ function renderChannels(){
   }
   box.innerHTML=h.join("");
 }
+var curChan="ai";
 function renderChanList(ch){
   var m=CH_META[ch];
   document.getElementById("chanList").innerHTML='<p class="sub">这个频道的全部推送都在这里，含历史 · 点卡片进入全屏</p>'
     +'<div id="clBody"></div>';
   var body=document.getElementById("clBody");var h=[];
-  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;
-    h.push('<div class="card" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
+  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;if(HIDE_READ&&c.read)continue;
+    h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<h3>'+esc(c.title)+'</h3></div><div class="sum">'+esc(c.sum)+'</div>'
       +(c.tags&&c.tags.length?'<div class="tags">'+c.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>':'')
-      +'<div class="meta"><span>'+esc(c.date2)+'</span></div>'+lpHTML(c.id)+'</div>');
+      +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'+lpHTML(c.id)+'</div>');
   }
   if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
   body.innerHTML=h.join("");
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
-  hdrSub.textContent=m.n+" · 今日与历史";chanDrill=true;setBk(true);window.scrollTo(0,0);
+  hdrSub.textContent=m.n+" · 今日与历史";chanDrill=true;curChan=ch;setBk(true);window.scrollTo(0,0);
 }
 document.getElementById("chanPortal").addEventListener("click",function(e){
   var el=e.target.closest("[data-chan]");if(el)renderChanList(el.getAttribute("data-chan"));
@@ -662,17 +670,19 @@ function renderDig(){
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
 var doneBtn=document.getElementById("doneBtn"),readTimer=null,readAccum=0,readTarget=null,readRAF=null;
-/* 已读状态本地持久化：App 是静态 PWA、无法回写 feed.json，
-   故用 localStorage 记录每张卡的已读，刷新/重开不丢（方向一） */
-var READ_KEY="kb_read";
-function loadReadState(){try{return JSON.parse(localStorage.getItem(READ_KEY)||"{}")||{};}catch(e){return {};}}
-function saveReadState(map){try{localStorage.setItem(READ_KEY,JSON.stringify(map));}catch(e){}}
-function setRead(id,val){
-  var m=loadReadState();
-  if(val)m[id]=true; else delete m[id];
-  saveReadState(m);
-  var c=getCard(id); if(c)c.read=!!val;
-}
+/* 本地操作统一持久化：App 是静态 PWA、无法回写 feed.json，
+   故把所有用户操作（已读/标星/标签/待挖掘）存进 localStorage，刷新/重开不丢 */
+var LS_KEY="kb_local";
+function loadLocal(){try{var s=JSON.parse(localStorage.getItem(LS_KEY)||"{}");if(!s||typeof s!=="object")s={};
+  // 兼容旧版 kb_read
+  try{var old=JSON.parse(localStorage.getItem("kb_read")||"{}");if(old&&typeof old==="object"){s.read=Object.assign({},old,s.read);localStorage.removeItem("kb_read");}}catch(e){}
+  return s;}catch(e){return {};}}
+function saveLocal(s){try{localStorage.setItem(LS_KEY,JSON.stringify(s));}catch(e){}}
+function setRead(id,val){var s=loadLocal();s.read=s.read||{};(val?s.read[id]=true:delete s.read[id]);saveLocal(s);var c=getCard(id);if(c)c.read=!!val;}
+function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=true:delete s.star[id]);saveLocal(s);var c=getCard(id);if(c)c.star=!!val;}
+function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
+function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
+var HIDE_READ=false;
 function openReader(data,srcRect){
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
@@ -779,6 +789,9 @@ document.querySelector(".sheet .grip").addEventListener("click",closeSheet);
 
 /* ====================== 卡片点击（事件委托） ====================== */
 document.getElementById("wrap").addEventListener("click",function(e){
+  // 标星切换（点卡片右下角星标）
+  var star=e.target.closest(".star");
+  if(star){var sc=star.closest(".card[data-id]");if(sc){var sid=sc.getAttribute("data-id");var c=getCard(sid);var on=!c.star;setStar(sid,on);star.classList.toggle("on",on);toast(on?"已标星":"已取消标星");}return;}
   // 长按面板按钮
   var actBtn=e.target.closest("[data-act]");
   if(actBtn){e.stopPropagation();var lp=actBtn.closest(".lp");var id=lp.getAttribute("data-lp");handleLp(actBtn.getAttribute("data-act"),id,lp);return;}
@@ -837,19 +850,20 @@ function buildTagPicker(lp){
   tp.innerHTML=html;
   tp.querySelectorAll("[data-tag]").forEach(function(s){
     s.addEventListener("click",function(){
-      var tag=s.getAttribute("data-tag");var c=getCard(lp.getAttribute("data-lp"));
+      var tag=s.getAttribute("data-tag");var id=lp.getAttribute("data-lp");var c=getCard(id);
       c.tags=c.tags||[];if(c.tags.indexOf(tag)>=0){c.tags.splice(c.tags.indexOf(tag),1);s.classList.remove("on");}
       else{c.tags.push(tag);s.classList.add("on");}
+      setTags(id,c.tags);   // 持久化
       toast("标签："+tag);
     });
   });
   var inp=tp.querySelector("input");
-  inp.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&inp.value.trim()){var c=getCard(lp.getAttribute("data-lp"));c.tags=c.tags||[];c.tags.push(inp.value.trim());toast("已加标签："+inp.value.trim());inp.value="";}});
+  inp.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&inp.value.trim()){var id=lp.getAttribute("data-lp");var c=getCard(id);c.tags=c.tags||[];c.tags.push(inp.value.trim());setTags(id,c.tags);toast("已加标签："+inp.value.trim());inp.value="";}});
 }
 function addDig(id){
   var c=getCard(id);if(!c)return;
-  var exist=DIG.filter(function(d){return d.q.indexOf(c.title)>=0;});
-  DIG.unshift({ch:c.ch,q:"深挖："+c.title,why:"你手动标记要深挖",from:"来自："+c.title});
+  var item={ch:normCh(c.ch),q:"深挖："+c.title,why:"你手动标记要深挖",from:"来自："+c.title};
+  addLocalDig(item);   // 持久化 + 内存更新（含去重）
   renderDig();
 }
 
@@ -872,9 +886,14 @@ function loadFeed(onDone){
     .then(function(d){
       if(d&&Array.isArray(d.cards)&&d.cards.length){CARDS=d.cards;}
       if(d&&Array.isArray(d.dig)&&d.dig.length){DIG=d.dig;}
-      // 用本地持久化的已读状态回填（刷新/重开后仍记得学过哪些）
-      var rs=loadReadState();
-      CARDS.forEach(function(c){ if(rs[c.id])c.read=true; });
+      // 用本地持久化回填所有用户操作（已读/标星/标签/待挖掘），刷新/重开不丢
+      var s=loadLocal();
+      CARDS.forEach(function(c){
+        if(s.read&&s.read[c.id])c.read=true;
+        if(s.star&&s.star[c.id])c.star=true;
+        if(s.tags&&s.tags[c.id])c.tags=s.tags[c.id];
+      });
+      if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
       renderToday();renderChannels();renderDig();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderMap();
     })
     .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
@@ -898,6 +917,9 @@ loadFeed();
     loadFeed(function(){ busy=false; reset(); if(typeof toast==='function')toast('已拉取最新推送'); });
   }
   var rb=document.getElementById('refreshBtn'); if(rb) rb.addEventListener('click', doRefresh);
+  var hrb=document.getElementById('hideReadBtn'); if(hrb) hrb.addEventListener('click', function(){
+    HIDE_READ=!HIDE_READ; hrb.classList.toggle('on',HIDE_READ); renderToday(); if(curView==="channels"&&chanDrill)renderChanList(curChan||"ai");
+  });
   document.addEventListener('touchstart', function(e){
     if(busy||!todayActive()||window.scrollY>0) return;
     if(e.target.closest('.card,.reader,.sheet,.tab,button')) return;
