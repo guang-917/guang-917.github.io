@@ -106,9 +106,10 @@ body{
 .card .meta{font-size:11.5px;color:var(--ink-3);margin-top:10px;display:flex;gap:10px;align-items:center}
 .card .star{margin-left:auto;font-size:14px;color:var(--ink-3)}
 .card .star.on{color:var(--gold)}
-/* 已读卡片视觉弱化 + 只看未读筛选 */
-.card.done{opacity:.5}
-.card.done .sum,.card.done h3{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+/* 已读卡片：标题划线 + 收起（只显标题与标签，摘要/时间隐藏） */
+.card.done{opacity:.6}
+.card.done h3{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+.card.done .sum,.card.done .meta{display:none}
 .filter{margin-left:auto;font-size:12px;color:var(--ink-3);background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .15s}
 .filter.on{background:var(--ai);color:#fff;border-color:var(--ai)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -334,7 +335,6 @@ body{
     <div class="pbar">
       <div class="pt"><span>今日进度</span><b id="pTxt">3 / 4 已完成</b></div>
       <div class="track"><i id="pFill" style="width:75%"></i></div>
-      <button class="filter" id="hideReadBtn" title="只看未读">只看未读</button>
     </div>
     <div id="todayList"></div>
   </section>
@@ -576,7 +576,6 @@ function todaySub(){
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
   var list=CARDS.filter(function(c){return c.date===todayStr();});
-  if(HIDE_READ)list=list.filter(function(c){return !c.read;});
   for(var i=0;i<list.length;i++){
     var c=list[i],m=chMeta(c.ch);
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card">'
@@ -588,7 +587,7 @@ function renderToday(){
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'
       +lpHTML(c.id)+'</div>');
   }
-  if(!list.length)h.push('<div class="empty">'+(HIDE_READ?'未读的都看完啦 · 关掉「只看未读」看全部':'今天还没新推送 · 去「学习频道」翻历史 →')+'</div>');
+  if(!list.length)h.push('<div class="empty">今天还没新推送 · 去「学习频道」翻历史 →</div>');
   box.innerHTML=h.join("");
   updateProgress(list);
 }
@@ -624,7 +623,7 @@ function renderChanList(ch){
   document.getElementById("chanList").innerHTML='<p class="sub">这个频道的全部推送都在这里，含历史 · 点卡片进入全屏</p>'
     +'<div id="clBody"></div>';
   var body=document.getElementById("clBody");var h=[];
-  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;if(HIDE_READ&&c.read)continue;
+  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<h3>'+esc(c.title)+'</h3></div><div class="sum">'+esc(c.sum)+'</div>'
       +(c.tags&&c.tags.length?'<div class="tags">'+c.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>':'')
@@ -854,7 +853,6 @@ function setRead(id,val){var s=loadLocal();s.read=s.read||{};(val?s.read[id]=tru
 function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=true:delete s.star[id]);saveLocal(s);var c=getCard(id);if(c)c.star=!!val;}
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
-var HIDE_READ=false;
 function openReader(data,srcRect){
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
@@ -938,8 +936,10 @@ function stopReadTimer(){if(readRAF){clearTimeout(readRAF);readRAF=null;}}
 function refreshRead(){var list=CARDS.filter(function(c){return c.date===todayStr();});updateProgress(list);}
 function markReadVisual(id){
   if(!id)return;
-  var el=document.querySelector('.card[data-id="'+cssEsc(id)+'"] .dot');
-  if(el)el.classList.add("read");
+  document.querySelectorAll('.card[data-id="'+cssEsc(id)+'"]').forEach(function(el){
+    el.classList.add("done");
+    var d=el.querySelector('.dot'); if(d)d.classList.add("read");
+  });
 }
 
 /* ====================== 底部抽屉 ====================== */
@@ -1091,9 +1091,6 @@ loadFeed();
     loadFeed(function(){ busy=false; reset(); if(typeof toast==='function')toast('已拉取最新推送'); });
   }
   var rb=document.getElementById('refreshBtn'); if(rb) rb.addEventListener('click', doRefresh);
-  var hrb=document.getElementById('hideReadBtn'); if(hrb) hrb.addEventListener('click', function(){
-    HIDE_READ=!HIDE_READ; hrb.classList.toggle('on',HIDE_READ); renderToday(); if(curView==="channels"&&chanDrill)renderChanList(curChan||"ai");
-  });
   document.addEventListener('touchstart', function(e){
     if(busy||!todayActive()||window.scrollY>0) return;
     if(e.target.closest('.card,.reader,.sheet,.tab,button')) return;
