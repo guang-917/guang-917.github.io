@@ -892,7 +892,13 @@ function addInterest(term,src){
   if(a.some(function(x){return x.term===term;}))return;
   a.unshift({term:term,src:src||"search",ts:Date.now()});
   if(a.length>80)a=a.slice(0,80);
-  saveInt(a);updateQaBdg();
+  saveInt(a);renderIntChips();updateQaBdg();
+}
+/* 实时刷新「我感兴趣的词」胶囊（搜索/提问时立即可见，不必切到问答Tab才刷新） */
+function renderIntChips(){
+  var el=document.getElementById("intAll");if(!el)return;
+  var ints=loadInt();
+  el.innerHTML=ints.length?ints.map(function(x){return '<span>'+esc(x.term)+'</span>';}).join(""):'<div class="qempty">搜索或提问时，相关词会自动记成"我感兴趣"。</div>';
 }
 function addQA(cardId,q){
   q=(q||"").trim();if(!q||!cardId)return null;
@@ -985,8 +991,7 @@ function renderQA(){
   }).join(""):'<div class="qempty">还没问过问题。打开任意卡片，在底部「问答」区随时提问。</div>';
   var foc=loadFocus();
   document.getElementById("focusAll").innerHTML=foc.length?foc.map(function(x){return '<span>'+esc(x.title)+'</span>';}).join(""):'<span style="color:var(--ink-3);font-size:12px">作答后，问题会凝练成专题出现在这里</span>';
-  var ints=loadInt();
-  document.getElementById("intAll").innerHTML=ints.length?ints.map(function(x){return '<span>'+esc(x.term)+'</span>';}).join(""):'<div class="qempty">搜索或提问时，相关词会自动记成"我感兴趣"。</div>';
+  renderIntChips();
   var rec=interestRelated();
   document.getElementById("recAll").innerHTML=rec.length?rec.map(function(c){
     return '<div class="recCard" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span><div class="ct"><b>'+esc(c.title)+'</b>'+(c.sum?'<p>'+esc(c.sum)+'</p>':'')+'</div></div>';
