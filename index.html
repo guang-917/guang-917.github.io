@@ -419,6 +419,12 @@ body{
       <div class="qsec"><div class="qsh">我感兴趣的词</div><div id="intAll" class="chips"></div></div>
       <div class="qsec"><div class="qsh">为你推荐（按兴趣匹配已有卡片）</div><div id="recAll"></div></div>
       <button class="filter" id="exportInt" style="margin-top:6px">导出兴趣清单</button>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="filter" id="backupBtn">备份到文件</button>
+        <button class="filter" id="restoreBtn">从文件恢复</button>
+        <button class="filter" id="syncCloudBtn">全部知识导出（贴给 AI 同步云端）</button>
+        <input type="file" id="restoreFile" accept="application/json" style="display:none">
+      </div>
     </div>
   </section>
 </div>
@@ -916,6 +922,27 @@ function backfillAnswers(){
   });
   if(changed)saveQA(qa);
 }
+/* 云端知识库：拉取 user_kb.json 合并到本地（知识跟随用户成长，清缓存/换设备可恢复） */
+function mergeQA(server){if(!server||!server.length)return;var local=loadQA(),byQ={};local.forEach(function(x){byQ[x.q.trim().toLowerCase()]=x;});server.forEach(function(s){byQ[s.q.trim().toLowerCase()]=s;});saveQA(Object.keys(byQ).map(function(k){return byQ[k];}));}
+function mergeInterest(server){if(!server||!server.length)return;var local=loadInt(),byT={};local.forEach(function(x){byT[x.term]=x;});server.forEach(function(s){byT[s.term]=s;});saveInt(Object.keys(byT).map(function(k){return byT[k];}));}
+function mergeTopics(server){var out=TOPICS;for(var ch in server){if(!out[ch])out[ch]=[];var byId={};out[ch].forEach(function(t){byId[t.id]=t;});server[ch].forEach(function(t){byId[t.id]=t;});out[ch]=Object.keys(byId).map(function(k){return byId[k];});}return out;}
+function mergeMeshObj(server){var out=MESH;for(var ch in server){if(!out[ch])out[ch]=[];var seen={};out[ch].forEach(function(e){seen[e.a+'|'+e.b]=1;});server[ch].forEach(function(e){if(!seen[e.a+'|'+e.b])out[ch].push(e);});}return out;}
+function loadCloudKB(){
+  fetch('user_kb.json?v='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(d){
+      if(!d||typeof d!=="object")return;
+      mergeQA(d.qa);mergeInterest(d.interest);
+      if(d.local){var s=loadLocal();for(var k in d.local){s[k]=Object.assign({},s[k],d.local[k]);}saveLocal(s);}
+      if(d.topics){TOPICS=mergeTopics(d.topics);saveTopics(TOPICS);}
+      if(d.mesh){MESH=mergeMeshObj(d.mesh);saveMesh(MESH);}
+      renderTree();updateQaBdg();
+    }).catch(function(){});
+}
+/* 本地备份 / 恢复 + 同步云端导出 */
+function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH};}
+function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
+function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}renderTree();updateQaBdg();toast('已从文件恢复');}
 function updateQaBdg(){
   var n=loadQA().length;
   var b=document.getElementById("qaBdg");if(b)b.textContent=n;
@@ -958,6 +985,14 @@ document.getElementById("exportInt").addEventListener("click",function(){
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(txt).then(function(){toast("已复制，贴给 AI 即可");},function(){toast("复制失败，长按选择手动复制");});
   }else{toast("请长按选择下方文本复制：\n"+txt);}
+});
+document.getElementById("backupBtn").addEventListener("click",downloadKB);
+document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
+document.getElementById("restoreFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{restoreKB(JSON.parse(rd.result));}catch(err){toast("解析失败");}};rd.readAsText(f);e.target.value="";});
+document.getElementById("syncCloudBtn").addEventListener("click",function(){
+  var txt=JSON.stringify(allKB());
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("已复制全部知识，贴给 AI 即可同步云端");},function(){toast("复制失败，长按选择手动复制");});}
+  else{toast("请长按选择下方文本复制：\n"+txt);}
 });
 document.getElementById("recAll").addEventListener("click",function(e){
   var cr=e.target.closest(".recCard[data-id]");if(!cr)return;
@@ -1214,6 +1249,7 @@ function loadFeed(onDone){
         if(s.tags&&s.tags[c.id])c.tags=s.tags[c.id];
       });
       backfillAnswers();
+      loadCloudKB();
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
       renderToday();renderChannels();renderDig();
       if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
