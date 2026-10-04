@@ -257,6 +257,34 @@ body{
 .reader .donebtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 36px);max-width:488px;background:var(--data);color:#fff;border:none;border-radius:13px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px -8px color-mix(in srgb,var(--data) 70%,transparent);transition:transform .15s var(--spring),opacity .3s}
 .reader .donebtn:active{transform:translateX(-50%) scale(.97)}
 .reader .donebtn.hide{opacity:0;pointer-events:none}
+/* 卡片内问答 + 兴趣 */
+.qa{max-width:520px;margin:14px auto 0;padding:0 16px 8px}
+.qa .qah{font-size:13px;color:var(--ink-2);margin-bottom:8px;font-weight:600}
+.qa .qalist{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.qa .qaitem{background:var(--card-2);border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.6}
+.qa .qaitem .qq{color:var(--ink)}
+.qa .qaitem .qa{color:var(--data);margin-top:3px}
+.qa .qaitem .qpend{color:var(--ink-3);font-size:12px;margin-top:3px}
+.qa .qempty{color:var(--ink-3);font-size:12.5px;margin-bottom:10px}
+.qa .qain{display:flex;gap:8px}
+.qa .qain textarea{flex:1;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 11px;font-size:13px;color:var(--ink);resize:none;height:42px;font-family:inherit}
+.qa .qain button{background:var(--ai);color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:13px;font-weight:600;cursor:pointer}
+/* 问答 tab */
+.qaWrap{max-width:520px;margin:0 auto;padding:4px 16px 24px}
+.qsec{margin-top:14px}
+.qsh{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips span{background:var(--ai-soft);color:var(--ai);border-radius:8px;padding:5px 11px;font-size:12.5px}
+.qitem{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+.qitem .qc{font-size:13px;color:var(--ink-2);margin-bottom:4px}
+.qitem .qq{font-size:14px;font-weight:600;line-height:1.5}
+.qitem .qa{font-size:13px;color:var(--data);margin-top:5px;line-height:1.6}
+.qitem .qpend{font-size:12px;color:var(--ink-3);margin-top:4px}
+.recCard{display:flex;gap:9px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
+.recCard .dot{margin-top:7px;flex:none}
+.recCard .ct{flex:1;min-width:0}
+.recCard .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
+.recCard .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
 
 /* ---------- 底部抽屉 ---------- */
 .sheet-mask{position:fixed;inset:0;background:rgba(20,18,14,.32);z-index:55;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -382,6 +410,17 @@ body{
     <p class="sub">系统从你的兴趣信号里攒下的「可往下钻」线索。每天只主动喂 1 个，其余排队候着——想挖哪个，点开看「为什么推荐」。</p>
     <div id="digList"></div>
   </section>
+
+  <!-- 问答 / 兴趣 -->
+  <section class="view" data-view="qa">
+    <p class="sub">你问过的问题、搜过的词，都记在这里＝"我感兴趣"。点「导出兴趣清单」复制给我一次，我就能让定时任务按这些兴趣深挖推送。</p>
+    <div class="qaWrap">
+      <div class="qsec"><div class="qsh">我的问题（<span id="qaCount">0</span>）· 待云端作答</div><div id="qaAll"></div></div>
+      <div class="qsec"><div class="qsh">我感兴趣的词</div><div id="intAll" class="chips"></div></div>
+      <div class="qsec"><div class="qsh">为你推荐（按兴趣匹配已有卡片）</div><div id="recAll"></div></div>
+      <button class="filter" id="exportInt" style="margin-top:6px">导出兴趣清单</button>
+    </div>
+  </section>
 </div>
 
 <!-- 底部导航 -->
@@ -390,6 +429,7 @@ body{
   <div class="tab" data-tab="channels"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5-8 4.5-8-4.5 8-4.5z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16l8 4.5 8-4.5"/></svg></div><div class="lb">频道</div></div>
   <div class="tab" data-tab="tree"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="12" r="2.4"/><path d="M6 8.4v7.2"/><path d="M8.2 7.1l7.4 3.5"/><path d="M8.2 16.9l7.4-3.5"/></svg></div><div class="lb">知识树</div></div>
   <div class="tab" data-tab="dig"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.4 10.9c.7.5 1.1 1.3 1.2 2.1h4.4c.1-.8.5-1.6 1.2-2.1A6 6 0 0 0 12 3z"/></svg></div><div class="lb">待挖掘</div><span class="bdg" id="digBdg">0</span></div>
+  <div class="tab" data-tab="qa"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 1 1-8-8"/><path d="M12 8v4l3 2"/><path d="M19 4l2 2-2 2"/></svg></div><div class="lb">问答</div><span class="bdg" id="qaBdg">0</span></div>
 </nav>
 
 <!-- 全屏阅读器 -->
@@ -400,6 +440,11 @@ body{
       <div class="rt" id="readerTitle"></div>
     </div>
     <div class="rbody" id="readerBody"></div>
+    <div class="qa" id="qaBox" style="display:none">
+      <div class="qah">问这张卡（随时提问，问题存本地）</div>
+      <div class="qalist" id="qaList"></div>
+      <div class="qain"><textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea><button id="qaSend">提问</button></div>
+    </div>
   </div>
   <button class="donebtn hide" id="doneBtn">标记为已读</button>
 </div>
@@ -526,7 +571,7 @@ themeBtn.addEventListener("click",function(){var cur=document.documentElement.ge
 /* ====================== Tab 切换 ====================== */
 var hdr=document.getElementById("hdr"),hdrTitle=document.getElementById("hdrTitle"),hdrSub=document.getElementById("hdrSub");
 var backBtn=document.getElementById("backBtn"),tabbar=document.getElementById("tabbar");
-var TAB_META={today:["知识工作台","今天 · 10月3日 周六"],channels:["学习频道","三个方向，各有节奏"],tree:["知识树","你走过的路，长成的形状"],dig:["待挖掘","系统攒下的可钻线索"]};
+var TAB_META={today:["知识工作台","今天 · 10月3日 周六"],channels:["学习频道","三个方向，各有节奏"],tree:["知识树","你走过的路，长成的形状"],dig:["待挖掘","系统攒下的可钻线索"],qa:["问答 / 兴趣","我问过什么、对什么感兴趣"]};
 var curView="today",chanDrill=false;
 function switchTab(v){
   curView=v;
@@ -541,6 +586,7 @@ function switchTab(v){
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
   if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
   if(v==="channels"){chanDrill=false;renderChannels();document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
+  if(v==="qa"){renderQA();}
   setBk(false);
   window.scrollTo(0,0);
 }
@@ -650,6 +696,7 @@ chanSearch.addEventListener("input",function(){
 chanClr.addEventListener("click",function(){chanSearch.value="";chanClr.style.display="none";document.getElementById("searchRes").style.display="none";document.getElementById("chanPortal").style.display="";hdrSub.textContent=TAB_META.channels[1];});
 function doSearch(q){
   var box=document.getElementById("searchRes");var low=q.toLowerCase();var h=[];var n=0;
+  if(q.trim().length>=2)addInterest(q.trim(),"search");
   for(var i=0;i<CARDS.length;i++){var c=CARDS[i];
     var hay=(c.title+" "+(c.tags?c.tags.join(" "):"")+" "+c.sum+" "+(c.body?c.body.join(" "):"")).toLowerCase();
     if(hay.indexOf(low)<0)continue;n++;
@@ -819,6 +866,91 @@ function openTreeEditor(){
   sheetMask.classList.add("on");sheet.classList.add("on");
 }
 
+/* ====================== 卡片内问答 + 兴趣记录 ====================== */
+var LS_QA="kb_qa",LS_INT="kb_interest";
+function loadQA(){try{return JSON.parse(localStorage.getItem(LS_QA)||"[]")||[];}catch(e){return [];}}
+function saveQA(a){try{localStorage.setItem(LS_QA,JSON.stringify(a));}catch(e){}}
+function loadInt(){try{return JSON.parse(localStorage.getItem(LS_INT)||"[]")||[];}catch(e){return [];}}
+function saveInt(a){try{localStorage.setItem(LS_INT,JSON.stringify(a));}catch(e){}}
+function addInterest(term,src){
+  term=(term||"").trim();if(!term)return;
+  var a=loadInt();
+  if(a.some(function(x){return x.term===term;}))return;
+  a.unshift({term:term,src:src||"search",ts:Date.now()});
+  if(a.length>80)a=a.slice(0,80);
+  saveInt(a);updateQaBdg();
+}
+function addQA(cardId,q){
+  q=(q||"").trim();if(!q||!cardId)return null;
+  var c=getCard(cardId);
+  var a=loadQA();
+  var item={id:"qa_"+Date.now().toString(36),cardId:cardId,cardTitle:c?c.title:"",cardSum:c?(c.sum||""):"",q:q,a:"",ts:Date.now()};
+  a.unshift(item);saveQA(a);addInterest(q,"qa");updateQaBdg();
+  return item;
+}
+/* 按兴趣匹配已有卡片，做"为你推荐" */
+function interestRelated(){
+  var terms=loadInt().map(function(x){return x.term.toLowerCase();});
+  if(!terms.length)return [];
+  var seen={},out=[];
+  CARDS.forEach(function(c){
+    if(seen[c.id])return;
+    var txt=((c.title||"")+" "+(c.tags?c.tags.join(" "):"")+" "+(c.sum||"")).toLowerCase();
+    var hit=terms.some(function(t){return t&&txt.indexOf(t)>=0;});
+    if(hit){out.push(c);seen[c.id]=1;}
+  });
+  return out.slice(0,15);
+}
+function updateQaBdg(){
+  var n=loadQA().length;
+  var b=document.getElementById("qaBdg");if(b)b.textContent=n;
+}
+/* 阅读器里渲染某卡的问答 */
+function renderCardQA(cardId){
+  var box=document.getElementById("qaBox");if(!box)return;
+  if(!cardId){box.style.display="none";return;}
+  box.style.display="";
+  var list=document.getElementById("qaList");
+  var items=loadQA().filter(function(x){return x.cardId===cardId;});
+  list.innerHTML=items.length?items.map(function(it){
+    return '<div class="qaitem"><div class="qq">问：'+esc(it.q)+'</div>'+(it.a?('<div class="qa">答：'+esc(it.a)+'</div>'):'<div class="qpend">（待云端作答）</div>')+'</div>';
+  }).join(""):'<div class="qempty">还没问过，下面提一个</div>';
+}
+/* 问答 tab 总览 */
+function renderQA(){
+  var qs=loadQA();
+  document.getElementById("qaCount").textContent=qs.length;
+  document.getElementById("qaAll").innerHTML=qs.length?qs.map(function(it){
+    return '<div class="qitem"><div class="qc">卡片：'+esc(it.cardTitle||"(已失效)")+'</div><div class="qq">问：'+esc(it.q)+'</div>'+(it.a?('<div class="qa">答：'+esc(it.a)+'</div>'):'<div class="qpend">待云端作答</div>')+'</div>';
+  }).join(""):'<div class="qempty">还没问过问题。打开任意卡片，在底部「问答」区随时提问。</div>';
+  var ints=loadInt();
+  document.getElementById("intAll").innerHTML=ints.length?ints.map(function(x){return '<span>'+esc(x.term)+'</span>';}).join(""):'<div class="qempty">搜索或提问时，相关词会自动记成"我感兴趣"。</div>';
+  var rec=interestRelated();
+  document.getElementById("recAll").innerHTML=rec.length?rec.map(function(c){
+    return '<div class="recCard" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span><div class="ct"><b>'+esc(c.title)+'</b>'+(c.sum?'<p>'+esc(c.sum)+'</p>':'')+'</div></div>';
+  }).join(""):'<div class="qempty">还没有兴趣词，先去搜索或提问，这里会按兴趣挑相关卡片给你。</div>';
+}
+document.getElementById("qaSend").addEventListener("click",function(){
+  var ta=document.getElementById("qaText");var q=ta.value.trim();
+  if(!q){toast("先写个问题");return;}
+  if(!readTarget){toast("没有对应卡片");return;}
+  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，下次推送会作答");
+});
+document.getElementById("exportInt").addEventListener("click",function(){
+  var ints=loadInt().map(function(x){return x.term;});
+  var qs=loadQA().filter(function(x){return !x.a;}).map(function(x){return (x.cardTitle||"")+"："+x.q;});
+  var txt="【我的兴趣词】\n"+(ints.join("、")||"（暂无）")+"\n\n【待回答的问题】\n"+(qs.join("\n")||"（无");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast("已复制，贴给 AI 即可");},function(){toast("复制失败，长按选择手动复制");});
+  }else{toast("请长按选择下方文本复制：\n"+txt);}
+});
+document.getElementById("recAll").addEventListener("click",function(e){
+  var cr=e.target.closest(".recCard[data-id]");if(!cr)return;
+  var c=getCard(cr.getAttribute("data-id"));
+  if(c){var rect=cr.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
+    openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:c.note||"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}
+});
+
 /* ====================== 渲染：待挖掘 ====================== */
 function renderDig(){
   var box=document.getElementById("digList");var h=[];var chs=["data","ai","jp"];
@@ -890,6 +1022,7 @@ function openReader(data,srcRect){
   reader.style.transform="translate(0,0) scale(1,1)";
   setTimeout(function(){rsc.style.opacity="1";rsc.style.transition="opacity .3s .1s";},120);
   reader.classList.add("on");
+  renderCardQA(data.id||null);
   startReadTimer();
 }
 function closeReader(){
@@ -1044,7 +1177,7 @@ var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on");},1600);}
 
 /* ====================== 初始 ====================== */
-initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();
+initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateQaBdg();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 
