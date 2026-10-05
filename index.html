@@ -1211,7 +1211,7 @@ document.getElementById("wrap").addEventListener("click",function(e){
   if(actBtn){e.stopPropagation();var lp=actBtn.closest(".lp");var id=lp.getAttribute("data-lp");handleLp(actBtn.getAttribute("data-act"),id,lp);return;}
   // 待挖掘
   var dig=e.target.closest(".dig");
-  if(dig){var _q=dig.getAttribute("data-q");markDigRead(_q);dig.classList.add("done");openSheet({title:_q,why:dig.getAttribute("data-why"),from:dig.getAttribute("data-from"),link:dig.getAttribute("data-link"),body:"点下方「去挖」，直接打开这条线索的解答页。"});return;}
+  if(dig){var _q=dig.getAttribute("data-q");markDigRead(_q);dig.classList.add("done");var _go=dig.querySelector(".go");if(_go)_go.textContent="已看 ✓";openSheet({title:_q,why:dig.getAttribute("data-why"),from:dig.getAttribute("data-from"),link:dig.getAttribute("data-link"),body:"点下方「去挖」，直接打开这条线索的解答页。"});return;}
   // 知识树 / 频道 / 今日 的卡
   var card=e.target.closest(".card[data-id]");
   if(card&&!e.target.closest(".lp")){
