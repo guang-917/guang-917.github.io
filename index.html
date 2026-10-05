@@ -611,9 +611,9 @@ tabbar.addEventListener("click",function(e){
   var v=t.getAttribute("data-tab");
   if(reader.classList.contains("on")){var i=navStack.lastIndexOf("reader"); if(i>=0)navStack.splice(i,1); closeReader();}
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
-  if(v==="today"){ navStack=["home"]; switchTab("today"); return; }
+  if(v==="today"){ navStack=["home"]; resetHistoryToHome(); switchTab("today"); return; }
   if(navStack[navStack.length-1]==="tab:"+v) return;
-  pushNav("tab:"+v); switchTab(v);
+  pushNav("tab:"+v); switchTab(v); pushHistoryLayer();
 });
 
 /* 返回键 */
@@ -628,7 +628,70 @@ backBtn.addEventListener("click",navBack);
    知识树主题展开是行内展开（非独立页），不计入层级。 */
 var navStack=["home"], armed=false, armT=null; var DISARM=2000;
 function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
+/* navBack：界面上的「返回」按钮 / 关闭按钮 / 触摸手势 都走这里。
+   策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
+   这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
+  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on");
+  if(hasLayer){
+    // 有界面层可退：触发浏览器 back，由 popstate 统一做界面回退（与系统侧滑同路径）
+    try{ history.back(); }catch(e){ navBackFromPop(); }
+  }
+  // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不再直接退桌
+}
+
+/* ====================== 系统返回手势接管（history 守卫模型）======================
+   ⚠ 核心事实（实测 + 权威结论）：
+   1) 真机「左/右边缘侧滑」= 系统级返回手势，触发浏览器 history.back()，
+      **不会命中我们绑定的 touch 事件**。旧实现只监听 touch → 真机侧滑 = 浏览器直接退到底 = 关 App。
+   2) Android 全屏 PWA 中，网页**无法**用脚本主动关闭 App（history.back() 调多少次都没用）；
+      只有“用户真实触发返回、且当前无历史可退”时，系统才会关 App。
+   ⇒ 正确做法（MDN/StackOverflow 经典“守卫记录”法）：让 App 历史里永远垫着一条**守卫**状态，
+     用户返回时先落到守卫 → 我们在 popstate 里决定：做一次界面回退（并补回守卫），
+     或（已在首页）提示/放行。放行时不再补守卫，用户再一次返回即退出。
+
+   实现（极简模型）：
+   - _backGuard()：push 一条 {kbGuard:true}，App 内部的“可后退垫片”。
+   - 进层/回首页后，保证恰有 1 条守卫压在顶层（_ensureGuard）。
+   - popstate：无论退到哪种 state，都视为“用户按了一次返回”：
+        · 若还有界面层级可退 → navBackFromPop()，然后 _ensureGuard() 补守卫（App 不退）；
+        · 若已在首页 → 首页退桌流程（首次提示+补守卫；2秒内再次则放行不再补守卫）。
+   - 因为只有 1 条守卫、且放行时不补，历史终会露出“App 之外”的条目 → 系统关 App 回桌面。
+   ============================================================== */
+var _guardMuted=false;     // 抑制我们自身 pushState 触发的 popstate（实际 push 不触发 pop，留作扩展）
+var _exitArmed=false;      // 首页已进入「再退一次就退桌」待命态
+
+function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) history.pushState({kbGuard:true},""); }catch(e){} }
+
+// 进入新层时调用（开卡/进一级页/开抽屉）：补一条守卫压在顶层
+function pushHistoryLayer(){ _ensureGuard(); }
+// 回首页时调用：重置退桌待命态，并保证守卫在位
+function resetHistoryToHome(){ _exitArmed=false; armed=false; clearTimeout(armT); _ensureGuard(); }
+
+window.addEventListener("popstate",function(){
+  // 一次用户返回（系统侧滑/返回键）
+  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill)
+              || reader.classList.contains("on") || sheet.classList.contains("on");
+  if(hasLayer){
+    navBackFromPop();     // 做一次界面回退
+    _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
+    return;
+  }
+  // 已在首页：退桌流程
+  if(!_exitArmed){
+    _exitArmed=true; armed=true;
+    toast("再侧滑一次，将退到桌面");
+    clearTimeout(armT);
+    armT=setTimeout(function(){ armed=false; _exitArmed=false; },DISARM); // 到期仅重置，不补守卫
+    _ensureGuard();       // 拦住：补回守卫，App 不退
+    return;
+  }
+  // 已待命：放行——不再补守卫；用户的下一次返回将退到 App 之外，由系统关闭 App。
+  _exitArmed=false; armed=false; clearTimeout(armT);
+});
+
+// 供 popstate 使用的「只做界面回退、不再动历史」的版本
+function navBackFromPop(){
   var top=navStack[navStack.length-1];
   if(top==="reader"){ navStack.pop(); closeReader(); return; }
   if(top==="sheet"){ navStack.pop(); closeSheet(); return; }
@@ -638,22 +701,13 @@ function navBack(){
     document.getElementById("chanList").style.display="none";
     hdrSub.textContent=TAB_META.channels[1]; setBk(false); window.scrollTo(0,0); return;
   }
-  if(navStack.length<=1){
-    if(armed){ doHomeExit(); }
-    else { armed=true; toast("再侧滑一次，将退到桌面"); clearTimeout(armT); armT=setTimeout(function(){armed=false;},DISARM); }
-    return;
-  }
+  if(navStack.length<=1){ return; }
   navStack.pop();
   var t=navStack[navStack.length-1];
   if(reader.classList.contains("on"))closeReader();
   if(sheet.classList.contains("on"))closeSheet();
   if(t==="home"){ switchTab("today"); return; }
   if(t.indexOf("tab:")===0){ switchTab(t.slice(4)); return; }
-}
-function doHomeExit(){
-  armed=false; clearTimeout(armT);
-  // PWA 中 JS 无法直接关闭 App；history.back() 在多数情况下让独立窗口退回系统桌面
-  if(window.history.length>1){ history.back(); } else { try{window.close();}catch(e){} }
 }
 
 /* 页头滚动阴影 */
@@ -1131,6 +1185,7 @@ function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
 function openReader(data,srcRect){
   pushNav("reader");
+  pushHistoryLayer();
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
   var body='<p class="lead">'+esc(data.lead||"")+'</p>';
@@ -1224,6 +1279,7 @@ function markReadVisual(id){
 var sheet=document.getElementById("sheet"),sheetMask=document.getElementById("sheetMask");
 function openSheet(data){
   pushNav("sheet");
+  pushHistoryLayer();
   var act='';
   if(data.link)act='<a class="sheetgo" href="'+esc(data.link)+'" target="_blank" rel="noopener">🔎 去挖：打开这条线索的解答页</a>';
   else act='<div class="note" style="background:var(--gold-soft);border-radius:12px;padding:11px 13px;font-size:12.5px;color:var(--ink-2);line-height:1.7;margin-top:10px">这条线索还没生成解答页，等下一次推送后就能直接开挖。</div>';
@@ -1326,6 +1382,13 @@ function toast(msg){var el=document.getElementById("toast");el.textContent=msg;e
 initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateQaBdg();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
+/* 建立历史基线：replaceState 占住当前条目（首页），再压一条「守卫」。
+   这样即使用户在首页触发系统返回，也会先落到 popstate 由我们接管，
+   而不是浏览器认为「无历史可退」直接关掉 App（守卫法，见上方说明）。 */
+try{
+  history.replaceState({kbHome:true},"");
+  _ensureGuard();
+}catch(e){}
 
 /* ====================== 拉取每日推送（feed.json） ======================
    启动后去仓库根目录拉 feed.json：拉到就用远程内容（每日推送会更新它），
@@ -1451,7 +1514,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-05.3';
+var _APP_VER_ = '2026-10-05.4';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
