@@ -1010,10 +1010,34 @@ document.getElementById("qaAll").addEventListener("click",function(e){
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
 document.getElementById("restoreFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{restoreKB(JSON.parse(rd.result));}catch(err){toast("解析失败");}};rd.readAsText(f);e.target.value="";});
+function buildSyncText(){
+  var qa=loadQA(),ints=loadInt(),lines=[];
+  lines.push("【我的知识工作台 · 待答问题请回答，并写回云端 user_kb.json 的 qa（按问题原文匹配）】");
+  lines.push("");
+  var todo=qa.filter(function(x){return !x.a;}),done=qa.filter(function(x){return x.a;});
+  lines.push("一、我的问题（待答 "+todo.length+" 条，请优先回答）");
+  todo.forEach(function(x,i){
+    lines.push((i+1)+". "+x.q);
+    if(x.cardTitle||x.cardSum)lines.push("   背景："+(x.cardTitle||"")+(x.cardSum?(" —— "+x.cardSum):""));
+  });
+  if(done.length){
+    lines.push("");
+    lines.push("二、已回答过的问题（供参考，不用再答）");
+    done.forEach(function(x,i){lines.push((i+1)+". "+x.q);});
+  }
+  if(ints.length){
+    lines.push("");
+    lines.push("三、我感兴趣的词");
+    ints.forEach(function(x){lines.push("- "+x.term);});
+  }
+  return lines.join("\n");
+}
 document.getElementById("syncAI").addEventListener("click",function(){
-  var txt=JSON.stringify(allKB());
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){toast("已复制全部知识，贴给 AI 即可作答 + 更新云端");},function(){toast("复制失败，长按选择手动复制");});}
-  else{toast("复制失败，请长按选择手动复制："+txt);}
+  var txt=buildSyncText();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast("已复制干净清单，贴给 AI 即可作答 + 更新云端");},function(){toast("复制失败，请重试");});
+  }
+  else{toast("复制失败，请重试");}
 });
 document.getElementById("recAll").addEventListener("click",function(e){
   var cr=e.target.closest(".recCard[data-id]");if(!cr)return;
