@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下钻解答｜提示词写了模板，AI 还是答非所问？</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#1a1f33; --ink:#eef1f8; --sub:#aab3c9;
+    --acc:#6ea8fe; --ok:#5fd39a; --warn:#ffcf6e; --line:#2a3150;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.75;padding:18px;}
+  .wrap{max-width:720px;margin:0 auto;}
+  h1{font-size:21px;margin:6px 0 4px;}
+  .meta{color:var(--sub);font-size:13px;margin-bottom:14px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin:14px 0;}
+  h2{font-size:16px;color:var(--acc);margin:4px 0 8px;}
+  .tag{display:inline-block;background:#26304f;color:var(--acc);
+    border-radius:999px;font-size:12px;padding:2px 10px;margin-right:6px;}
+  ul,ol{margin:8px 0;padding-left:22px;}
+  li{margin:6px 0;}
+  .step{border-left:3px solid var(--acc);padding:4px 0 4px 12px;margin:10px 0;}
+  .step b{color:var(--warn);}
+  .chk{color:var(--ok);}
+  code{background:#26304f;color:#ffe6a8;border-radius:6px;padding:1px 6px;font-size:13px;}
+  .x{color:#ff8e8e;}
+  .footer{color:var(--sub);font-size:12px;text-align:center;margin-top:18px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta"><span class="tag">AI 知识 · 下钻</span>来自《AI 知识问答 第 1 期》· 2026-10-05</div>
+  <h1>提示词我照着"目标+背景+格式"写了，AI 还是答非所问，到底是哪一步没写对？</h1>
+
+  <div class="card">
+    <h2>先给结论</h2>
+    <p>模板只是骨架，<b>空着哪一块、或哪一块写得太虚</b>，AI 就会自己脑补、然后答偏。最常漏的是 <span class="x">「背景」</span> 和 <span class="x">「格式」</span> 这两块——很多人以为写了"目标"就齐了，其实后两块才是让 AI 不跑偏的关键。</p>
+  </div>
+
+  <div class="card">
+    <h2>逐块自查：你到底是哪一步没写对</h2>
+
+    <div class="step">
+      <p><b>① 目标（要它干啥）</b><br>
+      错法：写"帮我看看这段""写得好一点"——AI 不知道你要"总结 / 翻译 / 挑错 / 列计划"。<br>
+      <span class="chk">✓ 改法：</span>一句话点明动作，比如"把这段会议记录<b>总结成 3 条待办</b>"。</p>
+    </div>
+
+    <div class="step">
+      <p><b>② 背景（给点上下文）</b>← 最常被漏<br>
+      错法：只说"写份周边游行程"，没说几个人、预算、带不带老人小孩、爱不爱走路。<br>
+      <span class="chk">✓ 改法：</span>补一句"2 人、预算 800、带 1 位老人、不想太累、爱吃本地小吃"。缺了背景，AI 只能按"大众模板"编，自然不合你用。</p>
+    </div>
+
+    <div class="step">
+      <p><b>③ 格式（要啥样的产出）</b>← 第二常被漏<br>
+      错法：写完目标就停，AI 给你一大段散文，你还得自己再整理。<br>
+      <span class="chk">✓ 改法：</span>说清"用表格，列 时间 / 地点 / 备注 三列，按 Day1、Day2 分"。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>一个能直接抄的对照模板</h2>
+    <p><code>目标：</code>我要____（具体动作）<br>
+    <code>背景：</code>受众/场景是____，有这些限制____<br>
+    <code>格式：</code>用____（表格/清单/分步骤），包含____</p>
+    <p>把三行都填实，再拿去问 AI。如果还答偏，八成是某行填得太虚（比如背景只写"随便"），把它写实就好。</p>
+  </div>
+
+  <div class="card">
+    <h2>为什么"写了模板还偏"？</h2>
+    <p>大模型是"会出主意的军师"——你给的线索越实，它猜得越准；你留白越多，它越爱自由发挥。模板的价值不是"走了过场"，而是<b>逼你把三块都写实</b>。所以下期加练重点：专练"把背景写具体"。</p>
+  </div>
+
+  <div class="footer">知识工作台 · 自动接水 · 下钻解答页</div>
+</div>
+</body>
+</html>
