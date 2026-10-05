@@ -1,4 +1,5 @@
-const CACHE = 'kb-workbench-v1';
+const VERSION = '2';
+const CACHE = 'kb-workbench-v' + VERSION;
 const ASSETS = [
   './',
   './index.html',
@@ -30,10 +31,11 @@ self.addEventListener('fetch', function (e) {
   var u = new URL(e.request.url);
   if (u.origin !== self.location.origin) return;
 
-  // 页面导航：网络优先，失败回退缓存的 index.html（离线也能开）
+  // 页面导航：强制绕过浏览器/CDN 缓存拿最新 index.html（部署后立即可见）；
+  // 仅当网络彻底失败时才回退到缓存副本（保证离线可开）
   if (e.request.mode === 'navigate') {
     e.respondWith(
-      fetch(e.request).then(function (r) {
+      fetch(e.request, { cache: 'no-store' }).then(function (r) {
         var cp = r.clone();
         caches.open(CACHE).then(function (c) { c.put('./index.html', cp); });
         return r;
