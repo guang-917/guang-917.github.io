@@ -1445,7 +1445,49 @@ loadFeed();
 })();
 </script>
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('SW注册失败',e);});});}
+/* ====================== 自动更新：确保装进桌面的 PWA 不再卡在旧版本 ======================
+   背景：sw.js 曾被 CDN 缓存 600 秒、旧 SW 又缓存了旧 index.html，
+   导致「代码已部署、但用户打开的还是旧页面」。这里三重保险根治：
+   1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
+   2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
+   3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
+var _APP_VER_ = '2026-10-05.3';
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
+      // 每次进入都检查一次 SW 更新
+      try{reg.update();}catch(e){}
+      // 有新的 SW 装好待接管 → 让它立刻接管，随后触发自动刷新
+      reg.addEventListener('updatefound',function(){
+        var nw=reg.installing; if(!nw)return;
+        nw.addEventListener('statechange',function(){
+          if(nw.state==='installed'&&navigator.serviceWorker.controller){
+            // 新 SW 已就绪，发消息请它接管（skipWaiting 已在 SW 内做）
+            try{nw.postMessage({type:'SKIP_WAITING'});}catch(e){}
+          }
+        });
+      });
+    }).catch(function(e){console.warn('SW注册失败',e);});
+  });
+  // 新 SW 接管 → 自动刷新到最新（只刷新一次，避免循环）
+  var _reloaded=false;
+  navigator.serviceWorker.addEventListener('message',function(ev){
+    if(ev.data&&ev.data.type==='SW_UPDATED'&&!_reloaded){_reloaded=true;location.reload();}
+  });
+  // 控制器切换（新 SW 接管）也兜底刷新一次
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(!_reloaded){_reloaded=true;location.reload();}
+  });
+  // 定时 + 回前台：主动比对线上版本号，发现新版自动刷新
+  function _checkVer(){
+    fetch('version.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+      if(d&&d.v&&d.v!==_APP_VER_&&!_reloaded){_reloaded=true;location.reload(true);}
+    }).catch(function(){});
+  }
+  setInterval(_checkVer,30*60*1000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_checkVer();});
+  window.addEventListener('load',function(){setTimeout(_checkVer,1500);});
+}
 </script>
 </body>
 </html>
