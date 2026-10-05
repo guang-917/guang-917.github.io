@@ -607,7 +607,13 @@ function switchTab(v){
   window.scrollTo(0,0);
 }
 tabbar.addEventListener("click",function(e){
-  var t=e.target.closest(".tab"); if(!t)return; switchTab(t.getAttribute("data-tab"));
+  var t=e.target.closest(".tab"); if(!t)return;
+  var v=t.getAttribute("data-tab");
+  if(reader.classList.contains("on")){var i=navStack.lastIndexOf("reader"); if(i>=0)navStack.splice(i,1); closeReader();}
+  if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
+  if(v==="today"){ navStack=["home"]; switchTab("today"); return; }
+  if(navStack[navStack.length-1]==="tab:"+v) return;
+  pushNav("tab:"+v); switchTab(v);
 });
 
 /* 返回键 */
@@ -615,11 +621,40 @@ function setBk(show){
   if(show){hdr.classList.add("has-bk");backBtn.style.display="flex";}
   else{hdr.classList.remove("has-bk");backBtn.style.display="none";}
 }
-backBtn.addEventListener("click",function(){
-  if(curView==="channels"&&chanDrill){chanDrill=false;document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";hdrSub.textContent=TAB_META.channels[1];setBk(false);window.scrollTo(0,0);return;}
-  if(reader.classList.contains("on")||sheet.classList.contains("on"))return;
-  switchTab("today");
-});
+backBtn.addEventListener("click",navBack);
+/* ====================== 导航栈（侧滑回退的核心） ======================
+   栈底=home(今日)；向上依次：tab:一级页(channels/tree/dig/qa) / reader(覆盖层) / sheet(覆盖层)。
+   每侧滑一次向上弹一级；一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面。
+   知识树主题展开是行内展开（非独立页），不计入层级。 */
+var navStack=["home"], armed=false, armT=null; var DISARM=2000;
+function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
+function navBack(){
+  var top=navStack[navStack.length-1];
+  if(top==="reader"){ navStack.pop(); closeReader(); return; }
+  if(top==="sheet"){ navStack.pop(); closeSheet(); return; }
+  if(curView==="channels"&&chanDrill){
+    chanDrill=false;
+    document.getElementById("chanPortal").style.display="";
+    document.getElementById("chanList").style.display="none";
+    hdrSub.textContent=TAB_META.channels[1]; setBk(false); window.scrollTo(0,0); return;
+  }
+  if(navStack.length<=1){
+    if(armed){ doHomeExit(); }
+    else { armed=true; toast("再侧滑一次，将退到桌面"); clearTimeout(armT); armT=setTimeout(function(){armed=false;},DISARM); }
+    return;
+  }
+  navStack.pop();
+  var t=navStack[navStack.length-1];
+  if(reader.classList.contains("on"))closeReader();
+  if(sheet.classList.contains("on"))closeSheet();
+  if(t==="home"){ switchTab("today"); return; }
+  if(t.indexOf("tab:")===0){ switchTab(t.slice(4)); return; }
+}
+function doHomeExit(){
+  armed=false; clearTimeout(armT);
+  // PWA 中 JS 无法直接关闭 App；history.back() 在多数情况下让独立窗口退回系统桌面
+  if(window.history.length>1){ history.back(); } else { try{window.close();}catch(e){} }
+}
 
 /* 页头滚动阴影 */
 document.addEventListener("scroll",function(){hdr.classList.toggle("scrolled",window.scrollY>6);},true);
@@ -1095,6 +1130,7 @@ function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=tru
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
 function openReader(data,srcRect){
+  pushNav("reader");
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
   var body='<p class="lead">'+esc(data.lead||"")+'</p>';
@@ -1144,7 +1180,7 @@ function closeReader(){
   reader.style.transform="translate("+rect.left+"px,"+rect.top+"px) scale("+(rect.width/innerWidth)+","+(rect.height/innerHeight)+")";
   setTimeout(function(){reader.style.display="none";reader.style.transform="";reader.style.transition="";reader.classList.remove("on");},400);
 }
-document.getElementById("readerClose").addEventListener("click",closeReader);
+document.getElementById("readerClose").addEventListener("click",navBack);
 doneBtn.addEventListener("click",function(){
   if(readTarget){setRead(readTarget,true);refreshRead();}
   markReadVisual(readTarget);
@@ -1187,6 +1223,7 @@ function markReadVisual(id){
 /* ====================== 底部抽屉 ====================== */
 var sheet=document.getElementById("sheet"),sheetMask=document.getElementById("sheetMask");
 function openSheet(data){
+  pushNav("sheet");
   var act='';
   if(data.link)act='<a class="sheetgo" href="'+esc(data.link)+'" target="_blank" rel="noopener">🔎 去挖：打开这条线索的解答页</a>';
   else act='<div class="note" style="background:var(--gold-soft);border-radius:12px;padding:11px 13px;font-size:12.5px;color:var(--ink-2);line-height:1.7;margin-top:10px">这条线索还没生成解答页，等下一次推送后就能直接开挖。</div>';
@@ -1198,8 +1235,8 @@ function openSheet(data){
   sheetMask.classList.add("on");sheet.classList.add("on");
 }
 function closeSheet(){sheetMask.classList.remove("on");sheet.classList.remove("on");}
-sheetMask.addEventListener("click",closeSheet);
-document.querySelector(".sheet .grip").addEventListener("click",closeSheet);
+sheetMask.addEventListener("click",navBack);
+document.querySelector(".sheet .grip").addEventListener("click",navBack);
 
 /* ====================== 卡片点击（事件委托） ====================== */
 document.getElementById("wrap").addEventListener("click",function(e){
@@ -1358,15 +1395,12 @@ loadFeed();
   });
 })();
 
-/* ====================== 左边缘侧滑回退 ======================
-   逻辑（思维链）：
-   ① goBack() 统一出口：关阅读器→关抽屉→退出频道下钻→回今日→已在今日则提示/退桌面
-   ② 只认左边缘(<=22px)起手、向右滑的水平手势，避免与下拉刷新/长按冲突
-   ③ 跟手位移做视觉反馈；松手过阈值(60px)才回退，否则弹回
-   ④ 已在今日首页时，先提示，2秒内再侧滑一次才尝试退回桌面 */
+/* ====================== 左边缘侧滑回退（导航栈） ======================
+   逻辑：navStack 栈底=home(今日)，向上为 tab:一级页 / reader(覆盖层) / sheet(覆盖层)，每侧滑弹一级；
+        一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面；EDGE 放宽到 40px。 */
 (function(){
-  var EDGE=22, THRESH=60, DISARM=2000;
-  var sx=0, sy=0, engaged=false, dirX=0, layer=null, armed=false, armT=null;
+  var EDGE=40, THRESH=60;
+  var sx=0, sy=0, engaged=false, dirX=0, layer=null;
   function topLayer(){
     if(reader.classList.contains("on")) return reader;
     if(sheet.classList.contains("on")) return sheet;
@@ -1375,29 +1409,10 @@ loadFeed();
   function clearAllNudge(){
     ["wrap","reader","sheet"].forEach(function(id){var L=document.getElementById(id);if(L){L.style.transition="";L.style.transform="";}});
   }
-  function goBack(){
-    if(reader.classList.contains("on")){ closeReader(); return; }
-    if(sheet.classList.contains("on")){ closeSheet(); return; }
-    if(curView==="channels"&&chanDrill){
-      chanDrill=false;
-      document.getElementById("chanPortal").style.display="";
-      document.getElementById("chanList").style.display="none";
-      hdrSub.textContent=TAB_META.channels[1]; setBk(false); window.scrollTo(0,0); return;
-    }
-    if(curView!=="today"){ switchTab("today"); return; }
-    // 已在今日首页：先提示，二次侧滑退桌面
-    if(armed){ doHomeExit(); }
-    else { armed=true; toast("再侧滑一次，将退到桌面"); clearTimeout(armT); armT=setTimeout(function(){armed=false;},DISARM); }
-  }
-  function doHomeExit(){
-    armed=false; clearTimeout(armT);
-    // PWA 中 JS 无法直接关闭 App；history.back() 在多数情况下让独立窗口退回系统桌面
-    if(window.history.length>1){ history.back(); } else { try{window.close();}catch(e){} }
-  }
   document.addEventListener("touchstart",function(e){
     if(engaged) return;
     var t=e.touches[0];
-    if(t.clientX>EDGE) return;            // 只在左边缘起手
+    if(t.clientX>EDGE) return;
     sx=t.clientX; sy=t.clientY; engaged=true; dirX=0; layer=null;
   },{passive:true});
   document.addEventListener("touchmove",function(e){
@@ -1406,7 +1421,7 @@ loadFeed();
     var dyy=t.clientY-sy;
     if(dirX===0){
       if(Math.abs(dx)>Math.abs(dyy)&&Math.abs(dx)>8){ dirX=1; layer=topLayer(); }
-      else if(Math.abs(dyy)>=Math.abs(dx)){ engaged=false; return; } // 纵向滚动，放弃
+      else if(Math.abs(dyy)>=Math.abs(dx)){ engaged=false; return; }
     }
     if(dirX!==1) return;
     if(dx<=0){ if(layer){layer.style.transition="none";layer.style.transform="";} return; }
@@ -1420,7 +1435,7 @@ loadFeed();
     var dx=(e.changedTouches?e.changedTouches[0].clientX:0)-sx;
     if(layer){
       layer.style.transition="transform .26s cubic-bezier(.22,1,.36,1)";
-      if(dx>=THRESH){ layer.style.transform=""; goBack(); }
+      if(dx>=THRESH){ layer.style.transform=""; navBack(); }
       else { layer.style.transform=""; }
     }
     layer=null; dirX=0;
