@@ -218,6 +218,8 @@ body{
 .dig .why{font-size:11.5px;color:var(--data);margin-top:7px;display:flex;align-items:center;gap:5px}
 .dig .from{font-size:11px;color:var(--ink-3);margin-top:4px}
 .dig .go{position:absolute;right:13px;bottom:11px;font-size:11px;color:var(--ink-3)}
+.dig.done{opacity:.5}
+.dig.done .go{color:var(--ink-3)}
 
 /* ---------- 底部 Tabbar ---------- */
 .tabbar{
@@ -965,8 +967,9 @@ function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
 function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}renderTree();updateQaBdg();toast('已从文件恢复');}
 function updateQaBdg(){
-  var n=loadQA().length;
-  var b=document.getElementById("qaBdg");if(b)b.textContent=n;
+  var n=loadQA().filter(function(x){return !x.a;}).length;
+  var b=document.getElementById("qaBdg");
+  if(b){b.textContent=n;b.style.display=n?"":"none";}
 }
 /* 阅读器里渲染某卡的问答 */
 function renderCardQA(cardId){
@@ -1049,20 +1052,31 @@ document.getElementById("recAll").addEventListener("click",function(e){
 /* ====================== 渲染：待挖掘 ====================== */
 function renderDig(){
   var box=document.getElementById("digList");var h=[];var chs=["data","ai","jp"];
+  var read=loadDigRead();
   for(var i=0;i<chs.length;i++){var c=chs[i],m=CH_META[c];
     var items=DIG.filter(function(d){return normCh(d.ch)===c;});if(!items.length)continue;
     h.push('<div class="dgrp"><div class="gh"><span class="ic">'+ICON[m.ic]+'</span> '+m.n+' <span class="badge">'+items.length+'</span></div>');
-    for(var j=0;j<items.length;j++){var d=items[j];
-      h.push('<div class="dig" data-q="'+esc(d.q)+'" data-from="'+esc(d.from)+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
+    for(var j=0;j<items.length;j++){var d=items[j];var isRead=read.indexOf(d.q)>=0;
+      h.push('<div class="dig'+(isRead?' done':'')+'" data-q="'+esc(d.q)+'" data-from="'+esc(d.from)+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
         +'<div class="q">'+esc(d.q)+'</div>'
         +'<div class="why">↳ '+esc(d.why)+'</div>'
         +'<div class="from">'+esc(d.from)+'</div>'
-        +'<div class="go">去挖 ›</div></div>');
+        +(isRead?'<div class="go">已看 ✓</div>':'<div class="go">去挖 ›</div>')+'</div>');
     }
     h.push('</div>');
   }
   box.innerHTML=h.join("");
-  document.getElementById("digBdg").textContent=DIG.length;
+  var unread=DIG.filter(function(d){return read.indexOf(d.q)<0;}).length;
+  var db=document.getElementById("digBdg");if(db){db.textContent=unread;db.style.display=unread?"":"none";}
+}
+/* 待挖掘「已看」记录（本地），角标按未看数显示 */
+var LS_DIGREAD="kb_digread";
+function loadDigRead(){try{return JSON.parse(localStorage.getItem(LS_DIGREAD)||"[]")||[];}catch(e){return [];}}
+function saveDigRead(a){try{localStorage.setItem(LS_DIGREAD,JSON.stringify(a));}catch(e){}}
+function markDigRead(q){
+  var a=loadDigRead();if(a.indexOf(q)<0)a.push(q);saveDigRead(a);
+  var unread=DIG.filter(function(d){return a.indexOf(d.q)<0;}).length;
+  var b=document.getElementById("digBdg");if(b){b.textContent=unread;b.style.display=unread?"":"none";}
 }
 
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
@@ -1197,7 +1211,7 @@ document.getElementById("wrap").addEventListener("click",function(e){
   if(actBtn){e.stopPropagation();var lp=actBtn.closest(".lp");var id=lp.getAttribute("data-lp");handleLp(actBtn.getAttribute("data-act"),id,lp);return;}
   // 待挖掘
   var dig=e.target.closest(".dig");
-  if(dig){openSheet({title:dig.getAttribute("data-q"),why:dig.getAttribute("data-why"),from:dig.getAttribute("data-from"),link:dig.getAttribute("data-link"),body:"点下方「去挖」，直接打开这条线索的解答页。"});return;}
+  if(dig){var _q=dig.getAttribute("data-q");markDigRead(_q);dig.classList.add("done");openSheet({title:_q,why:dig.getAttribute("data-why"),from:dig.getAttribute("data-from"),link:dig.getAttribute("data-link"),body:"点下方「去挖」，直接打开这条线索的解答页。"});return;}
   // 知识树 / 频道 / 今日 的卡
   var card=e.target.closest(".card[data-id]");
   if(card&&!e.target.closest(".lp")){
