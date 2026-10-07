@@ -464,7 +464,6 @@ body{
       </div>
       <div id="qaGroups"></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-        <button class="filter" id="syncAI">同步给 AI（作答 + 更新云端）</button>
         <button class="filter" id="backupBtn">备份到文件</button>
         <button class="filter" id="restoreBtn">从文件恢复</button>
         <input type="file" id="restoreFile" accept="application/json" style="display:none">
@@ -1106,8 +1105,8 @@ function genDetailFor(qs){
   });
 }
 function checkAndGenDetails(){
-  var a=loadQA(),now=Date.now(),DAY=86400000;
-  var pending=a.filter(function(x){return qaState(x)==="pending" && (now-(x.ts||now))>=2*DAY;});
+  var a=loadQA(),now=Date.now(),HOUR=3600000;
+  var pending=a.filter(function(x){return qaState(x)==="pending" && (now-(x.ts||now))>=HOUR;});
   if(!pending.length)return;
   var groups={};
   pending.forEach(function(x){var k=x.kp||"未分类";(groups[k]=groups[k]||[]).push(x);});
@@ -1196,35 +1195,6 @@ document.getElementById("qaSend").addEventListener("click",function(){
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
 document.getElementById("restoreFile").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{restoreKB(JSON.parse(rd.result));}catch(err){toast("解析失败");}};rd.readAsText(f);e.target.value="";});
-function buildSyncText(){
-  var qa=loadQA(),ints=loadInt(),lines=[];
-  lines.push("【我的知识工作台 · 待答问题请回答，并写回云端 user_kb.json 的 qa（按问题原文匹配）】");
-  lines.push("");
-  var todo=qa.filter(function(x){return !x.a;}),done=qa.filter(function(x){return x.a;});
-  lines.push("一、我的问题（待答 "+todo.length+" 条，请优先回答）");
-  todo.forEach(function(x,i){
-    lines.push((i+1)+". "+x.q);
-    if(x.cardTitle||x.cardSum)lines.push("   背景："+(x.cardTitle||"")+(x.cardSum?(" —— "+x.cardSum):""));
-  });
-  if(done.length){
-    lines.push("");
-    lines.push("二、已回答过的问题（供参考，不用再答）");
-    done.forEach(function(x,i){lines.push((i+1)+". "+x.q);});
-  }
-  if(ints.length){
-    lines.push("");
-    lines.push("三、我感兴趣的词");
-    ints.forEach(function(x){lines.push("- "+x.term);});
-  }
-  return lines.join("\n");
-}
-document.getElementById("syncAI").addEventListener("click",function(){
-  var txt=buildSyncText();
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(function(){toast("已复制干净清单，贴给 AI 即可作答 + 更新云端");},function(){toast("复制失败，请重试");});
-  }
-  else{toast("复制失败，请重试");}
-});
 /* ====================== 渲染：待挖掘 ====================== */
 function renderDig(){
   var box=document.getElementById("digList");var h=[];var chs=["data","ai","jp"];
@@ -1559,7 +1529,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-07.1';
+var _APP_VER_ = '2026-10-07.2';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
