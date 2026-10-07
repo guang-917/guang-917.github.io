@@ -277,11 +277,7 @@ body{
 .qsh{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chips span{background:var(--ai-soft);color:var(--ai);border-radius:8px;padding:5px 11px;font-size:12.5px}
-.qitem{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
-.qitem .qc{font-size:13px;color:var(--ink-2);margin-bottom:4px}
-.qitem .qq{font-size:14px;font-weight:600;line-height:1.5}
-.qitem .qa{font-size:13px;color:var(--data);margin-top:5px;line-height:1.6}
-.qitem .qpend{font-size:12px;color:var(--ink-3);margin-top:4px}
+/* 旧「紧凑问答列表」样式已废弃（问答 tab 重构后由 .qgrp / .qitem(298+) 接管），删除避免重复定义 */
 .recCard{display:flex;gap:9px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
 .recCard .dot{margin-top:7px;flex:none}
 .recCard .ct{flex:1;min-width:0}
@@ -448,7 +444,7 @@ body{
 
   <!-- 问答 / 兴趣 -->
   <section class="view" data-view="qa">
-    <p class="sub">针对任意卡片提问，问题按「知识点」归组。提问后约 2–3 天，AI 会自动生成一份详解卡——既在今日流出现，也链在这里。</p>
+    <p class="sub">针对任意卡片提问，问题按「知识点」归组。提问后约 1 小时，AI 会自动生成一份详解卡——既在今日流出现，也链在这里。</p>
     <div class="qaWrap">
       <div class="qstat" id="qaStat"></div>
       <div class="qfilters" id="qaFilters">
@@ -1021,9 +1017,10 @@ function addInterest(term,src){
 /* 知识点归类（占位：真实接 callAI 做语义归类；此处简单启发） */
 function classifyKP(q,card){
   q=(q||"").trim();
+  /* 并组策略：有来源卡→按卡标题归组；无卡→靠用户手填知识点归组（addQA 传 kp）。
+     不靠问题首句切分（切出来文本各异，并不了组）。无卡且没手填时统一归「未分类」。 */
   if(card&&card.title) return card.title.slice(0,12);
-  var base=q.split(/[？?。\.！!]/)[0].trim();
-  return (base&&base.length<=12)?base:(base?base.slice(0,12):"未分类");
+  return "未分类";
 }
 /* 某条问答的当前状态（兼容旧数据：无 state 字段时，有 a 视为已推送） */
 function qaState(it){ return it.state||(it.a?"pushed":"pending"); }
@@ -1044,18 +1041,22 @@ function addQA(cardId,q,kp){
 /* 按兴趣匹配已有卡片，做"为你推荐" */
 /* 答案回填：feed.json 里带原题(q)的「答案卡」推下来后，按问题原文匹配本地问答记录，自动填回答案 */
 function backfillAnswers(){
+  /* feed 是频道官推：把 feed.json 里带原题(q)的答案卡，回填到对应提问。
+     分工原则：一条提问只由一端回答——若已被本地 genDetail 生成详解(detailCardId 存在)，feed 不再写，避免双份答案。 */
   var qa=loadQA(); if(!qa.length)return;
   var byQ={}; qa.forEach(function(it){byQ[it.q.trim().toLowerCase()]=it;});
   var changed=false;
   CARDS.forEach(function(c){
     if(!c.q)return;
     var key=c.q.trim().toLowerCase();
-    if(byQ[key]){
-      var ans=Array.isArray(c.body)?c.body.join("\n"):(c.note||c.sum||"");
-      if(byQ[key].a!==ans){byQ[key].a=ans;changed=true;}
-    }
+    var it=byQ[key]; if(!it)return;
+    if(it.detailCardId) return; /* 已被 genDetail 生成详解，feed 让位 */
+    var ans=Array.isArray(c.body)?c.body.join("\n"):(c.note||c.sum||"");
+    it.a=ans; it.state="pushed"; it.detailCardId=c.id;
+    changed=true;
+    addFocus(it.kp||"未分类", it.q, c.ch||"ai");
   });
-  if(changed)saveQA(qa);
+  if(changed){saveQA(qa);updateQaBdg();}
 }
 /* 云端知识库：拉取 user_kb.json 合并到本地（知识跟随用户成长，清缓存/换设备可恢复） */
 function mergeQA(server){if(!server||!server.length)return;var local=loadQA(),byQ={};local.forEach(function(x){byQ[x.q.trim().toLowerCase()]=x;});server.forEach(function(s){byQ[s.q.trim().toLowerCase()]=s;});saveQA(Object.keys(byQ).map(function(k){return byQ[k];}));}
@@ -1081,6 +1082,14 @@ function loadFocus(){try{return JSON.parse(localStorage.getItem(LS_FOC)||"[]")||
 function saveFocus(a){try{localStorage.setItem(LS_FOC,JSON.stringify(a));}catch(e){}}
 function addFocus(title,fromQ,ch){if(!title)return;var a=loadFocus();if(a.some(function(x){return x.title===title;}))return;a.unshift({title:title,fromQ:fromQ||"",ch:ch||"",ts:Date.now()});if(a.length>50)a=a.slice(0,50);saveFocus(a);}
 function mergeFocus(server){if(!server||!server.length)return;var local=loadFocus(),byT={};local.forEach(function(x){byT[x.title]=x;});server.forEach(function(s){byT[s.title]=s;});saveFocus(Object.keys(byT).map(function(k){return byT[k];}));}
+/* 详解卡持久化：genDetailFor 在内存 CARDS 里生成详解卡，但 loadFeed 每次拉到 feed.json 会用
+   CARDS=d.cards 整体覆盖 CARDS，导致详解卡丢失、getCard 查不到、点「看详解」无反应。
+   故单独持久化到 LS_DET，loadFeed 覆盖后再回填；点击处也加 getDetail 兜底。 */
+var LS_DET="kb_details";
+function loadDetails(){try{return JSON.parse(localStorage.getItem(LS_DET)||"{}")||{};}catch(e){return {};}}
+function saveDetail(d){if(!d||!d.id)return;var m=loadDetails();m[d.id]=d;try{localStorage.setItem(LS_DET,JSON.stringify(m));}catch(e){}}
+function getDetail(id){return loadDetails()[id]||null;}
+function mergeDetailsIntoCards(){var m=loadDetails();for(var k in m){if(!getCard(k))CARDS.unshift(m[k]);}}
 /* 本地备份 / 恢复 + 同步云端导出 */
 function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
 /* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
@@ -1096,10 +1105,11 @@ function genDetailFor(qs){
     var id="det_"+Date.now().toString(36);
     var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
     var det={id:id,title:"你关注的「"+kp+"」详解",sum:(ans||"").slice(0,60),lead:"",body:[ans],tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
-    CARDS.unshift(det);
+    CARDS.unshift(det);saveDetail(det);
     var a=loadQA(),gid="grp_"+id;
     qs.forEach(function(q){for(var i=0;i<a.length;i++){if(a[i].id===q.id){a[i].state="pushed";a[i].detailCardId=id;a[i].groupId=gid;break;}}});
     saveQA(a);renderToday();renderChannels();updateQaBdg();
+    addFocus(kp, qs[0].q||"", ch); /* 出详解时顺手记入「关注专题」 */
     if(typeof remindNewDetail==="function")remindNewDetail(kp,id);
     if(curView==="qa")renderQA();
   });
@@ -1113,9 +1123,9 @@ function checkAndGenDetails(){
   Object.keys(groups).forEach(function(k){ genDetailFor(groups[k]); });
 }
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
-function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}renderTree();updateQaBdg();toast('已从文件恢复');}
+function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}if(obj.focus)mergeFocus(obj.focus);renderTree();updateQaBdg();toast('已从文件恢复');}
 function updateQaBdg(){
-  var n=loadQA().filter(function(x){return !x.a;}).length;
+  var n=loadQA().filter(function(x){var s=qaState(x);return s==="pending"||s==="pushed";}).length;
   var b=document.getElementById("qaBdg");
   if(b){b.textContent=n;b.style.display=n?"":"none";}
 }
@@ -1135,7 +1145,7 @@ function renderCardQA(cardId){
 }
 document.getElementById("qaBox").addEventListener("click",function(e){
   var lnk=e.target.closest(".qlink");
-  if(lnk){switchTab("qa");return;}
+  if(lnk){var did=lnk.getAttribute("data-det"),c=getCard(did)||getDetail(did);if(c){openReader(c);}return;}
 });
 /* 新详解生成后的轻量提醒（今日流已插入详解卡，这里弹提示） */
 function remindNewDetail(kp,id){
@@ -1178,11 +1188,11 @@ document.getElementById("qaNewSend").addEventListener("click",function(){
   var kp=document.getElementById("qaNewKp").value.trim()||null;
   addQA(null,q,kp);
   document.getElementById("qaNewQ").value="";document.getElementById("qaNewKp").value="";
-  renderQA();toast("已记录，AI 会按知识点归组并在 2–3 天后出详解");
+  renderQA();toast("已记录，AI 会按知识点归组并在约 1 小时后出详解");
 });
 document.getElementById("qaGroups").addEventListener("click",function(e){
   var lnk=e.target.closest(".qlink");
-  if(lnk){var c=getCard(lnk.getAttribute("data-det"));if(c){switchTab("today");openReader(c);}return;}
+  if(lnk){var did=lnk.getAttribute("data-det"),c=getCard(did)||getDetail(did);if(c){switchTab("today");openReader(c);}return;}
   var ig=e.target.closest(".qignore");
   if(ig){var a=loadQA();for(var i=0;i<a.length;i++){if(a[i].id===ig.getAttribute("data-qid")){a[i].state="ignored";break;}}saveQA(a);renderQA();updateQaBdg();return;}
 });
@@ -1190,7 +1200,7 @@ document.getElementById("qaSend").addEventListener("click",function(){
   var ta=document.getElementById("qaText");var q=ta.value.trim();
   if(!q){toast("先写个问题");return;}
   if(!readTarget){toast("没有对应卡片");return;}
-  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，AI 会在 2–3 天后出详解");
+  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，AI 会在约 1 小时后出详解");
 });
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
@@ -1280,9 +1290,10 @@ function openReader(data,srcRect){
   setTimeout(function(){rsc.style.opacity="1";rsc.style.transition="opacity .3s .1s";},120);
   reader.classList.add("on");
   renderCardQA(data.id||null);
-  if(data.isDetail&&data.fromQids&&data.fromQids.length){
+  /* 打开的卡若是某提问的详解卡（genDetail 生成，或 feed 官推答案卡），把对应提问翻为「已读」 */
+  if(data.id){
     var qa2=loadQA(),chg=false;
-    data.fromQids.forEach(function(qid){for(var i=0;i<qa2.length;i++){if(qa2[i].id===qid&&qa2[i].state==="pushed"){qa2[i].state="read";chg=true;break;}}});
+    qa2.forEach(function(it){ if(it.state==="pushed"&&it.detailCardId===data.id){ it.state="read"; chg=true; } });
     if(chg){saveQA(qa2);if(curView==="qa")renderQA();updateQaBdg();}
   }
   startReadTimer();
@@ -1461,6 +1472,7 @@ function loadFeed(onDone){
     .then(function(r){if(!r.ok)throw new Error('feed 404');return r.json();})
     .then(function(d){
       if(d&&Array.isArray(d.cards)&&d.cards.length){CARDS=d.cards;}
+      mergeDetailsIntoCards(); /* 回填本地生成的详解卡（feed 覆盖 CARDS 后不丢） */
       if(d&&Array.isArray(d.dig)&&d.dig.length){DIG=d.dig;}
       // 用本地持久化回填所有用户操作（已读/标星/标签/待挖掘），刷新/重开不丢
       var s=loadLocal();
@@ -1529,7 +1541,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-07.2';
+var _APP_VER_ = '2026-10-07.4';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
