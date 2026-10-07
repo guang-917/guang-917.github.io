@@ -295,6 +295,31 @@ body{
 .qrow .qchev{color:var(--ink-3);font-size:16px;flex:none}
 .qfull{padding:6px 2px 12px 17px;font-size:13px;line-height:1.7;color:var(--ink-2)}
 .qfull .qa{color:var(--data);margin-top:4px}
+/* 问答 tab 重构：统计 / 筛选 / 新建 / 知识点分组 */
+.qah2{font-size:13px;color:var(--ink-2);margin:12px 0 6px;font-weight:600}
+.qstat{font-size:13px;color:var(--ink-2);background:var(--card-2);border-radius:10px;padding:9px 12px;margin-bottom:10px}
+.qstat b{color:var(--ink);font-weight:700}
+.qfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.qnew{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:12px}
+.qnew textarea{width:100%;border:1px solid var(--line);background:var(--card-2);border-radius:9px;padding:9px 11px;font-size:13px;color:var(--ink);resize:none;height:48px;font-family:inherit;box-sizing:border-box}
+.qnewrow{display:flex;gap:8px;margin-top:8px}
+.qnewrow input{flex:1;border:1px solid var(--line);background:var(--card-2);border-radius:9px;padding:8px 11px;font-size:13px;color:var(--ink);box-sizing:border-box}
+.qnewrow button,.qlink{background:var(--ai);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.qgrp{margin-bottom:14px}
+.qgrph{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px;padding-left:2px}
+.qitem{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+.qitem.ig{opacity:.5}
+.qitem .qq{font-size:14px;font-weight:600;line-height:1.5}
+.qmeta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.qsrc{font-size:11.5px;color:var(--ink-3)}
+.qbadge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.b-pending{background:#fff3df;color:#b8740a}
+.b-pushed{background:#e6f4ea;color:#1f8a4c}
+.b-read{background:#e8eefc;color:#2f5fd0}
+.b-ignored{background:#f0f0f0;color:#888}
+.qacts{display:flex;gap:8px;margin-top:7px;align-items:center}
+.qignore{background:none;border:1px solid var(--line);color:var(--ink-3);border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer}
+.qhint{font-size:11.5px;color:var(--ink-3)}
 
 /* ---------- 底部抽屉 ---------- */
 .sheet-mask{position:fixed;inset:0;background:rgba(20,18,14,.32);z-index:55;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -423,12 +448,21 @@ body{
 
   <!-- 问答 / 兴趣 -->
   <section class="view" data-view="qa">
-    <p class="sub">每张卡里随时提问，问题跟随卡片。作答后我会把问题凝练成"专题"存后台，作为日后推送的重点关注对象。</p>
+    <p class="sub">针对任意卡片提问，问题按「知识点」归组。提问后约 2–3 天，AI 会自动生成一份详解卡——既在今日流出现，也链在这里。</p>
     <div class="qaWrap">
-      <div class="qsec"><div class="qsh">我关注的专题</div><div id="focusAll" class="chips"></div></div>
-      <div class="qsec"><div class="qsh">我的问题（<span id="qaCount">0</span>）· 点开看问答</div><div id="qaAll"></div></div>
-      <div class="qsec"><div class="qsh">我感兴趣的词</div><div id="intAll" class="chips"></div></div>
-      <div class="qsec"><div class="qsh">为你推荐（按兴趣匹配已有卡片）</div><div id="recAll"></div></div>
+      <div class="qstat" id="qaStat"></div>
+      <div class="qfilters" id="qaFilters">
+        <button class="filter on" data-f="all">全部</button>
+        <button class="filter" data-f="pending">待生成</button>
+        <button class="filter" data-f="pushed">已推送</button>
+        <button class="filter" data-f="read">已读</button>
+        <button class="filter" data-f="ignored">已忽略</button>
+      </div>
+      <div class="qnew">
+        <textarea id="qaNewQ" placeholder="直接提个问题（不必选卡，AI 自动归到知识点）…"></textarea>
+        <div class="qnewrow"><input id="qaNewKp" placeholder="知识点（可留空，让 AI 自动归类）"><button id="qaNewSend">新建提问</button></div>
+      </div>
+      <div id="qaGroups"></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="filter" id="syncAI">同步给 AI（作答 + 更新云端）</button>
         <button class="filter" id="backupBtn">备份到文件</button>
@@ -458,8 +492,9 @@ body{
     <div class="rbody" id="readerBody"></div>
     <div class="qa" id="qaBox" style="display:none">
       <div class="qah">问这张卡（随时提问，问题存本地）</div>
-      <div class="qalist" id="qaList"></div>
       <div class="qain"><textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea><button id="qaSend">提问</button></div>
+      <div class="qah2">我在这张卡上的提问</div>
+      <div class="qalist" id="qaList"></div>
     </div>
   </div>
   <button class="donebtn hide" id="doneBtn">标记为已读</button>
@@ -602,7 +637,7 @@ function switchTab(v){
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
   if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
   if(v==="channels"){chanDrill=false;renderChannels();document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
-  if(v==="qa"){renderQA();}
+  if(v==="qa"){checkAndGenDetails();renderQA();}
   setBk(false);
   window.scrollTo(0,0);
 }
@@ -613,7 +648,7 @@ tabbar.addEventListener("click",function(e){
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
   if(v==="today"){ navStack=["home"]; resetHistoryToHome(); switchTab("today"); return; }
   if(navStack[navStack.length-1]==="tab:"+v) return;
-  pushNav("tab:"+v); switchTab(v); pushHistoryLayer();
+  pushNav("tab:"+v); switchTab(v); _ensureGuard();
 });
 
 /* 返回键 */
@@ -626,9 +661,9 @@ backBtn.addEventListener("click",navBack);
    栈底=home(今日)；向上依次：tab:一级页(channels/tree/dig/qa) / reader(覆盖层) / sheet(覆盖层)。
    每侧滑一次向上弹一级；一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面。
    知识树主题展开是行内展开（非独立页），不计入层级。 */
-var navStack=["home"], armed=false, armT=null; var DISARM=2000;
+var navStack=["home"], armT=null; var DISARM=2000;
 function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
-/* navBack：界面上的「返回」按钮 / 关闭按钮 / 触摸手势 都走这里。
+/* navBack：界面上的「返回」按钮 / 关闭按钮 都走这里。
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
@@ -658,15 +693,13 @@ function navBack(){
         · 若已在首页 → 首页退桌流程（首次提示+补守卫；2秒内再次则放行不再补守卫）。
    - 因为只有 1 条守卫、且放行时不补，历史终会露出“App 之外”的条目 → 系统关 App 回桌面。
    ============================================================== */
-var _guardMuted=false;     // 抑制我们自身 pushState 触发的 popstate（实际 push 不触发 pop，留作扩展）
 var _exitArmed=false;      // 首页已进入「再退一次就退桌」待命态
 
 function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) history.pushState({kbGuard:true},""); }catch(e){} }
 
-// 进入新层时调用（开卡/进一级页/开抽屉）：补一条守卫压在顶层
-function pushHistoryLayer(){ _ensureGuard(); }
+// 进入新层/开卡/进一级页/开抽屉：直接调用 _ensureGuard() 补守卫（见 openReader / openSheet / switchTab）
 // 回首页时调用：重置退桌待命态，并保证守卫在位
-function resetHistoryToHome(){ _exitArmed=false; armed=false; clearTimeout(armT); _ensureGuard(); }
+function resetHistoryToHome(){ _exitArmed=false; clearTimeout(armT); _ensureGuard(); }
 
 window.addEventListener("popstate",function(){
   // 一次用户返回（系统侧滑/返回键）
@@ -679,15 +712,15 @@ window.addEventListener("popstate",function(){
   }
   // 已在首页：退桌流程
   if(!_exitArmed){
-    _exitArmed=true; armed=true;
+    _exitArmed=true;
     toast("再侧滑一次，将退到桌面");
     clearTimeout(armT);
-    armT=setTimeout(function(){ armed=false; _exitArmed=false; },DISARM); // 到期仅重置，不补守卫
+    armT=setTimeout(function(){ _exitArmed=false; },DISARM); // 到期仅重置，不补守卫
     _ensureGuard();       // 拦住：补回守卫，App 不退
     return;
   }
   // 已待命：放行——不再补守卫；用户的下一次返回将退到 App 之外，由系统关闭 App。
-  _exitArmed=false; armed=false; clearTimeout(armT);
+  _exitArmed=false; clearTimeout(armT);
 });
 
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
@@ -720,6 +753,7 @@ function todayStr(){
   var y=d.getFullYear(),m=('0'+(d.getMonth()+1)).slice(-2),day=('0'+d.getDate()).slice(-2);
   return y+'-'+m+'-'+day;
 }
+function todayDate2(){var d=new Date();return (d.getMonth()+1)+'月'+d.getDate()+'日';}
 function todaySub(){
   var d=new Date();var w=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
   return '今天 · '+(d.getMonth()+1)+'月'+d.getDate()+'日 '+w;
@@ -983,35 +1017,32 @@ function addInterest(term,src){
   if(a.some(function(x){return x.term===term;}))return;
   a.unshift({term:term,src:src||"search",ts:Date.now()});
   if(a.length>80)a=a.slice(0,80);
-  saveInt(a);renderIntChips();updateQaBdg();
+  saveInt(a);updateQaBdg();
 }
-/* 实时刷新「我感兴趣的词」胶囊（搜索/提问时立即可见，不必切到问答Tab才刷新） */
-function renderIntChips(){
-  var el=document.getElementById("intAll");if(!el)return;
-  var ints=loadInt();
-  el.innerHTML=ints.length?ints.map(function(x){return '<span>'+esc(x.term)+'</span>';}).join(""):'<div class="qempty">搜索或提问时，相关词会自动记成"我感兴趣"。</div>';
+/* 知识点归类（占位：真实接 callAI 做语义归类；此处简单启发） */
+function classifyKP(q,card){
+  q=(q||"").trim();
+  if(card&&card.title) return card.title.slice(0,12);
+  var base=q.split(/[？?。\.！!]/)[0].trim();
+  return (base&&base.length<=12)?base:(base?base.slice(0,12):"未分类");
 }
-function addQA(cardId,q){
-  q=(q||"").trim();if(!q||!cardId)return null;
-  var c=getCard(cardId);
+/* 某条问答的当前状态（兼容旧数据：无 state 字段时，有 a 视为已推送） */
+function qaState(it){ return it.state||(it.a?"pushed":"pending"); }
+/* 按知识点实时聚合（不单独建表） */
+function aggByKP(){
+  var qs=loadQA(),map={},order=[];
+  qs.forEach(function(it){var k=it.kp||"未分类";if(!map[k]){map[k]={kp:k,items:[]};order.push(k);}map[k].items.push(it);});
+  return order.map(function(k){return map[k];});
+}
+function addQA(cardId,q,kp){
+  q=(q||"").trim();if(!q)return null;
+  var c=cardId?getCard(cardId):null;
   var a=loadQA();
-  var item={id:"qa_"+Date.now().toString(36),cardId:cardId,cardTitle:c?c.title:"",cardSum:c?(c.sum||""):"",q:q,a:"",ts:Date.now()};
+  var item={id:"qa_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),cardId:cardId||null,cardTitle:c?c.title:"",cardSum:c?(c.sum||""):"",q:q,ts:Date.now(),kp:kp||classifyKP(q,c),state:"pending",detailCardId:null,groupId:null};
   a.unshift(item);saveQA(a);addInterest(q,"qa");updateQaBdg();
   return item;
 }
 /* 按兴趣匹配已有卡片，做"为你推荐" */
-function interestRelated(){
-  var terms=loadInt().map(function(x){return x.term.toLowerCase();});
-  if(!terms.length)return [];
-  var seen={},out=[];
-  CARDS.forEach(function(c){
-    if(seen[c.id])return;
-    var txt=((c.title||"")+" "+(c.tags?c.tags.join(" "):"")+" "+(c.sum||"")).toLowerCase();
-    var hit=terms.some(function(t){return t&&txt.indexOf(t)>=0;});
-    if(hit){out.push(c);seen[c.id]=1;}
-  });
-  return out.slice(0,15);
-}
 /* 答案回填：feed.json 里带原题(q)的「答案卡」推下来后，按问题原文匹配本地问答记录，自动填回答案 */
 function backfillAnswers(){
   var qa=loadQA(); if(!qa.length)return;
@@ -1053,6 +1084,35 @@ function addFocus(title,fromQ,ch){if(!title)return;var a=loadFocus();if(a.some(f
 function mergeFocus(server){if(!server||!server.length)return;var local=loadFocus(),byT={};local.forEach(function(x){byT[x.title]=x;});server.forEach(function(s){byT[s.title]=s;});saveFocus(Object.keys(byT).map(function(k){return byT[k];}));}
 /* 本地备份 / 恢复 + 同步云端导出 */
 function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
+/* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
+var SETTINGS={aiKey:""}; /* 真实密钥到位后填这里（或云端 Secrets）；前端不裸用 */
+function callAI(prompt){ /* 占位：真实接 AI API（用 SETTINGS.aiKey）。现返回假详解。 */
+  return new Promise(function(res){ setTimeout(function(){ res("【占位详解】关于「"+prompt.slice(0,40)+"」的详细解读：……（接入真实密钥后呈现 AI 生成内容）"); },10); });
+}
+function genDetailFor(qs){
+  if(!qs||!qs.length)return;
+  var kp=qs[0].kp||"未分类";
+  var prompt="知识点："+kp+"；用户问题："+qs.map(function(x){return x.q;}).join("；");
+  callAI(prompt).then(function(ans){
+    var id="det_"+Date.now().toString(36);
+    var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
+    var det={id:id,title:"你关注的「"+kp+"」详解",sum:(ans||"").slice(0,60),lead:"",body:[ans],tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
+    CARDS.unshift(det);
+    var a=loadQA(),gid="grp_"+id;
+    qs.forEach(function(q){for(var i=0;i<a.length;i++){if(a[i].id===q.id){a[i].state="pushed";a[i].detailCardId=id;a[i].groupId=gid;break;}}});
+    saveQA(a);renderToday();renderChannels();updateQaBdg();
+    if(typeof remindNewDetail==="function")remindNewDetail(kp,id);
+    if(curView==="qa")renderQA();
+  });
+}
+function checkAndGenDetails(){
+  var a=loadQA(),now=Date.now(),DAY=86400000;
+  var pending=a.filter(function(x){return qaState(x)==="pending" && (now-(x.ts||now))>=2*DAY;});
+  if(!pending.length)return;
+  var groups={};
+  pending.forEach(function(x){var k=x.kp||"未分类";(groups[k]=groups[k]||[]).push(x);});
+  Object.keys(groups).forEach(function(k){ genDetailFor(groups[k]); });
+}
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
 function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}renderTree();updateQaBdg();toast('已从文件恢复');}
 function updateQaBdg(){
@@ -1060,7 +1120,7 @@ function updateQaBdg(){
   var b=document.getElementById("qaBdg");
   if(b){b.textContent=n;b.style.display=n?"":"none";}
 }
-/* 阅读器里渲染某卡的问答 */
+/* 阅读器里渲染某卡的问答（底部「我在这张卡上的提问」块） */
 function renderCardQA(cardId){
   var box=document.getElementById("qaBox");if(!box)return;
   if(!cardId){box.style.display="none";return;}
@@ -1068,36 +1128,70 @@ function renderCardQA(cardId){
   var list=document.getElementById("qaList");
   var items=loadQA().filter(function(x){return x.cardId===cardId;});
   list.innerHTML=items.length?items.map(function(it){
-    return '<div class="qaitem"><div class="qq">问：'+esc(it.q)+'</div>'+(it.a?('<div class="qa">答：'+esc(it.a)+'</div>'):'<div class="qpend">（待云端作答）</div>')+'</div>';
-  }).join(""):'<div class="qempty">还没问过，下面提一个</div>';
+    var s=qaState(it);
+    var badge={pending:"待生成",pushed:"已推送",read:"已读",ignored:"已忽略"}[s];
+    var link=it.detailCardId?'<button class="qlink" data-det="'+esc(it.detailCardId)+'">看详解 →</button>':(s==="pushed"?'<span class="qhint">（已有答案）</span>':'<span class="qhint">（生成中）</span>');
+    return '<div class="qaitem"><div class="qq">问：'+esc(it.q)+'</div><div class="qmeta"><span class="qbadge b-'+s+'">'+badge+'</span></div><div class="qacts">'+link+'</div></div>';
+  }).join(""):'<div class="qempty">还没问过，上面提一个</div>';
 }
-/* 问答 tab 总览 */
+document.getElementById("qaBox").addEventListener("click",function(e){
+  var lnk=e.target.closest(".qlink");
+  if(lnk){switchTab("qa");return;}
+});
+/* 新详解生成后的轻量提醒（今日流已插入详解卡，这里弹提示） */
+function remindNewDetail(kp,id){
+  toast("已生成详解：「"+(kp||"")+"」· 去「今日」或「问答」查看");
+}
+/* 问答 tab 总览（按知识点分组 + 状态 + 链接 + 忽略 + 筛选） */
+var QA_FILTER="all";
 function renderQA(){
-  var qs=loadQA();
-  document.getElementById("qaCount").textContent=qs.length;
-  document.getElementById("qaAll").innerHTML=qs.length?qs.map(function(it){
-    var done=!!it.a;
-    return '<div class="qrow" data-qid="'+esc(it.id)+'"><span class="qdot'+(done?' done':'')+'"></span>'
-      +'<span class="qtitle">'+esc(it.title||it.q)+'</span><span class="qchev">›</span>'
-      +'<div class="qfull" style="display:none">问：'+esc(it.q)+'<br>'+(it.a?('答：'+esc(it.a)):'<span style="color:var(--ink-3)">待云端作答</span>')+'</div></div>';
-  }).join(""):'<div class="qempty">还没问过问题。打开任意卡片，在底部「问答」区随时提问。</div>';
-  var foc=loadFocus();
-  document.getElementById("focusAll").innerHTML=foc.length?foc.map(function(x){return '<span>'+esc(x.title)+'</span>';}).join(""):'<span style="color:var(--ink-3);font-size:12px">作答后，问题会凝练成专题出现在这里</span>';
-  renderIntChips();
-  var rec=interestRelated();
-  document.getElementById("recAll").innerHTML=rec.length?rec.map(function(c){
-    return '<div class="recCard" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span><div class="ct"><b>'+esc(c.title)+'</b>'+(c.sum?'<p>'+esc(c.sum)+'</p>':'')+'</div></div>';
-  }).join(""):'<div class="qempty">还没有兴趣词，先去搜索或提问，这里会按兴趣挑相关卡片给你。</div>';
+  var groups=aggByKP();
+  var all=loadQA();
+  function cnt(s){return all.filter(function(x){return qaState(x)===s;}).length;}
+  var stat=document.getElementById("qaStat");
+  if(stat)stat.innerHTML='待生成 <b>'+cnt("pending")+'</b> · 已推送 <b>'+cnt("pushed")+'</b> · 已读 <b>'+cnt("read")+'</b> · 已忽略 <b>'+cnt("ignored")+'</b>';
+  var box=document.getElementById("qaGroups");if(!box)return;
+  var filt=QA_FILTER;
+  var shown=groups.filter(function(g){return filt==="all"||g.items.some(function(it){return qaState(it)===filt;});});
+  if(!shown.length){box.innerHTML='<div class="qempty">还没有问题。打开任意卡片在底部提问，或上面直接新建一个。</div>';return;}
+  box.innerHTML=shown.map(function(g){
+    var items=g.items.map(function(it){
+      var s=qaState(it);
+      var badge={pending:"待生成",pushed:"已推送",read:"已读",ignored:"已忽略"}[s];
+      var src=it.cardTitle?'<span class="qsrc">来自：'+esc(it.cardTitle)+'</span>':'<span class="qsrc">无来源卡</span>';
+      var link=it.detailCardId?'<button class="qlink" data-det="'+esc(it.detailCardId)+'">看详解 →</button>':(s==="pushed"?'<span class="qhint">（已有答案）</span>':'');
+      var ig=s==="ignored"?'':'<button class="qignore" data-qid="'+esc(it.id)+'">忽略</button>';
+      return '<div class="qitem'+(s==="ignored"?" ig":"")+'"><div class="qq">'+esc(it.q)+'</div><div class="qmeta">'+src+'<span class="qbadge b-'+s+'">'+badge+'</span></div><div class="qacts">'+link+ig+'</div></div>';
+    }).join("");
+    return '<div class="qgrp"><div class="qgrph">'+esc(g.kp)+' · '+g.items.length+' 问</div>'+items+'</div>';
+  }).join("");
 }
+/* 问答 tab 交互绑定（一次性） */
+document.getElementById("qaFilters").addEventListener("click",function(e){
+  var b=e.target.closest("[data-f]");if(!b)return;
+  QA_FILTER=b.getAttribute("data-f");
+  var bs=document.querySelectorAll("#qaFilters .filter");for(var i=0;i<bs.length;i++)bs[i].classList.toggle("on",bs[i]===b);
+  renderQA();
+});
+document.getElementById("qaNewSend").addEventListener("click",function(){
+  var q=document.getElementById("qaNewQ").value.trim();
+  if(!q){toast("先写个问题");return;}
+  var kp=document.getElementById("qaNewKp").value.trim()||null;
+  addQA(null,q,kp);
+  document.getElementById("qaNewQ").value="";document.getElementById("qaNewKp").value="";
+  renderQA();toast("已记录，AI 会按知识点归组并在 2–3 天后出详解");
+});
+document.getElementById("qaGroups").addEventListener("click",function(e){
+  var lnk=e.target.closest(".qlink");
+  if(lnk){var c=getCard(lnk.getAttribute("data-det"));if(c){switchTab("today");openReader(c);}return;}
+  var ig=e.target.closest(".qignore");
+  if(ig){var a=loadQA();for(var i=0;i<a.length;i++){if(a[i].id===ig.getAttribute("data-qid")){a[i].state="ignored";break;}}saveQA(a);renderQA();updateQaBdg();return;}
+});
 document.getElementById("qaSend").addEventListener("click",function(){
   var ta=document.getElementById("qaText");var q=ta.value.trim();
   if(!q){toast("先写个问题");return;}
   if(!readTarget){toast("没有对应卡片");return;}
-  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，下次推送会作答");
-});
-document.getElementById("qaAll").addEventListener("click",function(e){
-  var row=e.target.closest(".qrow");if(!row)return;
-  var full=row.querySelector(".qfull");if(full)full.style.display=full.style.display==="none"?"block":"none";
+  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，AI 会在 2–3 天后出详解");
 });
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
@@ -1131,13 +1225,6 @@ document.getElementById("syncAI").addEventListener("click",function(){
   }
   else{toast("复制失败，请重试");}
 });
-document.getElementById("recAll").addEventListener("click",function(e){
-  var cr=e.target.closest(".recCard[data-id]");if(!cr)return;
-  var c=getCard(cr.getAttribute("data-id"));
-  if(c){var rect=cr.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
-    openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:c.note||"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}
-});
-
 /* ====================== 渲染：待挖掘 ====================== */
 function renderDig(){
   var box=document.getElementById("digList");var h=[];var chs=["data","ai","jp"];
@@ -1185,7 +1272,7 @@ function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
 function openReader(data,srcRect){
   pushNav("reader");
-  pushHistoryLayer();
+  _ensureGuard();
   readTarget=data.id||null;
   document.getElementById("readerTitle").textContent=data.title;
   var body='<p class="lead">'+esc(data.lead||"")+'</p>';
@@ -1223,6 +1310,11 @@ function openReader(data,srcRect){
   setTimeout(function(){rsc.style.opacity="1";rsc.style.transition="opacity .3s .1s";},120);
   reader.classList.add("on");
   renderCardQA(data.id||null);
+  if(data.isDetail&&data.fromQids&&data.fromQids.length){
+    var qa2=loadQA(),chg=false;
+    data.fromQids.forEach(function(qid){for(var i=0;i<qa2.length;i++){if(qa2[i].id===qid&&qa2[i].state==="pushed"){qa2[i].state="read";chg=true;break;}}});
+    if(chg){saveQA(qa2);if(curView==="qa")renderQA();updateQaBdg();}
+  }
   startReadTimer();
 }
 function closeReader(){
@@ -1279,7 +1371,7 @@ function markReadVisual(id){
 var sheet=document.getElementById("sheet"),sheetMask=document.getElementById("sheetMask");
 function openSheet(data){
   pushNav("sheet");
-  pushHistoryLayer();
+  _ensureGuard();
   var act='';
   if(data.link)act='<a class="sheetgo" href="'+esc(data.link)+'" target="_blank" rel="noopener">🔎 去挖：打开这条线索的解答页</a>';
   else act='<div class="note" style="background:var(--gold-soft);border-radius:12px;padding:11px 13px;font-size:12.5px;color:var(--ink-2);line-height:1.7;margin-top:10px">这条线索还没生成解答页，等下一次推送后就能直接开挖。</div>';
@@ -1379,7 +1471,7 @@ var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on");},1600);}
 
 /* ====================== 初始 ====================== */
-initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateQaBdg();
+initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateQaBdg();checkAndGenDetails();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 /* 建立历史基线：replaceState 占住当前条目（首页），再压一条「守卫」。
@@ -1458,54 +1550,7 @@ loadFeed();
   });
 })();
 
-/* ====================== 左边缘侧滑回退（导航栈） ======================
-   逻辑：navStack 栈底=home(今日)，向上为 tab:一级页 / reader(覆盖层) / sheet(覆盖层)，每侧滑弹一级；
-        一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面；EDGE 放宽到 40px。 */
-(function(){
-  var EDGE=40, THRESH=60;
-  var sx=0, sy=0, engaged=false, dirX=0, layer=null;
-  function topLayer(){
-    if(reader.classList.contains("on")) return reader;
-    if(sheet.classList.contains("on")) return sheet;
-    return document.getElementById("wrap");
-  }
-  function clearAllNudge(){
-    ["wrap","reader","sheet"].forEach(function(id){var L=document.getElementById(id);if(L){L.style.transition="";L.style.transform="";}});
-  }
-  document.addEventListener("touchstart",function(e){
-    if(engaged) return;
-    var t=e.touches[0];
-    if(t.clientX>EDGE) return;
-    sx=t.clientX; sy=t.clientY; engaged=true; dirX=0; layer=null;
-  },{passive:true});
-  document.addEventListener("touchmove",function(e){
-    if(!engaged) return;
-    var t=e.touches[0], dx=t.clientX-sx;
-    var dyy=t.clientY-sy;
-    if(dirX===0){
-      if(Math.abs(dx)>Math.abs(dyy)&&Math.abs(dx)>8){ dirX=1; layer=topLayer(); }
-      else if(Math.abs(dyy)>=Math.abs(dx)){ engaged=false; return; }
-    }
-    if(dirX!==1) return;
-    if(dx<=0){ if(layer){layer.style.transition="none";layer.style.transform="";} return; }
-    e.preventDefault();
-    layer.style.transition="none";
-    layer.style.transform="translateX("+Math.min(dx,90)+"px)";
-  },{passive:false});
-  document.addEventListener("touchend",function(e){
-    if(!engaged) return; engaged=false;
-    if(dirX!==1) return;
-    var dx=(e.changedTouches?e.changedTouches[0].clientX:0)-sx;
-    if(layer){
-      layer.style.transition="transform .26s cubic-bezier(.22,1,.36,1)";
-      if(dx>=THRESH){ layer.style.transform=""; navBack(); }
-      else { layer.style.transform=""; }
-    }
-    layer=null; dirX=0;
-    setTimeout(clearAllNudge,300);
-  });
-  document.addEventListener("touchcancel",function(){ engaged=false; dirX=0; });
-})();
+// 注：边缘侧滑返回手势已由下方 popstate / history 守卫统一接管，旧的 touch 侧滑块已移除（真机侧滑不触发 touch 事件）。
 </script>
 <script>
 /* ====================== 自动更新：确保装进桌面的 PWA 不再卡在旧版本 ======================
@@ -1514,7 +1559,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-05.4';
+var _APP_VER_ = '2026-10-07.1';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
