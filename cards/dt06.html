@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>概念卡 | 数据分类分级：先把数据分堆排座次，再决定谁能碰</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月8日 · 数据知识</div>
+<h1>概念卡 | 数据分类分级：先把数据分堆排座次，再决定谁能碰</h1>
+<div class="lead">周四概念卡：今天聊数据治理最底层的地基——数据分类分级。一句话，先把数据分堆排座次，再决定谁能碰、能拿来干啥。</div>
+<h2>① 这个东西到底是什么</h2>
+<p>数据分类分级，拆开念就是"分类"和"分级"两件事，都特别生活化：</p>
+<p><b>分类</b>：按"它是什么类型"把数据分堆。就像你收拾衣柜——上衣挂一杆、裤子叠一格、袜子塞一抽屉。公司里的数据也一样：客户姓名电话是一类（个人信息），财务报表账本是一类（经营数据），机器设备每秒跑出来的记录是一类（物联网数据）。</p>
+<p><b>分级</b>：在已经分好的同一堆里，再按"有多重要、有多敏感"排座次。就像家里的文件柜——水电费账单放普通抽屉，房产证和护照得锁进带密码的保险柜。数据也分档，常见的有 1~4 级（或叫一般、重要、核心），级别越往上，管得越严、看得人越少。</p>
+<blockquote>一句话记住：先分堆（分类），再排重要度（分级），然后"贵重证件进保险柜，普通文件放手边"。</blockquote>
+<h2>② 它和北数所哪些岗位的日常工作有关</h2>
+<ul>
+<li><b>数据治理 / 合规岗</b>：一份数据想上架交易，第一步就是把它分好类、定好级；没定级的数据，交易所根本不让挂出来卖。</li>
+<li><b>数据登记 / 确权岗</b>：给数据办"产权证"时，必须标注它是几级，级别直接决定这份数据以后能在多大范围里流转、要不要上级审批。</li>
+<li><b>交易审核 / 风控岗</b>：审核一笔买卖时，看的就是数据级别——高级别数据可能只允许卖给有资质的机构，普通级别才能广撒网。</li>
+<li><b>售前 / 项目经理（你的强项）</b>：给客户设计"数据怎么流通"的方案前，先问清对方的数据是几级，级别越高技术方案和合规成本越重。你原来的投标售前经验，到这儿直接能迁移。</li>
+</ul>
+<h2>③ 如果面试被问到，怎么答</h2>
+<blockquote>数据分类分级是数据治理的第一步，简单说就是先按类型把数据分堆、再按敏感重要程度分档，好比把贵重证件放保险柜、普通文件放抽屉。在北数所这类交易所，不分好级的数据不能上架交易，级别越高审批和合规要求越严。它是后面做脱敏、确权、交易流通所有动作的地基。</blockquote>
+<p style="color:var(--ink2)">下期预告：下回我们聊它的亲兄弟——<b>数据脱敏</b>，讲清楚"给数据化个妆"到底是怎么保护隐私的。坚持每天看一张卡，转行北数所就不远啦。</p>
+<div class="rel">相关延伸：概念卡 | 数据产品化：把"生红薯"做成能上架的数据商品；到底什么是数据匿名化？；周三情报｜北数所晋级国家级枢纽，数据确权有了"全国一本账"</div>
+<div class="note">本期为概念知识卡，内容依据 DAMA-DMBOK 数据治理知识体系及《数据安全法》《个人信息保护法》关于数据分类分级的通用口径整理，属于行业通行理解，非实时行情数据；具体分级标准以企业所在行业主管部门规定为准。</div>
+</body>
+</html>
