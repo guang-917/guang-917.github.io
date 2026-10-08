@@ -1,4 +1,4 @@
-const VERSION = '3';
+const VERSION = '4';
 const CACHE = 'kb-workbench-v' + VERSION;
 const ASSETS = [
   './',
