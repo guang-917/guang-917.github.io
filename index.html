@@ -106,14 +106,15 @@ body{
 .card .meta{font-size:11.5px;color:var(--ink-3);margin-top:10px;display:flex;gap:10px;align-items:center}
 .card .star{margin-left:auto;font-size:14px;color:var(--ink-3)}
 .card .star.on{color:var(--gold)}
-/* 已读卡片：标题划线 + 收起（只显标题与标签，摘要/时间隐藏） */
+/* 已读卡片：标题划线 + 整体变淡（日期/星标仍可见，与「最外层三样」保持一致） */
 .card.done{opacity:.6}
 .card.done h3{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
-.card.done .sum,.card.done .meta{display:none}
 .filter{margin-left:auto;font-size:12px;color:var(--ink-3);background:var(--card-2);border:1px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .15s}
 .filter.on{background:var(--ai);color:#fff;border-color:var(--ai)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .tags span{font-size:11px;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line);padding:2px 8px;border-radius:6px}
+/* 最外层只显示前 3 个关键词，多出的折成「+N」——完整关键词在摘要页 */
+.tags .tmore{color:var(--ink-3);background:transparent;border:1px dashed var(--line)}
 
 /* ---------- 频道门户 ---------- */
 .chan{display:flex;align-items:center;gap:14px;padding:18px 16px}
@@ -190,7 +191,12 @@ body{
 .topic .cardrow .dot{margin-top:7px;flex:none}
 .topic .cardrow .ct{flex:1;min-width:0}
 .topic .cardrow .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
+.topic .cardrow .crow{display:flex;align-items:flex-start;gap:8px}
+.topic .cardrow .crow b{flex:1;min-width:0}
+.topic .cardrow .crow .chip{margin-top:1px}
 .topic .cardrow .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
+.topic .cardrow .tags{margin-top:6px;gap:5px}
+.topic .cardrow .tags span{font-size:10.5px;padding:1px 7px}
 .topic .cardrow .meta{font-size:11px;color:var(--ink-3);margin-top:4px}
 /* 编辑抽屉 */
 .edtabs{display:flex;gap:8px;margin:6px 0 12px}
@@ -215,13 +221,22 @@ body{
 .dig{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden;cursor:pointer;transition:transform .15s var(--spring),box-shadow .15s}
 .dig:active{transform:scale(.98);box-shadow:var(--shadow-sm)}
 .dig .q{font-size:14px;font-weight:500;line-height:1.5}
-.dig.hasdt .q{padding-right:58px}
+/* 最外层只留：分类标签 + 日期 + 标题；「为什么推荐 / 来源 / 去挖」收进点击后的抽屉 */
+.dig .dtop{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.dig .dtop .dt{margin-left:auto;font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
 .dig .why{font-size:11.5px;color:var(--data);margin-top:7px;display:flex;align-items:center;gap:5px}
-.dig .from{font-size:11px;color:var(--ink-3);margin-top:4px}
+.dig .from{font-size:11px;color:var(--ink-3);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:52px}
 .dig .go{position:absolute;right:13px;bottom:11px;font-size:11px;color:var(--ink-3)}
 .dig.done{opacity:.5}
 .dig.done .go{color:var(--ink-3)}
 .dig .dt{position:absolute;right:13px;top:11px;font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
+/* ---------- 摘要页（第 2 层）：分类标签 + 日期 / 摘要块 / 关键词 ---------- */
+.reader .rmeta{display:flex;align-items:center;gap:8px;margin:2px 0 12px}
+.reader .rmeta .rdt{font-size:11.5px;color:var(--ink-3)}
+.reader .rsum{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--data);border-radius:10px;padding:13px 15px;margin:0 0 12px}
+.reader .rsum .rlbl{font-size:10.5px;color:var(--ink-3);letter-spacing:.16em;font-weight:600;margin-bottom:5px}
+.reader .rsum .rstx{font-size:15.5px;color:var(--ink);font-weight:600;line-height:1.65}
+.reader .tags{margin:0 0 14px}
 /* ---------- 视图标题行 + 归档小入口 ---------- */
 .viewbar{display:flex;align-items:flex-start;gap:10px}
 .viewbar .sub{flex:1;min-width:0;margin:0}
@@ -241,7 +256,7 @@ body{
 .arch .ahint{font-size:12px;color:var(--ink-3);line-height:1.75;margin:2px 0 14px}
 .aitem{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-sm);transition:transform .15s var(--spring)}
 .aitem .aq{font-size:13.5px;font-weight:500;line-height:1.55;padding-right:54px}
-.aitem .am{font-size:11px;color:var(--ink-3);margin-top:6px}
+.aitem .am{font-size:11px;color:var(--ink-3);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:54px}
 .aitem .arestore{position:absolute;right:11px;top:10px;font-size:11px;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:4px 10px;cursor:pointer;transition:transform .15s var(--spring)}
 .aitem .arestore:active{transform:scale(.92)}
 .aitem.tap{cursor:pointer}
@@ -704,6 +719,7 @@ function switchTab(v){
 tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
+  var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(reader.classList.contains("on")){var i=navStack.lastIndexOf("reader"); if(i>=0)navStack.splice(i,1); closeReader();}
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
@@ -822,6 +838,15 @@ function todaySub(){
   var d=new Date();var w=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
   return '今天 · '+(d.getMonth()+1)+'月'+d.getDate()+'日 '+w;
 }
+/* 关键词标签：最外层最多显示 3 个，多出的折成「+N」；摘要页显示全部 */
+var TAG_MAX=3;
+function tagsHTML(c,all){
+  var t=(c&&c.tags)?c.tags:[];if(!t.length)return "";
+  var show=all?t:t.slice(0,TAG_MAX);
+  var h='<div class="tags">'+show.map(function(x){return '<span>'+esc(x)+'</span>';}).join("");
+  if(!all&&t.length>TAG_MAX)h+='<span class="tmore">+'+(t.length-TAG_MAX)+'</span>';
+  return h+'</div>';
+}
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
   var list=CARDS.filter(function(c){return c.date===todayStr();});
@@ -831,8 +856,7 @@ function renderToday(){
       +'<div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<span class="chip '+m.c+'">'+m.n+'</span>'
       +'<h3>'+esc(c.title)+'</h3></div>'
-      +'<div class="sum">'+esc(c.sum)+'</div>'
-      +(c.tags&&c.tags.length?'<div class="tags">'+c.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>':'')
+      +tagsHTML(c)
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'
       +lpHTML(c.id)+'</div>');
   }
@@ -874,8 +898,9 @@ function renderChanList(ch){
   var body=document.getElementById("clBody");var h=[];
   for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
-      +'<h3>'+esc(c.title)+'</h3></div><div class="sum">'+esc(c.sum)+'</div>'
-      +(c.tags&&c.tags.length?'<div class="tags">'+c.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>':'')
+      +'<span class="chip '+m.c+'">'+m.n+'</span>'
+      +'<h3>'+esc(c.title)+'</h3></div>'
+      +tagsHTML(c)
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'+lpHTML(c.id)+'</div>');
   }
   if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
@@ -903,9 +928,11 @@ function doSearch(q){
   for(var i=0;i<CARDS.length;i++){var c=CARDS[i];
     var hay=(c.title+" "+(c.tags?c.tags.join(" "):"")+" "+c.sum+" "+(c.body?c.body.join(" "):"")).toLowerCase();
     if(hay.indexOf(low)<0)continue;n++;
+    var sm=chMeta(c.ch);
     h.push('<div class="card" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
-      +'<span class="chip '+CH_META[c.ch].c+'">'+CH_META[c.ch].n+'</span><h3>'+esc(c.title)+'</h3></div>'
-      +'<div class="sum">'+esc(c.sum)+'</div>'+lpHTML(c.id)+'</div>');
+      +'<span class="chip '+sm.c+'">'+sm.n+'</span><h3>'+esc(c.title)+'</h3></div>'
+      +tagsHTML(c)
+      +'<div class="meta"><span>'+esc(c.date2||"")+'</span></div>'+lpHTML(c.id)+'</div>');
   }
   document.getElementById("chanPortal").style.display="none";document.getElementById("chanList").style.display="none";
   hdrSub.textContent="搜索：「"+q+"」 "+n+" 条";
@@ -923,8 +950,9 @@ function renderTreePills(){
   document.querySelectorAll("#treeChPills [data-ch]").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-ch")===treeCh);});
 }
 function cardRowHTML(c){
+  var cm=chMeta(c.ch);
   return '<div class="cardrow" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span>'
-    +'<div class="ct"><b>'+esc(c.title)+'</b>'+(c.sum?'<p>'+esc(c.sum)+'</p>':'')+'<div class="meta">'+(c.date2||'')+'</div></div>'
+    +'<div class="ct"><div class="crow"><span class="chip '+cm.c+'">'+cm.n+'</span><b>'+esc(c.title)+'</b></div>'+tagsHTML(c)+'<div class="meta">'+(c.date2||'')+'</div></div>'
     +(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>';
 }
 function renderTree(){
@@ -1015,7 +1043,7 @@ document.getElementById("treeList").addEventListener("click",function(e){
   var cr=e.target.closest(".cardrow[data-id]");
   if(cr){var c=getCard(cr.getAttribute("data-id"));
     if(c){var rect=cr.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
-      openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:c.note||"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}return;}
+      openReader(c,lastRect);}return;}
 });
 
 /* ====================== 知识树编辑器（App 内，本地持久化） ====================== */
@@ -1476,25 +1504,42 @@ document.getElementById("restoreFile").addEventListener("change",function(e){var
 /* ====================== 渲染：待挖掘 ====================== */
 /* 待挖掘条目本身不自带日期 → 三级兜底算出「它大概哪天出现」：
    ① 条目自带 date；② 本地记的「第一次见到这条的日期」；③ 顺着 from 找到它延伸自的那张卡，用卡的日期 */
+/* 顺着「来自 from」反推它延伸自的那张卡。返回 {card, cross}：
+   cross=true 表示只能靠"跨频道"猜（可信度低，界面不当成确定来源展示） */
+function digFromMatch(d){
+  if(!d)return null;
+  var from=String(d.from||"").replace(/^来自[:：]\s*/,"").replace(/^深挖[:：]\s*/,"").trim();
+  if(!from)return null;
+  var cards=CARDS||[];
+  function pick(arr,test){for(var k=0;k<arr.length;k++){if(test(arr[k]))return arr[k];}return null;}
+  var c=pick(cards,function(x){return String(x.id)===from;});
+  if(c)return {card:c,cross:false};
+  if(!/^\d+$/.test(from))return null;
+  var num=String(from).replace(/^0+/,"")||"0";
+  var sameCh=cards.filter(function(x){return normCh(x.ch)===normCh(d.ch);});
+  c=pick(sameCh,function(x){return String(x.id).replace(/\D/g,"").replace(/^0+/,"")===num;})
+    ||pick(sameCh,function(x){return String(x.id).endsWith(from);});
+  if(c)return {card:c,cross:false};
+  c=pick(cards,function(x){return String(x.id).replace(/\D/g,"").replace(/^0+/,"")===num;})
+    ||pick(cards,function(x){return String(x.id).endsWith(from);});
+  return c?{card:c,cross:true}:null;
+}
 function digSourceDate(d){
   if(!d)return "";
   if(d.date)return d.date;
   var fs=loadDigFirst();
   if(fs[d.q])return fs[d.q];
-  var from=String(d.from||"").replace(/^来自[:：]\s*/,"").replace(/^深挖[:：]\s*/,"").trim();
-  if(!from)return "";
-  var cards=CARDS||[];
-  function pick(arr,test){for(var k=0;k<arr.length;k++){if(test(arr[k]))return arr[k];}return null;}
-  var sameCh=cards.filter(function(x){return normCh(x.ch)===normCh(d.ch);});
-  var c=pick(cards,function(x){return x.id===from;});
-  if(!c&&/^\d+$/.test(from)){
-    var num=String(from).replace(/^0+/,"")||"0";
-    c=pick(sameCh,function(x){return String(x.id).replace(/\D/g,"").replace(/^0+/,"")===num;})
-      ||pick(sameCh,function(x){return String(x.id).endsWith(from);})
-      ||pick(cards,function(x){return String(x.id).replace(/\D/g,"").replace(/^0+/,"")===num;})
-      ||pick(cards,function(x){return String(x.id).endsWith(from);});
-  }
-  return (c&&c.date)?c.date:"";
+  var m=digFromMatch(d);
+  return (m&&m.card&&m.card.date)?m.card.date:"";
+}
+/* 来源行给人看的样子：认得出就显示源卡标题；认不出也绝不把内部代号（dt07 / 08）怼给用户 */
+function digFromLabel(d){
+  var m=digFromMatch(d);
+  if(m&&m.card&&m.card.title&&!m.cross)return "来自："+m.card.title;
+  var raw=String((d&&d.from)||"").trim();
+  if(!raw)return "";
+  if(/^(来自|深挖)[:：]/.test(raw))return raw;
+  return "来自：更早的卡片";
 }
 /* 日期显示：统一成「今天 / 昨天 / 10月9日」，跟卡片别处的写法一致 */
 function digDateLabel(iso){
@@ -1540,13 +1585,12 @@ function renderDig(){
     items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
     h.push('<div class="dgrp"><div class="gh"><span class="ic">'+ICON[m.ic]+'</span> '+m.n+' <span class="badge">'+items.length+'</span></div>');
     for(var j=0;j<items.length;j++){
-      var d=items[j],dt=digSourceDate(d);
-      h.push('<div class="dig'+(dt?' hasdt':'')+'" data-q="'+esc(d.q)+'" data-from="'+esc(d.from)+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
-        +(dt?'<div class="dt">'+esc(digDateLabel(dt))+'</div>':'')
-        +'<div class="q">'+esc(d.q)+'</div>'
-        +'<div class="why">↳ '+esc(d.why)+'</div>'
-        +'<div class="from">'+esc(d.from)+'</div>'
-        +'<div class="go">去挖 ›</div></div>');
+      var d=items[j],dt=digSourceDate(d),flab=digFromLabel(d),dm=chMeta(d.ch);
+      /* 最外层只留：分类标签 + 日期 + 标题；「为什么推荐 / 来源 / 去挖」全收进点开后的抽屉 */
+      h.push('<div class="dig" data-q="'+esc(d.q)+'" data-from="'+esc(flab)+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
+        +'<div class="dtop"><span class="chip '+dm.c+'">'+dm.n+'</span>'
+        +'<span class="dt">'+esc(dt?digDateLabel(dt):"更早")+'</span></div>'
+        +'<div class="q">'+esc(d.q)+'</div></div>');
     }
     h.push('</div>');
   }
@@ -1588,10 +1632,10 @@ function renderArch(){
     if(!items.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>在「待挖掘」里点开看过一条线索，它就会自动收到这里。</div>';return;}
     archBodyEl.innerHTML='<div class="ahint">你已看过、收起来的 '+items.length+' 条线索，一条时间线从新到旧。点「放回」可以让它回到「待挖掘」重新排队。</div>'
       +items.map(function(d){
-        var dt=digSourceDate(d);
+        var dt=digSourceDate(d),flab=digFromLabel(d);
         return '<div class="aitem tap" data-aq="'+esc(d.q)+'">'
           +'<div class="aq">'+esc(d.q)+'</div>'
-          +'<div class="am">'+esc(digDateLabel(dt)||"更早")+(d.from?' · '+esc(d.from):'')+'</div>'
+          +'<div class="am">'+esc(digDateLabel(dt)||"更早")+(flab?' · '+esc(flab):'')+'</div>'
           +'<button class="arestore" data-restore="'+esc(d.q)+'">放回</button></div>';
       }).join("");
     return;
@@ -1638,6 +1682,9 @@ archBodyEl.addEventListener("click",function(e){
   }
 });
 document.getElementById("archClose").addEventListener("click",navBack);
+/* 归档入口：待挖掘 / 问答 右上角各一个（此前只写了"更新按钮上的数字"、漏了"点了要干什么"，点了没反应） */
+document.getElementById("digArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch("dig");});
+document.getElementById("qaArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch("qa");});
 
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
@@ -1655,24 +1702,30 @@ function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=tru
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
 function openReader(data,srcRect){
+  data=data||{};
   pushNav("reader");
   _ensureGuard();
   readTarget=data.id||null;
-  document.getElementById("readerTitle").textContent=data.title;
-  var body='<p class="lead">'+esc(data.lead||"")+'</p>';
-  if(data.body)for(var i=0;i<data.body.length;i++)body+='<p>'+esc(data.body[i])+'</p>';
-  if(data.note)body+='<div class="note">'+esc(data.note)+'</div>';
-  if(data.link)body+='<a class="fullbtn" href="'+esc(data.link)+'" target="_blank" rel="noopener">📖 打开完整学习卡（含发音跟读）</a>';
-  if(data.rel&&data.rel.length){
-    var relMatched=[];
-    data.rel.forEach(function(r){
-      var txt=(typeof r==="object")?r.t:r, idref=(typeof r==="object")?r.id:null, m=null;
-      if(idref)m=getCard(idref);
-      if(!m){for(var k=0;k<CARDS.length;k++){if(CARDS[k].title===txt&&CARDS[k].id!==(data.id||readTarget)){m=CARDS[k];break;}}}
-      if(m&&m.id!==(data.id||readTarget))relMatched.push(m);
-    });
-    if(relMatched.length)body+='<h4>相关延伸</h4><div class="rel">'+relMatched.map(function(m){return '<span class="relitem" data-relid="'+esc(m.id)+'">'+esc(m.title)+'</span>';}).join('')+'</div>';
+  /* 取「整卡」数据：摘要、关键词、日期、频道都挂在整卡上（调用时只传了部分字段） */
+  var full=(data.id?getCard(data.id):null)||data;
+  document.getElementById("readerTitle").textContent=data.title||full.title||"";
+  var fch=chMeta(full.ch),body="";
+  /* 分类标签 + 日期 */
+  body+='<div class="rmeta"><span class="chip '+fch.c+'">'+fch.n+'</span>'
+       +((full.date2||full.date)?'<span class="rdt">'+esc(full.date2||full.date)+'</span>':'')+'</div>';
+  /* 摘要（大字） */
+  if(full.sum)body+='<div class="rsum"><div class="rlbl">摘 要</div><div class="rstx">'+esc(full.sum)+'</div></div>';
+  /* 关键词（摘要页显示全部，不折叠） */
+  body+=tagsHTML(full,true);
+  /* 导读 */
+  if(full.lead)body+='<p class="lead">'+esc(full.lead)+'</p>';
+  /* 没有「完整学习卡」的卡（含 AI 当场生成的详解卡）：兜底显示要点，避免点开是空白 */
+  if(!full.link&&full.body&&full.body.length){
+    body+='<h4>要点</h4>';
+    for(var i=0;i<full.body.length;i++)body+='<p>'+esc(full.body[i])+'</p>';
   }
+  /* 完整学习卡入口（按钮文案已按要求去掉「含发音跟读」四字） */
+  if(full.link)body+='<a class="fullbtn" href="'+esc(full.link)+'" target="_blank" rel="noopener">📖 打开完整学习卡</a>';
   document.getElementById("readerBody").innerHTML=body;
   rsc.scrollTop=0;
   // 已有卡？先看是否已读决定按钮
@@ -1776,6 +1829,9 @@ document.querySelector(".sheet .grip").addEventListener("click",navBack);
 
 /* ====================== 卡片点击（事件委托） ====================== */
 document.getElementById("wrap").addEventListener("click",function(e){
+  /* 长按面板开着时：点面板外的任何地方 → 只收起面板，不触发其它动作（防误触） */
+  var _olp=document.querySelector(".lp.show");
+  if(_olp&&!e.target.closest(".lp")){ closeLp(_olp); return; }
   // 标星切换（点卡片右下角星标）
   var star=e.target.closest(".star");
   if(star){var sc=star.closest(".card[data-id]");if(sc){var sid=sc.getAttribute("data-id");var c=getCard(sid);var on=!c.star;setStar(sid,on);star.classList.toggle("on",on);toast(on?"已标星":"已取消标星");}return;}
@@ -1796,7 +1852,7 @@ document.getElementById("wrap").addEventListener("click",function(e){
   if(card&&!e.target.closest(".lp")){
     var rid=card.getBoundingClientRect();lastRect={left:rid.left,top:rid.top,width:rid.width,height:rid.height};
     var c=getCard(card.getAttribute("data-id"));
-    if(c){openReader({id:c.id,title:c.title,lead:c.lead,body:c.body,rel:c.rel,link:c.link,note:"相关数据：可在「待挖掘」找延伸方向。"},lastRect);}
+    if(c){openReader(c,lastRect);}
   }
 });
 
@@ -1807,6 +1863,7 @@ document.getElementById("wrap").addEventListener("touchstart",function(e){
   var card=e.target.closest(".card[data-id]");
   if(!card)return;
   var lp=card.querySelector(".lp");if(!lp)return;
+  var op=document.querySelector(".lp.show"); if(op&&op!==lp)closeLp(op);   /* 长按另一张卡：先把旧面板收掉 */
   var t=e.touches[0];lpId=lp.getAttribute("data-lp");lpStart={x:t.clientX,y:t.clientY};
   lpTimer=setTimeout(function(){showLp(lp,t);},480);
 },{passive:true});
@@ -1954,7 +2011,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-09.10';
+var _APP_VER_ = '2026-10-09.12';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
