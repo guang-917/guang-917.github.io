@@ -293,6 +293,13 @@ body{
 .qfull .qa{color:var(--data);margin-top:4px}
 /* 问答 tab 重构：统计 / 筛选 / 新建 / 知识点分组 */
 .qah2{font-size:13px;color:var(--ink-2);margin:12px 0 6px;font-weight:600}
+
+/* 提问后当场显示 AI 答案的区域（原先要等约 1 小时） */
+.qaans{background:var(--card-2);border-left:3px solid var(--ai);border-radius:var(--r-sm);padding:10px 12px;font-size:13.5px;line-height:1.75;color:var(--ink);white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:46vh;overflow:auto}
+.qaans.wait{border-left-color:var(--ink-3);color:var(--ink-2)}
+.qaans.bad{border-left-color:var(--jp);color:var(--jp)}
+.qregen{display:block;width:100%;margin-top:9px;background:var(--ai-soft);color:var(--ai);border:1px solid var(--ai);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.qregen:active{background:var(--ai);color:#fff}
 .qstat{font-size:13px;color:var(--ink-2);background:var(--card-2);border-radius:10px;padding:9px 12px;margin-bottom:10px}
 .qstat b{color:var(--ink);font-weight:700}
 .qfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
@@ -444,7 +451,7 @@ body{
 
   <!-- 问答 / 兴趣 -->
   <section class="view" data-view="qa">
-    <p class="sub">针对任意卡片提问，问题按「知识点」归组。提问后约 1 小时，AI 会自动生成一份详解卡——既在今日流出现，也链在这里。</p>
+    <p class="sub">针对任意卡片提问，问题按「知识点」归组。提问后 AI 立刻回答，并存成一份详解卡——既在今日流出现，也链在这里。</p>
     <div class="qaWrap">
       <div class="qstat" id="qaStat"></div>
       <div class="qfilters" id="qaFilters">
@@ -457,6 +464,7 @@ body{
       <div class="qnew">
         <textarea id="qaNewQ" placeholder="直接提个问题（不必选卡，AI 自动归到知识点）…"></textarea>
         <div class="qnewrow"><input id="qaNewKp" placeholder="知识点（可留空，让 AI 自动归类）"><button id="qaNewSend">新建提问</button></div>
+        <div class="qaans" id="qaNewAns" style="display:none"></div>
       </div>
       <div id="qaGroups"></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
@@ -486,8 +494,10 @@ body{
     </div>
     <div class="rbody" id="readerBody"></div>
     <div class="qa" id="qaBox" style="display:none">
-      <div class="qah">问这张卡（随时提问，问题存本地）</div>
+      <div class="qah">问这张卡（提问后立刻问 AI，答案当场出来）</div>
       <div class="qain"><textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea><button id="qaSend">提问</button></div>
+      <button class="qregen" id="qaRegen" style="display:none">这张卡内容看着旧？让 AI 按最新资料重讲一遍</button>
+      <div class="qaans" id="qaAns" style="display:none"></div>
       <div class="qah2">我在这张卡上的提问</div>
       <div class="qalist" id="qaList"></div>
     </div>
@@ -1105,6 +1115,43 @@ function callAI(prompt, system){ /* 真实接腾讯云 CloudBase 中转层（密
     return d.text;
   });
 }
+/* ===== 立刻问 AI：提问后当场出答案（原先要等约 1 小时才出详解卡）===== */
+function askAINow(item, q, ansId){
+  var box = document.getElementById(ansId || "qaAns");
+  if(!box) return;
+  function say(t, cls){ box.className = "qaans" + (cls ? " " + cls : ""); box.style.display = ""; box.textContent = t; }
+  if(!item){ say("问题没记上，请重试", "bad"); return; }
+  var kp = item.kp || "未分类";
+  var card = item.cardId ? getCard(item.cardId) : null;
+  var sysP = "你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。";
+  if(card){
+    sysP += "用户正在看这张卡：《" + String(card.title || "") + "》，摘要：" +
+            String(card.sum || "").slice(0, 150) + "。回答要紧扣这张卡，别跑题。";
+  }
+  say("AI 正在思考…", "wait");
+  callAI("知识点：" + kp + "；用户问题：" + q, sysP).then(function(ans){
+    ans = (ans || "").trim();
+    if(!ans) throw new Error("AI 返回了空内容");
+    var id = "det_" + Date.now().toString(36);
+    var ch = card ? normCh(card.ch || "ai") : "ai";
+    var det = { id:id, title:"你问：「" + q.slice(0,16) + (q.length > 16 ? "…" : "") + "」",
+                sum:ans.slice(0,60), lead:"", body:[ans], tags:[kp], ch:ch,
+                date:todayStr(), date2:todayDate2(), read:false, isDetail:true, kp:kp, fromQids:[item.id] };
+    var a = loadQA();
+    for(var i=0;i<a.length;i++){
+      if(a[i].id === item.id){ a[i].state="pushed"; a[i].a=ans; a[i].detailCardId=id; a[i].groupId="grp_"+id; break; }
+    }
+    saveQA(a); saveDetail(det); CARDS.unshift(det);
+    addFocus(kp, q, ch);
+    renderToday(); renderChannels(); updateQaBdg();
+    if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
+    if(typeof renderQA === "function") renderQA();
+    say(ans + "\n\n—— 已存成一张详解卡，去「今日」或「问答」可回看。");
+  }).catch(function(err){
+    var msg = String((err && err.message) || err || "未知错误");
+    say("没拿到答案：" + msg + "\n（先看网络是否正常，再点一次提问；若反复失败，把这句话截图发我）", "bad");
+  });
+}
 function genDetailFor(qs){
   if(!qs||!qs.length)return;
   var kp=qs[0].kp||"未分类";
@@ -1194,9 +1241,9 @@ document.getElementById("qaNewSend").addEventListener("click",function(){
   var q=document.getElementById("qaNewQ").value.trim();
   if(!q){toast("先写个问题");return;}
   var kp=document.getElementById("qaNewKp").value.trim()||null;
-  addQA(null,q,kp);
+  var _it=addQA(null,q,kp);
   document.getElementById("qaNewQ").value="";document.getElementById("qaNewKp").value="";
-  renderQA();toast("已记录，AI 会按知识点归组并在约 1 小时后出详解");
+  renderQA();askAINow(_it,q,"qaNewAns");
 });
 document.getElementById("qaGroups").addEventListener("click",function(e){
   var lnk=e.target.closest(".qlink");
@@ -1208,7 +1255,26 @@ document.getElementById("qaSend").addEventListener("click",function(){
   var ta=document.getElementById("qaText");var q=ta.value.trim();
   if(!q){toast("先写个问题");return;}
   if(!readTarget){toast("没有对应卡片");return;}
-  addQA(readTarget,q);ta.value="";renderCardQA(readTarget);toast("已记录，AI 会在约 1 小时后出详解");
+  var _it=addQA(readTarget,q);ta.value="";renderCardQA(readTarget);askAINow(_it,q,"qaAns");
+});
+/* "让 AI 重讲一遍"：把这张卡当初的原始问题找回来再问，拿到实在内容（不空转、不改动原卡） */
+document.getElementById("qaRegen").addEventListener("click",function(){
+  var ta=document.getElementById("qaText");
+  if(!ta)return;
+  var c=readTarget?(getCard(readTarget)||getDetail(readTarget)):null;
+  var q0="";
+  if(c){
+    var ids=c.fromQids||[], a=loadQA();
+    for(var i=0;i<a.length && !q0;i++){
+      if(ids.indexOf(a[i].id)>=0) q0=a[i].q;
+      else if(a[i].detailCardId===c.id) q0=a[i].q;
+    }
+    if(!q0){ var m=/^你问：「(.+?)」$/.exec(String(c.title||"")); if(m) q0=m[1]; }
+  }
+  ta.value = q0
+    ? ("请就「"+q0+"」这个话题，重新完整、准确地讲一遍，分点说清楚")
+    : ("请就这张卡的主题重新完整、准确地讲一遍；如果这张卡本身信息不够，请直接告诉我它缺什么");
+  document.getElementById("qaSend").click();
 });
 document.getElementById("backupBtn").addEventListener("click",downloadKB);
 document.getElementById("restoreBtn").addEventListener("click",function(){document.getElementById("restoreFile").click();});
@@ -1283,6 +1349,9 @@ function openReader(data,srcRect){
   var card=readTarget?getCard(readTarget):null;
   var already=card?card.read:false;
   doneBtn.classList.toggle("hide",already);
+  /* 详解卡才显示"让 AI 重讲一遍"（老卡内容是早前生成的，一键换新） */
+  var rgBtn=document.getElementById("qaRegen");
+  if(rgBtn){ rgBtn.style.display=(data.isDetail||/详解/.test(String(data.title||"")))?'':'none'; }
   // FLIP
   reader.style.display="block";
   var r=srcRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
@@ -1549,7 +1618,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-09.4';
+var _APP_VER_ = '2026-10-09.7';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
