@@ -1093,9 +1093,17 @@ function mergeDetailsIntoCards(){var m=loadDetails();for(var k in m){if(!getCard
 /* 本地备份 / 恢复 + 同步云端导出 */
 function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
 /* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
-var SETTINGS={aiKey:""}; /* 真实密钥到位后填这里（或云端 Secrets）；前端不裸用 */
-function callAI(prompt){ /* 占位：真实接 AI API（用 SETTINGS.aiKey）。现返回假详解。 */
-  return new Promise(function(res){ setTimeout(function(){ res("【占位详解】关于「"+prompt.slice(0,40)+"」的详细解读：……（接入真实密钥后呈现 AI 生成内容）"); },10); });
+var SETTINGS={aiKey:"", relayToken:"349493"}; /* 国内中转路线：密钥放腾讯云 CloudBase 云函数环境变量（LLM_API_KEY），前端不裸用；relayToken 填你在腾讯云设的 RELAY_TOKEN，与函数端一致即开锁 */
+var AI_ENDPOINT='https://guang-777-d6gos4xfd8674c765-1502603004.ap-shanghai.app.tcloudbase.com/kb-ai-relay'; /* 腾讯云 CloudBase 云函数 HTTP 地址（由 relay.js 中转，密钥在服务端、前端零密钥） */
+function callAI(prompt, system){ /* 真实接腾讯云 CloudBase 中转层（密钥在服务端，前端零密钥；可选 RELAY_TOKEN 口令校验） */
+  return fetch(AI_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt: prompt, system: system || '你是个人知识助教，用简体中文简洁、准确地回答。', token: SETTINGS.relayToken }),
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if (!d.ok) throw new Error(d.error || 'AI 调用失败');
+    return d.text;
+  });
 }
 function genDetailFor(qs){
   if(!qs||!qs.length)return;
@@ -1541,7 +1549,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-07.4';
+var _APP_VER_ = '2026-10-09.4';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
@@ -1574,10 +1582,9 @@ if('serviceWorker' in navigator){
       if(d&&d.v&&d.v!==_APP_VER_&&!_reloaded){_reloaded=true;location.reload(true);}
     }).catch(function(){});
   }
-  setInterval(_checkVer,60*1000);
+  setInterval(_checkVer,30*60*1000);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_checkVer();});
-  window.addEventListener('load',function(){_checkVer();});
-  if(document.readyState!=='loading'){_checkVer();}
+  window.addEventListener('load',function(){setTimeout(_checkVer,1500);});
 }
 </script>
 </body>
