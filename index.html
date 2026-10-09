@@ -1105,11 +1105,17 @@ function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics
 /* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
 var SETTINGS={aiKey:"", relayToken:"349493"}; /* 国内中转路线：密钥放腾讯云 CloudBase 云函数环境变量（LLM_API_KEY），前端不裸用；relayToken 填你在腾讯云设的 RELAY_TOKEN，与函数端一致即开锁 */
 var AI_ENDPOINT='https://guang-777-d6gos4xfd8674c765-1502603004.ap-shanghai.app.tcloudbase.com/kb-ai-relay'; /* 腾讯云 CloudBase 云函数 HTTP 地址（由 relay.js 中转，密钥在服务端、前端零密钥） */
+/* ===== 真实性铁律（全局，所有 AI 问答 / 由此生成的知识卡都适用）===== */
+var AI_TRUTH = "你必须严格遵守以下真实性铁律，任何情况下不得违反：" +
+ "① 绝不编造：所有内容必须是可核实的事实。不确定的数据、日期、机构名、政策条款、金额、人名职务、事件经过一律不写；确需提及就标注「待核实」。宁可少说、留白，也不许为了让回答显得完整而凭印象编造。" +
+ "② 网络信息不可全信：搜索/联网得到的内容只能当线索，不能当结论；优先官方来源（政府与监管机构官网、官方公告、权威媒体），自媒体、论坛、聚合页、AI 摘要不作为依据。同一事实至少两个独立来源一致才可作为事实陈述；说法矛盾时如实写明「存在不同说法」。" +
+ "③ 重要知识标明来源：涉及政策法规、行业数据、机构动态、技术标准、健康法律等严肃内容，必须注明来源（机构或媒体名 + 日期 + 链接）；拿不到链接就写「来源：XX 报道，未取得原文链接」。" +
+ "④ 依据不足就直说：信息不够时明确说「这点我不确定，建议进一步核实 / 请补充一句背景」，绝不编造凑数。";
 function callAI(prompt, system){ /* 真实接腾讯云 CloudBase 中转层（密钥在服务端，前端零密钥；可选 RELAY_TOKEN 口令校验） */
   return fetch(AI_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompt, system: system || '你是个人知识助教，用简体中文简洁、准确地回答。', token: SETTINGS.relayToken }),
+    body: JSON.stringify({ prompt: prompt, system: (system || '你是个人知识助教，用简体中文简洁、准确地回答。') + '\n\n' + AI_TRUTH, token: SETTINGS.relayToken }),
   }).then(function(r){ return r.json(); }).then(function(d){
     if (!d.ok) throw new Error(d.error || 'AI 调用失败');
     return d.text;
@@ -1123,7 +1129,7 @@ function askAINow(item, q, ansId){
   if(!item){ say("问题没记上，请重试", "bad"); return; }
   var kp = item.kp || "未分类";
   var card = item.cardId ? getCard(item.cardId) : null;
-  var sysP = "你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。";
+  var sysP = "你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。" + "\n\n" + AI_TRUTH;
   if(card){
     sysP += "用户正在看这张卡：《" + String(card.title || "") + "》，摘要：" +
             String(card.sum || "").slice(0, 150) + "。回答要紧扣这张卡，别跑题。";
@@ -1156,7 +1162,7 @@ function genDetailFor(qs){
   if(!qs||!qs.length)return;
   var kp=qs[0].kp||"未分类";
   var prompt="知识点："+kp+"；用户问题："+qs.map(function(x){return x.q;}).join("；");
-  callAI(prompt).then(function(ans){
+  callAI(prompt, AI_TRUTH).then(function(ans){
     var id="det_"+Date.now().toString(36);
     var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
     var det={id:id,title:"你关注的「"+kp+"」详解",sum:(ans||"").slice(0,60),lead:"",body:[ans],tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
@@ -1618,7 +1624,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-09.7';
+var _APP_VER_ = '2026-10-09.8';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
