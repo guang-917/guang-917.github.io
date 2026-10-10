@@ -23,7 +23,14 @@
   --serif:"Songti SC","Source Han Serif SC","Noto Serif SC",Georgia,serif;
   --spring:cubic-bezier(.34,1.4,.44,1);
   --glide:cubic-bezier(.22,1,.36,1);
+  /* 展开/收回专用：比 --glide 平缓。
+     --glide 前倾太狠（120ms 就走完 84% 行程），前几帧一帧要跳 17% 的位移，
+     手机上只要有掉帧就会看着「咯噔」；这条把每帧最大位移压到 9% 左右，走得更匀。 */
+  --flip:cubic-bezier(.38,.6,.26,1);
   --tabh:58px;
+  /* 提问悬浮球：亮色=白球深图标 */
+  --fab-bg:#ffffff; --fab-fg:#232019; --fab-line:#e6dfd2;
+  --fab-shadow:0 8px 22px -6px rgba(0,0,0,.3);
 }
 html[data-theme="dark"]{
   --bg:#12141a; --bg-2:#0d0f14; --card:#1a1d26; --card-2:#20242e;
@@ -34,6 +41,9 @@ html[data-theme="dark"]{
   --gold:#d8b447; --gold-soft:#2e2817;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
   --shadow-sm:0 1px 2px rgba(0,0,0,.35);
+  /* 提问悬浮球：暗色=深球亮图标，与背景同调但浮起一档 */
+  --fab-bg:#262b38; --fab-fg:#e9e6e0; --fab-line:#3a4152;
+  --fab-shadow:0 10px 26px -8px rgba(0,0,0,.8);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -119,8 +129,8 @@ body{
 .tags .tmore{color:var(--ink-3);background:transparent;border:1px dashed var(--line)}
 
 /* ---------- 向右拖拽粉碎 ---------- */
-.card.swipe,.cardrow.swipe,.qitem.swipe{transition:none}
-.card.swipe.back,.cardrow.swipe.back,.qitem.swipe.back{transition:transform .3s var(--spring)}
+.card.swipe,.cardrow.swipe,.qitem.swipe,.dig.swipe,.aitem.swipe{transition:none}
+.card.swipe.back,.cardrow.swipe.back,.qitem.swipe.back,.dig.swipe.back,.aitem.swipe.back{transition:transform .3s var(--spring)}
 .crushfx{position:absolute;inset:0;border-radius:inherit;display:flex;align-items:center;justify-content:center;gap:8px;
   background:linear-gradient(112deg,#d8483e,#b0261c);color:#fff;font-size:13.5px;font-weight:600;letter-spacing:.05em;
   opacity:0;pointer-events:none;z-index:6}
@@ -314,7 +324,7 @@ body{
 .arch .abar .at{flex:1;min-width:0;font-family:var(--serif);font-size:16px;font-weight:600}
 .arch .abody{max-width:520px;margin:0 auto;padding-top:6px}
 .arch .ahint{font-size:12px;color:var(--ink-3);line-height:1.75;margin:2px 0 14px}
-.aitem{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-sm);transition:transform .15s var(--spring)}
+.aitem{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-sm);transition:transform .15s var(--spring)}
 .aitem .aq{font-size:13.5px;font-weight:500;line-height:1.55;padding-right:54px}
 .aitem .am{font-size:11px;color:var(--ink-3);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:54px}
 .aitem .arestore{position:absolute;right:11px;top:10px;font-size:11px;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:4px 10px;cursor:pointer;transition:transform .15s var(--spring)}
@@ -338,8 +348,17 @@ body{
 .tab .lb{font-size:10.5px;letter-spacing:.02em}
 .tab .bdg{position:absolute;top:9px;right:calc(50% - 22px);min-width:16px;height:16px;border-radius:9px;background:var(--jp);color:#fff;font-size:10px;line-height:16px;text-align:center;padding:0 4px}
 
-/* ---------- 全屏阅读器 (FLIP) ---------- */
-.reader{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:64;display:none;overflow:hidden}
+/* ---------- 全屏阅读器 (FLIP) ----------
+   transform-origin 固定 0 0：配合 translate(卡片左上角)+scale(卡片尺寸/屏幕尺寸)，
+   动画的起点与落点才能精确压在来源卡上（原先 origin 与 translate 重复计算，整体偏低约 100px）。
+   will-change 让这一层常驻自己的合成层，展开/收回全程只走 GPU，不再逐帧重绘。 */
+.reader{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:64;display:none;overflow:hidden;
+  transform-origin:0 0;will-change:transform}
+/* 动画期间：屏蔽点击，并关掉两件最贵的实时计算——顶栏毛玻璃、正文惯性滚动 */
+.reader.anim{pointer-events:none;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.reader.anim .rbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
+.reader.anim .rsc{-webkit-overflow-scrolling:auto}
+.reader.on.anim .askfab{display:none}
 .reader .rsc{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;opacity:0;padding:0 18px calc(40px + env(safe-area-inset-bottom))}
 .reader .rbar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:13px 18px 11px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 82%,transparent)}
 .reader .rbar .bk2{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s var(--spring)}
@@ -364,9 +383,11 @@ body{
 .reader.on .askfab{display:flex}
 .askfab>*{pointer-events:auto}
 .fabrow{display:flex;justify-content:flex-end;align-items:flex-end}
-.fabball{width:54px;height:54px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 8px 22px -6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;flex:none;padding:0;transition:transform .16s var(--spring)}
+.fabball{width:54px;height:54px;border-radius:50%;background:var(--fab-bg);border:1px solid var(--fab-line);box-shadow:var(--fab-shadow);display:flex;align-items:center;justify-content:center;color:var(--fab-fg);cursor:pointer;flex:none;padding:0;transition:transform .16s var(--spring),background .28s ease,color .28s ease,border-color .28s ease}
 .fabball:active{transform:scale(.92)}
 .fabball svg{width:26px;height:26px;display:block}
+/* 图标里「前面那个气泡」的填充必须跟球底色一致，否则换成深色球后会露出一个白方块 */
+.fabball .fabmask{fill:var(--fab-bg);transition:fill .28s ease}
 .fabbar{flex:1;display:none;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:6px;box-shadow:0 10px 28px -10px rgba(0,0,0,.32)}
 .askfab.on .fabball{display:none}
 .askfab.on .fabbar{display:flex}
@@ -594,7 +615,7 @@ body{
   <!-- 待挖掘 -->
   <section class="view" data-view="dig">
     <div class="viewbar">
-      <p class="sub">系统从你的兴趣信号里攒下的「可往下钻」线索。<b>只看没看过的</b>，点开看过一条，它就自动收进「归档」——眼前永远是新的。</p>
+      <p class="sub">系统从你的兴趣信号里攒下的「可往下钻」线索。<b>只看没看过的</b>，点开看过一条，它就自动收进「归档」——眼前永远是新的。不想留的，<b>按住往右滑可粉碎</b>。</p>
       <button class="archbtn" id="digArchBtn">归档 <b>0</b> ›</button>
     </div>
     <div id="digList"></div>
@@ -661,7 +682,7 @@ body{
         <button id="qaSend">提问</button>
         <button id="fabDown" aria-label="收起"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
       </div>
-      <button class="fabball" id="fabBall" aria-label="提问"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="14.6" height="10.8" rx="1.5"/><rect x="6.5" y="8.6" width="15" height="11.2" rx="1.5" fill="#fff"/><path d="M11.6 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/><path d="M16.4 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/></svg></button>
+      <button class="fabball" id="fabBall" aria-label="提问"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="14.6" height="10.8" rx="1.5"/><rect x="6.5" y="8.6" width="15" height="11.2" rx="1.5" class="fabmask"/><path d="M11.6 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/><path d="M16.4 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/></svg></button>
     </div>
   </div>
 </div>
@@ -698,7 +719,7 @@ body{
 <div class="cdlg-mask" id="cdlgMask"></div>
 <div class="cdlg" id="cdlg" role="dialog" aria-modal="true">
   <div class="cdic" id="cdlgIc"></div>
-  <div class="cdt">粉碎这张卡？</div>
+  <div class="cdt" id="cdlgT">粉碎这张卡？</div>
   <div class="cdq" id="cdlgQ"></div>
   <div class="cdn" id="cdlgD"></div>
   <div class="cdb"><button type="button" data-c="cancel">取消</button><button type="button" class="ok" data-c="ok">粉碎</button></div>
@@ -1295,12 +1316,26 @@ function addInterest(term,src){
   if(a.length>80)a=a.slice(0,80);
   saveInt(a);updateQaBdg();
 }
+/* 剥掉「详解卡」自带的外壳，避免知识点名一层套一层：
+   在名为「你关注的「未分类」详解」的卡上再提问 → 以前会生成
+   「你关注的「你关注的「未分类」详解」详解」，越问越长。现在先剥回归属名。 */
+function cleanKpTitle(t){
+  t=String(t||"").trim();
+  for(var k=0;k<4;k++){                 /* 循环剥壳：多层套娃一次剥干净 */
+    var m,before=t;
+    if((m=/^你关注的[「【]([\s\S]+?)[」】]详解$/.exec(t))) t=m[1].trim();
+    else if((m=/^你问[：:]\s*[「【]([\s\S]+?)[」】]$/.exec(t))) t=m[1].trim();
+    else if((m=/^[\s\S]*?[「【]([\s\S]+?)[」】]详解$/.exec(t))) t=m[1].trim();
+    if(t===before) break;
+  }
+  return t;
+}
 /* 知识点归类（占位：真实接 callAI 做语义归类；此处简单启发） */
 function classifyKP(q,card){
   q=(q||"").trim();
   /* 并组策略：有来源卡→按卡标题归组；无卡→靠用户手填知识点归组（addQA 传 kp）。
      不靠问题首句切分（切出来文本各异，并不了组）。无卡且没手填时统一归「未分类」。 */
-  if(card&&card.title) return card.title.slice(0,12);
+  if(card&&card.title){ var t=cleanKpTitle(card.title); if(t) return t.slice(0,12); }
   return "未分类";
 }
 /* 某条问答的当前状态（兼容旧数据：无 state 字段时，有 a 视为已推送） */
@@ -1386,11 +1421,12 @@ var AI_TRUTH = "你必须严格遵守以下真实性铁律，任何情况下不�
  "② 网络信息不可全信：搜索/联网得到的内容只能当线索，不能当结论；优先官方来源（政府与监管机构官网、官方公告、权威媒体），自媒体、论坛、聚合页、AI 摘要不作为依据。同一事实至少两个独立来源一致才可作为事实陈述；说法矛盾时如实写明「存在不同说法」。" +
  "③ 重要知识标明来源：涉及政策法规、行业数据、机构动态、技术标准、健康法律等严肃内容，必须注明来源（机构或媒体名 + 日期 + 链接）；拿不到链接就写「来源：XX 报道，未取得原文链接」。" +
  "④ 依据不足就直说：信息不够时明确说「这点我不确定，建议进一步核实 / 请补充一句背景」，绝不编造凑数。";
-function callAI(prompt, system){ /* 真实接腾讯云 CloudBase 中转层（密钥在服务端，前端零密钥；可选 RELAY_TOKEN 口令校验） */
+function callAI(prompt, system, plain){ /* 真实接腾讯云 CloudBase 中转层（密钥在服务端，前端零密钥；可选 RELAY_TOKEN 口令校验）
+  plain=true 时不追加 AI_ANS_FMT（用于「只要一句摘要」这类单值请求，避免它又按"摘要/导读/分点/标签"整套作答） */
   return fetch(AI_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompt, system: (system || '你是个人知识助教，用简体中文简洁、准确地回答。') + '\n\n' + AI_TRUTH + AI_ANS_FMT, token: SETTINGS.relayToken }),
+    body: JSON.stringify({ prompt: prompt, system: (system || '你是个人知识助教，用简体中文简洁、准确地回答。') + '\n\n' + AI_TRUTH + (plain ? '' : AI_ANS_FMT), token: SETTINGS.relayToken }),
   }).then(function(r){ return r.json(); }).then(function(d){
     if (!d.ok) throw new Error(d.error || 'AI 调用失败');
     return d.text;
@@ -1401,13 +1437,13 @@ function callAI(prompt, system){ /* 真实接腾讯云 CloudBase 中转层（密
    前端再用 parseAnsCard() 拆成 摘要/导读/分点/标签 分别排版。 */
 var AI_ANS_FMT = "\n\n【输出格式｜必须严格遵守，优先于你平时的表达习惯】\n"
  + "严格按下面这套结构输出，不要写开场白/结束语，不要用 markdown 符号（#、**、```、表格、竖线）。\n"
- + "摘要：一句话结论，25 字以内\n"
+ + "摘要：对以上内容的一句话总结（就是这段回答在讲什么）。不限字数，但尽量简短，一般 25~60 字；必须是意思完整、通顺的一句话，宁可多几个字也要把话说完整，绝对不允许写成被截断的半句话\n"
  + "导读：一句话说明「为什么值得看 / 跟提问的人有什么关系」，20~40 字；写不出就整行省略\n"
  + "- 定义：能带来经济效益、可参与生产的数据资源\n"
  + "- 地位：与土地、劳动力、资本、技术并列的第五大生产要素\n"
  + "- 特点：可复制、非排他、供给近乎无限\n"
  + "标签：关键词一、关键词二、关键词三\n"
- + "硬性要求：① 上面「定义 / 地位 / 特点」只是举例，你要按具体问题自己起小标题；② 每条要点必须一行写完，格式是「小标题：一句话说明」，绝对不要把标题和说明拆成两行，也绝对不要写出「小标题」这三个字；③ 要点 3~5 条，每条不超过 45 字；④ 前缀字样（摘要、导读、标签）照抄；⑤ 信息不足以支撑时，把要点写成一条「信息不足：还缺什么」，绝不编造凑数。";
+ + "硬性要求：① 「摘要」这一行必须有，且必须是对下面要点的总结（不是把第一条要点抄一遍、更不是抄一半），这一行绝对不能省；② 上面「定义 / 地位 / 特点」只是举例，你要按具体问题自己起小标题；③ 每条要点必须一行写完，格式是「小标题：一句话说明」，绝对不要把标题和说明拆成两行，也绝对不要写出「小标题」这三个字；④ 要点 3~5 条，每条不超过 45 字；⑤ 前缀字样（摘要、导读、标签）照抄；⑥ 信息不足以支撑时，把要点写成一条「信息不足：还缺什么」，绝不编造凑数。";
 /* ===== 把 AI 的回答解析成「正式卡片」结构：{sum, lead, body[], tags[]} =====
    模型偶尔不按格式来 → 自动降级：按句号切段，保证界面上不会再出现"一整坨不分段"的文字。 */
 function parseAnsCard(text){
@@ -1468,9 +1504,63 @@ function parseAnsCard(text){
   }
   o.body=merged.filter(Boolean).slice(0,5);
   o.tags=o.tags.slice(0,4);
-  if(!o.sum){ var f=o.body[0]||clean; o.sum=(f.length>60?f.slice(0,60):f).replace(/[。；;]$/,""); }
+  /* 【重要】这里不再「抓要点第一句硬切 60 字」冒充摘要（那会把一句话拦腰截断，
+     正是「摘要显示不全」的病根）。摘要必须由 AI 总结得出：解析不到就留空，
+     交给 ensureSummary() 单独再向 AI 要一次；最终仍失败才退到「完整第一句」。 */
+  o.sum=String(o.sum||"").trim();
   if(!o.body.length&&clean) o.body=[clean];
   return o;
+}
+/* ===== 摘要一定要「AI 总结」出来，绝不前端硬切 =====
+   背景：AI 偶尔会漏掉「摘要」那一行。老做法是抓要点第一句切 60 字顶上——
+   那等于把一句话拦腰截断（曾出现「…（如数据仓库、数」这种半句话），
+   跟"摘要页"的初衷完全相反。现在改成：
+     ① AI 这轮给了摘要 → 直接用；
+     ② 没给 → 拿这次的完整回答（+ 来源卡内容）单独再向 AI 要一句总结（真总结）；
+     ③ 连补调也失败 → 退到「完整第一句」（按句末标点收口，不切断），宁可长一点也不给半句话。 */
+function aiSummarize(src, title){
+  var text = String(src || "").trim();
+  if (!text) return Promise.resolve("");
+  var prompt = (title ? ("标题：" + title + "\n") : "") + "内容：\n" + text.slice(0, 1500);
+  return callAI(prompt,
+    "你是个人知识助教。请把用户给你的内容总结成一句话摘要。只输出这句摘要本身："
+    + "不要任何前缀字样（不要写「摘要：」）、不要分点、不要 markdown、不要加引号。"
+    + "要求：意思完整、通顺；不限字数，但尽量简短。"
+    + "如果内容确实不足以做总结，就只输出四个字：信息不足。",
+    true
+  ).then(function(s){
+    s = String(s || "").replace(/\s+/g, " ").trim();
+    s = s.replace(/^(?:摘要|一句话摘要|总结|概括|概要)\s*[：:]\s*/, "");
+    s = s.replace(/^[「『"“]+|["”」』]+$/g, "").trim();
+    if (!s || s.length < 4 || /^信息不足/.test(s)) return "";
+    return s.replace(/[。；;]$/, "");
+  }).catch(function(){ return ""; });
+}
+/* 最后兜底：取「完整的第一句」（按句末标点收口，绝不切断）。比留空强，也绝不是半句话。 */
+function firstFullSentence(p){
+  var f = String((p && ((p.body && p.body[0]) || p.raw)) || "").trim();
+  if (!f) return "";
+  var m = /^[^。！？!?]*[。！？!?]/.exec(f);
+  return (m ? m[0] : f).replace(/[。；;！!？?]$/, "").trim();
+}
+/* 摘要关卡：AI 这轮没给摘要时，去补一次真总结。返回补齐后的 p（p.sumSrc 标记来源，便于自检）。 */
+function ensureSummary(p, card, answerText){
+  if (!p) return Promise.resolve(p);
+  if (String(p.sum || "").trim()) { p.sumSrc = "ai-card"; return Promise.resolve(p); }
+  var src = [];
+  if (card){
+    if (card.title) src.push("标题：" + card.title);
+    if (card.lead) src.push("导读：" + card.lead);
+    if (card.body && card.body.length) src.push(card.body.join("\n"));
+  }
+  if (answerText) src.push(String(answerText));
+  src = src.join("\n").trim();
+  if (!src) { p.sum = ""; p.sumSrc = "none"; return Promise.resolve(p); }
+  return aiSummarize(src, card && card.title ? String(card.title) : "").then(function(s){
+    if (s){ p.sum = s; p.sumSrc = "ai-summarize"; }
+    else { p.sum = firstFullSentence(p); p.sumSrc = p.sum ? "fallback" : "none"; }
+    return p;
+  });
 }
 /* ===== 把解析结果渲染成 HTML（摘要 / 导读 / 分点 / 标签）===== */
 function ansHTML(p){
@@ -1508,23 +1598,26 @@ function askAINow(item, q, ansId){
   callAI("知识点：" + kp + "；用户问题：" + q, sysP).then(function(ans){
     ans = (ans || "").trim();
     if(!ans) throw new Error("AI 返回了空内容");
-    var p = parseAnsCard(ans);                     /* 拆成 摘要/导读/分点/标签 */
-    var id = "det_" + Date.now().toString(36);
-    var ch = card ? normCh(card.ch || "ai") : "ai";
-    var tags = (p.tags && p.tags.length) ? p.tags : [kp];
-    var det = { id:id, title:"你问：「" + q.slice(0,16) + (q.length > 16 ? "…" : "") + "」",
-                sum:p.sum, lead:p.lead, body:p.body, tags:tags, ch:ch,
-                date:todayStr(), date2:todayDate2(), read:false, isDetail:true, kp:kp, fromQids:[item.id] };
-    var a = loadQA();
-    for(var i=0;i<a.length;i++){
-      if(a[i].id === item.id){ a[i].state="pushed"; a[i].a=ans; a[i].detailCardId=id; a[i].groupId="grp_"+id; break; }
-    }
-    saveQA(a); saveDetail(det); CARDS.unshift(det);
-    addFocus(kp, q, ch);
-    renderToday(); renderChannels(); updateQaBdg();
-    if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
-    if(typeof renderQA === "function") renderQA();
-    rich(ansHTML(p) + jpBlockHTML(p.raw || ans) + '<div class="aFoot">—— 已存成一张详解卡，去「今日」或「问答」可回看</div>');
+    var parsed = parseAnsCard(ans);                /* 拆成 摘要/导读/分点/标签 */
+    if(!parsed.sum) say("AI 正在提炼摘要…", "wait"); /* 摘要缺失时会给一次补调，先给个即时反馈 */
+    return ensureSummary(parsed, card, ans).then(function(p){   /* 摘要必须是 AI 总结；缺了就再要一次，绝不硬切 */
+      var id = "det_" + Date.now().toString(36);
+      var ch = card ? normCh(card.ch || "ai") : "ai";
+      var tags = (p.tags && p.tags.length) ? p.tags : [kp];
+      var det = { id:id, title:"你问：「" + q.slice(0,16) + (q.length > 16 ? "…" : "") + "」",
+                  sum:p.sum, lead:p.lead, body:p.body, tags:tags, ch:ch,
+                  date:todayStr(), date2:todayDate2(), read:false, isDetail:true, kp:kp, fromQids:[item.id] };
+      var a = loadQA();
+      for(var i=0;i<a.length;i++){
+        if(a[i].id === item.id){ a[i].state="pushed"; a[i].a=ans; a[i].detailCardId=id; a[i].groupId="grp_"+id; break; }
+      }
+      saveQA(a); saveDetail(det); CARDS.unshift(det);
+      addFocus(kp, q, ch);
+      renderToday(); renderChannels(); updateQaBdg();
+      if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
+      if(typeof renderQA === "function") renderQA();
+      rich(ansHTML(p) + jpBlockHTML(p.raw || ans) + '<div class="aFoot">—— 已存成一张详解卡，去「今日」或「问答」可回看</div>');
+    });
   }).catch(function(err){
     var msg = String((err && err.message) || err || "未知错误");
     say("没拿到答案：" + msg + "\n（先看网络是否正常，再点一次提问；若反复失败，把这句话截图发我）", "bad");
@@ -1532,23 +1625,28 @@ function askAINow(item, q, ansId){
 }
 function genDetailFor(qs){
   if(!qs||!qs.length)return;
-  var kp=qs[0].kp||"未分类";
+  var kp=cleanKpTitle(qs[0].kp||"未分类")||"未分类";   /* 先剥壳：防止「你关注的「X」详解」再被包一层 */
+  var srcCard=qs[0].cardId?getCard(qs[0].cardId):null;
   var prompt="知识点："+kp+"；用户问题："+qs.map(function(x){return x.q;}).join("；");
-  callAI(prompt, "你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。").then(function(ans){
+  var sysP="你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。";
+  if(srcCard){ sysP+="这条内容来自这张卡：《"+String(srcCard.title||"")+"》，摘要："+String(srcCard.sum||"").slice(0,150)+"。回答要紧扣它，别跑题。"; }
+  callAI(prompt, sysP).then(function(ans){
     ans = (ans || "").trim();
     if(!ans) return;
-    var p = parseAnsCard(ans);                     /* 与「当场回答」同一套格式 */
-    var id="det_"+Date.now().toString(36);
-    var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
-    var det={id:id,title:"你关注的「"+kp+"」详解",sum:p.sum,lead:p.lead,body:p.body,
-             tags:(p.tags&&p.tags.length)?p.tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
-    CARDS.unshift(det);saveDetail(det);
-    var a=loadQA(),gid="grp_"+id;
-    qs.forEach(function(q){for(var i=0;i<a.length;i++){if(a[i].id===q.id){a[i].state="pushed";a[i].detailCardId=id;a[i].groupId=gid;break;}}});
-    saveQA(a);renderToday();renderChannels();updateQaBdg();
-    addFocus(kp, qs[0].q||"", ch); /* 出详解时顺手记入「关注专题」 */
-    if(typeof remindNewDetail==="function")remindNewDetail(kp,id);
-    if(curView==="qa")renderQA();
+    var parsed = parseAnsCard(ans);               /* 与「当场回答」同一套格式 */
+    return ensureSummary(parsed, srcCard, ans).then(function(p){  /* 摘要由 AI 总结得出，不再硬切首句 */
+      var id="det_"+Date.now().toString(36);
+      var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
+      var det={id:id,title:"你关注的「"+kp+"」详解",sum:p.sum,lead:p.lead,body:p.body,
+               tags:(p.tags&&p.tags.length)?p.tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
+      CARDS.unshift(det);saveDetail(det);
+      var a=loadQA(),gid="grp_"+id;
+      qs.forEach(function(q){for(var i=0;i<a.length;i++){if(a[i].id===q.id){a[i].state="pushed";a[i].detailCardId=id;a[i].groupId=gid;break;}}});
+      saveQA(a);renderToday();renderChannels();updateQaBdg();
+      addFocus(kp, qs[0].q||"", ch); /* 出详解时顺手记入「关注专题」 */
+      if(typeof remindNewDetail==="function")remindNewDetail(kp,id);
+      if(curView==="qa")renderQA();
+    });
   });
 }
 function checkAndGenDetails(){
@@ -1565,6 +1663,7 @@ function updateQaBdg(){
   var n=loadQA().filter(function(x){var s=qaState(x);return s==="pending"||s==="pushed";}).length;
   var b=document.getElementById("qaBdg");
   if(b){b.textContent=n;b.style.display=n?"":"none";}
+  _archBtn("qaArchBtn",archCount("qa"));   /* 归档条数跟着一起刷新（粉碎/放回后不会留旧数字） */
 }
 /* 阅读器里渲染某卡的问答（底部「我在这张卡上的提问」块） */
 function renderCardQA(cardId){
@@ -1748,7 +1847,8 @@ function stampDigFirst(list){
 /* 归档条数（kind: "dig" | "qa"） */
 function archCount(kind){
   if(kind==="qa"){return loadQA().filter(function(x){var s=qaState(x);return s==="read"||s==="ignored";}).length;}
-  var read=loadDigRead();return DIG.filter(function(d){return read.indexOf(d.q)>=0;}).length;
+  var read=loadDigRead(),del=loadDigDel();
+  return DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0;}).length;
 }
 function _archBtn(id,n){
   var b=document.getElementById(id);if(!b)return;
@@ -1758,8 +1858,8 @@ function _archBtn(id,n){
 function renderDig(){
   var box=document.getElementById("digList");if(!box)return;
   stampDigFirst(DIG);
-  var read=loadDigRead();
-  var live=DIG.filter(function(d){return read.indexOf(d.q)<0;});
+  var read=loadDigRead(),del=loadDigDel();
+  var live=DIG.filter(function(d){return read.indexOf(d.q)<0&&del.indexOf(d.q)<0;});
   var chs=["data","ai","jp"],h=[];
   if(!live.length)h.push('<div class="qempty">没看过的线索都挖完了 👍 新的会在下次推送后出现。想回顾看过的，点右上角「归档」。</div>');
   for(var i=0;i<chs.length;i++){
@@ -1789,7 +1889,8 @@ function loadDigRead(){try{return JSON.parse(localStorage.getItem(LS_DIGREAD)||"
 function saveDigRead(a){try{localStorage.setItem(LS_DIGREAD,JSON.stringify(a));}catch(e){}}
 function markDigRead(q){
   var a=loadDigRead();if(a.indexOf(q)<0)a.push(q);saveDigRead(a);
-  var unread=DIG.filter(function(d){return a.indexOf(d.q)<0;}).length;
+  var del=loadDigDel();
+  var unread=DIG.filter(function(d){return a.indexOf(d.q)<0&&del.indexOf(d.q)<0;}).length;
   var b=document.getElementById("digBdg");if(b){b.textContent=unread;b.style.display=unread?"":"none";}
   _archBtn("digArchBtn",archCount("dig"));
 }
@@ -1810,11 +1911,11 @@ function renderArch(){
   var title=document.getElementById("archTitle");
   if(ARCH_KIND==="dig"){
     if(title)title.textContent="归档 · 待挖掘";
-    var read=loadDigRead();
-    var items=DIG.filter(function(d){return read.indexOf(d.q)>=0;});
+    var read=loadDigRead(),del=loadDigDel();
+    var items=DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0;});
     items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
     if(!items.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>在「待挖掘」里点开看过一条线索，它就会自动收到这里。</div>';return;}
-    archBodyEl.innerHTML='<div class="ahint">你已看过、收起来的 '+items.length+' 条线索，一条时间线从新到旧。点「放回」可以让它回到「待挖掘」重新排队。</div>'
+    archBodyEl.innerHTML='<div class="ahint">你已看过、收起来的 '+items.length+' 条线索，一条时间线从新到旧。点一条可重看它的推荐理由与来源；点「放回」可以让它回到「待挖掘」重新排队；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
       +items.map(function(d){
         var dt=digSourceDate(d),flab=digFromLabel(d);
         return '<div class="aitem tap" data-aq="'+esc(d.q)+'">'
@@ -1828,7 +1929,7 @@ function renderArch(){
   var qs=loadQA().filter(function(x){var s=qaState(x);return s==="read"||s==="ignored";});
   qs.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
   if(!qs.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>问答里标记为「已读」或「已忽略」的，会自动收到这里。</div>';return;}
-  archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点一条，就能重看你<b>当初看到的那版详解</b>；点「放回」可以让它回到问答案板。</div>'
+  archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点一条，就能重看你<b>当初看到的那版详解</b>；点「放回」可以让它回到问答案板；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
     +qs.map(function(it){
       var s=qaState(it);
       return '<div class="aitem tap" data-qa="'+esc(it.id)+'">'
@@ -1848,6 +1949,8 @@ function restoreQA(id){
   saveQA(a);updateQaBdg();renderQA();renderArch();toast("已放回问答");
 }
 archBodyEl.addEventListener("click",function(e){
+  /* 刚做完「向右拖拽」：吃掉紧随而来的这次点击，别顺手把条目打开 */
+  if(Date.now()-lastSwipeAt<450)return;
   var rs=e.target.closest("[data-restore]");
   if(rs){e.stopPropagation();var v=rs.getAttribute("data-restore");
     if(ARCH_KIND==="dig")restoreDig(v);else restoreQA(v);return;}
@@ -1876,6 +1979,18 @@ document.getElementById("qaArchBtn").addEventListener("click",function(e){e.stop
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
 var readTimer=null,readAccum=0,readTarget=null,readRAF=null;
+/* 展开/收回动画的两只表：正文淡入、动画收尾。开合各清一次，避免互相打架 */
+var _rdRevealT=null,_rdCleanT=null;
+/* 取来源卡此刻的真实位置（用于动画端点）。卡不在屏上就退回上次记录的位置 */
+function readerHomeRect(){
+  var fb=lastRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
+  if(!readTarget)return fb;
+  try{
+    var el=document.querySelector('.card[data-id="'+cssEsc(readTarget)+'"],.cardrow[data-id="'+cssEsc(readTarget)+'"]');
+    if(el){var r=el.getBoundingClientRect();if(r.width>1&&r.height>1)return {left:r.left,top:r.top,width:r.width,height:r.height};}
+  }catch(e){}
+  return fb;
+}
 /* 本地操作统一持久化：App 是静态 PWA、无法回写 feed.json，
    故把所有用户操作（已读/标星/标签/待挖掘）存进 localStorage，刷新/重开不丢 */
 var LS_KEY="kb_local";
@@ -1933,20 +2048,10 @@ function openReader(data,srcRect){
   /* 详解卡才显示"让 AI 重讲一遍"（老卡内容是早前生成的，一键换新） */
   var rgBtn=document.getElementById("qaRegen");
   if(rgBtn){ rgBtn.style.display=(data.isDetail||/详解/.test(String(data.title||"")))?'':'none'; }
-  // FLIP
-  reader.style.display="block";
-  var r=srcRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
-  reader.style.transformOrigin=r.left+"px "+(r.top)+"px";
-  reader.style.transition="none";
-  var sx=r.width/innerWidth, sy=r.height/innerHeight;
-  reader.style.transform="translate("+(r.left)+"px,"+(r.top)+"px) scale("+sx+","+sy+")";
-  reader.style.opacity="1";
-  // 强制回流
-  reader.getBoundingClientRect();
-  reader.style.transition="transform .42s var(--glide)";
-  reader.style.transform="translate(0,0) scale(1,1)";
-  setTimeout(function(){rsc.style.opacity="1";rsc.style.transition="opacity .3s .1s";},120);
-  reader.classList.add("on");
+  /* ---------- 展开动画（FLIP）----------
+     顺序很重要：正文、问答区、问答状态、已读回写这些「会触发布局」的活，
+     全部在动画开始前做完；动画一开始就只改 transform / opacity，中途不再碰布局。
+     这是这段动画不卡的根本——原先 renderCardQA 是在动画跑起来之后才写的。 */
   renderCardQA(data.id||null);
   /* 打开的卡若是某提问的详解卡（genDetail 生成，或 feed 官推答案卡），把对应提问翻为「已读」 */
   if(data.id){
@@ -1954,17 +2059,44 @@ function openReader(data,srcRect){
     qa2.forEach(function(it){ if(it.state==="pushed"&&it.detailCardId===data.id){ it.state="read"; chg=true; } });
     if(chg){saveQA(qa2);if(curView==="qa")renderQA();updateQaBdg();}
   }
+  var r=srcRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
+  var sx=r.width/innerWidth, sy=r.height/innerHeight;
+  clearTimeout(_rdRevealT);clearTimeout(_rdCleanT);
+  reader.classList.add("anim");                 /* 上合成层 + 停掉毛玻璃/惯性滚动 + 动画期间不收点击 */
+  reader.style.transition="none";
+  rsc.style.transition="none";rsc.style.opacity="0";
+  reader.style.transform="translate("+r.left+"px,"+r.top+"px) scale("+sx+","+sy+")";
+  reader.style.opacity="1";
+  reader.style.display="block";
+  reader.getBoundingClientRect();               /* 强制回流一次：这一帧即动画起点 */
+  reader.style.transition="transform .4s var(--flip)";
+  reader.style.transform="translate(0px,0px) scale(1,1)";
+  reader.classList.add("on");
   startReadTimer();
+  /* 正文在画面基本铺满之后再淡进来：
+     这段动画是把整页从卡片尺寸「撑开」，中途纵横缩放比例差得很大，
+     早早上字的话文字会被压扁（实测 150ms 时纵向仅 76%），看着就是糊/抖。
+     挪到 250ms（此时已铺满 9 成以上）再淡入，文字全程几乎不变形。 */
+  _rdRevealT=setTimeout(function(){rsc.style.transition="opacity .16s var(--glide)";rsc.style.opacity="1";},250);
+  _rdCleanT=setTimeout(function(){reader.classList.remove("anim");},460);
 }
 function closeReader(){
   stopReadTimer();
+  closeAskFab();
+  /* 落点按来源卡「此刻」的位置算，卡片行不存在（如从问答详解进来）才退回上次记录 */
+  var rect=readerHomeRect();
+  var sx=rect.width/innerWidth, sy=rect.height/innerHeight;
+  clearTimeout(_rdRevealT);clearTimeout(_rdCleanT);
+  reader.classList.add("anim");                 /* 收回同样只走合成 */
+  rsc.style.transition="opacity .12s linear";
   rsc.style.opacity="0";
-  reader.style.transition="transform .38s var(--glide)";
-  // 回到来源卡位置
-  var rect=lastRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
-  reader.style.transformOrigin=rect.left+"px "+rect.top+"px";
-  reader.style.transform="translate("+rect.left+"px,"+rect.top+"px) scale("+(rect.width/innerWidth)+","+(rect.height/innerHeight)+")";
-  setTimeout(function(){reader.style.display="none";reader.style.transform="";reader.style.transition="";reader.classList.remove("on");},400);
+  reader.style.transition="transform .36s var(--flip)";
+  reader.style.transform="translate("+rect.left+"px,"+rect.top+"px) scale("+sx+","+sy+")";
+  _rdCleanT=setTimeout(function(){
+    reader.style.display="none";
+    reader.style.transition="";reader.style.transform="";
+    reader.classList.remove("on");reader.classList.remove("anim");
+  },380);
 }
 /* ===== 提问悬浮球：收起是圆球，点一下就地展开成输入条 ===== */
 var askFab=document.getElementById("askFab");
@@ -2188,17 +2320,20 @@ document.getElementById("wrap").addEventListener("click",function(e){
    · 按住不动（480ms）→ 弹出「打标签 / 移入待挖掘」面板（原逻辑，未改）
    · 按住并向右拖      → 进入粉碎模式：卡片跟着手指走、整片变红提示「松手粉碎」；
                         松手到门槛 → 弹确认框；没到门槛 → 弹回原位
-   适用范围：所有知识卡（今日 / 学习频道 / 搜索 / 知识树）＋ 问答里的「问题」条目 */
+   适用范围：所有知识卡（今日 / 学习频道 / 搜索 / 知识树）＋ 问答里的「问题」条目
+             ＋ 待挖掘列表里的线索 ＋ 归档层里的问答条目 / 待挖掘条目 */
 function cssEsc(s){return String(s).replace(/(")/g,'\\$1');}
 var lpTimer=null,lpStart={x:0,y:0},lpId=null;
-var SW_SEL=".card[data-id],.cardrow[data-id],.qitem[data-qid]";
+/* 可右滑粉碎的对象：知识卡 + 问答条目 + 待挖掘线索 + 归档层里的两类条目 */
+var SW_SEL=".card[data-id],.cardrow[data-id],.qitem[data-qid],.dig[data-q],.aitem[data-aq],.aitem[data-qa]";
 var SW_TH=78;                                  /* 松手粉碎的门槛（像素） */
 var swEl=null,swStart={x:0,y:0},swOn=false,swArmed=false,swReady=false,swLeft=false,lastSwipeAt=0;
 var crushPending=null;
 
-document.getElementById("wrap").addEventListener("touchstart",function(e){
+function onSwStart(e){
   var t=e.touches[0];
-  var sp=e.target.closest(SW_SEL);
+  /* 「放回」是按钮、不是可粉碎的条目：从它上面起手不接管手势，避免误粉碎 */
+  var sp=(e.target.closest("[data-restore]"))?null:e.target.closest(SW_SEL);
   swOn=false;swReady=false;swLeft=false;
   if(sp&&!flipBusy){swEl=sp;swArmed=true;swStart={x:t.clientX,y:t.clientY};resetCrush(sp);}
   else {swEl=null;swArmed=false;}
@@ -2208,8 +2343,8 @@ document.getElementById("wrap").addEventListener("touchstart",function(e){
   var op=document.querySelector(".lp.show"); if(op&&op!==lp)closeLp(op);   /* 长按另一张卡：先把旧面板收掉 */
   lpId=lp.getAttribute("data-lp");lpStart={x:t.clientX,y:t.clientY};
   lpTimer=setTimeout(function(){showLp(lp,t);},480);
-},{passive:true});
-document.getElementById("wrap").addEventListener("touchmove",function(e){
+}
+function onSwMove(e){
   var t=e.touches[0];
   if(swArmed&&swEl){
     var dx=t.clientX-swStart.x,dy=t.clientY-swStart.y;
@@ -2243,7 +2378,15 @@ document.getElementById("wrap").addEventListener("touchmove",function(e){
   }
   if(!lpTimer)return;
   if(Math.abs(t.clientX-lpStart.x)>10||Math.abs(t.clientY-lpStart.y)>10){clearTimeout(lpTimer);lpTimer=null;}
-},{passive:false});
+}
+/* 手势要同时挂到主容器与「归档」全屏层——归档层不在主容器里面，只挂一处会收不到手势 */
+[document.getElementById("wrap"),document.getElementById("arch")].forEach(function(root){
+  if(!root)return;
+  root.addEventListener("touchstart",onSwStart,{passive:true});
+  root.addEventListener("touchmove",onSwMove,{passive:false});
+  root.addEventListener("touchend",function(){endSwipe(true);},{passive:true});
+  root.addEventListener("touchcancel",function(){endSwipe(false);},{passive:true});
+});
 function endSwipe(fire){
   if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
   if(!swOn||!swEl){swArmed=false;swEl=null;return;}
@@ -2395,20 +2538,36 @@ function flipRead(el){
 var cdlg=document.getElementById("cdlg"),cdlgMask=document.getElementById("cdlgMask");
 document.getElementById("cdlgIc").innerHTML=ICON.crush;
 function crushTargetOf(el){
+  /* 归档层里的问答条目（点整条看当初那版详解，往右滑就粉碎） */
+  if(el.classList.contains("aitem")&&el.hasAttribute("data-qa")){
+    var qid2=el.getAttribute("data-qa"),it2=null,a2=loadQA();
+    for(var k=0;k<a2.length;k++)if(a2[k].id===qid2)it2=a2[k];
+    var cid2=(it2&&it2.detailCardId)?it2.detailCardId:null;
+    return {kind:"qa",qid:qid2,cardId:cid2,title:(it2?it2.q:"这条提问"),what:"这条提问",
+      desc:cid2?"这条提问会从「归档 · 问答」里删掉，它生成的那张详解卡也会一并粉碎。":"这条提问会从「归档 · 问答」里删掉。"};
+  }
   if(el.classList.contains("qitem")){
     var qid=el.getAttribute("data-qid"),it=null,a=loadQA();
     for(var i=0;i<a.length;i++)if(a[i].id===qid)it=a[i];
     var cid=(it&&it.detailCardId)?it.detailCardId:null;
-    return {kind:"qa",qid:qid,cardId:cid,title:(it?it.q:"这条提问"),
+    return {kind:"qa",qid:qid,cardId:cid,title:(it?it.q:"这条提问"),what:"这条提问",
       desc:cid?"这条提问会从「问答」里删掉，它生成的那张详解卡也会一并粉碎。":"这条提问会从「问答」里删掉。"};
   }
+  /* 待挖掘线索（主列表里的 .dig / 归档里的待挖掘条目） */
+  if(el.classList.contains("dig")||(el.classList.contains("aitem")&&el.hasAttribute("data-aq"))){
+    var q=el.getAttribute("data-q")||el.getAttribute("data-aq");
+    return {kind:"dig",q:q,title:q,what:"这条线索",
+      desc:"这条线索会从「待挖掘」和归档里彻底消失，本机不会再出现。已如实告知：换设备 / 清缓存后，云端推送可能再下来。"};
+  }
   var id=el.getAttribute("data-id"),c=getCard(id);
-  return {kind:"card",id:id,title:(c&&c.title)||"这张卡",
+  return {kind:"card",id:id,title:(c&&c.title)||"这张卡",what:"这张卡",
     desc:"它会从今日、学习频道、搜索、知识树里一起消失，刷新也不会再回来。"};
 }
 function askCrush(el){
   var tg=crushTargetOf(el);
   crushPending={el:el,t:tg};
+  var tEl=document.getElementById("cdlgT");
+  if(tEl)tEl.textContent="粉碎"+(tg.what||"这张卡")+"？";
   document.getElementById("cdlgQ").textContent="「"+tg.title+"」";
   document.getElementById("cdlgD").textContent="粉碎后不可恢复！"+tg.desc;
   pushNav("cdlg");_ensureGuard();
@@ -2424,10 +2583,11 @@ function doCrush(){
   var p=crushPending;if(!p)return;
   crushPending=null;                       /* 先清空：关闭时不再触发弹回动画 */
   if(p.t.kind==="qa")crushQA(p.t.qid,p.t.cardId);
+  else if(p.t.kind==="dig")crushDig(p.t.q);
   else crushCardById(p.t.id);
-  afterCrush(p.t.kind==="qa"?p.t.cardId:p.t.id);
+  afterCrush(p.t.kind==="qa"?p.t.cardId:null);
   resetCrush(p.el);
-  toast(p.t.kind==="qa"?"已粉碎这条提问":"已粉碎，不会再出现");
+  toast(p.t.kind==="qa"?"已粉碎这条提问":(p.t.kind==="dig"?"已粉碎这条线索":"已粉碎，不会再出现"));
   navBack();                               /* 走统一返回路径关掉确认框，历史栈不会多留一层 */
 }
 /* 点蒙层关闭：加 400ms 宽限——松手瞬间浏览器可能补发一次 click，
@@ -2463,6 +2623,19 @@ function crushCardById(id){
 function crushQA(qid,cardId){
   saveQA(loadQA().filter(function(x){return x.id!==qid;}));
   if(cardId)crushCardById(cardId);
+}
+/* 待挖掘线索的粉碎 = 本机永久抹掉：记一条黑名单 + 从内存数组摘掉 + 清掉它的「已看」记录。
+   能力边界（已如实告知用户）：App 是静态站点、写不回 feed.json，
+   所以换设备 / 清缓存后，云端推送还会把这条线索再推下来。 */
+var LS_DIGDEL="kb_digdel";
+function loadDigDel(){try{return JSON.parse(localStorage.getItem(LS_DIGDEL)||"[]")||[];}catch(e){return [];}}
+function saveDigDel(a){try{localStorage.setItem(LS_DIGDEL,JSON.stringify(a));}catch(e){}}
+function crushDig(q){
+  if(!q)return;
+  var a=loadDigDel();if(a.indexOf(q)<0){a.push(q);saveDigDel(a);}
+  var r=loadDigRead(),i=r.indexOf(q);if(i>=0){r.splice(i,1);saveDigRead(r);}
+  var out=[];for(var k=0;k<DIG.length;k++){if(DIG[k].q!==q)out.push(DIG[k]);}
+  DIG=out;
 }
 function afterCrush(crushedId){
   /* 若正开着被粉碎的那张卡的摘要页，一并关掉，避免读到已删内容 */
@@ -2620,7 +2793,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.17';
+var _APP_VER_ = '2026-10-10.21';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
