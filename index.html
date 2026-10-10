@@ -326,17 +326,28 @@ body{
 .reader .rel span{font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 11px;color:var(--ink-2)}
 .reader .rel .relitem{font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 11px;color:var(--ink-2);cursor:pointer;transition:transform .15s var(--spring),background .15s}
 .reader .rel .relitem:active{transform:scale(.94);background:var(--bg)}
-.reader .fullbtn{display:block;text-align:center;background:#e8604c;color:#fff;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;text-decoration:none;margin:14px 0 2px}
+.reader .fullbtn{display:block;width:100%;text-align:center;background:#e8604c;color:#fff;border:none;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;text-decoration:none;font-family:inherit;cursor:pointer;margin:14px 0 2px}
 .reader .fullbtn:active{opacity:.85}
 .sheet .sheetgo{display:block;text-align:center;background:var(--ai);color:#fff;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;text-decoration:none;margin:12px 0 2px}
 .sheet .sheetgo:active{opacity:.85}
 .reader .donebtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 36px);max-width:488px;background:var(--data);color:#fff;border:none;border-radius:13px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px -8px color-mix(in srgb,var(--data) 70%,transparent);transition:transform .15s var(--spring),opacity .3s}
 .reader .donebtn:active{transform:translateX(-50%) scale(.97)}
 .reader .donebtn.hide{opacity:0;pointer-events:none}
+/* ---------- 跟读练习（App 内全屏打开日语卡的完整学习卡，真人音频不外跳） ---------- */
+.jpread{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:66;display:none;flex-direction:column}
+.jpread.on{display:flex}
+.jpread .jprbar{display:flex;align-items:center;gap:10px;padding:13px 14px 11px;border-bottom:1px solid var(--line-2);background:color-mix(in srgb,var(--bg) 92%,transparent);flex:none}
+.jpread .jprbar .bk2{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s var(--spring);flex:none}
+.jpread .jprbar .bk2:active{transform:scale(.86)}
+.jpread .jprbar .rt{flex:1;min-width:0;font-family:var(--serif);font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jpread .jprbar .jpex{flex:none;font-size:12px;color:var(--ink-3);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.jpread .jpload{flex:1;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px;line-height:2;text-align:center;padding:0 30px}
+.jpread .jpfrm{flex:1;width:100%;border:0;background:#fff}
+.jpread .jpfrm.hide{display:none}
 /* 卡片内问答 + 兴趣 */
 .qa{max-width:520px;margin:14px auto 0;padding:0 16px 8px}
 .qa .qah{font-size:13px;color:var(--ink-2);margin-bottom:8px;font-weight:600}
-.qa .qalist{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.qa .qalist{display:flex;flex-direction:column;gap:8px;margin:12px 0 10px}
 .qa .qaitem{background:var(--card-2);border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.6}
 .qa .qaitem .qq{color:var(--ink)}
 .qa .qaitem .qa{color:var(--data);margin-top:3px}
@@ -585,15 +596,24 @@ body{
     </div>
     <div class="rbody" id="readerBody"></div>
     <div class="qa" id="qaBox" style="display:none">
-      <div class="qah">问这张卡（提问后立刻问 AI，答案当场出来）</div>
       <div class="qain"><textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea><button id="qaSend">提问</button></div>
       <button class="qregen" id="qaRegen" style="display:none">这张卡内容看着旧？让 AI 按最新资料重讲一遍</button>
       <div class="qaans" id="qaAns" style="display:none"></div>
-      <div class="qah2">我在这张卡上的提问</div>
       <div class="qalist" id="qaList"></div>
     </div>
   </div>
   <button class="donebtn hide" id="doneBtn">标记为已读</button>
+</div>
+
+<!-- 跟读练习：App 内全屏打开日语卡的完整学习卡（真人音频，不外跳浏览器） -->
+<div class="jpread" id="jpRead">
+  <div class="jprbar">
+    <div class="bk2" id="jpReadClose"><span class="ic"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></span></div>
+    <div class="rt" id="jpReadTitle">跟读练习</div>
+    <a class="jpex" id="jpReadOpen" target="_blank" rel="noopener">外部打开</a>
+  </div>
+  <div class="jpload" id="jpReadLoad">正在打开跟读练习…<br>首次打开稍慢，请稍等</div>
+  <iframe class="jpfrm hide" id="jpReadFrame" title="跟读练习"></iframe>
 </div>
 
 <!-- 底部抽屉 -->
@@ -767,6 +787,7 @@ tabbar.addEventListener("click",function(e){
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
   if(reader.classList.contains("on")){var i=navStack.lastIndexOf("reader"); if(i>=0)navStack.splice(i,1); closeReader();}
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
+  if(jpRead&&jpRead.classList.contains("on")){var n=navStack.lastIndexOf("jpRead"); if(n>=0)navStack.splice(n,1); closeJpRead();}
   if(v==="today"){ navStack=["home"]; resetHistoryToHome(); switchTab("today"); return; }
   if(navStack[navStack.length-1]==="tab:"+v) return;
   pushNav("tab:"+v); switchTab(v); _ensureGuard();
@@ -783,17 +804,24 @@ backBtn.addEventListener("click",navBack);
    每侧滑一次向上弹一级；一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面。
    知识树主题展开是行内展开（非独立页），不计入层级。 */
 var navStack=["home"], armT=null; var DISARM=2000;
+/* 返回兜底：点「返回」时先请浏览器 back()，由 popstate 统一回退。
+   但某些浏览器/机型下这一次 back() 可能没推动历史指针（表现为"点一下没反应"），
+   所以加一道保险：若 600ms 内没等到 popstate，就自己回退一层。 */
+var _nbWatch=null,_lastPopAt=0,_nbFallbackAt=0;
 function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
 /* navBack：界面上的「返回」按钮 / 关闭按钮 都走这里。
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"));
-  if(hasLayer){
-    // 有界面层可退：触发浏览器 back，由 popstate 统一做界面回退（与系统侧滑同路径）
-    try{ history.back(); }catch(e){ navBackFromPop(); }
-  }
-  // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不再直接退桌
+  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on"));
+  if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
+  var lenBefore=navStack.length;
+  clearTimeout(_nbWatch);
+  _nbWatch=setTimeout(function(){
+    /* 兜底：260ms 内 popstate 没来（back 未生效）且层栈没变，就自己回退一层 */
+    if(navStack.length===lenBefore && Date.now()-_lastPopAt>200){ _nbFallbackAt=Date.now(); navBackFromPop(); }
+  },260);
+  try{ history.back(); }catch(e){ clearTimeout(_nbWatch); _nbFallbackAt=Date.now(); navBackFromPop(); }
 }
 
 /* ====================== 系统返回手势接管（history 守卫模型）======================
@@ -823,10 +851,14 @@ function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) histor
 function resetHistoryToHome(){ _exitArmed=false; clearTimeout(armT); _ensureGuard(); }
 
 window.addEventListener("popstate",function(){
+  /* 刚才兜底回退可能引发的"回响"返回：忽略掉，否则会一次退两层 */
+  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); return; }
+  _lastPopAt=Date.now(); clearTimeout(_nbWatch);   /* 系统返回真来了 → 撤掉兜底，避免重复回退 */
   // 一次用户返回（系统侧滑/返回键）
   var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill)
               || reader.classList.contains("on") || sheet.classList.contains("on")
-              || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"));
+              || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
+              || (jpRead&&jpRead.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
@@ -848,6 +880,7 @@ window.addEventListener("popstate",function(){
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
 function navBackFromPop(){
   var top=navStack[navStack.length-1];
+  if(top==="jpRead"){ navStack.pop(); closeJpRead(); return; }
   if(top==="cdlg"){ navStack.pop(); closeCrushDlg(); return; }
   if(top==="arch"){ navStack.pop(); closeArch(); return; }
   if(top==="reader"){ navStack.pop(); closeReader(); return; }
@@ -864,6 +897,7 @@ function navBackFromPop(){
   if(archEl&&archEl.classList.contains("on"))closeArch();
   if(reader.classList.contains("on"))closeReader();
   if(sheet.classList.contains("on"))closeSheet();
+  if(jpRead&&jpRead.classList.contains("on"))closeJpRead();
   if(t==="home"){ switchTab("today"); return; }
   if(t.indexOf("tab:")===0){ switchTab(t.slice(4)); return; }
 }
@@ -1811,8 +1845,14 @@ function openReader(data,srcRect){
     body+='<h4>要点</h4>';
     for(var i=0;i<full.body.length;i++)body+='<p>'+esc(full.body[i])+'</p>';
   }
-  /* 完整学习卡入口（按钮文案已按要求去掉「含发音跟读」四字） */
-  if(full.link)body+='<a class="fullbtn" href="'+esc(full.link)+'" target="_blank" rel="noopener">📖 打开完整学习卡</a>';
+  /* 完整学习卡入口：日语卡 → App 内直接跟读（真人音频，不外跳浏览器）；其他卡 → 原样外跳 */
+  if(full.link){
+    if(normCh(full.ch)==="jp"){
+      body+='<button type="button" class="fullbtn" data-read="'+esc(full.link)+'">🎧 跟读练习</button>';
+    }else{
+      body+='<a class="fullbtn" href="'+esc(full.link)+'" target="_blank" rel="noopener">📖 打开完整学习卡</a>';
+    }
+  }
   document.getElementById("readerBody").innerHTML=body;
   rsc.scrollTop=0;
   // 已有卡？先看是否已读决定按钮
@@ -1869,6 +1909,49 @@ document.getElementById("readerBody").addEventListener("click",function(e){
   if(!m){toast("暂无对应卡片");return;}
   var rect=rel.getBoundingClientRect();
   openReader({id:m.id,title:m.title,lead:m.lead,body:m.body,rel:m.rel,link:m.link,note:m.note||"相关数据：可在「待挖掘」找延伸方向。"},rect);
+});
+/* ====================== 跟读练习（App 内全屏打开日语卡的完整学习卡）======================
+   日语卡的完整学习卡里是真人发音（每句一个音频 + 整段连播 + 语速滑块）。
+   这里用全屏 iframe 就地打开，用户不用跳出浏览器；关掉时把帧清空，正在播的音频一并停止。 */
+var jpRead=document.getElementById("jpRead"),
+    jpReadFrame=document.getElementById("jpReadFrame"),
+    jpReadLoad=document.getElementById("jpReadLoad"),
+    jpReadTitle=document.getElementById("jpReadTitle"),
+    jpReadOpen=document.getElementById("jpReadOpen");
+var jpReadTimer=null;
+function revealJpFrame(){
+  if(!jpRead||!jpRead.classList.contains("on"))return;
+  var s=jpReadFrame.getAttribute("src");
+  if(!s||s==="about:blank")return;
+  jpReadLoad.style.display="none";jpReadFrame.classList.remove("hide");
+}
+function openJpRead(link,title){
+  if(!link)return;
+  pushNav("jpRead");_ensureGuard();
+  jpReadTitle.textContent=title||"跟读练习";
+  jpReadOpen.href=link;
+  jpRead.classList.add("on");
+  jpReadLoad.style.display="";jpReadFrame.classList.add("hide");
+  jpReadFrame.src=link;
+  /* 兜底：1.2 秒后无条件把画面亮出来（个别机型/网络下 load 事件可能来得晚甚至不来） */
+  clearTimeout(jpReadTimer);
+  jpReadTimer=setTimeout(revealJpFrame,1200);
+}
+function closeJpRead(){
+  if(!jpRead||!jpRead.classList.contains("on"))return;
+  clearTimeout(jpReadTimer);
+  jpRead.classList.remove("on");
+  try{jpReadFrame.src="about:blank";}catch(e){}   /* 清空帧：停掉正在播的音频 */
+  jpReadLoad.style.display="";jpReadFrame.classList.add("hide");
+}
+if(jpReadFrame&&jpReadFrame.addEventListener){
+  jpReadFrame.addEventListener("load",revealJpFrame);
+}
+document.getElementById("jpReadClose").addEventListener("click",navBack);
+/* 详情页里点「🎧 跟读练习」→ 就地打开（事件委托，卡片内容每次重绘都有效） */
+document.getElementById("readerBody").addEventListener("click",function(e){
+  var b=e.target.closest("[data-read]");if(!b)return;
+  openJpRead(b.getAttribute("data-read"),"跟读练习");
 });
 var lastRect=null;
 function startReadTimer(){
@@ -2274,7 +2357,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-09.13';
+var _APP_VER_ = '2026-10-10.15';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
