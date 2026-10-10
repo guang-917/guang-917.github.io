@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据脱敏：给数据里的「隐私部位」打码，但还能用</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月10日 · 数据知识（概念卡 dt08）</div>
+<h1>数据脱敏：给数据里的「隐私部位」打码，但还能用</h1>
+<div class="lead">快递单把收件人真名电话遮住一部分，包裹照样能寄能分拣——数据脱敏就是给数据里的「隐私部位」打码、替换、打乱，路人看不出是谁，但数据还能分析、测试、流通。这正是你目标方向（数据匿名化）最基础的一道防线。</div>
+
+<h2>一、这个东西是什么（用生活比喻讲明白）</h2>
+<p><b>权威定义：</b>国家标准 GB/T 37988-2019《信息安全技术 数据安全能力成熟度模型》第 3.12 条，把「数据脱敏（data desensitization）」定义为：「通过一系列数据处理方法对原始数据进行处理以屏蔽敏感数据的一种数据保护方法。」一句话翻译：不动数据的「样子和用途」，只把里面会暴露隐私的那块藏起来。</p>
+<p><b>生活比喻：</b>你寄快递，面单上「张三 / 13812345678 / 北京市朝阳区XX路1号」被系统改成「张* / 138****5678 / 北京市朝阳区***」。快递员照样能分拣、派送，但路上谁捡到单子，也拼不出你是谁、住哪。数据脱敏干的就是这件事——把「姓名、电话、身份证、住址、病历」这些敏感字段，用遮盖、替换、打乱、加密等方式处理掉，同时保留「这是男、30岁、上个月买了3次」这类还能分析的特征。</p>
+<p><b>两类做法，记住「先做好副本」和「当场打码」的区别：</b></p>
+<ul>
+  <li><b>静态脱敏：</b>先把一份「脱敏版复印件」做好存着，给开发测试、外包分析、对外共享的人用；原始真身锁在保险柜里不出门。比如银行要把生产库拿去给外包公司测系统，先复制一份、把客户姓名卡号全换成假数据，再交出去。</li>
+  <li><b>动态脱敏：</b>谁查数据，系统当场按他的权限打码——有权限（如风控员）看全貌，没权限（如客服）只看到「张* / 138****5678」。相当于「看的时候才打码」，原始库不动。</li>
+</ul>
+<blockquote>⚠️ 一个必须知道的坑：脱敏不是万能。如果只遮了名字、却留着「身份证号+精确住址+出生日期」，坏人仍可能用这些信息组合把你认出来——这叫「重识别风险」。所以脱敏要按场景做到位，涉及强隐私时还要叠加去标识化、匿名化，甚至隐私计算（这俩以后单独讲）。</blockquote>
+
+<h2>二、它和北数所哪些岗位的日常工作有关</h2>
+<table>
+<tr><th>岗位（北数所常见方向）</th><th>脱敏在其中的位置</th></tr>
+<tr><td>数据治理 / 合规审查岗</td><td>北数所对进场数据做「来源合法性验证和合规性审查」（见「数字交易合约」报道）。涉及个人信息等敏感数据，进场挂牌前往往要先脱敏或去标识化——脱敏策略是合规审查的必查项。</td></tr>
+<tr><td>数商 / 数据产品经理<br>（你的售前强项可迁移）</td><td>帮数据提供方设计「这份数据怎么脱敏后才能安全流通」的方案，是进场前的核心交付物；也是你做售前方案、写标书的抓手。</td></tr>
+<tr><td>数据资产登记 / 运营岗</td><td>北数所设有数据资产登记中心，登记时要说清数据的敏感级别和已做的脱敏处理，决定它能以哪种模式（免费开放 / 授权调用 / 共同建模）交易。</td></tr>
+</table>
+<p><b>补充背景：</b>北数所官方方案明确「根据数据性质进行分级分类，采取免费开放、授权调用、共同建模、联邦学习、加密计算等多种模式」流通（北京市经信局答复）。也就是说——能直接给「原始副本」的，通常只有脱敏后或本就不敏感的数据；敏感数据不让拿走原样。</p>
+
+<h2>三、面试被问到，怎么答（2-3句背下来）</h2>
+<blockquote>「数据脱敏是按国标 GB/T 37988 的定义，对敏感数据做变形、屏蔽来保护隐私，同时尽量保留数据可用的特征；常见做法有静态脱敏（先做脱敏副本）和动态脱敏（按权限实时打码）。对北数所这类交易所，脱敏是数据能合规进场流通的『前置工序』——涉及个人信息的数据不脱敏就不能挂牌，它是『数据可用不可见』最基础的一道防线。」</blockquote>
+
+<p style="margin-top:24px;color:var(--accent2);font-weight:600">下期预告：今天先吃透「脱敏」这道基础防线；周二我们讲它的进阶兄弟——「去标识化与匿名化的区别」，正好是你目标方向的核心。坚持每天一张卡，转行的底气就是这么一点点攒出来的。</p>
+
+<div class="rel">相关延伸：数据分类分级：先把数据分堆排座次，再决定谁能碰（dt06，已推送概念卡）</div>
+<div class="note">
+<b>来源说明（本期全部引用，均经官方/权威出处核对）：</b><br>
+1. 国家标准 GB/T 37988-2019《信息安全技术 数据安全能力成熟度模型》第 3.12 条「数据脱敏」定义。来源：全国标准信息公共服务平台（std.samr.gov.cn），标准号 GB/T 37988-2019，现行。该定义亦被四川省地方标准文件直接引用，见四川省人民政府网站：https://www.sc.gov.cn/10462/sjfbzcwj/2023/9/25/39f9aaf0262a4a0b868f0a29310ee31f/files/b5fb7787659842fb98c0d5fa3fd5f24a.pdf<br>
+2. 北数所「根据数据性质进行分级分类，采取免费开放、授权调用、共同建模、联邦学习、加密计算等多种模式」流通；「对交易参与主体实行准入审核和分级管理，对数据来源进行合法性验证和合规性审查」。来源：①北京市经济和信息化局《关于完善国际大数据交易所相关工作的建议的答复意见》（2022-09），http://jxj.beijing.gov.cn/jxdt/gzdt/202209/P020220909543546814573.pdf；②中国经济网《北数所首发"数字交易合约"》（2021-11-16），https://www.ce.cn/xwzx/gnsz/gdxw/202111/16/t20211116_37089782.shtml<br>
+3. 北数所数据资产登记中心、五大功能定位。来源：北京市人民政府《北京国际大数据交易所设立工作实施方案》（2021-03-31），https://www.beijing.gov.cn/zhengce/gfxwj/sj/202103/t20210331_2341258.html<br>
+4. 去标识化 / 匿名化定义（用于「重识别风险」补充说明）。来源：国家标准 GB/T 35273-2020《信息安全技术 个人信息安全规范》，全国标准信息公共服务平台（std.samr.gov.cn）
+</div>
+</body>
+</html>
