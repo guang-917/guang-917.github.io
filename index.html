@@ -2863,7 +2863,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.24';
+var _APP_VER_ = '2026-10-10.25';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
@@ -2881,19 +2881,39 @@ if('serviceWorker' in navigator){
       });
     }).catch(function(e){console.warn('SW注册失败',e);});
   });
-  // 新 SW 接管 → 自动刷新到最新（只刷新一次，避免循环）
-  var _reloaded=false;
+  /* ===== 发现新版后「挑空档」再刷新（关键：绝不打断正在看的卡片）=====
+     教训：原先一发现新版就 location.reload()，你正开着卡片看时会被当场刷掉、
+     弹回列表页。现在改成「待生效」：记下有待更新，等你退回列表（没有任何覆盖层）
+     的那一刻再刷新；等待期间一切照常可用，只是把刷新挪到安全的空档。 */
+  var _reloaded=false,_pendingReload=false;
+  function _busyReading(){
+    try{
+      return reader.classList.contains("on") || sheet.classList.contains("on")
+          || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
+          || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
+          || (curView==="channels"&&chanDrill);
+    }catch(e){ return false; }
+  }
+  function _applyUpdate(){
+    if(_reloaded) return;
+    if(_busyReading()){ _pendingReload=true; return; }   /* 你正在看东西 → 先不打断，等空档 */
+    _reloaded=true; location.reload(true);
+  }
+  function _flushPendingReload(){
+    if(_pendingReload&&!_reloaded&&!_busyReading()){ _reloaded=true; location.reload(true); }
+  }
+  // 每 1.5 秒探一次空档：你一旦退回列表，就立刻把待生效的刷新补上
+  setInterval(_flushPendingReload,1500);
+  // 新 SW 接管 → 挑空档刷新到最新
   navigator.serviceWorker.addEventListener('message',function(ev){
-    if(ev.data&&ev.data.type==='SW_UPDATED'&&!_reloaded){_reloaded=true;location.reload();}
+    if(ev.data&&ev.data.type==='SW_UPDATED') _applyUpdate();
   });
   // 控制器切换（新 SW 接管）也兜底刷新一次
-  navigator.serviceWorker.addEventListener('controllerchange',function(){
-    if(!_reloaded){_reloaded=true;location.reload();}
-  });
+  navigator.serviceWorker.addEventListener('controllerchange',function(){ _applyUpdate(); });
   // 定时 + 回前台：主动比对线上版本号，发现新版自动刷新
   function _checkVer(){
     fetch('version.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
-      if(d&&d.v&&d.v!==_APP_VER_&&!_reloaded){_reloaded=true;location.reload(true);}
+      if(d&&d.v&&d.v!==_APP_VER_) _applyUpdate();
     }).catch(function(){});
   }
   setInterval(_checkVer,30*60*1000);
