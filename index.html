@@ -872,7 +872,9 @@ tabbar.addEventListener("click",function(e){
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
   if(jpRead&&jpRead.classList.contains("on")){var n=navStack.lastIndexOf("jpRead"); if(n>=0)navStack.splice(n,1); closeJpRead();}
   if(v==="today"){ navStack=["home"]; resetHistoryToHome(); switchTab("today"); return; }
-  if(navStack[navStack.length-1]==="tab:"+v) return;
+  /* 「已经在这页了，点它不做事」——判断必须同时看导航栈顶**和**当前真正显示的页。
+     只看栈顶会误判：栈里可能还记着「tab:qa」，而页面其实已被别处切走（曾把「问答」点成彻底没反应）。 */
+  if(navStack[navStack.length-1]==="tab:"+v && curView===v) return;
   pushNav("tab:"+v); switchTab(v); _ensureGuard();
 });
 
@@ -1780,7 +1782,20 @@ document.getElementById("qaNewSend").addEventListener("click",function(){
 });
 document.getElementById("qaGroups").addEventListener("click",function(e){
   var lnk=e.target.closest(".qlink");
-  if(lnk){var did=lnk.getAttribute("data-det"),c=getCard(did)||getDetail(did);if(c){switchTab("today");openReader(c);}return;}
+  if(lnk){
+    var did=lnk.getAttribute("data-det"),c=getCard(did)||getDetail(did);
+    if(c){
+      /* 【别再绕道今日页】以前这里是 switchTab("today") 再开卡——详解卡确实排在今日列表最前，动画好看，
+         但代价是：① 看完侧滑返回落回「今日」，人在问答页点进来的却退到了另一页；
+                    ② 导航栈里还记着「tab:qa」，页面却已是今日 → 再点「问答」图标会被当成"已经在这页了"而整个吃掉（点不动）。
+         现在：就地撑开，起点/落点都取刚点的这一条，动画从这条长出来、再缩回这条。 */
+      var row=e.target.closest(".qitem")||lnk,rr=row.getBoundingClientRect();
+      var src={left:rr.left,top:rr.top,width:rr.width,height:rr.height};
+      lastRect=src;                       /* 收回时落回这条（详解卡在隐藏的今日页里量不到位置，靠这个兜底） */
+      openReader(c,src);
+    }
+    return;
+  }
   var ig=e.target.closest(".qignore");
   if(ig){var a=loadQA();for(var i=0;i<a.length;i++){if(a[i].id===ig.getAttribute("data-qid")){a[i].state="ignored";break;}}saveQA(a);renderQA();updateQaBdg();toast("已忽略，收进归档");return;}
 });
@@ -2848,7 +2863,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.23';
+var _APP_VER_ = '2026-10-10.24';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
