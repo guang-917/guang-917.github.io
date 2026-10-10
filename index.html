@@ -113,8 +113,40 @@ body{
 .filter.on{background:var(--ai);color:#fff;border-color:var(--ai)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .tags span{font-size:11px;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line);padding:2px 8px;border-radius:6px}
-/* 最外层只显示前 3 个关键词，多出的折成「+N」——完整关键词在摘要页 */
+/* 最外层关键词：只占一行，按实际宽度自动决定放几个（不写死数量），放不下的收成「+N」；完整关键词在摘要页 */
+.tags.one{flex-wrap:nowrap;overflow:hidden}
+.tags.one span{flex:0 0 auto;white-space:nowrap;max-width:100%}
 .tags .tmore{color:var(--ink-3);background:transparent;border:1px dashed var(--line)}
+
+/* ---------- 向右拖拽粉碎 ---------- */
+.card.swipe,.cardrow.swipe,.qitem.swipe{transition:none}
+.card.swipe.back,.cardrow.swipe.back,.qitem.swipe.back{transition:transform .3s var(--spring)}
+.crushfx{position:absolute;inset:0;border-radius:inherit;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(112deg,#d8483e,#b0261c);color:#fff;font-size:13.5px;font-weight:600;letter-spacing:.05em;
+  opacity:0;pointer-events:none;z-index:6}
+.crushfx svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.crushfx.rdy{animation:crushPulse .46s ease-in-out infinite alternate}
+@keyframes crushPulse{from{filter:brightness(1)}to{filter:brightness(1.22)}}
+
+/* ---------- 粉碎确认框 ---------- */
+.cdlg-mask{position:fixed;inset:0;background:rgba(20,18,14,.42);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+.cdlg-mask.on{opacity:1;pointer-events:auto}
+.cdlg{position:fixed;left:50%;top:50%;width:min(330px,86vw);z-index:71;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:20px 18px 16px;box-shadow:var(--shadow);opacity:0;pointer-events:none;
+  transform:translate(-50%,-46%) scale(.94);transition:opacity .25s,transform .3s var(--spring)}
+.cdlg.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.cdlg .cdic{width:46px;height:46px;border-radius:15px;background:color-mix(in srgb,#c0392b 12%,var(--card));color:#c0392b;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.cdlg .cdic svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cdlg .cdt{font-size:16px;font-weight:700;text-align:center;color:var(--ink)}
+.cdlg .cdq{font-size:13.5px;color:var(--ink-2);text-align:center;margin-top:8px;line-height:1.6;word-break:break-word}
+.cdlg .cdn{font-size:11.5px;color:var(--ink-3);text-align:center;line-height:1.7;background:var(--card-2);border:1px solid var(--line);
+  border-radius:11px;padding:9px 11px;margin-top:11px}
+.cdlg .cdb{display:flex;gap:10px;margin-top:16px}
+.cdlg .cdb button{flex:1;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;cursor:pointer;
+  border:1px solid var(--line);background:var(--card-2);color:var(--ink-2)}
+.cdlg .cdb button.ok{background:#c0392b;border-color:#c0392b;color:#fff}
+.cdlg .cdb button:active{transform:scale(.97)}
 
 /* ---------- 频道门户 ---------- */
 .chan{display:flex;align-items:center;gap:14px;padding:18px 16px}
@@ -187,7 +219,7 @@ body{
 .topic .mesh{font-size:12px;color:var(--ink-2);margin:6px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .topic .mesh .arrow{color:var(--ink-3)}
 .topic .mesh .mt{background:var(--ai-soft);color:var(--ai);border-radius:8px;padding:3px 9px}
-.topic .cardrow{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
+.topic .cardrow{position:relative;display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
 .topic .cardrow .dot{margin-top:7px;flex:none}
 .topic .cardrow .ct{flex:1;min-width:0}
 .topic .cardrow .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
@@ -363,7 +395,7 @@ body{
 .qnewrow button,.qlink{background:var(--ai);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
 .qgrp{margin-bottom:14px}
 .qgrph{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px;padding-left:2px}
-.qitem{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+.qitem{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
 .qitem.ig{opacity:.5}
 .qitem .qq{font-size:14px;font-weight:600;line-height:1.5}
 .qmeta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
@@ -581,6 +613,15 @@ body{
 
 <!-- 长按面板模板容器（动态注入） -->
 <div class="toast" id="toast"></div>
+<!-- 粉碎确认框（长按向右拖拽卡片后弹出） -->
+<div class="cdlg-mask" id="cdlgMask"></div>
+<div class="cdlg" id="cdlg" role="dialog" aria-modal="true">
+  <div class="cdic" id="cdlgIc"></div>
+  <div class="cdt">粉碎这张卡？</div>
+  <div class="cdq" id="cdlgQ"></div>
+  <div class="cdn" id="cdlgD"></div>
+  <div class="cdb"><button type="button" data-c="cancel">取消</button><button type="button" class="ok" data-c="ok">粉碎</button></div>
+</div>
 
 <script>
 "use strict";
@@ -613,7 +654,8 @@ var ICON={
  star:'<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
  tag:'<svg viewBox="0 0 24 24"><path d="M3.5 11.5l7.5-7.5a2 2 0 0 1 1.4-.6h6.2a2 2 0 0 1 2 2v6.2a2 2 0 0 1-.6 1.4l-7.5 7.5a2 2 0 0 1-2.8 0l-6-6a2 2 0 0 1 0-2.9z"/><circle cx="15.5" cy="8.5" r="1.4"/></svg>',
  list:'<svg viewBox="0 0 24 24"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>',
- map:'<svg viewBox="0 0 24 24"><path d="M9 3.5 4 6v14l5-2.5 6 2.5 5-2.5V3.5L14 6 9 3.5z"/><path d="M9 3.5v14"/><path d="M14 6v14"/></svg>'
+  map:'<svg viewBox="0 0 24 24"><path d="M9 3.5 4 6v14l5-2.5 6 2.5 5-2.5V3.5L14 6 9 3.5z"/><path d="M9 3.5v14"/><path d="M14 6v14"/></svg>',
+  crush:'<svg viewBox="0 0 24 24"><path d="M12 2.5l1.9 5.1 5.1-1.9-1.9 5.1 5.1 1.9-5.1 1.9 1.9 5.1-5.1-1.9-1.9 5.1-1.9-5.1-5.1 1.9 1.9-5.1-5.1-1.9 5.1-1.9-1.9-5.1 5.1 1.9z"/></svg>'
 };
 
 /* 今日卡片（已推内容，含摘要/标签/正文/相关） */
@@ -705,6 +747,7 @@ function switchTab(v){
   for(var i=0;i<vs.length;i++)vs[i].classList.remove("active");
   var el=document.querySelector('.view[data-view="'+v+'"]');
   el.classList.add("active");
+  fitTagLines(el);   /* 切到该页时元素才可见，这时才量得准「关键词一行能放几个」 */
   var tabs=tabbar.querySelectorAll(".tab");
   for(var j=0;j<tabs.length;j++)tabs[j].classList.toggle("on",tabs[j].getAttribute("data-tab")===v);
   // 头部
@@ -721,6 +764,7 @@ tabbar.addEventListener("click",function(e){
   var v=t.getAttribute("data-tab");
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
+  if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
   if(reader.classList.contains("on")){var i=navStack.lastIndexOf("reader"); if(i>=0)navStack.splice(i,1); closeReader();}
   if(sheet.classList.contains("on")){var j=navStack.lastIndexOf("sheet"); if(j>=0)navStack.splice(j,1); closeSheet();}
   if(v==="today"){ navStack=["home"]; resetHistoryToHome(); switchTab("today"); return; }
@@ -744,7 +788,7 @@ function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return;
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on"));
+  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"));
   if(hasLayer){
     // 有界面层可退：触发浏览器 back，由 popstate 统一做界面回退（与系统侧滑同路径）
     try{ history.back(); }catch(e){ navBackFromPop(); }
@@ -782,7 +826,7 @@ window.addEventListener("popstate",function(){
   // 一次用户返回（系统侧滑/返回键）
   var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill)
               || reader.classList.contains("on") || sheet.classList.contains("on")
-              || (archEl&&archEl.classList.contains("on"));
+              || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
@@ -804,6 +848,7 @@ window.addEventListener("popstate",function(){
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
 function navBackFromPop(){
   var top=navStack[navStack.length-1];
+  if(top==="cdlg"){ navStack.pop(); closeCrushDlg(); return; }
   if(top==="arch"){ navStack.pop(); closeArch(); return; }
   if(top==="reader"){ navStack.pop(); closeReader(); return; }
   if(top==="sheet"){ navStack.pop(); closeSheet(); return; }
@@ -838,15 +883,49 @@ function todaySub(){
   var d=new Date();var w=['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
   return '今天 · '+(d.getMonth()+1)+'月'+d.getDate()+'日 '+w;
 }
-/* 关键词标签：最外层最多显示 3 个，多出的折成「+N」；摘要页显示全部 */
-var TAG_MAX=3;
+/* 关键词标签：
+   · 摘要页（all=true）→ 全部展开，可换行
+   · 最外层（all=false）→ 只占一行：渲染后按真实像素宽度量，放得下几个就显示几个，
+     放不下的收成「+N」（数量不写死：屏幕宽就多放一个，窄就少放一个） */
+var TAG_GAP=6;
 function tagsHTML(c,all){
   var t=(c&&c.tags)?c.tags:[];if(!t.length)return "";
-  var show=all?t:t.slice(0,TAG_MAX);
-  var h='<div class="tags">'+show.map(function(x){return '<span>'+esc(x)+'</span>';}).join("");
-  if(!all&&t.length>TAG_MAX)h+='<span class="tmore">+'+(t.length-TAG_MAX)+'</span>';
+  var h='<div class="tags'+(all?'':' one')+'">'
+    +t.map(function(x){return '<span class="tag">'+esc(x)+'</span>';}).join("");
+  if(!all)h+='<span class="tmore" style="display:none"></span>';
   return h+'</div>';
 }
+/* 把「一行放不下的关键词」收成「+N」——按真实宽度测量，绝不写死个数 */
+function fitTagLines(root){
+  var scope=(root&&root.querySelectorAll)?root:document;
+  var boxes=scope.querySelectorAll(".tags.one");
+  for(var i=0;i<boxes.length;i++)fitOneTagLine(boxes[i]);
+}
+function fitOneTagLine(box){
+  var spans=box.querySelectorAll("span.tag"),more=box.querySelector(".tmore");
+  if(!more||!spans.length)return;
+  for(var i=0;i<spans.length;i++)spans[i].style.display="";
+  more.style.display="none";
+  var avail=box.clientWidth;
+  if(!avail)return;                     /* 视图被隐藏（display:none）时量不出宽度，切到该页时会重新量 */
+  var w0=0;
+  for(var i=0;i<spans.length;i++)w0+=spans[i].offsetWidth+(i?TAG_GAP:0);
+  if(w0<=avail)return;                  /* 一行放得下：全部显示 */
+  for(var k=spans.length-1;k>=0;k--){
+    spans[k].style.display="none";
+    var shown=0,w=0;
+    for(var j=0;j<spans.length;j++){
+      if(spans[j].style.display!=="none"){w+=spans[j].offsetWidth+(shown?TAG_GAP:0);shown++;}
+    }
+    more.textContent="+"+(spans.length-shown);
+    more.style.display="";
+    if(!shown||w+TAG_GAP+more.offsetWidth<=avail)return;
+  }
+}
+var _fitT=null;
+function fitTagLinesSoon(){clearTimeout(_fitT);_fitT=setTimeout(function(){fitTagLines();},80);}
+window.addEventListener("resize",fitTagLinesSoon);
+window.addEventListener("orientationchange",fitTagLinesSoon);
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
   var list=CARDS.filter(function(c){return c.date===todayStr();});
@@ -863,6 +942,7 @@ function renderToday(){
   if(!list.length)h.push('<div class="empty">今天还没新推送 · 去「学习频道」翻历史 →</div>');
   box.innerHTML=h.join("");
   updateProgress(list);
+  fitTagLines(box);
 }
 function updateProgress(list){
   var total=list.length,done=0;
@@ -905,6 +985,7 @@ function renderChanList(ch){
   }
   if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
   body.innerHTML=h.join("");
+  fitTagLines(body);
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
   hdrSub.textContent=m.n+" · 今日与历史";chanDrill=true;curChan=ch;setBk(true);window.scrollTo(0,0);
@@ -938,6 +1019,7 @@ function doSearch(q){
   hdrSub.textContent="搜索：「"+q+"」 "+n+" 条";
   box.innerHTML=n?h.join(""):'<div class="empty">没找到 · 换个词试试</div>';
   box.style.display="";
+  fitTagLines(box);
 }
 
 /* ====================== 渲染：知识树 ====================== */
@@ -981,8 +1063,13 @@ function renderTree(){
       +'<div class="body"><div class="pad">'+(data.unmatched.map(function(c){return cardRowHTML(c);}).join(''))+'</div></div></div>');
   }
   box.innerHTML=h.join("");
+  fitTagLines(box);
 }
-function toggleTopic(id){var el=document.getElementById("tp-"+id);if(el)el.classList.toggle("open");}
+function toggleTopic(id){
+  var el=document.getElementById("tp-"+id);if(!el)return;
+  el.classList.toggle("open");
+  if(el.classList.contains("open"))fitTagLines(el);   /* 展开后卡片才量得出宽度，补量一次 */
+}
 
 /* 地图（主题网状，聚焦模式） */
 function renderMap(focus){
@@ -1444,7 +1531,7 @@ function renderQA(){
       var link=it.detailCardId?'<button class="qlink" data-det="'+esc(it.detailCardId)+'">看详解 →</button>':'';
       var ig='<button class="qignore" data-qid="'+esc(it.id)+'">忽略，收进归档</button>';
       var dt=_fmtMD(it.ts);
-      return '<div class="qitem"><div class="qq">'+esc(it.q)+'</div><div class="qmeta">'+src+'<span class="qbadge b-'+s+'">'+badge+'</span>'+(dt?'<span class="qdate">'+esc(dt)+'</span>':'')+'</div><div class="qacts">'+link+ig+'</div></div>';
+      return '<div class="qitem" data-qid="'+esc(it.id)+'"><div class="qq">'+esc(it.q)+'</div><div class="qmeta">'+src+'<span class="qbadge b-'+s+'">'+badge+'</span>'+(dt?'<span class="qdate">'+esc(dt)+'</span>':'')+'</div><div class="qacts">'+link+ig+'</div></div>';
     }).join("");
     return '<div class="qgrp"><div class="qgrph">'+esc(g.kp)+' · '+g.items.length+' 问</div>'+items+'</div>';
   }).join("");
@@ -1829,6 +1916,8 @@ document.querySelector(".sheet .grip").addEventListener("click",navBack);
 
 /* ====================== 卡片点击（事件委托） ====================== */
 document.getElementById("wrap").addEventListener("click",function(e){
+  /* 刚做完「向右拖拽」：吃掉这次紧随而来的点击，别顺手把卡片打开了 */
+  if(Date.now()-lastSwipeAt<450)return;
   /* 长按面板开着时：点面板外的任何地方 → 只收起面板，不触发其它动作（防误触） */
   var _olp=document.querySelector(".lp.show");
   if(_olp&&!e.target.closest(".lp")){ closeLp(_olp); return; }
@@ -1856,23 +1945,195 @@ document.getElementById("wrap").addEventListener("click",function(e){
   }
 });
 
-/* ====================== 长按：水波纹灌注 ====================== */
+/* ====================== 长按：水波纹灌注 + 向右拖拽粉碎 ======================
+   两个手势分开、互不干扰：
+   · 按住不动（480ms）→ 弹出「打标签 / 移入待挖掘」面板（原逻辑，未改）
+   · 按住并向右拖      → 进入粉碎模式：卡片跟着手指走、整片变红提示「松手粉碎」；
+                        松手到门槛 → 弹确认框；没到门槛 → 弹回原位
+   适用范围：所有知识卡（今日 / 学习频道 / 搜索 / 知识树）＋ 问答里的「问题」条目 */
 function cssEsc(s){return String(s).replace(/(")/g,'\\$1');}
-var lpTimer=null,lpTarget=null,lpStart={x:0,y:0},lpId=null;
+var lpTimer=null,lpStart={x:0,y:0},lpId=null;
+var SW_SEL=".card[data-id],.cardrow[data-id],.qitem[data-qid]";
+var SW_TH=78;                                  /* 松手粉碎的门槛（像素） */
+var swEl=null,swStart={x:0,y:0},swOn=false,swArmed=false,swReady=false,lastSwipeAt=0;
+var crushPending=null;
+
 document.getElementById("wrap").addEventListener("touchstart",function(e){
+  var t=e.touches[0];
+  var sp=e.target.closest(SW_SEL);
+  swOn=false;swReady=false;
+  if(sp){swEl=sp;swArmed=true;swStart={x:t.clientX,y:t.clientY};resetCrush(sp);}
+  else {swEl=null;swArmed=false;}
   var card=e.target.closest(".card[data-id]");
-  if(!card)return;
+  if(!card){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}return;}
   var lp=card.querySelector(".lp");if(!lp)return;
   var op=document.querySelector(".lp.show"); if(op&&op!==lp)closeLp(op);   /* 长按另一张卡：先把旧面板收掉 */
-  var t=e.touches[0];lpId=lp.getAttribute("data-lp");lpStart={x:t.clientX,y:t.clientY};
+  lpId=lp.getAttribute("data-lp");lpStart={x:t.clientX,y:t.clientY};
   lpTimer=setTimeout(function(){showLp(lp,t);},480);
 },{passive:true});
 document.getElementById("wrap").addEventListener("touchmove",function(e){
-  if(!lpTimer)return;var t=e.touches[0];
+  var t=e.touches[0];
+  if(swArmed&&swEl){
+    var dx=t.clientX-swStart.x,dy=t.clientY-swStart.y;
+    if(!swOn){
+      if(Math.abs(dx)<=8&&Math.abs(dy)<=8)return;                 /* 还没动够：什么都不做 */
+      if(dx>0&&Math.abs(dx)>Math.abs(dy)*1.15){
+        swOn=true;                                                /* 判定为「向右拖」→ 粉碎模式 */
+        if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
+        var lpx=swEl.querySelector(".lp.show"); if(lpx)closeLp(lpx);
+      }else{
+        if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}           /* 竖向或向左：放弃手势，保持原行为 */
+        swArmed=false;swEl=null;return;
+      }
+    }
+    var dxn=Math.max(0,dx);
+    swReady=dxn>=SW_TH;                       /* 记住「够不够门槛」——松手时靠它决定弹框还是弹回 */
+    applyCrush(swEl,dxn,swReady);
+    if(e.cancelable&&e.preventDefault)e.preventDefault();
+    return;
+  }
+  if(!lpTimer)return;
   if(Math.abs(t.clientX-lpStart.x)>10||Math.abs(t.clientY-lpStart.y)>10){clearTimeout(lpTimer);lpTimer=null;}
-},{passive:true});
-document.getElementById("wrap").addEventListener("touchend",function(){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}},{passive:true});
-document.getElementById("wrap").addEventListener("touchcancel",function(){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}},{passive:true});
+},{passive:false});
+function endSwipe(fire){
+  if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
+  if(!swOn||!swEl){swArmed=false;swEl=null;return;}
+  var el=swEl,ready=swReady;
+  swArmed=false;swOn=false;swReady=false;swEl=null;
+  lastSwipeAt=Date.now();                 /* 记一笔：紧接着的那次 click 要吃掉，别顺手把卡片打开 */
+  if(ready&&fire)askCrush(el); else springBack(el);
+}
+document.getElementById("wrap").addEventListener("touchend",function(){endSwipe(true);},{passive:true});
+document.getElementById("wrap").addEventListener("touchcancel",function(){endSwipe(false);},{passive:true});
+
+/* ---------- 粉碎过程的视觉：卡片跟手右移 + 整片变红提示 ---------- */
+function childCrushFx(el){
+  var k=el.children;
+  for(var i=0;i<k.length;i++)if(k[i].classList&&k[i].classList.contains("crushfx"))return k[i];
+  return null;
+}
+function ensureCrushFx(el){
+  var fx=childCrushFx(el);
+  if(!fx){
+    fx=document.createElement("div");fx.className="crushfx";
+    fx.innerHTML='<span class="cfi">'+ICON.crush+'</span><span class="cft">继续右拖</span>';
+    el.appendChild(fx);
+  }
+  return fx;
+}
+function applyCrush(el,dx,ready){
+  var fx=ensureCrushFx(el);
+  el.classList.add("swipe");el.classList.remove("back");
+  el.style.transform="translateX("+dx+"px)";
+  fx.style.opacity=Math.min(1,dx/(SW_TH*0.6));
+  fx.classList.toggle("rdy",!!ready);
+  var lb=fx.querySelector(".cft");if(lb)lb.textContent=ready?"松手粉碎":"继续右拖";
+}
+function resetCrush(el){
+  if(!el)return;
+  el.classList.remove("swipe","back");el.style.transform="";
+  var fx=childCrushFx(el);if(fx)fx.parentNode.removeChild(fx);
+}
+function springBack(el){
+  if(!el)return;
+  var fx=childCrushFx(el);
+  el.classList.add("swipe","back");el.style.transform="translateX(0px)";
+  if(fx){fx.style.opacity="0";fx.classList.remove("rdy");}
+  setTimeout(function(){
+    el.classList.remove("swipe","back");el.style.transform="";
+    var f2=childCrushFx(el);if(f2)f2.parentNode.removeChild(f2);
+  },320);
+}
+
+/* ---------- 粉碎确认框 ---------- */
+var cdlg=document.getElementById("cdlg"),cdlgMask=document.getElementById("cdlgMask");
+document.getElementById("cdlgIc").innerHTML=ICON.crush;
+function crushTargetOf(el){
+  if(el.classList.contains("qitem")){
+    var qid=el.getAttribute("data-qid"),it=null,a=loadQA();
+    for(var i=0;i<a.length;i++)if(a[i].id===qid)it=a[i];
+    var cid=(it&&it.detailCardId)?it.detailCardId:null;
+    return {kind:"qa",qid:qid,cardId:cid,title:(it?it.q:"这条提问"),
+      desc:cid?"这条提问会从「问答」里删掉，它生成的那张详解卡也会一并粉碎。":"这条提问会从「问答」里删掉。"};
+  }
+  var id=el.getAttribute("data-id"),c=getCard(id);
+  return {kind:"card",id:id,title:(c&&c.title)||"这张卡",
+    desc:"它会从今日、学习频道、搜索、知识树里一起消失，刷新也不会再回来。"};
+}
+function askCrush(el){
+  var tg=crushTargetOf(el);
+  crushPending={el:el,t:tg};
+  document.getElementById("cdlgQ").textContent="「"+tg.title+"」";
+  document.getElementById("cdlgD").textContent="粉碎后不可恢复！"+tg.desc;
+  pushNav("cdlg");_ensureGuard();
+  cdlgOpenedAt=Date.now();
+  cdlgMask.classList.add("on");cdlg.classList.add("on");
+}
+function closeCrushDlg(){
+  cdlgMask.classList.remove("on");cdlg.classList.remove("on");
+  if(crushPending&&crushPending.el)springBack(crushPending.el);
+  crushPending=null;
+}
+function doCrush(){
+  var p=crushPending;if(!p)return;
+  crushPending=null;                       /* 先清空：关闭时不再触发弹回动画 */
+  if(p.t.kind==="qa")crushQA(p.t.qid,p.t.cardId);
+  else crushCardById(p.t.id);
+  afterCrush(p.t.kind==="qa"?p.t.cardId:p.t.id);
+  resetCrush(p.el);
+  toast(p.t.kind==="qa"?"已粉碎这条提问":"已粉碎，不会再出现");
+  navBack();                               /* 走统一返回路径关掉确认框，历史栈不会多留一层 */
+}
+/* 点蒙层关闭：加 400ms 宽限——松手瞬间浏览器可能补发一次 click，
+   若不拦住，确认框会在刚弹出的一刹那被自己吃掉 */
+var cdlgOpenedAt=0;
+cdlgMask.addEventListener("click",function(){if(Date.now()-cdlgOpenedAt<400)return;navBack();});
+cdlg.addEventListener("click",function(e){
+  var b=e.target.closest("[data-c]");if(!b)return;
+  if(b.getAttribute("data-c")==="ok")doCrush(); else navBack();
+});
+
+/* ---------- 粉碎（本机删除）----------
+   App 是静态 PWA、写不回 feed.json：粉碎 = 在本机记一条「已粉碎」黑名单，
+   所有列表装载时把它滤掉。本机刷新不复活；但换设备 / 清缓存后，云端推送还会再下来。 */
+function crushCardById(id){
+  if(!id)return;
+  var s=loadLocal();s.deleted=s.deleted||{};s.deleted[id]=true;
+  if(s.read)delete s.read[id];
+  if(s.star)delete s.star[id];
+  if(s.tags)delete s.tags[id];
+  saveLocal(s);
+  /* 本地生成的详解卡：从 kb_details 里彻底移除 */
+  var ds=loadDetails();
+  if(ds[id]){delete ds[id];try{localStorage.setItem(LS_DET,JSON.stringify(ds));}catch(e){}}
+  /* 它是某条问答的答案：那条问题退回「待生成」，可以重新问 */
+  var qa=loadQA(),hit=false;
+  for(var i=0;i<qa.length;i++){
+    if(qa[i].detailCardId===id){qa[i].detailCardId=null;qa[i].state="pending";qa[i].a="";hit=true;}
+  }
+  if(hit)saveQA(qa);
+  CARDS=CARDS.filter(function(c){return c.id!==id;});
+}
+function crushQA(qid,cardId){
+  saveQA(loadQA().filter(function(x){return x.id!==qid;}));
+  if(cardId)crushCardById(cardId);
+}
+function afterCrush(crushedId){
+  /* 若正开着被粉碎的那张卡的摘要页，一并关掉，避免读到已删内容 */
+  if(crushedId&&readTarget===crushedId&&reader.classList.contains("on")){
+    var i=navStack.lastIndexOf("reader");if(i>=0)navStack.splice(i,1);
+    readTarget=null;closeReader();
+  }
+  renderToday();
+  if(curView==="channels"){
+    if(chanDrill)renderChanList(curChan);else renderChannels();
+    if(chanSearch&&chanSearch.value.trim())doSearch(chanSearch.value.trim());
+  }else renderChannels();
+  renderTree();renderDig();updateQaBdg();
+  if(curView==="qa")renderQA();
+  if(archEl&&archEl.classList.contains("on")&&typeof renderArch==="function")renderArch();
+}
+
 function showLp(lp,t){
   var rect=lp.getBoundingClientRect();
   var ox=(t.clientX-rect.left),oy=(t.clientY-rect.top);
@@ -1951,6 +2212,8 @@ function loadFeed(onDone){
         if(s.star&&s.star[c.id])c.star=true;
         if(s.tags&&s.tags[c.id])c.tags=s.tags[c.id];
       });
+      /* 本机粉碎过的卡片：所有列表一律不再出现（喂下来的 feed 也照样滤掉） */
+      if(s.deleted){var _dl=s.deleted;CARDS=CARDS.filter(function(c){return !_dl[c.id];});}
       backfillAnswers();
       loadCloudKB();
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
@@ -2011,7 +2274,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-09.12';
+var _APP_VER_ = '2026-10-09.13';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
