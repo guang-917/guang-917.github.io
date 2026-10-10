@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>北数所怎么做到「可用不可见」？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.78;padding:20px 16px 60px}
+h1{font-size:21px;margin:6px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:14px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin:14px 0;font-size:15px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+.note{margin-top:22px;color:var(--ink2);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">数据知识 · 概念卡 dt08 下钻</div>
+<h1>北数所进场的数据，怎么做到「可用不可见」？</h1>
+<div class="lead">核心思路就一句：把数据的「可见信息」和「可计算价值」拆开——能卖出去的是「算出来的价值」，不是原始数据本尊。这正是北京市经信局答复里说的「可用不可见、可控可计量」。</div>
+
+<p>落到北数所日常，分三层看：</p>
+
+<h2>1. 规则层：先脱敏/去标识化，才让进场</h2>
+<p>进场数据按性质做<b>分级分类</b>（北京市经信局答复），涉及个人信息等敏感数据的，先脱敏或去标识化，再决定用哪种模式流通——免费开放、授权调用、共同建模、联邦学习、加密计算。换句话说：能直接给「原始副本」的，通常只有脱敏后、或本就不敏感的数据；敏感数据绝不让拿走原样。</p>
+
+<h2>2. 技术层：隐私计算当「保险箱」</h2>
+<p>北数所依托隐私计算、区块链，建了自主知识产权的数据交易平台（IDeX 系统），给供需双方提供「可信的数据融合计算环境」（北京市经信局答复；人民网 2024-07-04 报道）。多方想一起建模时，<b>原始数据不出各自的库</b>，只在加密/沙箱环境里联合算，最后拿到的「是结果、不是原数据」。</p>
+
+<h2>3. 审查层：先把人和来源把关</h2>
+<p>对交易主体做<b>准入审核和分级管理</b>，对数据来源做<b>合法性验证和合规性审查</b>（「数字交易合约」报道）；北数所还设数据资产登记中心，给数据确权、登记，把敏感级别和已做的处理记清楚。</p>
+
+<blockquote>一句话收：脱敏管「能给人看什么」，隐私计算管「不给人看也能一起算」——两者叠起来，才是北数所敢让数据进场交易的底气。</blockquote>
+
+<div class="note">
+来源：①北京市经济和信息化局《关于完善国际大数据交易所相关工作的建议的答复意见》（2022-09），http://jxj.beijing.gov.cn/jxdt/gzdt/202209/P020220909543546814573.pdf；②中国经济网《北数所首发"数字交易合约"》（2021-11-16），https://www.ce.cn/xwzx/gnsz/gdxw/202111/16/t20211116_37089782.shtml；③人民网《北京国际大数据交易所：推动人工智能等数据合规进场交易》（2024-07-04），https://bj.people.com.cn/n2/2024/0704/c14540-40901693.html
+</div>
+</body>
+</html>
