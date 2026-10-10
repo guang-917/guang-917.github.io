@@ -859,6 +859,7 @@ function switchTab(v){
   if(v==="channels"){chanDrill=false;renderChannels();document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
   if(v==="qa"){checkAndGenDetails();renderQA();}
   setBk(false);
+  cancelScrollFix();   /* 切页是"整页换新"，本来就该从顶部开始：作废上一张卡的返回复位 */
   window.scrollTo(0,0);
 }
 tabbar.addEventListener("click",function(e){
@@ -926,6 +927,9 @@ function navBack(){
    ============================================================== */
 var _exitArmed=false;      // 首页已进入「再退一次就退桌」待命态
 
+/* 返回后的滚动位置由脚本自己接管（见 fixScrollBack）：关掉浏览器自带的还原，免得两边打架 */
+try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+
 function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) history.pushState({kbGuard:true},""); }catch(e){} }
 
 // 进入新层/开卡/进一级页/开抽屉：直接调用 _ensureGuard() 补守卫（见 openReader / openSheet / switchTab）
@@ -973,7 +977,7 @@ function navBackFromPop(){
     chanDrill=false;
     document.getElementById("chanPortal").style.display="";
     document.getElementById("chanList").style.display="none";
-    hdrSub.textContent=TAB_META.channels[1]; setBk(false); window.scrollTo(0,0); return;
+    hdrSub.textContent=TAB_META.channels[1]; setBk(false); cancelScrollFix(); window.scrollTo(0,0); return;
   }
   if(navStack.length<=1){ return; }
   navStack.pop();
@@ -1303,8 +1307,15 @@ function openTreeEditor(){
 }
 
 /* ====================== 卡片内问答 + 兴趣记录 ====================== */
-var LS_QA="kb_qa",LS_INT="kb_interest";
-function loadQA(){try{return JSON.parse(localStorage.getItem(LS_QA)||"[]")||[];}catch(e){return [];}}
+var LS_QA="kb_qa",LS_INT="kb_interest",LS_QADEL="kb_qadel";
+function loadQaDel(){try{return JSON.parse(localStorage.getItem(LS_QADEL)||"[]")||[];}catch(e){return [];}}
+function saveQaDel(a){try{localStorage.setItem(LS_QADEL,JSON.stringify(a));}catch(e){}}
+function loadQA(){
+  var a;try{a=JSON.parse(localStorage.getItem(LS_QA)||"[]")||[];}catch(e){a=[];}
+  var del=loadQaDel();if(!del.length)return a;
+  /* 本机粉碎过的（黑名单里的）一律不再返回 —— 否则一拉云端备份就被"复活" */
+  return a.filter(function(x){return del.indexOf(x&&x.id)<0;});
+}
 function saveQA(a){try{localStorage.setItem(LS_QA,JSON.stringify(a));}catch(e){}}
 function loadInt(){try{return JSON.parse(localStorage.getItem(LS_INT)||"[]")||[];}catch(e){return [];}}
 function saveInt(a){try{localStorage.setItem(LS_INT,JSON.stringify(a));}catch(e){}}
@@ -1371,6 +1382,9 @@ function backfillAnswers(){
     var key=c.q.trim().toLowerCase();
     var it=byQ[key]; if(!it)return;
     if(it.detailCardId) return; /* 已被 genDetail 生成详解，feed 让位 */
+    /* 已归档（已读 / 已忽略）的不再改动：否则用户收起来的问答，
+       会被随后推下来的官推答案卡打回「已推送」，重新冒到列表里。 */
+    var _st=qaState(it); if(_st==="read"||_st==="ignored") return;
     var ans=Array.isArray(c.body)?c.body.join("\n"):(c.note||c.sum||"");
     it.a=ans; it.state="pushed"; it.detailCardId=c.id;
     changed=true;
@@ -1378,8 +1392,22 @@ function backfillAnswers(){
   });
   if(changed){saveQA(qa);updateQaBdg();}
 }
-/* 云端知识库：拉取 user_kb.json 合并到本地（知识跟随用户成长，清缓存/换设备可恢复） */
-function mergeQA(server){if(!server||!server.length)return;var local=loadQA(),byQ={};local.forEach(function(x){byQ[x.q.trim().toLowerCase()]=x;});server.forEach(function(s){byQ[s.q.trim().toLowerCase()]=s;});saveQA(Object.keys(byQ).map(function(k){return byQ[k];}));}
+/* 云端知识库：拉取 user_kb.json 合并到本地（换设备 / 清缓存后可恢复）
+   【关键】云端那份是「历史快照」——它没有 state / detailCardId，而且之后再没更新过。
+   所以合并必须「本地优先」：同一条问题，本地有就以本地为准（保住已读 / 已忽略 / 详解链接），
+   本地没有才把云端那条补进来。否则每刷新一次，本地的归档就被云端旧快照冲回列表一次。 */
+function mergeQA(server){
+  if(!server||!server.length)return;
+  var del=loadQaDel(),local=loadQA(),byQ={};
+  local.forEach(function(x){byQ[x.q.trim().toLowerCase()]=x;});
+  server.forEach(function(s){
+    if(del.indexOf(s.id)>=0)return;               /* 本机粉碎过的不再复活 */
+    var k=s.q.trim().toLowerCase();
+    if(byQ[k])return;                             /* 本地已有 → 保留本地（含 state / detailCardId / a） */
+    byQ[k]=s;                                     /* 本地没有 → 补进来 */
+  });
+  saveQA(Object.keys(byQ).map(function(k){return byQ[k];}));
+}
 function mergeInterest(server){if(!server||!server.length)return;var local=loadInt(),byT={};local.forEach(function(x){byT[x.term]=x;});server.forEach(function(s){byT[s.term]=s;});saveInt(Object.keys(byT).map(function(k){return byT[k];}));}
 function mergeTopics(server){var out=TOPICS;for(var ch in server){if(!out[ch])out[ch]=[];var byId={};out[ch].forEach(function(t){byId[t.id]=t;});server[ch].forEach(function(t){byId[t.id]=t;});out[ch]=Object.keys(byId).map(function(k){return byId[k];});}return out;}
 function mergeMeshObj(server){var out=MESH;for(var ch in server){if(!out[ch])out[ch]=[];var seen={};out[ch].forEach(function(e){seen[e.a+'|'+e.b]=1;});server[ch].forEach(function(e){if(!seen[e.a+'|'+e.b])out[ch].push(e);});}return out;}
@@ -1981,6 +2009,27 @@ var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
 var readTimer=null,readAccum=0,readTarget=null,readRAF=null;
 /* 展开/收回动画的两只表：正文淡入、动画收尾。开合各清一次，避免互相打架 */
 var _rdRevealT=null,_rdCleanT=null;
+/* ---------- 返回时「回到原位」----------
+   背景：为了接管系统返回手势，App 的历史里垫了一条"哨兵"记录，它是在切 tab 时压进去的
+   （那一刻页面恰好在顶部）。浏览器执行 history 回退时，会顺手把页面滚回这条记录当初记住的位置
+   → 于是"打开卡片看完返回"就跳回了列表顶部，看的人一晃。
+   做法：打开卡片时记住当时的滚动位置，收回时按原样滚回去；用户若切了 tab（本来就该回到顶部）就作废这次复位。 */
+var _rdScrollY=0,_rdFixT=[];
+function cancelScrollFix(){for(var i=0;i<_rdFixT.length;i++)clearTimeout(_rdFixT[i]);_rdFixT=[];
+  document.removeEventListener("touchstart",_rdFixOnce,true);}
+function _rdFixOnce(){cancelScrollFix();}
+function fixScrollBack(){
+  var tgt=_rdScrollY;
+  cancelScrollFix();
+  var back=function(){
+    if(Math.abs((window.scrollY||window.pageYOffset||0)-tgt)>2){try{window.scrollTo(0,tgt);}catch(e){}}
+  };
+  back();                                            /* 立刻复位：动画落点要靠它才算得准 */
+  if(window.requestAnimationFrame)requestAnimationFrame(back);
+  /* 浏览器自己的回滚可能比我们稍晚一点落地，补几次确认；用户一旦上手就立刻让位 */
+  [80,200,440].forEach(function(ms){_rdFixT.push(setTimeout(back,ms));});
+  document.addEventListener("touchstart",_rdFixOnce,true);
+}
 /* 取来源卡此刻的真实位置（用于动画端点）。卡不在屏上就退回上次记录的位置 */
 function readerHomeRect(){
   var fb=lastRect||{left:innerWidth/2-150,top:innerHeight/2-80,width:300,height:160};
@@ -2005,6 +2054,7 @@ function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
 function openReader(data,srcRect){
   data=data||{};
+  _rdScrollY=Math.round(window.scrollY||window.pageYOffset||0);   /* 记住"你现在看到哪儿"，返回时滚回来 */
   pushNav("reader");
   _ensureGuard();
   /* 提问悬浮球复位：每次打开卡片都从「收起」开始，并清掉上一次的答案 */
@@ -2083,6 +2133,7 @@ function openReader(data,srcRect){
 function closeReader(){
   stopReadTimer();
   closeAskFab();
+  fixScrollBack();                               /* 先滚回打开前的位置，动画落点才算得准 */
   /* 落点按来源卡「此刻」的位置算，卡片行不存在（如从问答详解进来）才退回上次记录 */
   var rect=readerHomeRect();
   var sx=rect.width/innerWidth, sy=rect.height/innerHeight;
@@ -2621,6 +2672,10 @@ function crushCardById(id){
   CARDS=CARDS.filter(function(c){return c.id!==id;});
 }
 function crushQA(qid,cardId){
+  /* 记一条「已粉碎」黑名单：问答列表是「本地 + 云端备份」两份合起来的，
+     只从 kb_qa 里删掉的话，下次拉云端备份又会把它补回来（复活）。
+     所以这里像卡片/待挖掘那样记黑名单，读取时统一滤掉。 */
+  if(qid){var d=loadQaDel();if(d.indexOf(qid)<0){d.push(qid);saveQaDel(d);}}
   saveQA(loadQA().filter(function(x){return x.id!==qid;}));
   if(cardId)crushCardById(cardId);
 }
@@ -2793,7 +2848,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.21';
+var _APP_VER_ = '2026-10-10.23';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
