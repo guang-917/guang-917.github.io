@@ -128,6 +128,34 @@ body{
 .crushfx.rdy{animation:crushPulse .46s ease-in-out infinite alternate}
 @keyframes crushPulse{from{filter:brightness(1)}to{filter:brightness(1.22)}}
 
+/* ---------- 向左拖拽：立体翻卡 = 已读（往右仍是粉碎，左右分工） ---------- */
+.flipfx{position:absolute;inset:0;border-radius:inherit;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(112deg,#2f9e78,#1c7a57);color:#fff;font-size:13.5px;font-weight:600;letter-spacing:.05em;
+  opacity:0;pointer-events:none;z-index:6}
+.flipfx svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.flipfx.rdy{animation:flipPulse .46s ease-in-out infinite alternate}
+@keyframes flipPulse{from{filter:brightness(1)}to{filter:brightness(1.18)}}
+/* 翻卡进行中：把这张卡抬到邻卡之上，翻折时不会被压住 */
+.card.flipping,.cardrow.flipping{z-index:3}
+/* 背面：一张平铺在卡片上的「已读」章（默认透明，翻折到侧棱时才亮出来）
+   注意：翻折角度全程不超过 90°，所以永远不可能出现「反字」——
+   一开始用「整圈 360° + backface-visibility」的写法，静止时是对的，
+   但 Chrome 在动画过程中会把该层按平面栅格化，正面文字被翻成镜像露出来，故改成这套折纸式。 */
+.flipback{position:absolute;inset:0;border-radius:inherit;background:var(--card);
+  border:1px solid color-mix(in srgb,var(--data) 42%,var(--line));
+  display:flex;align-items:center;justify-content:center;pointer-events:none;
+  opacity:0;transition:opacity .1s linear}
+.flipback .fbIn{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--data);
+  border:2px solid color-mix(in srgb,var(--data) 58%,transparent);border-radius:12px;padding:9px 20px;
+  transform:rotate(-5deg);opacity:.94}
+.flipback .fbIc{display:flex}
+.flipback .fbIc svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.flipback .fbIn b{font-size:15px;letter-spacing:.3em;font-weight:700;text-indent:.3em}
+.flipback .fbD{font-size:10.5px;color:var(--ink-3);letter-spacing:.06em}
+/* 知识树里的行也沿用「已读＝划线变淡」，跟卡片保持一致 */
+.cardrow.done{opacity:.6}
+.cardrow.done .ct b{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+
 /* ---------- 粉碎确认框 ---------- */
 .cdlg-mask{position:fixed;inset:0;background:rgba(20,18,14,.42);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
 .cdlg-mask.on{opacity:1;pointer-events:auto}
@@ -311,7 +339,7 @@ body{
 .tab .bdg{position:absolute;top:9px;right:calc(50% - 22px);min-width:16px;height:16px;border-radius:9px;background:var(--jp);color:#fff;font-size:10px;line-height:16px;text-align:center;padding:0 4px}
 
 /* ---------- 全屏阅读器 (FLIP) ---------- */
-.reader{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:60;display:none;overflow:hidden}
+.reader{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:64;display:none;overflow:hidden}
 .reader .rsc{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;opacity:0;padding:0 18px calc(40px + env(safe-area-inset-bottom))}
 .reader .rbar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:13px 18px 11px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 82%,transparent)}
 .reader .rbar .bk2{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s var(--spring)}
@@ -330,9 +358,32 @@ body{
 .reader .fullbtn:active{opacity:.85}
 .sheet .sheetgo{display:block;text-align:center;background:var(--ai);color:#fff;border-radius:12px;padding:12px 0;font-size:14px;font-weight:600;text-decoration:none;margin:12px 0 2px}
 .sheet .sheetgo:active{opacity:.85}
-.reader .donebtn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 36px);max-width:488px;background:var(--data);color:#fff;border:none;border-radius:13px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px -8px color-mix(in srgb,var(--data) 70%,transparent);transition:transform .15s var(--spring),opacity .3s}
-.reader .donebtn:active{transform:translateX(-50%) scale(.97)}
-.reader .donebtn.hide{opacity:0;pointer-events:none}
+/* 「标记为已读」按钮已按需求删除：改为在列表里向左滑卡片翻面即视为已读 */
+/* ===== 提问悬浮球（摘要页右下角）：收起是一颗圆球，点一下就地展开成输入条 ===== */
+.askfab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));width:calc(100% - 36px);max-width:488px;z-index:70;display:none;flex-direction:column;gap:9px;pointer-events:none}
+.reader.on .askfab{display:flex}
+.askfab>*{pointer-events:auto}
+.fabrow{display:flex;justify-content:flex-end;align-items:flex-end}
+.fabball{width:54px;height:54px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 8px 22px -6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;flex:none;padding:0;transition:transform .16s var(--spring)}
+.fabball:active{transform:scale(.92)}
+.fabball svg{width:26px;height:26px;display:block}
+.fabbar{flex:1;display:none;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:6px;box-shadow:0 10px 28px -10px rgba(0,0,0,.32)}
+.askfab.on .fabball{display:none}
+.askfab.on .fabbar{display:flex}
+.fabbar textarea{flex:1;border:none;background:transparent;padding:8px 10px;font-size:13.5px;color:var(--ink);resize:none;height:38px;font-family:inherit;outline:none}
+.fabbar #qaSend{background:var(--ai);color:#fff;border:none;border-radius:10px;padding:0 15px;height:36px;font-size:13px;font-weight:600;cursor:pointer;flex:none;font-family:inherit}
+.fabbar #fabDown{width:34px;height:36px;border:none;background:transparent;color:var(--ink-3);cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;padding:0}
+.fabbar #fabDown svg{width:16px;height:16px;display:block}
+/* ===== 日语跟读（手机自带朗读，零成本）：逐句列出、点一下念 ===== */
+.jpblk{margin-top:13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 12px}
+.jpblk .jph{font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:9px}
+.jpblk .jph .jpn{color:var(--ink-3);font-weight:400}
+.jpblk .jpl{display:flex;flex-direction:column;gap:7px}
+.jpblk .jpline{display:flex;align-items:flex-start;gap:9px}
+.jpblk .jpplay{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s var(--spring),background .2s,border-color .2s}
+.jpblk .jpplay:active{transform:scale(.9)}
+.jpblk .jpplay.on{background:var(--jp);border-color:var(--jp)}
+.jpblk .jptx{flex:1;font-size:14.5px;line-height:1.6;color:var(--ink);font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",system-ui,sans-serif;word-break:break-word}
 /* ---------- 跟读练习（App 内全屏打开日语卡的完整学习卡，真人音频不外跳） ---------- */
 .jpread{position:fixed;left:0;top:0;width:100%;height:100%;background:var(--bg);z-index:66;display:none;flex-direction:column}
 .jpread.on{display:flex}
@@ -596,13 +647,23 @@ body{
     </div>
     <div class="rbody" id="readerBody"></div>
     <div class="qa" id="qaBox" style="display:none">
-      <div class="qain"><textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea><button id="qaSend">提问</button></div>
       <button class="qregen" id="qaRegen" style="display:none">这张卡内容看着旧？让 AI 按最新资料重讲一遍</button>
-      <div class="qaans" id="qaAns" style="display:none"></div>
       <div class="qalist" id="qaList"></div>
     </div>
   </div>
-  <button class="donebtn hide" id="doneBtn">标记为已读</button>
+  <!-- 「标记为已读」按钮已删除：现在在列表里向左滑卡片、翻面盖章即视为已读 -->
+  <!-- 提问悬浮球：收起是一颗圆球，点一下就地展开成输入条；答案显示在它上方 -->
+  <div class="askfab" id="askFab">
+    <div class="qaans" id="qaAns" style="display:none"></div>
+    <div class="fabrow">
+      <div class="fabbar" id="fabBar">
+        <textarea id="qaText" placeholder="对这张卡有啥没懂的？直接问…"></textarea>
+        <button id="qaSend">提问</button>
+        <button id="fabDown" aria-label="收起"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+      <button class="fabball" id="fabBall" aria-label="提问"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="14.6" height="10.8" rx="1.5"/><rect x="6.5" y="8.6" width="15" height="11.2" rx="1.5" fill="#fff"/><path d="M11.6 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/><path d="M16.4 13l1.4 1.6-1.4 1.6-1.4-1.6z" fill="currentColor" stroke="none"/></svg></button>
+    </div>
+  </div>
 </div>
 
 <!-- 跟读练习：App 内全屏打开日语卡的完整学习卡（真人音频，不外跳浏览器） -->
@@ -813,7 +874,7 @@ function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return;
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on"));
+  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
   if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
   var lenBefore=navStack.length;
   clearTimeout(_nbWatch);
@@ -858,7 +919,7 @@ window.addEventListener("popstate",function(){
   var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill)
               || reader.classList.contains("on") || sheet.classList.contains("on")
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
-              || (jpRead&&jpRead.classList.contains("on"));
+              || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
@@ -879,6 +940,8 @@ window.addEventListener("popstate",function(){
 
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
 function navBackFromPop(){
+  /* 提问输入条展开着 → 先收起它（它不算一层界面，不动历史栈） */
+  if(askFab&&askFab.classList.contains("on")){ closeAskFab(); return; }
   var top=navStack[navStack.length-1];
   if(top==="jpRead"){ navStack.pop(); closeJpRead(); return; }
   if(top==="cdlg"){ navStack.pop(); closeCrushDlg(); return; }
@@ -1461,7 +1524,7 @@ function askAINow(item, q, ansId){
     renderToday(); renderChannels(); updateQaBdg();
     if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
     if(typeof renderQA === "function") renderQA();
-    rich(ansHTML(p) + '<div class="aFoot">—— 已存成一张详解卡，去「今日」或「问答」可回看</div>');
+    rich(ansHTML(p) + jpBlockHTML(p.raw || ans) + '<div class="aFoot">—— 已存成一张详解卡，去「今日」或「问答」可回看</div>');
   }).catch(function(err){
     var msg = String((err && err.message) || err || "未知错误");
     say("没拿到答案：" + msg + "\n（先看网络是否正常，再点一次提问；若反复失败，把这句话截图发我）", "bad");
@@ -1515,7 +1578,7 @@ function renderCardQA(cardId){
     var badge={pending:"待生成",pushed:"已推送",read:"已读",ignored:"已忽略"}[s];
     var link=it.detailCardId?'<button class="qlink" data-det="'+esc(it.detailCardId)+'">看详解 →</button>':(s==="pushed"?'<span class="qhint">（已有答案）</span>':'<span class="qhint">（生成中）</span>');
     return '<div class="qaitem"><div class="qq">问：'+esc(it.q)+'</div><div class="qmeta"><span class="qbadge b-'+s+'">'+badge+'</span></div><div class="qacts">'+link+'</div></div>';
-  }).join(""):'<div class="qempty">还没问过，上面提一个</div>';
+  }).join(""):'<div class="qempty">还没问过，点右下角的圆钮问一个</div>';
 }
 document.getElementById("qaBox").addEventListener("click",function(e){
   var lnk=e.target.closest(".qlink");
@@ -1765,10 +1828,10 @@ function renderArch(){
   var qs=loadQA().filter(function(x){var s=qaState(x);return s==="read"||s==="ignored";});
   qs.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
   if(!qs.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>问答里标记为「已读」或「已忽略」的，会自动收到这里。</div>';return;}
-  archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点「放回」可以让它回到问答案板。</div>'
+  archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点一条，就能重看你<b>当初看到的那版详解</b>；点「放回」可以让它回到问答案板。</div>'
     +qs.map(function(it){
       var s=qaState(it);
-      return '<div class="aitem" data-qa="'+esc(it.id)+'">'
+      return '<div class="aitem tap" data-qa="'+esc(it.id)+'">'
         +'<div class="aq">'+esc(it.q)+'</div>'
         +'<div class="am">'+esc(_fmtMD(it.ts)||"更早")+' · '+esc(it.kp||"未分类")+' · '+(s==="ignored"?"已忽略":"已读")+'</div>'
         +'<button class="arestore" data-restore="'+esc(it.id)+'">放回</button></div>';
@@ -1797,9 +1860,12 @@ archBodyEl.addEventListener("click",function(e){
     var id=it.getAttribute("data-qa"),a=loadQA(),q2=null;
     for(var j=0;j<a.length;j++){if(a[j].id===id){q2=a[j];break;}}
     if(!q2)return;
+    /* 「当时那版」详解：归档条目上钉着的就是当时生成的那张卡（之后重讲会另生成新卡，不动这张），
+       所以这里拿到的天然是「当初那份」。卡片若已被粉碎/清缓存，则退回展示当时那份原文。 */
     var det=q2.detailCardId?(getCard(q2.detailCardId)||getDetail(q2.detailCardId)):null;
     if(det){openReader(det);return;}
-    openSheet({title:q2.q,why:"归档 · "+(qaState(q2)==="ignored"?"已忽略":"已读"),body:(q2.a?String(q2.a):"这个问题还没有生成详解卡。点「放回」可以让它回到问答案板重新排队。")});
+    openSheet({title:q2.q,why:"归档 · "+(qaState(q2)==="ignored"?"已忽略":"已读")+" · 当时那版",
+      body:(q2.a?String(q2.a):"这个问题当时没有生成详解卡。点「放回」可以让它回到问答案板重新排队。")});
   }
 });
 document.getElementById("archClose").addEventListener("click",navBack);
@@ -1809,7 +1875,7 @@ document.getElementById("qaArchBtn").addEventListener("click",function(e){e.stop
 
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
-var doneBtn=document.getElementById("doneBtn"),readTimer=null,readAccum=0,readTarget=null,readRAF=null;
+var readTimer=null,readAccum=0,readTarget=null,readRAF=null;
 /* 本地操作统一持久化：App 是静态 PWA、无法回写 feed.json，
    故把所有用户操作（已读/标星/标签/待挖掘）存进 localStorage，刷新/重开不丢 */
 var LS_KEY="kb_local";
@@ -1826,6 +1892,10 @@ function openReader(data,srcRect){
   data=data||{};
   pushNav("reader");
   _ensureGuard();
+  /* 提问悬浮球复位：每次打开卡片都从「收起」开始，并清掉上一次的答案 */
+  closeAskFab();
+  var _ans0=document.getElementById("qaAns");
+  if(_ans0){_ans0.className="qaans";_ans0.style.display="none";_ans0.textContent="";}
   readTarget=data.id||null;
   /* 取「整卡」数据：摘要、关键词、日期、频道都挂在整卡上（调用时只传了部分字段） */
   var full=(data.id?getCard(data.id):null)||data;
@@ -1854,11 +1924,12 @@ function openReader(data,srcRect){
     }
   }
   document.getElementById("readerBody").innerHTML=body;
+  /* 正文含日文 → 追加「日语跟读」块（手机自带朗读，逐句） */
+  var _jpTxt=String(full.title||"")+"。"+String(full.sum||"")+"。"+String(full.lead||"")+"。"+((full.body||[]).join("。"));
+  var _jpH=jpBlockHTML(_jpTxt);
+  if(_jpH)document.getElementById("readerBody").insertAdjacentHTML("beforeend",_jpH);
   rsc.scrollTop=0;
-  // 已有卡？先看是否已读决定按钮
-  var card=readTarget?getCard(readTarget):null;
-  var already=card?card.read:false;
-  doneBtn.classList.toggle("hide",already);
+  /* 已读状态不再靠底部按钮切换（按钮已删）：列表里向左滑翻卡即视为已读 */
   /* 详解卡才显示"让 AI 重讲一遍"（老卡内容是早前生成的，一键换新） */
   var rgBtn=document.getElementById("qaRegen");
   if(rgBtn){ rgBtn.style.display=(data.isDetail||/详解/.test(String(data.title||"")))?'':'none'; }
@@ -1895,13 +1966,97 @@ function closeReader(){
   reader.style.transform="translate("+rect.left+"px,"+rect.top+"px) scale("+(rect.width/innerWidth)+","+(rect.height/innerHeight)+")";
   setTimeout(function(){reader.style.display="none";reader.style.transform="";reader.style.transition="";reader.classList.remove("on");},400);
 }
-document.getElementById("readerClose").addEventListener("click",navBack);
-doneBtn.addEventListener("click",function(){
-  if(readTarget){setRead(readTarget,true);refreshRead();}
-  markReadVisual(readTarget);
-  toast("已标记为已读");
-  setTimeout(closeReader,300);
+/* ===== 提问悬浮球：收起是圆球，点一下就地展开成输入条 ===== */
+var askFab=document.getElementById("askFab");
+function openAskFab(){
+  if(!askFab)return;
+  askFab.classList.add("on");
+  /* 之前问过、答案还在 → 展开时带回来 */
+  var a=document.getElementById("qaAns");
+  if(a&&a.innerHTML.replace(/\s/g,""))a.style.display="";
+  setTimeout(function(){var t=document.getElementById("qaText");if(t){try{t.focus();}catch(e){}}},200);
+}
+function closeAskFab(){
+  if(!askFab)return;
+  askFab.classList.remove("on");
+  /* 收起时连答案一起收（内容留着，再点球展开还在），免得浮层一直挡着正文 */
+  var a=document.getElementById("qaAns");
+  if(a)a.style.display="none";
+}
+(function(){
+  var ball=document.getElementById("fabBall"),down=document.getElementById("fabDown");
+  if(ball)ball.addEventListener("click",function(e){e.stopPropagation();openAskFab();});
+  if(down)down.addEventListener("click",function(e){e.stopPropagation();closeAskFab();});
+  /* 点摘要页其它地方 → 自动收起（球 / 输入条内部不收起） */
+  document.addEventListener("click",function(e){
+    if(!askFab||!askFab.classList.contains("on"))return;
+    if(askFab.contains(e.target))return;
+    closeAskFab();
+  });
+})();
+/* ===== 日语跟读（手机自带朗读，零成本、无需密钥）：把含日文的句子逐句列出来 ===== */
+var JP_KANA=/[\u3040-\u309F\u30A0-\u30FF\u30FC]/;   /* 平假名 / 片假名 / 长音符：中文正文里不会出现 */
+function jpLines(text){
+  var t=String(text==null?"":text).replace(/\r/g,"");
+  var raw=t.split(/[\n。！？!?；;／\/]+/);
+  var out=[];
+  for(var i=0;i<raw.length;i++){
+    var s=raw[i].replace(/^[\s·•\-—:：]+/,"").replace(/[\s，,、]+$/,"").trim();
+    if(s.length<2||s.length>100)continue;
+    /* 「中文标签：日文原句」→ 只留冒号后的日文，中文标签不念 */
+    var seg=s.split(/[:：]/);
+    if(seg.length===2){
+      var lf=seg[0].trim(), rt=seg[1].trim();
+      if(lf&&rt&&!JP_KANA.test(lf)&&JP_KANA.test(rt))s=rt;
+    }
+    var kana=(s.match(/[\u3040-\u309F\u30A0-\u30FF\u30FC]/g)||[]).length;
+    /* 至少 2 个假名、且假名占比 ≥ 20%：中文句子里偶尔混一个假名（如「は行」）不会被当日语念 */
+    if(kana<2||kana/s.length<0.2)continue;
+    if(out.indexOf(s)<0)out.push(s);
+  }
+  return out;
+}
+function jpBlockHTML(text){
+  var ls=jpLines(text); if(!ls.length)return "";
+  var h='<div class="jpblk"><div class="jph">🔊 日语跟读<span class="jpn">（'+ls.length+' 句 · 点喇叭就念）</span></div><div class="jpl">';
+  for(var i=0;i<ls.length;i++){
+    h+='<div class="jpline"><button type="button" class="jpplay" data-jp="'+esc(ls[i])+'" aria-label="播放">🔊</button><span class="jptx">'+esc(ls[i])+'</span></div>';
+  }
+  return h+'</div></div>';
+}
+var _jpVoice=null;
+function _jpPickVoice(){
+  try{
+    if(!window.speechSynthesis)return;
+    var vs=speechSynthesis.getVoices()||[];
+    for(var i=0;i<vs.length;i++){ if(/^ja/i.test(vs[i].lang||"")){_jpVoice=vs[i];return;} }
+  }catch(e){}
+}
+if(window.speechSynthesis){ _jpPickVoice(); try{ speechSynthesis.onvoiceschanged=_jpPickVoice; }catch(e){} }
+function speakJp(txt,btn){
+  if(!window.speechSynthesis||typeof SpeechSynthesisUtterance==="undefined"){toast("这台设备的浏览器不支持朗读");return;}
+  try{speechSynthesis.cancel();}catch(e){}
+  var u=new SpeechSynthesisUtterance(String(txt||""));
+  u.lang="ja-JP";
+  if(_jpVoice)u.voice=_jpVoice;
+  u.rate=1;u.pitch=1;
+  u.onstart=function(){ if(btn)btn.classList.add("on"); };
+  u.onend=function(){ if(btn)btn.classList.remove("on"); };
+  u.onerror=function(ev){
+    if(btn)btn.classList.remove("on");
+    var t=String((ev&&(ev.error||ev.type))||"");
+    if(/interrupt|cancel/i.test(t))return;
+    toast("念不出来：这台手机可能还没装日语朗读语音（手机设置里下载一个日语语音包即可）");
+  };
+  try{speechSynthesis.speak(u);}catch(e){ toast("朗读失败："+(e&&e.message?e.message:e)); }
+}
+document.addEventListener("click",function(e){
+  var b=(e.target&&e.target.closest)?e.target.closest(".jpplay"):null;
+  if(!b)return;
+  e.stopPropagation();
+  speakJp(b.getAttribute("data-jp"),b);
 });
+document.getElementById("readerClose").addEventListener("click",navBack);
 document.getElementById("readerBody").addEventListener("click",function(e){
   var rel=e.target.closest(".relitem");
   if(!rel)return;
@@ -1972,7 +2127,7 @@ function stopReadTimer(){if(readRAF){clearTimeout(readRAF);readRAF=null;}}
 function refreshRead(){var list=CARDS.filter(function(c){return c.date===todayStr();});updateProgress(list);}
 function markReadVisual(id){
   if(!id)return;
-  document.querySelectorAll('.card[data-id="'+cssEsc(id)+'"]').forEach(function(el){
+  document.querySelectorAll('.card[data-id="'+cssEsc(id)+'"],.cardrow[data-id="'+cssEsc(id)+'"]').forEach(function(el){
     el.classList.add("done");
     var d=el.querySelector('.dot'); if(d)d.classList.add("read");
   });
@@ -2038,14 +2193,14 @@ function cssEsc(s){return String(s).replace(/(")/g,'\\$1');}
 var lpTimer=null,lpStart={x:0,y:0},lpId=null;
 var SW_SEL=".card[data-id],.cardrow[data-id],.qitem[data-qid]";
 var SW_TH=78;                                  /* 松手粉碎的门槛（像素） */
-var swEl=null,swStart={x:0,y:0},swOn=false,swArmed=false,swReady=false,lastSwipeAt=0;
+var swEl=null,swStart={x:0,y:0},swOn=false,swArmed=false,swReady=false,swLeft=false,lastSwipeAt=0;
 var crushPending=null;
 
 document.getElementById("wrap").addEventListener("touchstart",function(e){
   var t=e.touches[0];
   var sp=e.target.closest(SW_SEL);
-  swOn=false;swReady=false;
-  if(sp){swEl=sp;swArmed=true;swStart={x:t.clientX,y:t.clientY};resetCrush(sp);}
+  swOn=false;swReady=false;swLeft=false;
+  if(sp&&!flipBusy){swEl=sp;swArmed=true;swStart={x:t.clientX,y:t.clientY};resetCrush(sp);}
   else {swEl=null;swArmed=false;}
   var card=e.target.closest(".card[data-id]");
   if(!card){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}return;}
@@ -2061,13 +2216,24 @@ document.getElementById("wrap").addEventListener("touchmove",function(e){
     if(!swOn){
       if(Math.abs(dx)<=8&&Math.abs(dy)<=8)return;                 /* 还没动够：什么都不做 */
       if(dx>0&&Math.abs(dx)>Math.abs(dy)*1.15){
-        swOn=true;                                                /* 判定为「向右拖」→ 粉碎模式 */
+        swOn=true;swLeft=false;                                   /* 判定为「向右拖」→ 粉碎模式 */
         if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
         var lpx=swEl.querySelector(".lp.show"); if(lpx)closeLp(lpx);
+      }else if(dx<0&&Math.abs(dx)>Math.abs(dy)*1.15&&flipOK(swEl)){
+        swOn=true;swLeft=true;                                    /* 判定为「向左拖」→ 翻卡模式（翻过即已读） */
+        if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
+        var lpy=swEl.querySelector(".lp.show"); if(lpy)closeLp(lpy);
       }else{
-        if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}           /* 竖向或向左：放弃手势，保持原行为 */
+        if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}           /* 竖向：放弃手势，保持原行为 */
         swArmed=false;swEl=null;return;
       }
+    }
+    if(swLeft){
+      var dxl=Math.max(0,-dx);
+      swReady=dxl>=FLIP_TH;                     /* 左滑门槛 */
+      applyFlip(swEl,dxl,swReady);
+      if(e.cancelable&&e.preventDefault)e.preventDefault();
+      return;
     }
     var dxn=Math.max(0,dx);
     swReady=dxn>=SW_TH;                       /* 记住「够不够门槛」——松手时靠它决定弹框还是弹回 */
@@ -2081,9 +2247,13 @@ document.getElementById("wrap").addEventListener("touchmove",function(e){
 function endSwipe(fire){
   if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
   if(!swOn||!swEl){swArmed=false;swEl=null;return;}
-  var el=swEl,ready=swReady;
-  swArmed=false;swOn=false;swReady=false;swEl=null;
+  var el=swEl,ready=swReady,left=swLeft;
+  swArmed=false;swOn=false;swReady=false;swLeft=false;swEl=null;
   lastSwipeAt=Date.now();                 /* 记一笔：紧接着的那次 click 要吃掉，别顺手把卡片打开 */
+  if(left){                               /* 左滑：够门槛 → 翻面盖「已读」章；不够 → 弹回 */
+    if(ready&&fire)flipRead(el); else springBackFlip(el);
+    return;
+  }
   if(ready&&fire)askCrush(el); else springBack(el);
 }
 document.getElementById("wrap").addEventListener("touchend",function(){endSwipe(true);},{passive:true});
@@ -2114,8 +2284,10 @@ function applyCrush(el,dx,ready){
 }
 function resetCrush(el){
   if(!el)return;
-  el.classList.remove("swipe","back");el.style.transform="";
+  el.classList.remove("swipe","back");
+  if(!flipBusy)el.style.transform="";        /* 正在翻面动画中：别把它的 transform 抹掉 */
   var fx=childCrushFx(el);if(fx)fx.parentNode.removeChild(fx);
+  var ff=childFlipFx(el);if(ff)ff.parentNode.removeChild(ff);
 }
 function springBack(el){
   if(!el)return;
@@ -2126,6 +2298,97 @@ function springBack(el){
     el.classList.remove("swipe","back");el.style.transform="";
     var f2=childCrushFx(el);if(f2)f2.parentNode.removeChild(f2);
   },320);
+}
+
+/* ---------- 向左拖拽：立体翻卡 = 已读（与「右滑粉碎」左右分工，互不打架） ---------- */
+var FLIP_TH=62;              /* 左滑多少像素算「翻过去」（约一个指甲盖宽） */
+var flipBusy=false;          /* 正在翻的这张卡，翻完前不接新动作，避免叠加动画 */
+function childFlipFx(el){
+  var k=el.children;
+  for(var i=0;i<k.length;i++)if(k[i].classList&&k[i].classList.contains("flipfx"))return k[i];
+  return null;
+}
+function ensureFlipFx(el){
+  var fx=childFlipFx(el);
+  if(!fx){
+    fx=document.createElement("div");fx.className="flipfx";
+    fx.innerHTML='<span class="ffi">'+ICON.check+'</span><span class="fft">继续左滑翻卡</span>';
+    el.appendChild(fx);
+  }
+  return fx;
+}
+/* 只有「知识卡」能翻（问答条目没有已读这回事，往左滑不接管） */
+function flipOK(el){
+  return !!(el&&(el.classList.contains("card")||el.classList.contains("cardrow"))&&el.getAttribute("data-id"));
+}
+function applyFlip(el,dx,ready){
+  var fx=ensureFlipFx(el);
+  el.classList.add("swipe");el.classList.remove("back");
+  var deg=Math.min(30,dx/7);                     /* 跟手侧倾一点，手感上「这张卡正被掀起来」 */
+  el.style.transform="perspective(1000px) rotateY(-"+deg+"deg)";
+  fx.style.opacity=Math.min(1,dx/(FLIP_TH*0.6));
+  fx.classList.toggle("rdy",!!ready);
+  var lb=fx.querySelector(".fft");if(lb)lb.textContent=ready?"松手标为已读":"继续左滑翻卡";
+}
+function springBackFlip(el){
+  if(!el)return;
+  var fx=childFlipFx(el);
+  el.classList.add("swipe","back");
+  el.style.transform="perspective(1000px) rotateY(0deg)";
+  if(fx){fx.style.opacity="0";fx.classList.remove("rdy");}
+  setTimeout(function(){
+    if(!el)return;
+    el.classList.remove("swipe","back");el.style.transform="";
+    var f2=childFlipFx(el);if(f2)f2.parentNode.removeChild(f2);
+  },320);
+}
+/* 立体翻卡动画（折纸式：折到侧棱 → 换面 → 展开，全程角度 ≤88°，不会有反字）
+   ① 折 0→-88°（卡片只剩一条边）② 亮出背面章、展开 -88→0°（「已读」章正对用户）
+   ③ 停一下 ④ 再折 0→-88°、换回正面 ⑤ 展开 -88→0°（正面已是已读：划线+变淡） */
+function flipRead(el){
+  if(flipBusy)return;
+  var id=el?el.getAttribute("data-id"):null;if(!id)return;
+  flipBusy=true;
+  var FOLD=250,HOLD=560;
+  var fx=childFlipFx(el);if(fx)fx.parentNode.removeChild(fx);
+  el.classList.remove("swipe","back");
+  var old=el.querySelector(".flipback");if(old&&old.parentNode)old.parentNode.removeChild(old);
+  var back=document.createElement("div");back.className="flipback";
+  back.innerHTML='<div class="fbIn"><span class="fbIc">'+ICON.check+'</span><b>已 读</b><span class="fbD">'+esc(todayDate2())+'</span></div>';
+  el.appendChild(back);
+  /* 正面内容 = 除背面章以外的全部子元素；换面时靠透明度切换（不依赖 backface-visibility） */
+  var fronts=[];for(var i=0;i<el.children.length;i++){if(el.children[i]!==back)fronts.push(el.children[i]);}
+  function frontsOp(v){for(var k=0;k<fronts.length;k++){fronts[k].style.opacity=v;}}
+  el.classList.add("flipping");
+  el.style.transition="none";
+  el.style.transform="perspective(1000px) rotateY(0deg)";
+  void el.offsetWidth;                            /* 强制回流：确保从 0° 出发 */
+  var tilt=function(deg,ms,ease){el.style.transition="transform "+ms+"ms "+ease;el.style.transform="perspective(1000px) rotateY("+deg+"deg)";};
+  tilt(-88,FOLD,"ease-in");                       /* ① 折到侧棱 */
+  setTimeout(function(){
+    frontsOp("0");back.style.opacity="1";         /* ② 侧棱处换面（此时卡片是零宽，看不出来） */
+    tilt(0,FOLD,"ease-out");
+    setTimeout(function(){                        /* ③ 停一下，让人看清「已读」章 */
+      el.classList.add("done");                   /* 正面重新露出来之前，先让它带上已读外观 */
+      var d=el.querySelector(".dot");if(d)d.classList.add("read");
+      tilt(-88,FOLD,"ease-in");                   /* ④ 再折一次，换回正面 */
+      setTimeout(function(){
+        back.style.opacity="0";frontsOp("");      /* ⑤ 展开 → 正面，已是已读 */
+        tilt(0,FOLD,"ease-out");
+        setTimeout(function(){
+          el.classList.remove("flipping");
+          el.style.transition="";el.style.transform="";
+          frontsOp("");back.style.opacity="";
+          var b=el.querySelector(".flipback");if(b&&b.parentNode)b.parentNode.removeChild(b);
+          flipBusy=false;
+        },FOLD+50);
+      },FOLD);
+    },FOLD+HOLD);
+  },FOLD);
+  /* 记账：翻过即已读（重复翻同一张不会重复写） */
+  var c=getCard(id);
+  if(!c||!c.read){setRead(id,true);refreshRead();}
+  toast("翻过即已读 ✓");
 }
 
 /* ---------- 粉碎确认框 ---------- */
@@ -2357,7 +2620,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.15';
+var _APP_VER_ = '2026-10-10.17';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
