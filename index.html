@@ -869,7 +869,14 @@ function switchTab(v){
   var meta=TAB_META[v];
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
   if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
-  if(v==="channels"){chanDrill=false;renderChannels();document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";}
+  if(v==="channels"){
+    chanDrill=false;renderChannels();
+    document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";
+    /* 上次离开时残留的搜索状态，进入本页时一并清掉——
+       否则门户和旧搜索结果会同时显出来（切走再切回来就能复现）。 */
+    var _cs=document.getElementById("chanSearch"),_cclr=document.getElementById("chanClr"),_csr=document.getElementById("searchRes");
+    if(_cs)_cs.value=""; if(_cclr)_cclr.style.display="none"; if(_csr){_csr.style.display="none";_csr.innerHTML="";}
+  }
   if(v==="qa"){checkAndGenDetails();renderQA();}
   setBk(false);
   cancelScrollFix();   /* 切页是"整页换新"，本来就该从顶部开始：作废上一张卡的返回复位 */
@@ -888,7 +895,12 @@ tabbar.addEventListener("click",function(e){
   /* 「已经在这页了，点它不做事」——判断必须同时看导航栈顶**和**当前真正显示的页。
      只看栈顶会误判：栈里可能还记着「tab:qa」，而页面其实已被别处切走（曾把「问答」点成彻底没反应）。 */
   if(navStack[navStack.length-1]==="tab:"+v && curView===v) return;
-  pushNav("tab:"+v); switchTab(v); _ensureGuard();
+  /* 【一级页不互相叠栈】（本版起）：栈里最多只留一格一级页，互切时就地替换。
+     这样从任意一级页按返回，都直接回「今日」，而不是"回到上一个访问过的标签页"。
+     （用户反馈：从「知识树」返回被带回了「待挖掘」，回退逻辑错误。） */
+  if(navStack.length>1 && navStack[navStack.length-1].indexOf("tab:")===0) navStack[navStack.length-1]="tab:"+v;
+  else pushNav("tab:"+v);
+  switchTab(v); _ensureGuard();
 });
 
 /* 返回键 */
@@ -899,7 +911,8 @@ function setBk(show){
 backBtn.addEventListener("click",navBack);
 /* ====================== 导航栈（侧滑回退的核心） ======================
    栈底=home(今日)；向上依次：tab:一级页(channels/tree/dig/qa) / reader(覆盖层) / sheet(覆盖层)。
-   每侧滑一次向上弹一级；一级页互切为栈式（回上一个一级页）；首页侧滑先提示、2秒内再侧滑退桌面。
+   每侧滑一次向上弹一级；**一级页只占栈里一格**（互切时就地替换）——
+   从任意一级页按返回，都先回「今日」；首页侧滑先提示、2秒内再侧滑退桌面。
    知识树主题展开是行内展开（非独立页），不计入层级。 */
 var navStack=["home"], armT=null; var DISARM=2000;
 /* 返回兜底：点「返回」时先请浏览器 back()，由 popstate 统一回退。
@@ -911,7 +924,7 @@ function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return;
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
+  var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
   if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
   var lenBefore=navStack.length;
   clearTimeout(_nbWatch);
@@ -956,7 +969,8 @@ window.addEventListener("popstate",function(){
   if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); return; }
   _lastPopAt=Date.now(); clearTimeout(_nbWatch);   /* 系统返回真来了 → 撤掉兜底，避免重复回退 */
   // 一次用户返回（系统侧滑/返回键）
-  var hasLayer = navStack.length>1 || (curView==="channels"&&chanDrill)
+  var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show")
+              || (curView==="channels"&&chanDrill)
               || reader.classList.contains("on") || sheet.classList.contains("on")
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
               || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
@@ -980,6 +994,10 @@ window.addEventListener("popstate",function(){
 
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
 function navBackFromPop(){
+  /* 长按面板（打标签 / 移入待挖掘）开着 → 先收起它（它不算独立一层，不动导航栈）。
+     旧版这里不管它：面板开着按返回会直接去退层/弹"退到桌面"提示，面板反而留在原地。 */
+  var _lp0=document.querySelector(".lp.show");
+  if(_lp0){ closeLp(_lp0); return; }
   /* 提问输入条展开着 → 先收起它（它不算一层界面，不动历史栈） */
   if(askFab&&askFab.classList.contains("on")){ closeAskFab(); return; }
   var top=navStack[navStack.length-1];
@@ -1002,7 +1020,9 @@ function navBackFromPop(){
   if(sheet.classList.contains("on"))closeSheet();
   if(jpRead&&jpRead.classList.contains("on"))closeJpRead();
   if(t==="home"){ switchTab("today"); return; }
-  if(t.indexOf("tab:")===0){ switchTab(t.slice(4)); return; }
+  /* 一级页不互相叠栈：万一栈里还留着历史遗留的 tab 层，也一律回「今日」，
+     不再"回到上一个访问过的标签页"（本版起的新策略）。 */
+  if(t.indexOf("tab:")===0){ navStack=["home"]; switchTab("today"); return; }
 }
 
 /* 页头滚动阴影 */
@@ -2989,7 +3009,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.28';
+var _APP_VER_ = '2026-10-11.29';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
