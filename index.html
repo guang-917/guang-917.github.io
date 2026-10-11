@@ -466,6 +466,13 @@ body{
 .qaans .aTags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .qaans .aTag{font-size:11.5px;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:3px 9px;color:var(--ink-3)}
 .qaans .aFoot{margin-top:11px;padding-top:9px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--ink-3);line-height:1.6}
+/* 长回答折叠（.28）：先露一截，底下的「展开完整回答」点开看全部；内容没超出就不显示按钮 */
+.coll{max-height:320px;overflow:hidden;position:relative;transition:max-height .36s ease}
+.coll.open{max-height:none}
+.coll.can:not(.open){-webkit-mask-image:linear-gradient(180deg,#000 58%,rgba(0,0,0,0));mask-image:linear-gradient(180deg,#000 58%,rgba(0,0,0,0))}
+.cbtn{display:none;width:100%;margin-top:9px;background:var(--card-2);border:1px solid var(--line);border-radius:10px;color:var(--ink-2);font-size:13px;font-weight:600;padding:9px 12px;cursor:pointer;font-family:inherit;transition:background .18s}
+.cbtn:active{background:var(--line)}
+.cbtn.on{display:block}
 .qregen{display:block;width:100%;margin-top:9px;background:var(--ai-soft);color:var(--ai);border:1px solid var(--ai);border-radius:var(--r-sm);padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .qregen:active{background:var(--ai);color:#fff}
 .qstat{font-size:13px;color:var(--ink-2);background:var(--card-2);border-radius:10px;padding:9px 12px;margin-bottom:10px}
@@ -1492,24 +1499,39 @@ function callAI(prompt, system, plain){ /* 真实接腾讯云 CloudBase 中转�
   return fetch(AI_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompt, system: (system || '你是个人知识助教，用简体中文简洁、准确地回答。') + '\n\n' + AI_TRUTH + (plain ? '' : AI_ANS_FMT), token: SETTINGS.relayToken }),
+    body: JSON.stringify({ prompt: prompt, system: (system || '你是个人知识助教，用简体中文把话讲完整、讲准确，按问题的类型给足深度。') + '\n\n' + AI_TRUTH + (plain ? '' : AI_ANS_FMT), token: SETTINGS.relayToken }),
   }).then(function(r){ return r.json(); }).then(function(d){
     if (!d.ok) throw new Error(d.error || 'AI 调用失败');
     return d.text;
   });
 }
-/* ===== 回答格式模板（对齐「定时任务正式推送卡片」的排版：摘要 → 导读 → 分点 → 标签）=====
-   背景：AI 以前一次吐一整坨、零换行，看着像墙；这里强制它按正式卡片的骨架输出，
-   前端再用 parseAnsCard() 拆成 摘要/导读/分点/标签 分别排版。 */
-var AI_ANS_FMT = "\n\n【输出格式｜必须严格遵守，优先于你平时的表达习惯】\n"
- + "严格按下面这套结构输出，不要写开场白/结束语，不要用 markdown 符号（#、**、```、表格、竖线）。\n"
- + "摘要：对以上内容的一句话总结（就是这段回答在讲什么）。不限字数，但尽量简短，一般 25~60 字；必须是意思完整、通顺的一句话，宁可多几个字也要把话说完整，绝对不允许写成被截断的半句话\n"
+/* ===== 作答要求（对齐「定时任务正式推送卡片」的排版：摘要 → 导读 → 要点 → 标签）=====
+   背景（.28 重构）：原先这套模板写死了「要点 3~5 条、每条不超过 45 字」「每条必须一行写完」，
+   于是全文上限只有约 225 字——实测问「FDE 和 AIGC 的区别」，AI 被逼得只写得出
+   「区别：用途不同、技术不同、结果不同」这种说了等于没说的一句话（用户反馈"太简短、反而创造新疑惑"）。
+   现在改成：**先判断问题属于哪一类、再按那一类把话说透**，条数与篇幅不再设上限（只防灌水）。
+   骨架仍然保留（摘要 / 导读 / 要点 / 标签），因为前端要按这个骨架排版。 */
+var AI_ANS_FMT = "\n\n【作答要求｜优先于你平时的表达习惯】\n"
+ + "先判断用户问的是哪一类，再按那一类把话说透：\n"
+ + "· 「是什么 / 为什么」→ 先用一两句话把结论讲清楚，再展开：关键点、常见误解、一个具体例子；\n"
+ + "· 「A 和 B 有什么区别 / 怎么选」→ 先给一句话总纲，再逐条对照（A 是什么样 / B 是什么样 / 最容易混的地方）；\n"
+ + "· 「怎么做 / 步骤」→ 直接给能照着做的步骤，一步一行；前提条件和容易踩的坑都要说；\n"
+ + "· 「帮我写 / 算 / 整理」→ 直接给成品，不要解释你的格式。\n"
+ + "内容长短由问题决定：该说完整就说完整，不要为了短而丢信息；也不要为了长而灌水（一般 800 字以内，问题本身要求长篇的除外）。\n"
+ + "不许出现「用途不同、技术不同、结果不同」这类说了等于没说的空话——要么讲清具体差在哪，要么就不写这一条。\n"
+ + "【缩写 / 简称 / 一词多义】遇到英文字母缩写（如 FDE、AIGC、RAG、SFT），**先写出它的英文全称**；"
+ + "同一个缩写在**不同行业往往指完全不同的东西**（例如 FDE 在安全领域是 Full-Disk Encryption 全磁盘加密，在 AI 交付领域是 Forward Deployed Engineer 前线部署工程师；AIGC 常被写成 AI GC）。"
+ + "**只要存在多种展开，必须全部列出来**，然后说明「你问的如果是 X 领域，指的就是第 N 个」。"
+ + "**如果你拿不准对方指的是哪一个，就直接说不确定，并反问一句「你说的是哪个领域的」，绝不许挑一个就断言。**\n"
+ + "不确定的地方不要笼统说「信息不足」——**能正常回答的问题不要出现这几行**；真的答不了时，才单独写出来：你缺哪一句关键信息、补上之后能答到什么程度、基于现有信息能确定的部分是什么。\n"
+ + "\n【输出格式｜照这个骨架写，方便 App 排版】\n"
+ + "摘要：对整段回答的一句话总结（意思必须完整、通顺，不许写成被截断的半句，也不许把第一条要点抄一遍）\n"
  + "导读：一句话说明「为什么值得看 / 跟提问的人有什么关系」，20~40 字；写不出就整行省略\n"
- + "- 定义：能带来经济效益、可参与生产的数据资源\n"
- + "- 地位：与土地、劳动力、资本、技术并列的第五大生产要素\n"
- + "- 特点：可复制、非排他、供给近乎无限\n"
+ + "要点：（这一行只是骨架标记，紧接着写正文，怎么组织由你按上面那一类决定）\n"
+ + "- 需要对照就一行一类，写成「A 是什么样：…」；需要分步骤就写成「第一步：…」\n"
+ + "- 一行一条，条数和每条的篇幅不限，够说清就行\n"
  + "标签：关键词一、关键词二、关键词三\n"
- + "硬性要求：① 「摘要」这一行必须有，且必须是对下面要点的总结（不是把第一条要点抄一遍、更不是抄一半），这一行绝对不能省；② 上面「定义 / 地位 / 特点」只是举例，你要按具体问题自己起小标题；③ 每条要点必须一行写完，格式是「小标题：一句话说明」，绝对不要把标题和说明拆成两行，也绝对不要写出「小标题」这三个字；④ 要点 3~5 条，每条不超过 45 字；⑤ 前缀字样（摘要、导读、标签）照抄；⑥ 信息不足以支撑时，把要点写成一条「信息不足：还缺什么」，绝不编造凑数。";
+ + "硬性要求：① 「摘要」和「标签」这两行必须有；② 不要写开场白和结束语；③ 不要用 markdown 符号（#、**、```），需要对照时用「名称：说明」一行一类，不要用表格和竖线；④ 正文每一条都要有实质内容，说不清就不写这条。";
 /* ===== 把 AI 的回答解析成「正式卡片」结构：{sum, lead, body[], tags[]} =====
    模型偶尔不按格式来 → 自动降级：按句号切段，保证界面上不会再出现"一整坨不分段"的文字。 */
 function parseAnsCard(text){
@@ -1532,8 +1554,12 @@ function parseAnsCard(text){
     var rawLine=lines[i].trim(); if(!rawLine)continue;
     /* 【关键】先剥掉行首的项目符号，再去认「摘要/导读/标签」——
        否则模型写成「- 标签：a、b」时，标签会被当成第 N 条要点，标签就丢了。 */
-    var isBullet=/^(?:[-*•]|\d+[.、)])\s+/.test(rawLine);
-    var t=isBullet?rawLine.replace(/^(?:[-*•]|\d+[.、)])\s+/,"").trim():rawLine;
+    /* 【.28 修】行首编号不再强制要求「后面跟空格」：中文里常见的「1、第一步：…」不带空格，
+       以前认不出来 → 被当成普通行 → 紧跟在「摘要」后面就被并进摘要里（整篇回答会被吸进摘要）。
+       为避免误判（如「3.5 万亿元」），编号后面要么是空白、要么是中文或左括号。 */
+    var BUL=/^(?:[-*•]|\d{1,2}\s*[.、)）])(?:\s+|(?=[\u4e00-\u9fa5「『（(]))/;
+    var isBullet=BUL.test(rawLine);
+    var t=isBullet?rawLine.replace(BUL,"").trim():rawLine;
     if(!t)continue;
     var v;
     if((v=pick(t,["摘要","一句话摘要","结论"]))!==null){ flush(); cur="sum"; o.sum=v; o.fmt=true; continue; }
@@ -1542,7 +1568,12 @@ function parseAnsCard(text){
     if((v=pick(t,["要点","正文","具体来说"]))!==null){ flush(); cur="body"; if(v)buf.push(v); o.fmt=true; continue; }
     if(isBullet){ if(cur!=="body"){flush();cur="body";} buf.push(t); o.fmt=true; continue; }
     /* 没有任何前缀的普通行：跟在上一个字段后面就并入它 */
-    if(cur==="sum"){ o.sum+=t; }
+    if(cur==="sum"){
+      /* 【.28 护栏】摘要最多吸收到 80 字；再长就说明这行不是摘要的续写（多半是没被认出编号的正文行），
+         转成正文，避免整篇回答被吸进摘要里。 */
+      if(o.sum.length<80) o.sum+=t;
+      else { flush(); cur="body"; buf.push(t); }
+    }
     else if(cur==="lead"){ o.lead+=t; }
     else if(cur==="tag"){ o.tags=o.tags.concat(splitTags(t)); }
     else { if(cur!=="body"){flush();cur="body";} buf.push(t); }
@@ -1568,7 +1599,8 @@ function parseAnsCard(text){
     if(curFrag && nxIsDesc){ merged.push(cur.replace(GENERIC,"").trim()+"："+nx); j++; }
     else { merged.push(cur.replace(GENERIC,"").trim()||cur); }
   }
-  o.body=merged.filter(Boolean).slice(0,5);
+  /* 【.28 改】不再把要点砍到 5 条：条数由问题决定，砍掉就等于丢信息（见 AI_ANS_FMT 上方说明） */
+  o.body=merged.filter(Boolean);
   o.tags=o.tags.slice(0,4);
   /* 【重要】这里不再「抓要点第一句硬切 60 字」冒充摘要（那会把一句话拦腰截断，
      正是「摘要显示不全」的病根）。摘要必须由 AI 总结得出：解析不到就留空，
@@ -1629,17 +1661,43 @@ function ensureSummary(p, card, answerText){
   });
 }
 /* ===== 把解析结果渲染成 HTML（摘要 / 导读 / 分点 / 标签）===== */
+/* ===== 长回答折叠（.28）=====
+   答案变长之后，一屏塞不下会把下面的内容顶走。做法：正文先露一截（.coll 限高 + 底部渐隐），
+   底下给一个「展开完整回答」；**内容没超出就不显示按钮**（靠真实高度量，不靠字数猜）。
+   量高度不受 transform 缩放影响，所以阅读器还在做展开动画时也能量准。 */
+function fitCollapse(root){
+  var rs=(root||document).querySelectorAll(".coll");
+  for(var i=0;i<rs.length;i++){
+    var el=rs[i];
+    var over=el.scrollHeight>el.clientHeight+4;
+    el.classList.toggle("can",over);
+    var btn=el.nextElementSibling;
+    if(btn&&btn.classList&&btn.classList.contains("cbtn")){
+      btn.classList.toggle("on",over);
+      if(over&&!el.classList.contains("open"))btn.textContent="展开完整回答（还有下文）";
+      else if(over)btn.textContent="收起";
+    }
+  }
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest(".cbtn"); if(!b)return;
+  var col=b.previousElementSibling; if(!col||!col.classList.contains("coll"))return;
+  var open=col.classList.toggle("open");
+  b.textContent=open?"收起":"展开完整回答（还有下文）";
+  e.preventDefault();e.stopPropagation();
+});
+
 function ansHTML(p){
   if(!p) return "";
   var h="";
   if(p.sum) h+='<div class="aSum">'+esc(p.sum)+'</div>';
   if(p.lead) h+='<div class="aLead">'+esc(p.lead)+'</div>';
   if(p.body&&p.body.length){
-    h+='<div class="aPts">'+p.body.map(function(x,i){
+    h+='<div class="coll"><div class="aPts">'+p.body.map(function(x,i){
       var m=/^(.{2,16}?)[：:]([\s\S]+)$/.exec(x);
       var inner=m?('<b>'+esc(m[1])+'：</b>'+esc(m[2])):esc(x);
       return '<div class="aPt"><span class="aNum">'+(i+1)+'</span><span class="aTxt">'+inner+'</span></div>';
-    }).join("")+'</div>';
+    }).join("")+'</div></div><button type="button" class="cbtn">展开完整回答</button>';
   }
   if(p.tags&&p.tags.length){
     h+='<div class="aTags">'+p.tags.map(function(t){return '<span class="aTag">'+esc(t)+'</span>';}).join("")+'</div>';
@@ -1655,7 +1713,10 @@ function askAINow(item, q, ansId){
   if(!item){ say("问题没记上，请重试", "bad"); return; }
   var kp = item.kp || "未分类";
   var card = item.cardId ? getCard(item.cardId) : null;
-  var sysP = "你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。";
+  var sysP = "你是个人知识助教，用简体中文把话讲完整、讲准确。"
+          + "回答要按问题的类型给足深度，不要为了短而丢信息。"
+          + "**能正常回答的问题就直接答，不要出现任何「信息不足 / 缺少关键信息」之类的话**；只有当问题本身缺了关键前提、真的答不了时，才先说你基于现有信息能确定的部分，最后另起一段写清「还缺什么」和「补上之后能答到什么程度」。"
+          + "绝不编造不存在的内容，不确定的地方要明确标出来。";
   if(card){
     sysP += "用户正在看这张卡：《" + String(card.title || "") + "》，摘要：" +
             String(card.sum || "").slice(0, 150) + "。回答要紧扣这张卡，别跑题。";
@@ -1683,6 +1744,7 @@ function askAINow(item, q, ansId){
       if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
       if(typeof renderQA === "function") renderQA();
       rich(ansHTML(p) + jpBlockHTML(p.raw || ans) + '<div class="aFoot">—— 已存成一张详解卡，去「今日」或「问答」可回看</div>');
+      fitCollapse(box);   /* 答案长了先折叠，量完再决定要不要给「展开完整回答」 */
     });
   }).catch(function(err){
     var msg = String((err && err.message) || err || "未知错误");
@@ -1696,7 +1758,10 @@ function genDetailFor(qs){
   var kp=cleanKpTitle(qs[0].kp||"未分类")||"未分类";   /* 先剥壳：防止「你关注的「X」详解」再被包一层 */
   var srcCard=qs[0].cardId?getCard(qs[0].cardId):null;
   var prompt="知识点："+kp+"；用户问题："+qs.map(function(x){return x.q;}).join("；");
-  var sysP="你是个人知识助教，用简体中文简洁、准确地回答。如果手头信息不足以回答，就直接说明「这条信息不够，请补充一句背景」，绝不编造不存在的内容。";
+  var sysP="你是个人知识助教，用简体中文把话讲完整、讲准确。"
+          + "回答要按问题的类型给足深度，不要为了短而丢信息。"
+          + "**能正常回答的问题就直接答，不要出现任何「信息不足 / 缺少关键信息」之类的话**；只有当问题本身缺了关键前提、真的答不了时，才先说你基于现有信息能确定的部分，最后另起一段写清「还缺什么」和「补上之后能答到什么程度」。"
+          + "绝不编造不存在的内容，不确定的地方要明确标出来。";
   if(srcCard){ sysP+="这条内容来自这张卡：《"+String(srcCard.title||"")+"》，摘要："+String(srcCard.sum||"").slice(0,150)+"。回答要紧扣它，别跑题。"; }
   callAI(prompt, sysP).then(function(ans){
     ans = (ans || "").trim();
@@ -2138,10 +2203,12 @@ function openReader(data,srcRect){
   body+=tagsHTML(full,true);
   /* 导读 */
   if(full.lead)body+='<p class="lead">'+esc(full.lead)+'</p>';
-  /* 没有「完整学习卡」的卡（含 AI 当场生成的详解卡）：兜底显示要点，避免点开是空白 */
+  /* 没有「完整学习卡」的卡（含 AI 当场生成的详解卡）：兜底显示要点，避免点开是空白。
+     要点一多会很长 → 套一层折叠，先露一截、底下给「展开完整回答」。 */
   if(!full.link&&full.body&&full.body.length){
-    body+='<h4>要点</h4>';
+    body+='<h4>要点</h4><div class="coll">';
     for(var i=0;i<full.body.length;i++)body+='<p>'+esc(full.body[i])+'</p>';
+    body+='</div><button type="button" class="cbtn">展开完整回答</button>';
   }
   /* 完整学习卡入口：日语卡 → App 内直接跟读（真人音频，不外跳浏览器）；其他卡 → 原样外跳 */
   if(full.link){
@@ -2152,6 +2219,7 @@ function openReader(data,srcRect){
     }
   }
   document.getElementById("readerBody").innerHTML=body;
+  fitCollapse(document.getElementById("readerBody"));   /* 先量一遍（此时阅读器可能还没显示，量到 0 也没关系，下面显示后会再量一次） */
   /* 正文含日文 → 追加「日语跟读」块（手机自带朗读，逐句） */
   var _jpTxt=String(full.title||"")+"。"+String(full.sum||"")+"。"+String(full.lead||"")+"。"+((full.body||[]).join("。"));
   var _jpH=jpBlockHTML(_jpTxt);
@@ -2181,6 +2249,7 @@ function openReader(data,srcRect){
   reader.style.transform="translate("+r.left+"px,"+r.top+"px) scale("+sx+","+sy+")";
   reader.style.opacity="1";
   reader.style.display="block";
+  fitCollapse(document.getElementById("readerBody"));   /* 【必须在显示之后再量】隐藏时 height 全是 0，量不出"有没有超出"，按钮就不会出现 */
   reader.getBoundingClientRect();               /* 强制回流一次：这一帧即动画起点 */
   reader.style.transition="transform .4s var(--flip)";
   reader.style.transform="translate(0px,0px) scale(1,1)";
@@ -2920,7 +2989,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.27';
+var _APP_VER_ = '2026-10-11.28';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
