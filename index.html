@@ -798,30 +798,36 @@ function loadMesh(){try{var s=JSON.parse(localStorage.getItem(LS_MESH)||"{}");if
 function saveMesh(o){try{localStorage.setItem(LS_MESH,JSON.stringify(o));}catch(e){}}
 var TOPICS={},MESH={};
 TOPICS=loadTopics();MESH=loadMesh();
-/* 卡片归入主题：标题/标签/摘要 命中任一关键词（或主题名）即归入 */
-function matchTopicIds(ch,card){
+/* 卡片归入主题：**只归「最该归的那一个」**，不再一张卡同时出现在好几个主题里。
+   打分规则（可调）：
+     ① 主题名命中 = 最强信号（+100）—— 主题名是这张卡的"正主"
+     ② 关键词命中：越长的关键词越具体，权重越高（+ 关键词长度，最多 20）
+     ③ 平手时取主题列表里靠前的那个（你在「编辑」里的顺序＝优先级）
+   一个都没命中 → 返回 null，卡片进「未分类卡片」。 */
+function pickTopicId(ch,card){
   var text=((card.title||"")+" "+(card.tags?card.tags.join(" "):"")+" "+(card.sum||"")).toLowerCase();
-  var ids=[];
+  var best=null,bestScore=0;
   (TOPICS[ch]||[]).forEach(function(t){
-    var hit=t.name&&text.indexOf(String(t.name).toLowerCase())>=0;
-    if(!hit&&t.kw)(t.kw||[]).forEach(function(k){if(String(k).toLowerCase()&&text.indexOf(String(k).toLowerCase())>=0)hit=true;});
-    if(hit)ids.push(t.id);
+    var s=0,nm=String(t.name||"").toLowerCase();
+    if(nm&&text.indexOf(nm)>=0)s+=100;
+    (t.kw||[]).forEach(function(k){var kk=String(k||"").toLowerCase();if(kk&&text.indexOf(kk)>=0)s+=Math.min(kk.length,20);});
+    if(s>bestScore){bestScore=s;best=t.id;}
   });
-  return ids;
+  return best;
 }
 /* 构建某频道的主题结构（含命中卡片、凝练摘要、延伸连线、未分类卡片） */
 function buildChannelTree(ch){
   var topics=(TOPICS[ch]||[]).map(function(t){return Object.assign({},t);});
   var cardByTopic={};
-  CARDS.forEach(function(c){if(normCh(c.ch)!==ch)return;var ids=matchTopicIds(ch,c);
-    ids.forEach(function(tid){(cardByTopic[tid]=cardByTopic[tid]||[]).push(c);});});
+  CARDS.forEach(function(c){if(normCh(c.ch)!==ch)return;var tid=pickTopicId(ch,c);   /* 只归一个主题 */
+    if(tid)(cardByTopic[tid]=cardByTopic[tid]||[]).push(c);});
   topics.forEach(function(t){t.cards=cardByTopic[t.id]||[];t.hasCards=t.cards.length>0;
     var parts=t.cards.map(function(c){return c.sum;}).filter(Boolean);
     t.summary=parts.join("　").slice(0,160);
     var tagSet={};t.cards.forEach(function(c){(c.tags||[]).forEach(function(g){tagSet[g]=1;});});
     t.tags=Object.keys(tagSet);
   });
-  var unmatched=CARDS.filter(function(c){if(normCh(c.ch)!==ch)return false;return matchTopicIds(ch,c).length===0;});
+  var unmatched=CARDS.filter(function(c){if(normCh(c.ch)!==ch)return false;return !pickTopicId(ch,c);});
   var edges=(MESH[ch]||[]).filter(function(e){return e.a!==e.b;});
   return {ch:ch,topics:topics,unmatched:unmatched,edges:edges};
 }
@@ -1305,6 +1311,10 @@ function openTreeEditor(){
     }
   }
   draw();
+  /* 【必须登记到返回栈】以前这里只把抽屉显示出来、没入栈，于是"点别处关抽屉"这一步会走
+     navBack → history.back()，而栈顶还是上一个标签页 → 被当成"退回上一页"，把人带到了
+     上一个标签页（比如「待挖掘」）。openSheet() 是入了栈的，这里补齐保持一致。 */
+  pushNav("sheet");_ensureGuard();
   sheetMask.classList.add("on");sheet.classList.add("on");
 }
 
@@ -1439,7 +1449,33 @@ var LS_DET="kb_details";
 function loadDetails(){try{return JSON.parse(localStorage.getItem(LS_DET)||"{}")||{};}catch(e){return {};}}
 function saveDetail(d){if(!d||!d.id)return;var m=loadDetails();m[d.id]=d;try{localStorage.setItem(LS_DET,JSON.stringify(m));}catch(e){}}
 function getDetail(id){return loadDetails()[id]||null;}
-function mergeDetailsIntoCards(){var m=loadDetails();for(var k in m){if(!getCard(k))CARDS.unshift(m[k]);}}
+/* 同一批提问（fromQids 完全一致）只放出「一张」详解卡，其余同批重复卡不再显示。
+   为什么会有重复：旧版没有"正在生成中"的挡板，同一批待生成提问会被反复抓取，
+   一次生成好几张标题一模一样的卡（实测可到 4 张）。
+   这里只做「不显示」——卡本身仍留在 kb_details 里，不删任何数据，可随时改回来。
+   保留哪一张：优先留「问答条目真正指向的那张」（保证「看详解 →」点得开），
+   没有被指向的就留最新的那张。 */
+function _detSig(d){var f=d&&d.fromQids;return (f&&f.length)?f.slice().sort().join("|"):"";}
+function dedupeDetailCards(){
+  var pointed={};
+  try{ loadQA().forEach(function(x){ if(x&&x.detailCardId) pointed[x.detailCardId]=1; }); }catch(e){}
+  var rep={},sig={};
+  for(var i=0;i<CARDS.length;i++){
+    var c=CARDS[i]; if(!c||!c.isDetail) continue;
+    var s=_detSig(c); if(!s) continue;                 /* 老卡没有 fromQids → 视为唯一，不去重 */
+    sig[c.id]=s;
+    if(!rep[s]) rep[s]=c;                              /* 默认留最先遇到的（CARDS 已按新→旧） */
+    if(pointed[c.id]) rep[s]=c;                        /* 有问答条目指着它，优先留它 */
+  }
+  CARDS=CARDS.filter(function(c){
+    if(!c||!c.isDetail) return true;
+    var s=sig[c.id]; if(!s) return true;
+    return rep[s]===c;
+  });
+}
+function mergeDetailsIntoCards(){var m=loadDetails();for(var k in m){if(!getCard(k))CARDS.unshift(m[k]);}dedupeDetailCards();}
+/* 【挡板】正在生成详解的提问 id（见 checkAndGenDetails 上方说明）：先占位再发请求，防止同一批被反复抓取 */
+var _genInflight={};
 /* 本地备份 / 恢复 + 同步云端导出 */
 function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
 /* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
@@ -1631,7 +1667,7 @@ function askAINow(item, q, ansId){
     var parsed = parseAnsCard(ans);                /* 拆成 摘要/导读/分点/标签 */
     if(!parsed.sum) say("AI 正在提炼摘要…", "wait"); /* 摘要缺失时会给一次补调，先给个即时反馈 */
     return ensureSummary(parsed, card, ans).then(function(p){   /* 摘要必须是 AI 总结；缺了就再要一次，绝不硬切 */
-      var id = "det_" + Date.now().toString(36);
+      var id = "det_" + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
       var ch = card ? normCh(card.ch || "ai") : "ai";
       var tags = (p.tags && p.tags.length) ? p.tags : [kp];
       var det = { id:id, title:"你问：「" + q.slice(0,16) + (q.length > 16 ? "…" : "") + "」",
@@ -1641,7 +1677,7 @@ function askAINow(item, q, ansId){
       for(var i=0;i<a.length;i++){
         if(a[i].id === item.id){ a[i].state="pushed"; a[i].a=ans; a[i].detailCardId=id; a[i].groupId="grp_"+id; break; }
       }
-      saveQA(a); saveDetail(det); CARDS.unshift(det);
+      saveQA(a); saveDetail(det); CARDS.unshift(det); dedupeDetailCards();
       addFocus(kp, q, ch);
       renderToday(); renderChannels(); updateQaBdg();
       if(readTarget && typeof renderCardQA === "function") renderCardQA(readTarget);
@@ -1655,6 +1691,8 @@ function askAINow(item, q, ansId){
 }
 function genDetailFor(qs){
   if(!qs||!qs.length)return;
+  /* 无论成功还是失败，都要撤掉"正在生成中"的挡板；失败时撤回 → 下次还能再试 */
+  var _done=function(){ qs.forEach(function(x){ delete _genInflight[x.id]; }); };
   var kp=cleanKpTitle(qs[0].kp||"未分类")||"未分类";   /* 先剥壳：防止「你关注的「X」详解」再被包一层 */
   var srcCard=qs[0].cardId?getCard(qs[0].cardId):null;
   var prompt="知识点："+kp+"；用户问题："+qs.map(function(x){return x.q;}).join("；");
@@ -1662,30 +1700,40 @@ function genDetailFor(qs){
   if(srcCard){ sysP+="这条内容来自这张卡：《"+String(srcCard.title||"")+"》，摘要："+String(srcCard.sum||"").slice(0,150)+"。回答要紧扣它，别跑题。"; }
   callAI(prompt, sysP).then(function(ans){
     ans = (ans || "").trim();
-    if(!ans) return;
+    if(!ans){ _done(); return; }
     var parsed = parseAnsCard(ans);               /* 与「当场回答」同一套格式 */
     return ensureSummary(parsed, srcCard, ans).then(function(p){  /* 摘要由 AI 总结得出，不再硬切首句 */
-      var id="det_"+Date.now().toString(36);
+      var id="det_"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
       var ch=qs[0].cardId?(function(c){return c?c.ch:"ai";})(getCard(qs[0].cardId)):"ai"; ch=normCh(ch);
       var det={id:id,title:"你关注的「"+kp+"」详解",sum:p.sum,lead:p.lead,body:p.body,
                tags:(p.tags&&p.tags.length)?p.tags:[kp],ch:ch,date:todayStr(),date2:todayDate2(),read:false,isDetail:true,kp:kp,fromQids:qs.map(function(x){return x.id;})};
       CARDS.unshift(det);saveDetail(det);
+      dedupeDetailCards();                        /* 万一还是撞上了同批重复，只留一张 */
       var a=loadQA(),gid="grp_"+id;
       qs.forEach(function(q){for(var i=0;i<a.length;i++){if(a[i].id===q.id){a[i].state="pushed";a[i].detailCardId=id;a[i].groupId=gid;break;}}});
       saveQA(a);renderToday();renderChannels();updateQaBdg();
       addFocus(kp, qs[0].q||"", ch); /* 出详解时顺手记入「关注专题」 */
       if(typeof remindNewDetail==="function")remindNewDetail(kp,id);
       if(curView==="qa")renderQA();
+      _done();
     });
-  });
+  }).catch(function(){ _done(); });
 }
+/* 【挡板】正在生成详解的提问 id —— 防止同一批提问被反复抓取、重复生成多张同标题详解卡。
+   病根：checkAndGenDetails() 在「启动」和「每次切到问答页」都会跑，而 genDetailFor() 是异步的；
+        AI 还没回来的这几秒里，那批提问仍是「待生成」→ 每次调用都再发一次请求、再存一张卡。
+        实测：2 条待生成提问 + 来回切 3 次问答标签 = 一次生成 4 张一模一样的「你关注的「X」详解」。 */
 function checkAndGenDetails(){
   var a=loadQA(),now=Date.now(),HOUR=3600000;
-  var pending=a.filter(function(x){return qaState(x)==="pending" && (now-(x.ts||now))>=HOUR;});
+  var pending=a.filter(function(x){return qaState(x)==="pending" && (now-(x.ts||now))>=HOUR && !_genInflight[x.id];});
   if(!pending.length)return;
   var groups={};
   pending.forEach(function(x){var k=x.kp||"未分类";(groups[k]=groups[k]||[]).push(x);});
-  Object.keys(groups).forEach(function(k){ genDetailFor(groups[k]); });
+  Object.keys(groups).forEach(function(k){
+    var qs=groups[k];
+    qs.forEach(function(x){ _genInflight[x.id]=1; });   /* 先占位再发请求：下一次调用就不会再抓这批 */
+    genDetailFor(qs);
+  });
 }
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
 function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}if(obj.focus)mergeFocus(obj.focus);renderTree();updateQaBdg();toast('已从文件恢复');}
@@ -2678,10 +2726,19 @@ function crushCardById(id){
   /* 本地生成的详解卡：从 kb_details 里彻底移除 */
   var ds=loadDetails();
   if(ds[id]){delete ds[id];try{localStorage.setItem(LS_DET,JSON.stringify(ds));}catch(e){}}
-  /* 它是某条问答的答案：那条问题退回「待生成」，可以重新问 */
+  /* 它是某条问答的答案：那条问题退回「待生成」，可以重新问。
+     ⚠ 但**已归档（已读 / 已忽略）的一律不动**——归档的意思是"我看完了、收起来了"，
+       不该被一次粉碎打回列表。否则你清理重复的详解卡时，归档的问答会集体"复活"
+       并在一小时后重新生成新详解卡（就是用户反馈的"归档失败、推送混乱"）。
+       只把失效的详解链接摘掉即可，归档层会退回展示当时那份原文。 */
   var qa=loadQA(),hit=false;
   for(var i=0;i<qa.length;i++){
-    if(qa[i].detailCardId===id){qa[i].detailCardId=null;qa[i].state="pending";qa[i].a="";hit=true;}
+    if(qa[i].detailCardId===id){
+      qa[i].detailCardId=null;
+      var _qs=qaState(qa[i]);
+      if(_qs!=="read"&&_qs!=="ignored"){qa[i].state="pending";qa[i].a="";}
+      hit=true;
+    }
   }
   if(hit)saveQA(qa);
   CARDS=CARDS.filter(function(c){return c.id!==id;});
@@ -2863,7 +2920,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-10.25';
+var _APP_VER_ = '2026-10-11.27';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
