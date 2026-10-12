@@ -1059,7 +1059,7 @@ var DIAG=(function(){
         bar.addEventListener('click',function(){ panel.style.display=(panel.style.display==='none'?'block':'none'); });
       }
       var L=log[log.length-1]||{};
-      bar.textContent='DIAG .35 | 记录 '+log.length+' 条 | 最新 '+L.tag+' | hLen='+L.hLen+' 守卫='+L.st+' view='+L.view+' arch='+L.arch+' reader='+L.reader+' armed='+L.armed+' ready='+L.ready+' ｜点这里看完整日志';
+      bar.textContent='DIAG .36 | 记录 '+log.length+' 条 | 最新 '+L.tag+' | hLen='+L.hLen+' 守卫='+L.st+' view='+L.view+' arch='+L.arch+' reader='+L.reader+' armed='+L.armed+' ready='+L.ready+' ｜点这里看完整日志';
       panel.textContent='（最新记录在最上面）\n\n'+log.slice().reverse().map(function(e){
         return e.t+'  '+e.tag+'\n   hLen='+e.hLen+'  守卫='+e.st+'  view='+e.view+'  arch='+e.arch+' reader='+e.reader+' sheet='+e.sheet+' armed='+e.armed+' ready='+e.ready+'\n   stack='+e.stack+(e.x?('\n   '+e.x):'');
       }).join('\n\n');
@@ -2554,7 +2554,7 @@ function renderArch(){
     archBodyEl.innerHTML='<div class="ahint">你已看过、收起来的 '+items.length+' 条线索，一条时间线从新到旧。点一条可重看它的推荐理由与来源；点「放回」可以让它回到「待挖掘」重新排队；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
       +items.map(function(d){
         var dt=digSourceDate(d),flab=digFromLabel(d);
-        return '<div class="aitem tap" data-aq="'+esc(d.q)+'">'
+        return '<div class="aitem tap" data-aq="'+esc(d.q)+'" data-dig="'+esc(JSON.stringify({q:d.q,why:d.why,from:d.from,link:d.link}))+'">'
           +'<div class="aq">'+esc(d.q)+'</div>'
           +'<div class="am">'+esc(digDateLabel(dt)||"更早")+(flab?' · '+esc(flab):'')+'</div>'
           +'<button class="arestore" data-restore="'+esc(d.q)+'">放回</button></div>';
@@ -2593,12 +2593,19 @@ archBodyEl.addEventListener("click",function(e){
   var it=e.target.closest(".aitem");if(!it)return;
   if(ARCH_KIND==="dig"){
     var q=it.getAttribute("data-aq"),d=null;
-    for(var i=0;i<DIG.length;i++){if(DIG[i].q===q){d=DIG[i];break;}}
+    /* `.36`：优先用**渲染时钉在 DOM 上**的数据（data-dig）。
+       旧版是"点击时再去 DIG 里按文本 q 查一遍"，一旦 DIG 与渲染那一刻不一致
+       （feed 刷新 / 这条已不在本次推送里）就会查不到 → 点了毫无反应、也没任何提示。
+       用户反馈的「已归档的待挖掘卡片无法点击查看」正是这个。 */
+    var raw=it.getAttribute("data-dig");
+    if(raw){ try{ d=JSON.parse(raw); }catch(e){ d=null; } }
+    if(!d){ for(var i=0;i<DIG.length;i++){ if(DIG[i].q===q){ d=DIG[i]; break; } } }
     if(d)openSheet({title:d.q,why:d.why,from:d.from,link:d.link,body:"这条已经看过、收在归档里。点下方「去挖」还能再打开它的解答页。"});
+    else toast("这条线索已不在本次推送里，打不开了（可点「放回」，或按住往右滑粉碎）");
   }else{
     var id=it.getAttribute("data-qa"),a=loadQA(),q2=null;
     for(var j=0;j<a.length;j++){if(a[j].id===id){q2=a[j];break;}}
-    if(!q2)return;
+    if(!q2){ toast("这条问答已不在归档里（可能已被放回或粉碎）"); return; }   /* `.36`：不再静默失败 */
     /* 「当时那版」详解：归档条目上钉着的就是当时生成的那张卡（之后重讲会另生成新卡，不动这张），
        所以这里拿到的天然是「当初那份」。卡片若已被粉碎/清缓存，则退回展示当时那份原文。 */
     var det=q2.detailCardId?(getCard(q2.detailCardId)||getDetail(q2.detailCardId)):null;
@@ -3482,7 +3489,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.35';
+var _APP_VER_ = '2026-10-11.36';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
