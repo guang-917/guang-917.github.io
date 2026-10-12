@@ -952,6 +952,8 @@ function switchTab(v){
 tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
+  /* `.35`：面板/输入条/下钻现在也占历史条目，而切 tab 会 push 并截断历史 → 先同步摘掉它们的栈项 */
+  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill");
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
@@ -988,7 +990,13 @@ var navStack=["home"], armT=null; var DISARM=2000;
    补账很关键：若这次 back 其实"迟到生效"，它会消耗一条历史——不补账就会累积亏空，
    亏到指针落在文档最底时，用户的下一次侧滑会直接离开 App（真机=退到桌面）。（`.31` 修） */
 var _nbWatch=null,_lastPopAt=0,_nbFallbackAt=0;
-function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); _exitReady=false; }
+/* pushNav：进一层（一级页 / 覆盖层）时，除了记导航栈，**同时 push 一条真实的历史条目**（`.34` 根因修复）。
+   ⚠ 真机（Android PWA）实测：**系统返回手势之后，pushState 会被浏览器「假成功」**——history.state
+   变了、条目却没真进历史（history.length 不增），所以「等返回后再补守卫」这条路线在真机上走不通：
+   第 1 次返回后守卫没落上 → 第 2 次返回就直接离开 App，连 popstate 都不触发（界面来不及关）。
+   ⇒ 对策：把历史条目在**用户操作时就垫实**——每进一层 push 一条（带层名 nav），
+      每次返回都落到一条**真实存在**的条目上，不再依赖「临时补」。 */
+function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); _exitReady=false; try{ history.pushState({kbGuard:true,nav:e},""); }catch(err){} }
 /* navBack：界面上的「返回」按钮 / 关闭按钮 都走这里。
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
@@ -1051,7 +1059,7 @@ var DIAG=(function(){
         bar.addEventListener('click',function(){ panel.style.display=(panel.style.display==='none'?'block':'none'); });
       }
       var L=log[log.length-1]||{};
-      bar.textContent='DIAG .33 | 记录 '+log.length+' 条 | 最新 '+L.tag+' | hLen='+L.hLen+' 守卫='+L.st+' view='+L.view+' arch='+L.arch+' reader='+L.reader+' armed='+L.armed+' ready='+L.ready+' ｜点这里看完整日志';
+      bar.textContent='DIAG .35 | 记录 '+log.length+' 条 | 最新 '+L.tag+' | hLen='+L.hLen+' 守卫='+L.st+' view='+L.view+' arch='+L.arch+' reader='+L.reader+' armed='+L.armed+' ready='+L.ready+' ｜点这里看完整日志';
       panel.textContent='（最新记录在最上面）\n\n'+log.slice().reverse().map(function(e){
         return e.t+'  '+e.tag+'\n   hLen='+e.hLen+'  守卫='+e.st+'  view='+e.view+'  arch='+e.arch+' reader='+e.reader+' sheet='+e.sheet+' armed='+e.armed+' ready='+e.ready+'\n   stack='+e.stack+(e.x?('\n   '+e.x):'');
       }).join('\n\n');
@@ -1099,9 +1107,26 @@ function _guardSoon(){
 }
 function _clearGuardSoon(){ try{ _guardTimers.forEach(clearTimeout); }catch(e){} _guardTimers=[]; }
 
+/* 【`.35`】非返回方式关闭浮层时，把它占的那条历史条目「还回去」（静默 back），
+   保证「导航栈 ↔ 历史条目」始终一一对应。
+   ⚠ 否则会两种错位，且在后续每一次返回里累积：
+     ① 只关界面、不还条目 → 用户按返回时「白按一次」（条目留着没人用）；
+     ② 只 splice 导航栈、不还条目 → 用户按返回时「多退一层」（栈被提前 pop）。
+   ⚠ 真机上这正是继"返回后补 pushState 假成功"之后的第二个坑。（`.35` 审计发现） */
+var _silentBack=0;
+function _dropNav(name){ var k=navStack.lastIndexOf(name); if(k>=0)navStack.splice(k,1); }
+function _closeLayerByCode(name, closeFn){
+  var i=navStack.lastIndexOf(name);
+  if(i>=0){ navStack.splice(i,1); _silentBack++; try{ history.back(); }catch(e){ _silentBack--; } }
+  try{ closeFn(); }catch(e){}
+}
+
 // 进入新层/开卡/进一级页/开抽屉：直接调用 _ensureGuard() 补守卫（见 openReader / openSheet / switchTab）
 // 回首页时调用：重置退桌待命态，并保证守卫在位
-function resetHistoryToHome(){ _exitArmed=false; _exitReady=false; clearTimeout(armT); _ensureGuard(); }
+/* 回首页：重置退桌待命态，并 **push 一条新的 home 条目**（`.34`）。
+   push 会**截断指针之后的多余条目**，所以历史总能收敛回 `[kbHome, gHome]` 两条——
+   这样「在今日按返回：第 1 次提示、第 2 次退出」这个预期才成立。 */
+function resetHistoryToHome(){ _exitArmed=false; _exitReady=false; clearTimeout(armT); try{ history.pushState({kbGuard:true,nav:"home"},""); }catch(e){} }
 
 /* 守卫心跳（`.32` 新增）：兜住"手势期间补守卫被忽略"的真机偶发——
    只要 App 里还有层可退、且不在退桌待命/放行态，就把垫底守卫补回来（幂等：无守卫才 push）。
@@ -1115,6 +1140,8 @@ setInterval(function(){
 
 window.addEventListener("popstate",function(){
   DIAG.snap('popstate 到来');
+  /* `.35`：这是"程序性关闭浮层"顺带触发的静默返回 —— 界面已经关过了，这里不做任何回退。 */
+  if(_silentBack>0){ _silentBack--; _lastPopAt=Date.now(); clearTimeout(_nbWatch); return; }
   /* 刚才兜底回退可能引发的"回响/迟到"返回：界面不再重复退（兜底已退过），
      但 **账必须补平**——这次 popstate 已经消耗了一条历史（back 生效只是迟到），
      不补守卫的话账目会亏空；亏到"指针落在文档最底"时，用户的下一次侧滑
@@ -1152,28 +1179,29 @@ window.addEventListener("popstate",function(){
 
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
 function navBackFromPop(){
-  /* 长按面板（打标签 / 移入待挖掘）开着 → 先收起它（它不算独立一层，不动导航栈）。
-     旧版这里不管它：面板开着按返回会直接去退层/弹"退到桌面"提示，面板反而留在原地。 */
+  var top=navStack[navStack.length-1];
+  /* `.35`：长按面板 / 提问输入条 / 频道下钻 / 梳理下钻 —— 这四类界面现在也各占一条**真实历史条目**，
+     所以按「栈顶匹配」pop 掉自己那一层。
+     （旧版它们不占条目 → 真机上"用返回收起它"会白吃上一层的历史，累积后提前掉出 App。） */
+  if(top==="lp"){ navStack.pop(); var _lp0=document.querySelector(".lp.show"); if(_lp0)closeLp(_lp0); return; }
+  if(top==="askFab"){ navStack.pop(); closeAskFab(); return; }
+  if(top==="chanDrill"){
+    navStack.pop(); chanDrill=false;
+    document.getElementById("chanPortal").style.display="";
+    document.getElementById("chanList").style.display="none";
+    hdrSub.textContent=TAB_META.channels[1]; setBk(false); cancelScrollFix(); window.scrollTo(0,0); return;
+  }
+  if(top==="shuliDrill"){ navStack.pop(); shuliDrill=null; renderShuli(); cancelScrollFix(); window.scrollTo(0,0); return; }
+  /* 兜底：栈里没登记、但面板 / 输入条还开着（异常态）→ 至少收掉它，别把人挡着 */
   var _lp0=document.querySelector(".lp.show");
   if(_lp0){ closeLp(_lp0); return; }
-  /* 提问输入条展开着 → 先收起它（它不算一层界面，不动历史栈） */
   if(askFab&&askFab.classList.contains("on")){ closeAskFab(); return; }
-  var top=navStack[navStack.length-1];
   if(top==="jpRead"){ navStack.pop(); closeJpRead(); return; }
   if(top==="cdlg"){ navStack.pop(); closeCrushDlg(); return; }
   if(top==="arch"){ navStack.pop(); closeArch(); return; }
   if(top==="reader"){ navStack.pop(); closeReader(); return; }
   if(top==="sheet"){ navStack.pop(); closeSheet(); return; }
   if(top==="srSheet"){ navStack.pop(); closeSrSheet(); return; }
-  if(curView==="channels"&&chanDrill){
-    chanDrill=false;
-    document.getElementById("chanPortal").style.display="";
-    document.getElementById("chanList").style.display="none";
-    hdrSub.textContent=TAB_META.channels[1]; setBk(false); cancelScrollFix(); window.scrollTo(0,0); return;
-  }
-  if(curView==="tree"&&treeMode==="shuli"&&shuliDrill){
-    shuliDrill=null; renderShuli(); cancelScrollFix(); window.scrollTo(0,0); return;
-  }
   if(navStack.length<=1){ return; }
   navStack.pop();
   var t=navStack[navStack.length-1];
@@ -1309,6 +1337,7 @@ function renderChanList(ch){
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
   hdrSub.textContent=m.n+" · 今日与历史";chanDrill=true;curChan=ch;setBk(true);window.scrollTo(0,0);
+  pushNav("chanDrill"); _ensureGuard();   /* `.35`：频道下钻也占一条真实历史条目 */
 }
 document.getElementById("chanPortal").addEventListener("click",function(e){
   var el=e.target.closest("[data-chan]");if(el)renderChanList(el.getAttribute("data-chan"));
@@ -1692,7 +1721,7 @@ document.getElementById("treeMap").addEventListener("click",function(e){
   var gr=e.target.closest("[data-shread]");
   if(gr){ openSrSheet(gr.getAttribute("data-shread")); return; }
   var tr=e.target.closest("[data-shtopic]");
-  if(tr){ shuliDrill=tr.getAttribute("data-shtopic"); window.scrollTo(0,0); renderShuli(); return; }
+  if(tr){ shuliDrill=tr.getAttribute("data-shtopic"); pushNav("shuliDrill"); _ensureGuard(); window.scrollTo(0,0); renderShuli(); return; }
 });
 document.getElementById("segList").addEventListener("click",function(){
   treeMode="list";this.classList.add("on");document.getElementById("segMap").classList.remove("on");
@@ -2637,6 +2666,7 @@ function openReader(data,srcRect){
   pushNav("reader");
   _ensureGuard();
   /* 提问悬浮球复位：每次打开卡片都从「收起」开始，并清掉上一次的答案 */
+  _dropNav("askFab");   /* `.35`：上面 pushNav("reader") 已 push 并截断历史，这里同步摘掉输入条的栈项 */
   closeAskFab();
   var _ans0=document.getElementById("qaAns");
   if(_ans0){_ans0.className="qaans";_ans0.style.display="none";_ans0.textContent="";}
@@ -2736,6 +2766,7 @@ function closeReader(){
 var askFab=document.getElementById("askFab");
 function openAskFab(){
   if(!askFab)return;
+  pushNav("askFab"); _ensureGuard();   /* `.35`：输入条同样占一条真实历史条目 */
   askFab.classList.add("on");
   /* 之前问过、答案还在 → 展开时带回来 */
   var a=document.getElementById("qaAns");
@@ -2752,12 +2783,13 @@ function closeAskFab(){
 (function(){
   var ball=document.getElementById("fabBall"),down=document.getElementById("fabDown");
   if(ball)ball.addEventListener("click",function(e){e.stopPropagation();openAskFab();});
-  if(down)down.addEventListener("click",function(e){e.stopPropagation();closeAskFab();});
-  /* 点摘要页其它地方 → 自动收起（球 / 输入条内部不收起） */
+  if(down)down.addEventListener("click",function(e){e.stopPropagation();_closeLayerByCode("askFab",closeAskFab);});
+  /* 点摘要页其它地方 → 自动收起（球 / 输入条内部不收起）。
+     `.35`：走 _closeLayerByCode —— 把它占的那条历史条目一起还回去，免得留下"按返回白按一次"。 */
   document.addEventListener("click",function(e){
     if(!askFab||!askFab.classList.contains("on"))return;
     if(askFab.contains(e.target))return;
-    closeAskFab();
+    _closeLayerByCode("askFab",closeAskFab);
   });
 })();
 /* ===== 日语跟读（手机自带朗读，零成本、无需密钥）：把含日文的句子逐句列出来 ===== */
@@ -2933,7 +2965,7 @@ document.getElementById("wrap").addEventListener("click",function(e){
   if(Date.now()-lastSwipeAt<450)return;
   /* 长按面板开着时：点面板外的任何地方 → 只收起面板，不触发其它动作（防误触） */
   var _olp=document.querySelector(".lp.show");
-  if(_olp&&!e.target.closest(".lp")){ closeLp(_olp); return; }
+  if(_olp&&!e.target.closest(".lp")){ _closeLayerByCode("lp",function(){closeLp(_olp);}); return; }
   // 标星切换（点卡片右下角星标）
   var star=e.target.closest(".star");
   if(star){var sc=star.closest(".card[data-id]");if(sc){var sid=sc.getAttribute("data-id");var c=getCard(sid);var on=!c.star;setStar(sid,on);star.classList.toggle("on",on);toast(on?"已标星":"已取消标星");}return;}
@@ -2996,11 +3028,11 @@ function onSwMove(e){
       if(dx>0&&Math.abs(dx)>Math.abs(dy)*1.15){
         swOn=true;swLeft=false;                                   /* 判定为「向右拖」→ 粉碎模式 */
         if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
-        var lpx=swEl.querySelector(".lp.show"); if(lpx)closeLp(lpx);
+        var lpx=swEl.querySelector(".lp.show"); if(lpx){_dropNav("lp");closeLp(lpx);}
       }else if(dx<0&&Math.abs(dx)>Math.abs(dy)*1.15&&flipOK(swEl)){
         swOn=true;swLeft=true;                                    /* 判定为「向左拖」→ 翻卡模式（翻过即已读） */
         if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}
-        var lpy=swEl.querySelector(".lp.show"); if(lpy)closeLp(lpy);
+        var lpy=swEl.querySelector(".lp.show"); if(lpy){_dropNav("lp");closeLp(lpy);}
       }else{
         if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}           /* 竖向：放弃手势，保持原行为 */
         swArmed=false;swEl=null;return;
@@ -3310,6 +3342,7 @@ function afterCrush(crushedId){
 }
 
 function showLp(lp,t){
+  pushNav("lp"); _ensureGuard();     /* `.35`：长按面板也占一条真实历史条目（真机上"用返回收起它"才不吃掉上层） */
   var rect=lp.getBoundingClientRect();
   var ox=(t.clientX-rect.left),oy=(t.clientY-rect.top);
   lp.style.setProperty("--ox",ox+"px");lp.style.setProperty("--oy",oy+"px");
@@ -3323,7 +3356,7 @@ function showLp(lp,t){
   buildTagPicker(lp);
 }
 function handleLp(act,id,lp){
-  if(act==="dig"){addDig(id);toast("已移入待挖掘");closeLp(lp);}
+  if(act==="dig"){addDig(id);toast("已移入待挖掘");_closeLayerByCode("lp",function(){closeLp(lp);});}
   else if(act==="tag"){var tp=lp.querySelector(".tagpick");tp.classList.toggle("on");}
 }
 function closeLp(lp){if(lp){lp.classList.remove("show","go");setTimeout(function(){var r=lp.querySelector(".ripple");if(r)r.remove();},420);}}
@@ -3449,7 +3482,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.33';
+var _APP_VER_ = '2026-10-11.35';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
