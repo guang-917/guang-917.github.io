@@ -988,7 +988,7 @@ var navStack=["home"], armT=null; var DISARM=2000;
    补账很关键：若这次 back 其实"迟到生效"，它会消耗一条历史——不补账就会累积亏空，
    亏到指针落在文档最底时，用户的下一次侧滑会直接离开 App（真机=退到桌面）。（`.31` 修） */
 var _nbWatch=null,_lastPopAt=0,_nbFallbackAt=0;
-function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
+function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); _exitReady=false; }
 /* navBack：界面上的「返回」按钮 / 关闭按钮 都走这里。
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
@@ -1003,9 +1003,9 @@ function navBack(){
        不能用"层栈长度变没变"——有的返回只收起浮层（长按面板 / 输入条），
        本就不改变层栈长度；旧判据（长度不变+距上次 popstate>200ms）会把它们
        误判成"back 没生效"，260ms 后再多退一层。（`.31` 修） */
-    if(_lastPopAt<_t0){ _nbFallbackAt=Date.now(); navBackFromPop(); _ensureGuard(); }
+    if(_lastPopAt<_t0){ _nbFallbackAt=Date.now(); navBackFromPop(); _guardSoon(); }
   },260);
-  try{ history.back(); }catch(e){ clearTimeout(_nbWatch); _nbFallbackAt=Date.now(); navBackFromPop(); _ensureGuard(); }
+  try{ history.back(); }catch(e){ clearTimeout(_nbWatch); _nbFallbackAt=Date.now(); navBackFromPop(); _guardSoon(); }
 }
 
 /* ====================== 系统返回手势接管（history 守卫模型）======================
@@ -1033,16 +1033,45 @@ try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }cat
 
 function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) history.pushState({kbGuard:true},""); }catch(e){} }
 
+/* _guardSoon：补守卫的"稳"版（`.32` 修）。
+   ⚠ 真机（Android 系统返回手势）实测机理：**返回手势进行中调 history.pushState 会被浏览器忽略**
+   （返回导航尚未提交），此时在 popstate 里补守卫＝补了个寂寞 → 垫底守卫丢失 →
+   下一次返回已无历史可退 → 直接离开 App（真机=退回桌面，界面还来不及关就没了）。
+   桌面 history.back() 是纯 JS 调用、没有这个"手势窗口"，所以桌面自检永远测不出来。
+   对策：立即补一次，再在 rAF / 60 / 200 / 400 / 700ms 各补一次（幂等）——
+   覆盖"手势提交完成"之后的时间窗，总有一次落在有效时机。
+   _exitReady（已放行退桌）时停手，免得把用户该走的那次返回又拦住。 */
+var _exitReady=false, _guardTimers=[];
+function _guardSoon(){
+  if(_exitReady) return;
+  _ensureGuard();
+  try{ requestAnimationFrame(function(){ if(!_exitReady) _ensureGuard(); }); }catch(e){}
+  [60,200,400,700].forEach(function(ms){
+    _guardTimers.push(setTimeout(function(){ if(!_exitReady) _ensureGuard(); }, ms));
+  });
+}
+function _clearGuardSoon(){ try{ _guardTimers.forEach(clearTimeout); }catch(e){} _guardTimers=[]; }
+
 // 进入新层/开卡/进一级页/开抽屉：直接调用 _ensureGuard() 补守卫（见 openReader / openSheet / switchTab）
 // 回首页时调用：重置退桌待命态，并保证守卫在位
-function resetHistoryToHome(){ _exitArmed=false; clearTimeout(armT); _ensureGuard(); }
+function resetHistoryToHome(){ _exitArmed=false; _exitReady=false; clearTimeout(armT); _ensureGuard(); }
+
+/* 守卫心跳（`.32` 新增）：兜住"手势期间补守卫被忽略"的真机偶发——
+   只要 App 里还有层可退、且不在退桌待命/放行态，就把垫底守卫补回来（幂等：无守卫才 push）。
+   与"多拍补守卫"是双保险：多拍管"这次返回后几百毫秒内补上"，心跳管"万一还是漏了，半秒内必补"。 */
+setInterval(function(){
+  try{
+    if(_exitArmed || _exitReady) return;
+    if(navStack.length>1 && !(history.state && history.state.kbGuard)) _ensureGuard();
+  }catch(e){}
+},400);
 
 window.addEventListener("popstate",function(){
   /* 刚才兜底回退可能引发的"回响/迟到"返回：界面不再重复退（兜底已退过），
      但 **账必须补平**——这次 popstate 已经消耗了一条历史（back 生效只是迟到），
      不补守卫的话账目会亏空；亏到"指针落在文档最底"时，用户的下一次侧滑
      就会直接离开 App（真机=退到桌面）。（`.31` 修） */
-  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); _ensureGuard(); return; }
+  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); _guardSoon(); return; }
   _lastPopAt=Date.now(); clearTimeout(_nbWatch);   /* 系统返回真来了 → 撤掉兜底，避免重复回退 */
   // 一次用户返回（系统侧滑/返回键）
   var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show")
@@ -1054,7 +1083,7 @@ window.addEventListener("popstate",function(){
               || (srSheet&&srSheet.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
-    _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
+    _guardSoon();         // 补回守卫（多拍，防真机手势期间 pushState 被忽略），App 不退，还能继续逐级退
     return;
   }
   // 已在首页：退桌流程
@@ -1063,11 +1092,11 @@ window.addEventListener("popstate",function(){
     toast("再侧滑一次，将退到桌面");
     clearTimeout(armT);
     armT=setTimeout(function(){ _exitArmed=false; },DISARM); // 到期仅重置，不补守卫
-    _ensureGuard();       // 拦住：补回守卫，App 不退
+    _guardSoon();         // 拦住：补回守卫，App 不退
     return;
   }
   // 已待命：放行——不再补守卫；用户的下一次返回将退到 App 之外，由系统关闭 App。
-  _exitArmed=false; clearTimeout(armT);
+  _exitArmed=false; _exitReady=true; _clearGuardSoon(); clearTimeout(armT);
 });
 
 // 供 popstate 使用的「只做界面回退、不再动历史」的版本
@@ -3369,7 +3398,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.31';
+var _APP_VER_ = '2026-10-11.32';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
