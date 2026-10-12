@@ -218,19 +218,91 @@ body{
 .node .lab{font-size:14px;flex:1}
 .node.todo .lab{color:var(--ink-3)}
 @keyframes breathe{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--ai) 12%,transparent)}50%{box-shadow:0 0 0 9px color-mix(in srgb,var(--ai) 3%,transparent)}}
-.legend{display:flex;gap:14px;font-size:11.5px;color:var(--ink-3);padding:4px 4px 14px}
-.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
-
-/* 地图 */
-.mapwrap{position:relative;height:62vh;background:var(--card-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
-#mapSvg{width:100%;height:100%;display:block;touch-action:none}
-#mapSvg .edge-mesh{stroke:var(--ink-2);stroke-width:2;fill:none;opacity:.5}
-#mapSvg .edge-mesh.hl{stroke:var(--ai);stroke-width:3;opacity:.95}
-#mapSvg .ncirc.hl{stroke:var(--ai);stroke-width:3.5}
-#mapSvg .ncirc{cursor:pointer;transition:r .2s}
-#mapSvg text{font-size:12px;fill:var(--ink);font-family:inherit;pointer-events:none}
-.mapfocus{position:absolute;left:12px;top:12px;font-size:12px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:80%}
-.mapfocus b{color:var(--ink)}
+/* ============ 梳理视图（从卡片里提炼的「图」· 列表说卡、梳理说图） ============ */
+.sh-stat{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-2);margin:2px 2px 4px;line-height:1.7}
+.sh-stat b{color:var(--ink)}
+.sh-stat .sh-busy{color:var(--data);font-weight:700}
+.sh-stat .sh-redo{margin-left:auto;flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:11px;border-radius:8px;padding:3px 9px;cursor:pointer;font-family:inherit}
+.sh-stat .sh-redo:active{transform:scale(.95)}
+.sh-sec{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;margin:15px 2px 9px}
+.sh-sec .shk{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--data-soft);color:var(--data)}
+.sh-sec .shk.k2{background:var(--gold-soft);color:var(--gold)}
+/* 图卡（流程图 / 思维导图 / 对比表的公共壳） */
+.sh-graph{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:13px 13px 11px;margin-bottom:12px;cursor:pointer;transition:transform .15s var(--spring)}
+.sh-graph:active{transform:scale(.985)}
+.shgt{font-size:14px;font-weight:700;line-height:1.5;margin-bottom:10px}
+.shgt .shgk{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--ink-3);margin-left:6px;vertical-align:2px;white-space:nowrap}
+.sh-tap{font-size:11px;color:var(--ink-3);margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+/* 流程图 */
+.sh-step{display:flex;gap:10px;align-items:flex-start}
+.sh-step .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--data-soft);color:var(--data);font-weight:800;font-size:11.5px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.sh-step .mid{flex:1;min-width:0}
+.sh-step .tt{font-size:13px;font-weight:700;line-height:1.5}
+.sh-step .dd{font-size:11.5px;color:var(--ink-2);line-height:1.55;margin-top:2px}
+.sh-fa{width:2px;height:11px;background:var(--line);margin:3px 0 3px 10px}
+.sh-note{font-size:11px;color:var(--ink-3);margin-top:9px;line-height:1.6}
+/* 思维导图 */
+.sh-mroot{display:inline-block;font-size:12.5px;font-weight:800;color:var(--data);background:var(--data-soft);border:1.5px solid var(--data);border-radius:10px;padding:7px 12px;margin:2px 0 11px}
+.sh-mbr{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.sh-mbr:last-child{margin-bottom:2px}
+.sh-mbr .bl{flex:none;font-size:11.5px;font-weight:700;color:var(--ink);background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;min-width:52px;text-align:center}
+.sh-mbr .chips{display:flex;flex-wrap:wrap;gap:6px;padding-top:3px;min-width:0}
+.sh-chip{font-size:11px;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:3px 9px;line-height:1.4}
+/* 对比表 */
+.sh-cmp{border:1px solid var(--line-2);border-radius:11px;overflow:hidden}
+.sh-cmp .row{display:grid;grid-template-columns:60px 1fr 1fr}
+.sh-cmp .row+.row{border-top:1px solid var(--line-2)}
+.sh-cmp .c{padding:9px 8px;font-size:11.5px;line-height:1.55;color:var(--ink-2);min-width:0;word-break:break-word}
+.sh-cmp .c+.c{border-left:1px solid var(--line-2)}
+.sh-cmp .lb{color:var(--ink-3);font-weight:700;font-size:11px;background:var(--card-2)}
+.sh-cmp .hd .c{font-weight:800;font-size:12px;color:var(--ink)}
+.sh-cmp .hd .c2{color:var(--data)}
+.sh-cmp .hd .c3{color:var(--jp)}
+/* 主题门牌（两行式：说图不说卡） */
+.sh-trow{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-sm);padding:9px 12px 10px;margin-bottom:8px;cursor:pointer;transition:transform .15s var(--spring)}
+.sh-trow:active{transform:scale(.985)}
+.sh-trow .top{display:flex;align-items:center;gap:8px}
+.sh-trow .nm{font-size:13px;font-weight:700;flex:1;min-width:0}
+.sh-trow .cnt{font-size:10.5px;color:var(--ink-3);flex:none}
+.sh-trow .ar{color:var(--ink-3);font-size:12px;flex:none}
+.sh-trow .figs{font-size:11px;color:var(--ink-2);margin-top:3px;line-height:1.55}
+.sh-trow.gap{border-style:dashed;background:var(--card-2);box-shadow:none}
+.sh-trow.gap .nm{color:var(--ink-3);font-weight:600}
+.sh-trow.gap .figs{color:var(--ink-3)}
+/* 面包屑 / 「翻回卡」的桥 */
+.sh-crumb{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-3);margin:2px 2px 12px;flex-wrap:wrap}
+.sh-crumb .bk{color:var(--data);font-weight:700;cursor:pointer;padding:2px 6px;margin:-2px 0 -2px -6px;border-radius:7px}
+.sh-crumb .bk:active{background:var(--data-soft)}
+.sh-crumb b{color:var(--ink);font-size:12.5px;margin-left:2px}
+.sh-bridge{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:14px;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .15s var(--spring)}
+.sh-bridge span{font-size:11px;color:var(--ink-3);flex:none}
+.sh-bridge b{font-size:12.5px;flex:1;min-width:0;font-weight:600}
+.sh-bridge .ar{color:var(--ink-3)}
+.sh-bridge:active{transform:scale(.985)}
+/* 加载 / 空 / 失败 */
+.sh-load{text-align:center;padding:44px 18px;color:var(--ink-2);font-size:12.5px;line-height:2}
+.sh-load .ld{display:flex;gap:5px;justify-content:center;margin-bottom:10px}
+.sh-load .ld i{width:7px;height:7px;border-radius:50%;background:var(--data);opacity:.25;animation:shp 1.2s infinite}
+.sh-load .ld i:nth-child(2){animation-delay:.2s}
+.sh-load .ld i:nth-child(3){animation-delay:.4s}
+@keyframes shp{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.sh-empty{text-align:center;padding:36px 18px;color:var(--ink-3);font-size:12.5px;line-height:1.95}
+.sh-empty button{margin-top:13px;border:1px solid var(--data);color:var(--data);background:var(--card);border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+/* 深读弹层 */
+.sr-mask{position:fixed;inset:0;background:rgba(20,18,14,.32);z-index:57;opacity:0;pointer-events:none;transition:opacity .3s}
+.sr-mask.on{opacity:1;pointer-events:auto}
+.sr{position:fixed;bottom:0;width:100%;max-width:520px;left:50%;transform:translate(-50%,100%);z-index:58;background:var(--card);border-radius:20px 20px 0 0;box-shadow:0 -10px 40px -12px rgba(0,0,0,.4);padding:8px 18px calc(24px + env(safe-area-inset-bottom));max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;transition:transform .42s var(--spring)}
+.sr.on{transform:translate(-50%,0)}
+.sr .grip{width:38px;height:4px;border-radius:4px;background:var(--line);margin:6px auto 14px}
+.sr .sh{font-family:var(--serif);font-size:16px;font-weight:600;margin-bottom:4px;line-height:1.55}
+.sr .shtag{font-size:11.5px;color:var(--data);margin-bottom:12px}
+.sr p{font-size:14px;color:var(--ink-2);line-height:1.85;margin-bottom:10px}
+.sr .from{font-size:11px;color:var(--ink-3);margin:14px 0 8px}
+.sr .backcard{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:var(--card-2);transition:transform .15s var(--spring)}
+.sr .backcard span{font-size:10.5px;color:var(--ink-3);flex:none}
+.sr .backcard b{font-size:12.5px;flex:1;min-width:0;font-weight:600;line-height:1.45}
+.sr .backcard .go{font-size:11px;color:var(--data);font-weight:700}
+.sr .backcard:active{transform:scale(.985)}
 
 /* 知识树频道选择 */
 .chpills{max-width:520px;margin:6px auto 2px;padding:0 16px;display:flex;gap:8px}
@@ -602,20 +674,11 @@ body{
     </div>
     <div class="seg">
       <button id="segList" class="on"><span class="ic"><svg viewBox="0 0 24 24"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg> 列表</button>
-      <button id="segMap"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3.5 4 6v14l5-2.5 6 2.5 5-2.5V3.5L14 6 9 3.5z"/><path d="M9 3.5v14"/><path d="M14 6v14"/></svg> 地图</button>
+      <button id="segMap"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4.2v4.2"/><circle cx="12" cy="10.9" r="2.5"/><path d="M12 13.4v1.6c0 1.7-2.1 2.3-4.8 2.3H7"/><path d="M12 16.4c0 1.7 2.1 2.3 4.8 2.3H17"/><circle cx="4.8" cy="17.6" r="2.2"/><circle cx="19.2" cy="17.6" r="2.2"/></svg> 梳理</button>
     </div>
     <div id="treeList"></div>
     <div id="treeMap" style="display:none">
-      <div class="mapwrap">
-        <svg id="mapSvg" viewBox="0 0 360 520" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="mapfocus" id="mapFocus"></div>
-      </div>
-      <div class="legend">
-        <span><i style="background:var(--data)"></i>已充实(有卡)</span>
-        <span><i style="background:transparent;border:1.5px solid var(--ink-3)"></i>待充实(缺口)</span>
-        <span><i style="background:var(--ai)"></i>延伸连线</span>
-      </div>
-      <p class="sub">点任意主题节点可置中为圆心，查看它的延伸与已学卡片；灰色空心＝该补的知识缺口。</p>
+      <div id="shuliBody"></div>
     </div>
   </section>
 
@@ -708,6 +771,10 @@ body{
 <!-- 底部抽屉 -->
 <div class="sheet-mask" id="sheetMask"></div>
 <div class="sheet" id="sheet"><div class="grip"></div><div id="sheetBody"></div></div>
+
+<!-- 梳理·深读弹层（点图打开：一段讲透的话 + 翻回原卡） -->
+<div class="sr-mask" id="srMask"></div>
+<div class="sr" id="srSheet"><div class="grip" id="srGrip"></div><div id="srBody"></div></div>
 
 <!-- 归档（全屏层；待挖掘 / 问答 共用同一个入口） -->
 <div class="arch" id="arch">
@@ -868,7 +935,7 @@ function switchTab(v){
   // 头部
   var meta=TAB_META[v];
   hdrTitle.textContent=meta[0];hdrSub.textContent=(v==='today'?todaySub():meta[1]);
-  if(v==="tree"){renderTreePills();if(treeMode==="map")renderMap(mapFocus);}
+  if(v==="tree"){renderTreePills();if(treeMode==="shuli")renderShuli();}
   if(v==="channels"){
     chanDrill=false;renderChannels();
     document.getElementById("chanPortal").style.display="";document.getElementById("chanList").style.display="none";
@@ -917,22 +984,28 @@ backBtn.addEventListener("click",navBack);
 var navStack=["home"], armT=null; var DISARM=2000;
 /* 返回兜底：点「返回」时先请浏览器 back()，由 popstate 统一回退。
    但某些浏览器/机型下这一次 back() 可能没推动历史指针（表现为"点一下没反应"），
-   所以加一道保险：若 600ms 内没等到 popstate，就自己回退一层。 */
+   所以加一道保险：若 260ms 内没等到 popstate，就自己回退一层，并**把守卫账补平**。
+   补账很关键：若这次 back 其实"迟到生效"，它会消耗一条历史——不补账就会累积亏空，
+   亏到指针落在文档最底时，用户的下一次侧滑会直接离开 App（真机=退到桌面）。（`.31` 修） */
 var _nbWatch=null,_lastPopAt=0,_nbFallbackAt=0;
 function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return; navStack.push(e); }
 /* navBack：界面上的「返回」按钮 / 关闭按钮 都走这里。
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
+  var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || (curView==="tree"&&treeMode==="shuli"&&shuliDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on")) || (srSheet&&srSheet.classList.contains("on"));
   if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
-  var lenBefore=navStack.length;
+  var _t0=Date.now();          /* 本次 back 发起的时刻：兜底判据的基准线 */
   clearTimeout(_nbWatch);
   _nbWatch=setTimeout(function(){
-    /* 兜底：260ms 内 popstate 没来（back 未生效）且层栈没变，就自己回退一层 */
-    if(navStack.length===lenBefore && Date.now()-_lastPopAt>200){ _nbFallbackAt=Date.now(); navBackFromPop(); }
+    /* 兜底：260ms 内**完全没有 popstate 到来**，才自己回退一层，并补平守卫账。
+       ⚠ 判据只能看"popstate 是否在本次 back 之后来过"（_lastPopAt≥_t0），
+       不能用"层栈长度变没变"——有的返回只收起浮层（长按面板 / 输入条），
+       本就不改变层栈长度；旧判据（长度不变+距上次 popstate>200ms）会把它们
+       误判成"back 没生效"，260ms 后再多退一层。（`.31` 修） */
+    if(_lastPopAt<_t0){ _nbFallbackAt=Date.now(); navBackFromPop(); _ensureGuard(); }
   },260);
-  try{ history.back(); }catch(e){ clearTimeout(_nbWatch); _nbFallbackAt=Date.now(); navBackFromPop(); }
+  try{ history.back(); }catch(e){ clearTimeout(_nbWatch); _nbFallbackAt=Date.now(); navBackFromPop(); _ensureGuard(); }
 }
 
 /* ====================== 系统返回手势接管（history 守卫模型）======================
@@ -965,15 +1038,20 @@ function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) histor
 function resetHistoryToHome(){ _exitArmed=false; clearTimeout(armT); _ensureGuard(); }
 
 window.addEventListener("popstate",function(){
-  /* 刚才兜底回退可能引发的"回响"返回：忽略掉，否则会一次退两层 */
-  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); return; }
+  /* 刚才兜底回退可能引发的"回响/迟到"返回：界面不再重复退（兜底已退过），
+     但 **账必须补平**——这次 popstate 已经消耗了一条历史（back 生效只是迟到），
+     不补守卫的话账目会亏空；亏到"指针落在文档最底"时，用户的下一次侧滑
+     就会直接离开 App（真机=退到桌面）。（`.31` 修） */
+  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); _ensureGuard(); return; }
   _lastPopAt=Date.now(); clearTimeout(_nbWatch);   /* 系统返回真来了 → 撤掉兜底，避免重复回退 */
   // 一次用户返回（系统侧滑/返回键）
   var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show")
               || (curView==="channels"&&chanDrill)
+              || (curView==="tree"&&treeMode==="shuli"&&shuliDrill)
               || reader.classList.contains("on") || sheet.classList.contains("on")
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
-              || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"));
+              || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
+              || (srSheet&&srSheet.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _ensureGuard();       // 补回守卫，App 不退，还能继续逐级退
@@ -1006,11 +1084,15 @@ function navBackFromPop(){
   if(top==="arch"){ navStack.pop(); closeArch(); return; }
   if(top==="reader"){ navStack.pop(); closeReader(); return; }
   if(top==="sheet"){ navStack.pop(); closeSheet(); return; }
+  if(top==="srSheet"){ navStack.pop(); closeSrSheet(); return; }
   if(curView==="channels"&&chanDrill){
     chanDrill=false;
     document.getElementById("chanPortal").style.display="";
     document.getElementById("chanList").style.display="none";
     hdrSub.textContent=TAB_META.channels[1]; setBk(false); cancelScrollFix(); window.scrollTo(0,0); return;
+  }
+  if(curView==="tree"&&treeMode==="shuli"&&shuliDrill){
+    shuliDrill=null; renderShuli(); cancelScrollFix(); window.scrollTo(0,0); return;
   }
   if(navStack.length<=1){ return; }
   navStack.pop();
@@ -1018,6 +1100,7 @@ function navBackFromPop(){
   if(archEl&&archEl.classList.contains("on"))closeArch();
   if(reader.classList.contains("on"))closeReader();
   if(sheet.classList.contains("on"))closeSheet();
+  if(srSheet&&srSheet.classList.contains("on"))closeSrSheet();
   if(jpRead&&jpRead.classList.contains("on"))closeJpRead();
   if(t==="home"){ switchTab("today"); return; }
   /* 一级页不互相叠栈：万一栈里还留着历史遗留的 tab 层，也一律回「今日」，
@@ -1180,7 +1263,10 @@ function doSearch(q){
 }
 
 /* ====================== 渲染：知识树 ====================== */
-var treeMode="list",mapFocus=null,treeCh="data";
+var treeMode="list",treeCh="data";
+/* 梳理视图状态：shuliDrill=null 频道大盘 / 否则主题 id（细盘）；
+   _shuliBusy 频道级挡板（同一频道只跑一批提炼）；_shuliFail 本会话失败的频道；_shuliGraphs 渲染时的图索引 */
+var shuliDrill=null,_shuliBusy={},_shuliFail={},_shuliProg={},_shuliGraphs={};
 function initTreeCh(){
   var order=["data","ai","jp"];
   for(var i=0;i<order.length;i++){if(CARDS.some(function(c){return normCh(c.ch)===order[i];})){treeCh=order[i];return;}}
@@ -1229,53 +1315,318 @@ function toggleTopic(id){
 }
 
 /* 地图（主题网状，聚焦模式） */
-function renderMap(focus){
-  if(focus)mapFocus=focus;
-  var data=buildChannelTree(treeCh);
-  if(!mapFocus||!topicById(data,mapFocus))mapFocus=data.topics.length?data.topics[0].id:null;
-  var svg=document.getElementById("mapSvg");
-  if(!data.topics.length){svg.innerHTML="";document.getElementById("mapFocus").innerHTML="该频道暂无主题，点右上「编辑」添加。";return;}
-  var W=360,H=520,cx=W/2,cy=H/2;
-  var col={data:"var(--data)",ai:"var(--ai)",jp:"var(--jp)"};
-  var pos={};
-  function layout(centerId,others){
-    if(centerId)pos[centerId]={x:cx,y:cy};
-    var m=others.length,rad=185;
-    for(var i=0;i<m;i++){var ang=-Math.PI/2+2*Math.PI*i/m;
-      var x=cx+rad*Math.cos(ang),y=cy+rad*Math.sin(ang);
-      x=Math.max(50,Math.min(W-50,x));y=Math.max(60,Math.min(H-50,y));
-      pos[others[i]]={x:x,y:y};}
-  }
-  if(mapFocus){layout(mapFocus,data.topics.filter(function(t){return t.id!==mapFocus;}).map(function(t){return t.id;}));}
-  else layout(null,data.topics.map(function(t){return t.id;}));
-  var s='';
-  (data.edges||[]).forEach(function(e){if(pos[e.a]&&pos[e.b]){
-    var hl=mapFocus&&(e.a===mapFocus||e.b===mapFocus);
-    s+='<line class="edge-mesh'+(hl?' hl':'')+'" x1="'+pos[e.a].x.toFixed(1)+'" y1="'+pos[e.a].y.toFixed(1)+'" x2="'+pos[e.b].x.toFixed(1)+'" y2="'+pos[e.b].y.toFixed(1)+'"/>';}});
-  data.topics.forEach(function(t){var p=pos[t.id];if(!p)return;var r=(t.id===mapFocus)?20:15;
-    var fill=t.hasCards?col[treeCh]:"transparent";
-    s+='<circle class="ncirc'+(mapFocus===t.id?' hl':'')+'" data-ncirc="'+esc(t.id)+'" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+r+'" fill="'+fill+'" stroke="'+col[treeCh]+'" stroke-width="2.5"/>';
-    s+='<text x="'+p.x.toFixed(1)+'" y="'+(p.y+r+14).toFixed(1)+'" text-anchor="middle">'+esc(t.name)+'</text>';
-  });
-  svg.innerHTML=s;
-  var f=topicById(data,mapFocus);
-  if(f){
-    var mesh=(data.edges||[]).filter(function(e){return e.a===f.id||e.b===f.id;}).map(function(e){var oid=e.a===f.id?e.b:e.a;return topicById(data,oid);}).filter(Boolean).map(function(o){return o.name;});
-    document.getElementById("mapFocus").innerHTML='<b>'+esc(f.name)+'</b>'+(f.hasCards?(' · 已学 '+f.cards.length+' 张'):' · 待充实')+(mesh.length?'<br>延伸：'+mesh.join('、'):'');
-  }
-  svg.querySelectorAll("[data-ncirc]").forEach(function(circ){circ.addEventListener("click",function(){renderMap(circ.getAttribute("data-ncirc"));});});
+/* ====================== 梳理视图（从卡片里提炼「图」） ======================
+   定位：知识树里「列表说卡、梳理说图」。列表按主题列卡片；梳理把卡片里的知识
+   提炼成「一眼能扫懂」的图（先后→流程图、包含→思维导图、对比→表格），
+   只回答一件事：学过的这块知识，整体长成什么样、彼此什么关系。
+   生成：进视图时自动触发；有缓存直接用，来了新卡只重跑受影响的主题（增量），
+   逐主题串行调 AI，每完成一步就落一次盘（中途关页面不白干、下次续跑）。 */
+var LS_SHULI="kb_shuli";
+var SHULI_GEN_VER=1;                 /* 生成规则版本：改提示词↔+1，旧缓存自动失效 */
+var SHULI_SYS="你是知识图提炼助手。你只输出 JSON，不输出任何解释、开场白或 markdown 围栏。";
+
+function loadShuliMap(){ try{ return JSON.parse(localStorage.getItem(LS_SHULI)||"{}")||{}; }catch(e){ return {}; } }
+function saveShuliMap(m){ try{ localStorage.setItem(LS_SHULI,JSON.stringify(m)); }catch(e){} }
+function shuliCardsOf(ch){ return CARDS.filter(function(c){ return normCh(c.ch)===ch && !c.isDetail; }); }
+function shuliSigOf(ch){ return shuliCardsOf(ch).map(function(c){return c.id;}).sort().join(","); }
+function shuliTopicSig(cards){ return cards.map(function(c){return c.id;}).sort().join(","); }
+function shuliKindName(t){ return t==="table"?"对比表":(t==="mind"?"导图":"流程图"); }
+function shuliFigName(g){ return "「"+esc(g.title)+"」"+shuliKindName(g.type); }
+/* 渲染用：全部主题（含没卡的空主题、含未分类）；生成用：只挑有卡的主题 */
+function shuliTopicAll(ch){
+  var d=buildChannelTree(ch),arr=[];
+  d.topics.forEach(function(t){ arr.push({id:t.id,name:t.name,cards:t.cards||[]}); });
+  if(d.unmatched.length) arr.push({id:"__unmatched__",name:"未分类",cards:d.unmatched});
+  return arr;
 }
+function shuliTopicGen(ch){ return shuliTopicAll(ch).filter(function(t){return t.cards.length;}); }
+
+/* ---- 提示词（真调 AI 探针验证过的版本） ---- */
+function shuliCardLine(c,i){
+  return (i+1)+".《"+String(c.title||"").slice(0,60)+"》\n"
+       +"  摘要："+String(c.sum||c.note||"").slice(0,90)+"\n"
+       +"  标签："+(Array.isArray(c.tags)?c.tags.slice(0,6).join("、"):"");
+}
+function shuliMainPrompt(cards){
+  return "下面是用户一个知识频道里学过的全部卡片。判断这些卡片之间有没有一条「贯穿多个主题的先后主线」（一件事要走完的几道工序 / 步骤）。\n\n"
+    +"【卡片清单】\n"+cards.map(shuliCardLine).join("\n")+"\n\n"
+    +"【输出】只输出下面这个 JSON（不要 markdown 围栏、不要任何解释）：\n"
+    +'{"flow":{"title":"10~20字","d":"把这条主线讲透的一段话，60~100字","steps":[{"t":"步骤名(6字内)","d":"一句话(25字内)"}],"from":[1,3]}}\n'
+    +'如果这些卡片之间没有明显的主线，就输出：\n{"flow":null}\n\n'
+    +"【硬性要求】① steps 3~5 步，顺序必须真的从前到后；② 只根据卡片真实内容；③ 没有主线就 null，不要硬凑；④ 只输出 JSON。";
+}
+function shuliTopicPrompt(cards,topicName){
+  return "下面是一个知识频道里「"+topicName+"」主题下用户学过的卡片。请判断这些卡片之间是什么关系，提炼成 1~2 张「一眼能扫懂」的图——能 2 张就 2 张。\n\n"
+    +"【可选图型】\n"
+    +"- flow：卡片之间存在先后 / 步骤关系（先做 A 才能做 B）\n"
+    +"- mind：一个东西包含哪些子项（\"都有什么\"）\n"
+    +"- table：两张卡在讲容易混淆的一对概念（A vs B）\n\n"
+    +"【卡片清单】\n"+cards.map(shuliCardLine).join("\n")+"\n\n"
+    +"【输出】只输出下面这个 JSON（不要 markdown 围栏、不要任何解释文字）：\n"
+    +'{"graphs":[{"type":"mind","title":"8~16字","d":"把这张图讲透的一段话，60~120字","root":"中心词","branches":[{"name":"分支名","items":["子项1","子项2"]}],"from":[1,2]},{"type":"table","title":"8~16字","d":"把这张图讲透的一段话，60~120字","cols":["左列名","右列名"],"rows":[{"label":"行标签","cells":["左格","右格"]}],"from":[1,3]}]}\n\n'
+    +"三种图型各自用这些字段（按 type 选其一）：\n"
+    +"- table：cols(2个) + rows(2~4行，每行 label + cells两个)\n"
+    +"- mind：root(中心词) + branches(2~4个，每个 {name, items:[2~4个短词]})\n"
+    +"- flow：steps(3~5个，每个 {t:短名, d:一句话}) + note(可选，一句提醒)\n\n"
+    +"【提炼要领】\n"
+    +"① 如果卡片里有「串讲 / 知识地图 / 小测验 / 复习」类的总览卡，优先以它的框架为骨架——这类卡就是为\"串联\"准备的；\n"
+    +"② 做对比表时，优先挑一对\"同宗同源又明显区别\"的易混概念，行标签用具体维度（如：一句话 / 常见做法 / 怎么配合），不要做\"概念/定义\"这种清单表；\n"
+    +"③ 做思维导图时，分支要归纳成 2~4 个\"类别\"，不要把每张卡名平铺成分支。\n\n"
+    +"【硬性要求】\n"
+    +"① 只根据卡片真实内容提炼，不编造；不要画「学习过程 / 学习阶段」这类流程图（那是学习安排，不是知识关系）；\n"
+    +"② title、d、from 三个字段每张图都必须有，d 写 60~120 字；\n"
+    +"③ 一个主题 1~2 张图；关系不够就 1 张；实在没有就输出 {\"graphs\":[]}；\n"
+    +"④ from 填卡片清单序号；⑤ 只输出 JSON，不能有任何别的文字。";
+}
+/* ---- 解析 + 规范化（AI 输出不完全可靠，逐字段校验兜底） ---- */
+function parseShuliJSON(t){
+  t=String(t||"").trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/,"");
+  var a=t.indexOf("{"),b=t.lastIndexOf("}");
+  if(a<0||b<0) return null;
+  try{ return JSON.parse(t.slice(a,b+1)); }catch(e){ return null; }
+}
+function shuliFromCards(from,cards){
+  var ids=[];
+  (Array.isArray(from)?from:[]).forEach(function(n){ var i=parseInt(n,10)-1; if(cards[i]&&ids.indexOf(cards[i].id)<0) ids.push(cards[i].id); });
+  return ids.length?ids:cards.map(function(c){return c.id;});
+}
+function shuliNormFlow(f,cards){
+  if(!f||!Array.isArray(f.steps)) return null;
+  var steps=f.steps.filter(function(x){return x&&x.t;}).slice(0,6).map(function(x){return {t:String(x.t).slice(0,12),d:String(x.d||"").slice(0,42)};});
+  if(steps.length<3) return null;
+  return {type:"flow",title:String(f.title||"这个频道的主线").slice(0,30),d:String(f.d||"").slice(0,200),steps:steps,note:f.note?String(f.note).slice(0,60):"",cards:shuliFromCards(f.from,cards)};
+}
+function shuliNormGraphs(gs,cards){
+  var out=[];
+  (Array.isArray(gs)?gs:[]).forEach(function(g){
+    if(!g||!g.type) return;
+    var gg={type:g.type,title:String(g.title||"").slice(0,24),d:String(g.d||"").slice(0,220)};
+    if(g.type==="table"){
+      if(!Array.isArray(g.cols)||g.cols.length<2||!Array.isArray(g.rows)||!g.rows.length) return;
+      gg.cols=g.cols.slice(0,2).map(function(x){return String(x).slice(0,10);});
+      gg.rows=g.rows.slice(0,5).map(function(r){return {label:String((r&&r.label)||"").slice(0,8),cells:((r&&Array.isArray(r.cells))?r.cells:[]).slice(0,2).map(function(c){return String(c).slice(0,60);})};}).filter(function(r){return r.cells.length===2;});
+      if(!gg.rows.length) return;
+    }else if(g.type==="mind"){
+      if(!g.root) return;
+      gg.root=String(g.root).slice(0,12);
+      gg.branches=(Array.isArray(g.branches)?g.branches:[]).slice(0,5).map(function(b){return {name:String((b&&b.name)||"").slice(0,10),items:((b&&Array.isArray(b.items))?b.items:[]).slice(0,6).map(function(x){return String(x).slice(0,12);})};}).filter(function(b){return b.name;});
+      if(!gg.branches.length) return;
+    }else if(g.type==="flow"){
+      gg.steps=(Array.isArray(g.steps)?g.steps:[]).slice(0,6).map(function(x){return {t:String((x&&x.t)||"").slice(0,14),d:String((x&&x.d)||"").slice(0,42)};}).filter(function(x){return x.t;});
+      if(gg.steps.length<2) return;
+      gg.note=g.note?String(g.note).slice(0,60):"";
+    }else return;
+    if(!gg.title) gg.title=(g.type==="table"?"概念对比":(g.type==="mind"?"知识结构":"先后关系"));
+    gg.cards=shuliFromCards(g.from,cards);
+    out.push(gg);
+  });
+  return out.slice(0,2);
+}
+/* ---- 生成：主线一次 + 逐主题（增量：只重跑签名变了的主题） ---- */
+function shuliGen(ch,force){
+  if(_shuliBusy[ch]) return;
+  if(_shuliFail[ch]&&!force) return;
+  var cards=shuliCardsOf(ch);
+  if(!cards.length) return;
+  var map=loadShuliMap(),cur=map[ch],sig=shuliSigOf(ch);
+  if(!force&&cur&&cur.ver===SHULI_GEN_VER&&cur.sig===sig&&cur.done) return;
+  if(!cur||cur.ver!==SHULI_GEN_VER){ cur={ver:SHULI_GEN_VER,sig:sig,t:Date.now(),mainSig:null,mainline:null,topics:{}}; }
+  cur.sig=sig; delete cur.fail;
+  if(force){ cur.mainSig=null; cur.mainline=null; cur.topics={}; cur.done=false; }
+  delete _shuliFail[ch];
+  _shuliBusy[ch]=true;
+  var topics=shuliTopicGen(ch),topicI=0,tryN=0,errN=0;
+  function persist(){ var m=loadShuliMap(); m[ch]=cur; saveShuliMap(m); }
+  function finish(){
+    delete _shuliBusy[ch]; delete _shuliProg[ch];
+    if(tryN>0&&errN>=tryN){ cur.fail=true; cur.done=false; _shuliFail[ch]=true; }
+    persist(); renderShuli();
+  }
+  function stage(){
+    if(cur.mainSig!==sig){
+      cur.mainSig=sig; _shuliProg[ch]="正在通读全部卡片…"; persist(); renderShuli();
+      tryN++;
+      callAI(shuliMainPrompt(cards),SHULI_SYS,true).then(function(txt){
+        var j=parseShuliJSON(txt);
+        cur.mainline=(j&&j.flow)?shuliNormFlow(j.flow,cards):null;
+      }).catch(function(){ errN++; cur.mainSig=null; }).then(function(){ persist(); stage(); });
+      return;
+    }
+    if(topicI>=topics.length){ cur.done=true; persist(); finish(); return; }
+    var t=topics[topicI++];
+    var sub=shuliTopicSig(t.cards),td=cur.topics[t.id];
+    if(td&&td.sig===sub){ stage(); return; }
+    _shuliProg[ch]="正在提炼「"+t.name+"」…（"+topicI+"/"+topics.length+"）"; renderShuli();
+    tryN++;
+    callAI(shuliTopicPrompt(t.cards,t.name),SHULI_SYS,true).then(function(txt){
+      var j=parseShuliJSON(txt);
+      cur.topics[t.id]={sig:sub,graphs:(j&&j.graphs)?shuliNormGraphs(j.graphs,t.cards):[]};
+    }).catch(function(){ errN++; }).then(function(){ persist(); stage(); });
+  }
+  persist();
+  stage();
+}
+function shuliRedo(){
+  var ch=treeCh;
+  if(_shuliBusy[ch]) return;
+  shuliGen(ch,true);
+}
+/* ---- 渲染：大盘（主线+各主题的图）/ 细盘（某主题的图）---- */
+function shuliGraphHTML(gid,g){
+  _shuliGraphs[gid]=g;
+  var h='<div class="sh-graph" data-shread="'+esc(gid)+'">';
+  /* 类型角标：标题里已经带了"流程/导图/对比"，就不再重复标一次 */
+  var badge=shuliKindName(g.type);
+  if(g.type==="flow"&&/流程/.test(g.title)) badge="";
+  if(g.type==="mind"&&/导图/.test(g.title)) badge="";
+  if(g.type==="table"&&/对比表|对照/.test(g.title)) badge="";
+  h+='<div class="shgt">'+esc(g.title)+(badge?'<span class="shgk">'+badge+'</span>':'')+'</div>';
+  if(g.type==="flow"){
+    (g.steps||[]).forEach(function(s,i){
+      if(i) h+='<div class="sh-fa"></div>';
+      h+='<div class="sh-step"><span class="n">'+(i+1)+'</span><span class="mid"><span class="tt">'+esc(s.t)+'</span>'+(s.d?'<div class="dd">'+esc(s.d)+'</div>':'')+'</span></div>';
+    });
+    if(g.note) h+='<div class="sh-note">'+esc(g.note)+'</div>';
+  }else if(g.type==="mind"){
+    h+='<div class="sh-mroot">'+esc(g.root)+'</div>';
+    (g.branches||[]).forEach(function(b){
+      h+='<div class="sh-mbr"><span class="bl">'+esc(b.name)+'</span><span class="chips">'+(b.items||[]).map(function(it){return '<span class="sh-chip">'+esc(it)+'</span>';}).join("")+'</span></div>';
+    });
+  }else{
+    h+='<div class="sh-cmp">';
+    h+='<div class="row hd"><span class="c lb"></span><span class="c c2">'+esc(g.cols[0])+'</span><span class="c c3">'+esc(g.cols[1])+'</span></div>';
+    (g.rows||[]).forEach(function(r){
+      h+='<div class="row"><span class="c lb">'+esc(r.label)+'</span><span class="c">'+esc(r.cells[0])+'</span><span class="c">'+esc(r.cells[1])+'</span></div>';
+    });
+    h+='</div>';
+  }
+  h+='<div class="sh-tap">点这张图 → 读一段讲透的话、翻回原卡 ›</div>';
+  return h+'</div>';
+}
+function renderShuli(){
+  if(curView!=="tree"||treeMode!=="shuli") return;
+  var box=document.getElementById("shuliBody");if(!box) return;
+  var ch=treeCh,cards=shuliCardsOf(ch),map=loadShuliMap(),d=map[ch];
+  var busy=!!_shuliBusy[ch],sig=shuliSigOf(ch);
+  var fresh=!!(d&&d.ver===SHULI_GEN_VER&&d.sig===sig&&d.done);
+  if(cards.length&&!busy&&!fresh&&!_shuliFail[ch]){ shuliGen(ch); busy=!!_shuliBusy[ch]; }
+  if(!cards.length){
+    box.innerHTML='<div class="sh-empty">这个频道还没有可梳理的卡片。<br>去「今日」学几张，这里就会长出图来。</div>';
+    return;
+  }
+  if(!d||d.ver!==SHULI_GEN_VER){
+    if(_shuliFail[ch]&&!busy){
+      box.innerHTML='<div class="sh-empty">这次没提炼出来（可能是网络抖了一下）。<br><button data-shredo="1">重新提炼 ›</button></div>';
+    }else{
+      box.innerHTML='<div class="sh-load"><div class="ld"><i></i><i></i><i></i></div>正在通读你的卡片、提炼成图…<br><span style="font-size:11px;color:var(--ink-3)">'+esc(_shuliProg[ch]||"")+'&nbsp;</span></div>';
+    }
+    return;
+  }
+  _shuliGraphs={};
+  var topics=shuliTopicAll(ch),h=[],gCount=0;
+  topics.forEach(function(t){ var td=d.topics[t.id]; if(td&&td.graphs) gCount+=td.graphs.length; });
+  if(d.mainline) gCount++;
+  if(d.fail&&!busy&&!gCount){
+    box.innerHTML='<div class="sh-empty">这次没提炼出来（可能是网络抖了一下）。<br><button data-shredo="1">重新提炼 ›</button></div>';
+    return;
+  }
+  h.push('<div class="sh-stat">已学 <b>'+cards.length+' 张卡</b> · <b>'+topics.length+' 个主题</b> · 串出 <b>'+gCount+' 张图</b>'
+    +(busy?('　<span class="sh-busy">'+esc(_shuliProg[ch]||"正在并入新卡…")+'</span>'):'<button class="sh-redo" data-shredo="1">↻ 重新提炼</button>')
+    +'</div>');
+  var drill=null;
+  if(shuliDrill){ topics.forEach(function(x){ if(x.id===shuliDrill) drill=x; }); if(!drill) shuliDrill=null; }
+  if(drill){
+    var gs=(d.topics[drill.id]&&d.topics[drill.id].graphs)||[];
+    h.push('<div class="sh-crumb"><span class="bk" data-shback="1">‹ '+esc(chMeta(ch).n)+'</span> · <b>'+esc(drill.name)+'</b>　'+esc(gs.length?gs.length+" 张图":"还没串出图")+'</div>');
+    if(gs.length){ gs.forEach(function(g,i){ h.push(shuliGraphHTML(drill.id+":"+i,g)); }); }
+    else h.push('<div class="sh-empty">这个主题暂时还串不出图。<br>多学几张相关的卡，它就会长出来。</div>');
+    h.push('<div class="sh-bridge" data-shcards="'+esc(drill.id)+'"><span>学过的卡</span><b>'+drill.cards.length+' 张</b><span class="ar">›</span></div>');
+  }else{
+    if(d.mainline){
+      h.push('<div class="sh-sec">一条主线 <span class="shk k2">跨主题 · 流程图</span></div>');
+      h.push(shuliGraphHTML("main",d.mainline));
+    }
+    h.push('<div class="sh-sec">各主题的图</div>');
+    topics.forEach(function(t){
+      var td=d.topics[t.id],hasG=td&&td.graphs&&td.graphs.length;
+      if(hasG){
+        h.push('<div class="sh-trow" data-shtopic="'+esc(t.id)+'">'
+          +'<div class="top"><span class="nm">'+esc(t.name)+'</span><span class="cnt">'+td.graphs.length+' 张图</span><span class="ar">›</span></div>'
+          +'<div class="figs">'+td.graphs.map(shuliFigName).join(" · ")+'</div></div>');
+      }else{
+        var cntTxt,tapTxt,canTap=false;
+        if(!t.cards.length){ cntTxt="待充实"; tapTxt="还没有卡，串不出图"; }
+        else if(td!==undefined){ cntTxt="暂时串不出图"; tapTxt="等这个主题的卡再多几张，图就会长出来"; canTap=true; }
+        else{ cntTxt=(busy?"正在提炼…":"待提炼"); tapTxt=(busy?"马上就好":"点右上角「↻ 重新提炼」"); }
+        h.push('<div class="sh-trow gap"'+(canTap?' data-shtopic="'+esc(t.id)+'"':'')+'>'
+          +'<div class="top"><span class="nm">'+esc(t.name)+'</span><span class="cnt">'+cntTxt+'</span>'+(canTap?'<span class="ar">›</span>':'')+'</div>'
+          +'<div class="figs">'+tapTxt+'</div></div>');
+      }
+    });
+  }
+  box.innerHTML=h.join("");
+}
+/* ---- 细盘里的「学过的卡」桥：跳回列表、展开并定位该主题 ---- */
+function shuliGoCards(tid){
+  treeMode="list";
+  document.getElementById("segList").classList.add("on");
+  document.getElementById("segMap").classList.remove("on");
+  document.getElementById("treeHint").textContent="按主题梳理知识结构";
+  document.getElementById("treeList").style.display="";
+  document.getElementById("treeMap").style.display="none";
+  shuliDrill=null;
+  renderTree();
+  var el=document.getElementById("tp-"+tid);
+  if(el){
+    el.classList.add("open");
+    if(typeof fitTagLines==="function")fitTagLines(el);
+    setTimeout(function(){ try{ el.scrollIntoView({behavior:"smooth",block:"start"}); }catch(e){ try{ el.scrollIntoView(); }catch(e2){} } },60);
+  }else window.scrollTo(0,0);
+}
+/* ---- 深读弹层：点图 → 一段讲透的话 + 翻回原卡 ---- */
+function openSrSheet(gid){
+  var g=_shuliGraphs[gid];if(!g) return;
+  pushNav("srSheet"); _ensureGuard();
+  var h='<div class="sh">'+esc(g.title)+'</div>';
+  h+='<div class="shtag">'+shuliKindName(g.type)+' · 从你学过的卡里提炼</div>';
+  h+=g.d?('<p>'+esc(g.d)+'</p>'):'<p>（这张图暂时没有配讲解，点下面翻回原卡看细节）</p>';
+  var cs=(g.cards||[]).map(getCard).filter(Boolean);
+  if(cs.length){
+    h+='<div class="from">这张图来自这 '+cs.length+' 张卡</div>';
+    cs.forEach(function(c){
+      h+='<div class="backcard" data-srcard="'+esc(c.id)+'"><span>翻回原卡</span><b>'+esc(c.title)+'</b><span class="go">打开 ›</span></div>';
+    });
+  }
+  document.getElementById("srBody").innerHTML=h;
+  srMask.classList.add("on");srSheet.classList.add("on");
+}
+function closeSrSheet(){ srMask.classList.remove("on");srSheet.classList.remove("on"); }
+/* ---- 梳理视图的点击（事件委托）---- */
+document.getElementById("treeMap").addEventListener("click",function(e){
+  var rd=e.target.closest("[data-shredo]");
+  if(rd){ e.stopPropagation(); shuliRedo(); return; }
+  var bk=e.target.closest("[data-shback]");
+  if(bk){ navBack(); return; }
+  var br=e.target.closest("[data-shcards]");
+  if(br){ shuliGoCards(br.getAttribute("data-shcards")); return; }
+  var gr=e.target.closest("[data-shread]");
+  if(gr){ openSrSheet(gr.getAttribute("data-shread")); return; }
+  var tr=e.target.closest("[data-shtopic]");
+  if(tr){ shuliDrill=tr.getAttribute("data-shtopic"); window.scrollTo(0,0); renderShuli(); return; }
+});
 document.getElementById("segList").addEventListener("click",function(){
   treeMode="list";this.classList.add("on");document.getElementById("segMap").classList.remove("on");
+  document.getElementById("treeHint").textContent="按主题梳理知识结构";
   document.getElementById("treeList").style.display="";document.getElementById("treeMap").style.display="none";
 });
 document.getElementById("segMap").addEventListener("click",function(){
-  treeMode="map";this.classList.add("on");document.getElementById("segList").classList.remove("on");
-  document.getElementById("treeList").style.display="none";document.getElementById("treeMap").style.display="";renderMap(mapFocus);
+  treeMode="shuli";this.classList.add("on");document.getElementById("segList").classList.remove("on");
+  document.getElementById("treeHint").textContent="从卡片里提炼出的图：先扫一眼，想深入再点读";
+  document.getElementById("treeList").style.display="none";document.getElementById("treeMap").style.display="";renderShuli();
 });
 document.getElementById("treeChPills").addEventListener("click",function(e){
-  var b=e.target.closest("[data-ch]");if(!b)return;treeCh=b.getAttribute("data-ch");mapFocus=null;
-  renderTreePills();renderTree();if(treeMode==="map")renderMap();
+  var b=e.target.closest("[data-ch]");if(!b)return;treeCh=b.getAttribute("data-ch");shuliDrill=null;
+  renderTreePills();renderTree();if(treeMode==="shuli")renderShuli();
 });
 document.getElementById("treeEdit").addEventListener("click",openTreeEditor);
 
@@ -1317,24 +1668,24 @@ function openTreeEditor(){
     var et=document.querySelector(".edtabs");
     if(et)et.addEventListener("click",function(ev){var b=ev.target.closest("[data-et]");if(b){tab=b.getAttribute("data-et");draw();}});
     if(tab==="topic"){
-      document.querySelectorAll("[data-tedit]").forEach(function(inp){inp.addEventListener("change",function(){var id=inp.getAttribute("data-tedit");var t=topics.find(function(x){return x.id===id;});if(t){t.name=inp.value.trim()||t.name;saveTopics(TOPICS);renderTree();if(treeMode==="map")renderMap();}});});
+      document.querySelectorAll("[data-tedit]").forEach(function(inp){inp.addEventListener("change",function(){var id=inp.getAttribute("data-tedit");var t=topics.find(function(x){return x.id===id;});if(t){t.name=inp.value.trim()||t.name;saveTopics(TOPICS);renderTree();if(treeMode==="shuli")renderShuli();}});});
       document.querySelectorAll("[data-tdel]").forEach(function(btn){btn.addEventListener("click",function(){var id=btn.getAttribute("data-tdel");
         TOPICS[ch]=TOPICS[ch].filter(function(x){return x.id!==id;});
         MESH[ch]=MESH[ch].filter(function(e){return e.a!==id&&e.b!==id;});
-        saveTopics(TOPICS);saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});});
+        saveTopics(TOPICS);saveMesh(MESH);draw();renderTree();if(treeMode==="shuli")renderShuli();});});
       var addBtn=document.getElementById("addTopic");
       if(addBtn)addBtn.addEventListener("click",function(){var v=document.getElementById("newTopic").value.trim();if(!v)return;
         TOPICS[ch]=TOPICS[ch]||[];TOPICS[ch].push({id:"t_"+ch+"_"+Date.now().toString(36),name:v,kw:[v]});
-        saveTopics(TOPICS);draw();renderTree();if(treeMode==="map")renderMap();});
+        saveTopics(TOPICS);draw();renderTree();if(treeMode==="shuli")renderShuli();});
     }else if(topics.length>=2){
       var addMeshBtn=document.getElementById("addMesh");
       if(addMeshBtn)addMeshBtn.addEventListener("click",function(){var a=document.getElementById("meshA").value,b=document.getElementById("meshB").value;
         if(a===b){toast("不能连自己");return;}
         if((MESH[ch]||[]).some(function(e){return (e.a===a&&e.b===b)||(e.a===b&&e.b===a);})){toast("已有这条线");return;}
-        MESH[ch]=MESH[ch]||[];MESH[ch].push({a:a,b:b});saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});
+        MESH[ch]=MESH[ch]||[];MESH[ch].push({a:a,b:b});saveMesh(MESH);draw();renderTree();if(treeMode==="shuli")renderShuli();});
       document.querySelectorAll("[data-mdel]").forEach(function(btn){btn.addEventListener("click",function(){var p=btn.getAttribute("data-mdel").split("|");
         MESH[ch]=MESH[ch].filter(function(e){return !(e.a===p[0]&&e.b===p[1])&&!(e.a===p[1]&&e.b===p[0]);});
-        saveMesh(MESH);draw();renderTree();if(treeMode==="map")renderMap();});});
+        saveMesh(MESH);draw();renderTree();if(treeMode==="shuli")renderShuli();});});
     }
   }
   draw();
@@ -2487,6 +2838,15 @@ function closeSheet(){sheetMask.classList.remove("on");sheet.classList.remove("o
 sheetMask.addEventListener("click",navBack);
 document.querySelector(".sheet .grip").addEventListener("click",navBack);
 
+/* ====================== 梳理·深读弹层（点图打开：一段讲透的话 + 翻回原卡） ====================== */
+var srSheet=document.getElementById("srSheet"),srMask=document.getElementById("srMask");
+srMask.addEventListener("click",navBack);
+document.getElementById("srGrip").addEventListener("click",navBack);
+srSheet.addEventListener("click",function(e){
+  var cb=e.target.closest("[data-srcard]");
+  if(cb){ var c=getCard(cb.getAttribute("data-srcard")); if(c)openReader(c); return; }
+});
+
 /* ====================== 卡片点击（事件委托） ====================== */
 document.getElementById("wrap").addEventListener("click",function(e){
   /* 刚做完「向右拖拽」：吃掉这次紧随而来的点击，别顺手把卡片打开了 */
@@ -2954,7 +3314,7 @@ function loadFeed(onDone){
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
       renderToday();renderChannels();renderDig();updateQaBdg();_archBtn("qaArchBtn",archCount("qa"));
       if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
-      renderTreePills();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderMap();
+      renderTreePills();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderShuli();
     })
     .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
     .then(function(){ if(onDone)onDone(); });
@@ -3009,7 +3369,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.29';
+var _APP_VER_ = '2026-10-11.31';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
@@ -3037,7 +3397,9 @@ if('serviceWorker' in navigator){
       return reader.classList.contains("on") || sheet.classList.contains("on")
           || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
           || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
-          || (curView==="channels"&&chanDrill);
+          || (srSheet&&srSheet.classList.contains("on"))
+          || (curView==="channels"&&chanDrill)
+          || (curView==="tree"&&treeMode==="shuli"&&shuliDrill);
     }catch(e){ return false; }
   }
   function _applyUpdate(){
