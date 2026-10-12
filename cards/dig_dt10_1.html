@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据脱敏、去标识化、匿名化，到底有啥区别？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.78;padding:20px 16px 60px}
+h1{font-size:21px;margin:6px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:14px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin:14px 0;font-size:15px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.note{margin-top:22px;color:var(--ink2);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">数据知识 · 小测验 dt10 下钻</div>
+<h1>面试官问「脱敏、去标识化、匿名化有啥区别」，怎么一次答清？</h1>
+<div class="lead">先给一句大白话：三个词都在说"把能认出这是谁的线索处理掉"，区别在于<b>处理到什么程度</b>——脱敏是这一类动作的统称，去标识化是"涂掉名字但底单还留着"，匿名化是"连底单一起烧了，永远还原不回去"。</div>
+
+<h2>1. 法条怎么说的（这是答题的底气）</h2>
+<p>《个人信息保护法》第七十三条给了两个标准定义：</p>
+<ul>
+<li><b>去标识化</b>（第（三）项）：个人信息经过处理，使其在不借助额外信息的情况下无法识别特定自然人的过程。</li>
+<li><b>匿名化</b>（第（四）项）：个人信息经过处理无法识别特定自然人且不能复原的过程。</li>
+</ul>
+<p>看出差别了吗？去标识化留了半句话——"不借助额外信息"，意思是<b>如果手里还有另外一份对照表，理论上还能对上人</b>；匿名化多了一条硬要求：<b>不能复原</b>，也就是不可逆。</p>
+<p>再看《个人信息保护法》第四条：个人信息"不包括匿名化处理后的信息"。所以一旦真正做到匿名化，这份数据就不算个人信息了，同意、告知这些合规负担大幅降低——这是企业愿意做匿名化的最大动力。</p>
+
+<h2>2. 国标口径（可以顺带提一句）</h2>
+<p>GB/T 35273-2020《信息安全技术 个人信息安全规范》对匿名化的表述是：通过对个人信息的技术处理，使得个人信息主体无法被识别或者关联，且处理后的信息不能被复原的过程。意思和法条一致，只是把"不能识别"写成了"不能识别或者关联"。</p>
+
+<h2>3. 生活比喻，面试时用得上</h2>
+<table>
+<tr><th>词</th><th>比喻</th><th>能不能还原</th></tr>
+<tr><td>数据脱敏</td><td>给快递单上的手机号打星号——这一类"打码动作"的总称</td><td>看怎么做，多数可还原</td></tr>
+<tr><td>去标识化</td><td>把名字涂掉，但底单还锁在仓库，拿底单一查还能对上号</td><td>可还原（需额外信息）</td></tr>
+<tr><td>匿名化</td><td>底单直接烧掉，只剩"某小区这个月有 30 人买了书"这种统计</td><td>不能还原</td></tr>
+</table>
+
+<h2>4. 面试三句话这么答</h2>
+<blockquote>"这三个词都是把能识别到个人的信息处理掉，程度不同。按《个人信息保护法》第七十三条，去标识化是处理后不借助额外信息就认不出是谁，匿名化是处理后既认不出、也不能复原——关键差别在<b>可逆还是不可逆</b>。匿名化后的信息依法不再属于个人信息，所以交易所、合规岗最看重的是：哪些数据做到去标识化就够用，哪些必须做到匿名化才能对外流通。"</blockquote>
+
+<h2>5. 一个不能不知道的坑</h2>
+<p>业界有观点指出，随着数据维度越来越多、技术越来越强，所谓"完全不能复原"的绝对标准在实践中很难保证，去标识化和匿名化之间的界限并不总是那么清楚（安全内参《个人信息匿名化制度的反思与改进》）。所以答完可以补一句："实际操作中通常还要叠加访问控制、合同约定、审计这些管理措施，不能完全只靠技术一步到位。"——这句话能让你从背概念的，变成干过活的样子。</p>
+
+<div class="note">
+来源：①《中华人民共和国个人信息保护法》第七十三条第（三）（四）项、第四条（中国人大网原文，经清远市政府门户网站转载），https://www.gdqy.gov.cn/qymzj/gkmlpt/content/1/1437/post_1437968.html ；② GB/T 35273-2020《信息安全技术 个人信息安全规范》匿名化定义转引自中国软件评测中心《一眼识别个人信息》，https://cstc.org.cn/info/1933/247910.htm ，及 iCourt《个人信息匿名化风险及应对建议》，https://www.icourt.cc/prac-document/138757.html ；③ 安全内参《个人信息匿名化制度的反思与改进》（关于两者界限存在讨论），https://www.secrss.com/articles/70304 。<br>
+说明：以上为法律与国标条文的科普性整理，不构成法律意见；具体项目中的合规判断请以监管部门口径和所在机构法务意见为准。
+</div>
+</body>
+</html>
