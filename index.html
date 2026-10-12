@@ -1039,54 +1039,7 @@ var _exitArmed=false;      // 首页已进入「再退一次就退桌」待命�
 /* 返回后的滚动位置由脚本自己接管（见 fixScrollBack）：关掉浏览器自带的还原，免得两边打架 */
 try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
 
-/* ================= 返回路径诊断（临时 · `.33`，定位完即整块删除）=================
-   目的：真机（Android）「侧滑退桌面」在桌面自检里测不出来 → 把真机上每一步的真实状态记下来。
-   显示：顶部一条实时状态条（不挡点击）＋ 右下角「诊断日志」按钮（点开看完整记录）。
-   ★ 注意状态条开头的版本号，可用来确认手机上加载的是不是这一版。 */
-var DIAG=(function(){
-  var KEY='kb_diag', log=[];
-  try{ log=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){ log=[]; }
-  var bar=null, panel=null;
-  function render(){
-    try{
-      if(!bar){
-        bar=document.createElement('div'); bar.id='_diagBar';
-        bar.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483000;background:rgba(8,8,8,.9);color:#7CFC9A;font:10px/1.45 ui-monospace,Consolas,monospace;padding:1px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer';
-        document.body.appendChild(bar);
-        panel=document.createElement('pre'); panel.id='_diagPanel';
-        panel.style.cssText='position:fixed;left:0;right:0;bottom:0;height:64%;z-index:2147483000;background:rgba(6,6,6,.97);color:#cfe;font:10.5px/1.55 ui-monospace,Consolas,monospace;padding:30px 10px 12px;overflow:auto;margin:0;display:none;white-space:pre-wrap';
-        document.body.appendChild(panel);
-        bar.addEventListener('click',function(){ panel.style.display=(panel.style.display==='none'?'block':'none'); });
-      }
-      var L=log[log.length-1]||{};
-      bar.textContent='DIAG .36 | 记录 '+log.length+' 条 | 最新 '+L.tag+' | hLen='+L.hLen+' 守卫='+L.st+' view='+L.view+' arch='+L.arch+' reader='+L.reader+' armed='+L.armed+' ready='+L.ready+' ｜点这里看完整日志';
-      panel.textContent='（最新记录在最上面）\n\n'+log.slice().reverse().map(function(e){
-        return e.t+'  '+e.tag+'\n   hLen='+e.hLen+'  守卫='+e.st+'  view='+e.view+'  arch='+e.arch+' reader='+e.reader+' sheet='+e.sheet+' armed='+e.armed+' ready='+e.ready+'\n   stack='+e.stack+(e.x?('\n   '+e.x):'');
-      }).join('\n\n');
-    }catch(e){}
-  }
-  function snap(tag, extra){
-    try{
-      log.push({ t:new Date().toTimeString().slice(0,8), tag:tag, hLen:history.length,
-        st:(history.state?(history.state.kbGuard?'guard':JSON.stringify(history.state)):'null'),
-        stack:(window.navStack||[]).join('>'),
-        view:((document.querySelector('.view.active')||{dataset:{}}).dataset.view)||'?',
-        arch:(window.archEl&&archEl.classList.contains('on'))?1:0,
-        reader:(document.getElementById('reader').classList.contains('on'))?1:0,
-        sheet:(document.getElementById('sheet').classList.contains('on'))?1:0,
-        armed:_exitArmed?1:0, ready:_exitReady?1:0, x:extra||'' });
-      if(log.length>80) log=log.slice(-80);
-      localStorage.setItem(KEY, JSON.stringify(log));
-    }catch(e){}
-    render();
-  }
-  return { snap:snap, render:render, clear:function(){ log=[]; try{localStorage.removeItem(KEY);}catch(e){} render(); } };
-})();
-window.addEventListener('pagehide',function(){ DIAG.snap('★pagehide：页面被卸载（=离开文档）'); });
-window.addEventListener('beforeunload',function(){ DIAG.snap('★beforeunload'); });
-setTimeout(function(){ DIAG.snap('boot：本次打开','UA='+navigator.userAgent.slice(0,72)); },400);
-
-function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)){ history.pushState({kbGuard:true},""); if(!(history.state&&history.state.kbGuard)) DIAG.snap('⚠ pushState 调用后守卫仍未生效（被浏览器忽略？）'); } }catch(e){ DIAG.snap('⚠ pushState 抛错', String(e.message)); } }
+function _ensureGuard(){ try{ if(!(history.state&&history.state.kbGuard)) history.pushState({kbGuard:true},""); }catch(e){} }
 
 /* _guardSoon：补守卫的"稳"版（`.32` 修）。
    ⚠ 真机（Android 系统返回手势）实测机理：**返回手势进行中调 history.pushState 会被浏览器忽略**
@@ -1139,14 +1092,13 @@ setInterval(function(){
 },400);
 
 window.addEventListener("popstate",function(){
-  DIAG.snap('popstate 到来');
   /* `.35`：这是"程序性关闭浮层"顺带触发的静默返回 —— 界面已经关过了，这里不做任何回退。 */
   if(_silentBack>0){ _silentBack--; _lastPopAt=Date.now(); clearTimeout(_nbWatch); return; }
   /* 刚才兜底回退可能引发的"回响/迟到"返回：界面不再重复退（兜底已退过），
      但 **账必须补平**——这次 popstate 已经消耗了一条历史（back 生效只是迟到），
      不补守卫的话账目会亏空；亏到"指针落在文档最底"时，用户的下一次侧滑
      就会直接离开 App（真机=退到桌面）。（`.31` 修） */
-  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); DIAG.snap('→ 宽限期吞并：补守卫'); _guardSoon(); return; }
+  if(Date.now()-_nbFallbackAt<420){ _lastPopAt=Date.now(); clearTimeout(_nbWatch); _guardSoon(); return; }
   _lastPopAt=Date.now(); clearTimeout(_nbWatch);   /* 系统返回真来了 → 撤掉兜底，避免重复回退 */
   // 一次用户返回（系统侧滑/返回键）
   var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show")
@@ -1158,7 +1110,6 @@ window.addEventListener("popstate",function(){
               || (srSheet&&srSheet.classList.contains("on"));
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
-    DIAG.snap('→ 有关层：关一层 + 补守卫');
     _guardSoon();         // 补回守卫（多拍，防真机手势期间 pushState 被忽略），App 不退，还能继续逐级退
     return;
   }
@@ -1168,12 +1119,10 @@ window.addEventListener("popstate",function(){
     toast("再侧滑一次，将退到桌面");
     clearTimeout(armT);
     armT=setTimeout(function(){ _exitArmed=false; },DISARM); // 到期仅重置，不补守卫
-    DIAG.snap('→ 首页：提示待命 + 补守卫');
     _guardSoon();         // 拦住：补回守卫，App 不退
     return;
   }
   // 已待命：放行——不再补守卫；用户的下一次返回将退到 App 之外，由系统关闭 App。
-  DIAG.snap('→ 首页：放行退桌（不再补守卫）');
   _exitArmed=false; _exitReady=true; _clearGuardSoon(); clearTimeout(armT);
 });
 
@@ -3489,7 +3438,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.36';
+var _APP_VER_ = '2026-10-11.37';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
