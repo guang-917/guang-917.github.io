@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>既然匿名化之后流转更自由，为什么大家不把所有数据都匿名化？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+.note{margin-top:24px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月13日 · 数据知识 · 下钻问答</div>
+<h1>既然匿名化之后流转更自由，为什么大家不把所有数据都匿名化？</h1>
+
+<p>因为匿名化不是「免费升级」，它是一张要拿数据价值去换的门票。</p>
+
+<h2>理由一：很多生意本来就需要认出这个人</h2>
+<p>银行做风控，是要判断「张三这个人还不还得起」；医院随访，是要找到「李四本人」；物流催派送，是要打通电话。一旦数据匿名化到不能复原，这些事就都做不了了——数据还在，但它已经不指向任何一个具体的人。价值也就跟着没了。</p>
+
+<h2>理由二：为了「不可复原」，数据会被磨粗</h2>
+<p>要让人拼不回去，常见做法就是把信息磨粗：年龄从「32岁」变成「30-35岁」，地址从具体门牌变成所在城市，收入从精确数字变成区间。粒度一粗，能做的分析就少了。实务里一直存在这个取舍：磨得越狠越安全，也越不值钱。</p>
+
+<h2>理由三：宣称「已匿名」本身有风险</h2>
+<p>匿名化最大的好处是「不算个人信息」，但也正因为如此，一旦有人用别的线索把人重新认出来，你当初那句「已匿名」就不成立了，合规依据会整块塌掉。学界对此也有质疑声音，认为随着技术发展，完全不能复原的匿名化在实践中比较罕见（来源：中国法学网相关文章，属学者观点，非定论）。所以负责任的机构反而不敢随便拍胸脯说「我这个绝对匿名了」。</p>
+
+<h2>那实务里怎么做？</h2>
+<p>多数场景是停在<strong>去标识化</strong>这一级，然后管住那张「对照表」：把能恢复识别的信息与去标识化后的数据分开存储、分开授权，并限制重新识别。按《信息安全技术 个人信息安全规范》的思路，个人信息控制者宜在收集后即进行去标识化处理，并把两类信息分开存储、确保后续不重新识别个人（来源：GB/T 35273—2020 相关解读）。</p>
+
+<blockquote>
+一句话给面试官：匿名化是「退出个人信息保护规则」的门票，代价是放弃个体级价值；所以不是越匿名越好，而是按用途选——要认人的场景做到去标识化加严格管控，不认人的统计分析场景才做到匿名化。
+</blockquote>
+
+<div class="note">来源说明：①《信息安全技术 个人信息安全规范》GB/T 35273—2020 关于去标识化处理与分开存储的要求及解读——全国网络安全标准化技术委员会官网（tc260.org.cn）、中国法学网相关文章（iolaw.cssn.cn）转述；②关于匿名化在实践中是否可绝对不可复原的学术质疑——中国法学网（iolaw.cssn.cn），此为学者观点，存在不同说法，非定论；③「年龄泛化、地址泛化、区间化」等做法为数据脱敏/匿名化领域通用技术常识，本期作为一般性介绍，未引用具体标准条款。</div>
+</body>
+</html>
