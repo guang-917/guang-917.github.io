@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖 | 脱敏、匿名化、隐私计算：企业到底什么时候用哪个？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月17日 · 深挖 · 数据知识</div>
+<h1>深挖 | 脱敏、匿名化、隐私计算：企业到底什么时候用哪个？</h1>
+<div class="lead">这三招都是「保护数据」，但适用场景不同。判断思路记一个总纲：<strong>看数据要不要离开原主人、离开之后还能不能被认出人来</strong>。</div>
+
+<h2>一张决策表</h2>
+<table>
+<tr><th>场景</th><th>该用哪招</th><th>为什么</th></tr>
+<tr><td>数据要交给第三方（外包开发、交付测试环境）</td><td><strong>脱敏</strong></td><td>第三方要用「长得像真数据」的数据干活，打码变形但结构不变即可，对照表自己留着</td></tr>
+<tr><td>数据要对外发布、公开（统计数据、研究报告）</td><td><strong>匿名化</strong></td><td>数据出去了就收不回来，必须做到「任何人用任何办法都认不出具体某个人」，才能不算个人信息</td></tr>
+<tr><td>多家单位想联合算个结果，但互不信任、谁也不能看对方的原始数据</td><td><strong>隐私计算</strong></td><td>原始数据干脆不出门，只在原地参与计算，大家共享结果</td></tr>
+<tr><td>既要联合计算，又要留证据证明「过程中没人偷看」</td><td><strong>隐私计算 + 合规评估/日志存证</strong></td><td>技术兜底之外，还要合规留痕——这正是合规评估机构的价值所在</td></tr>
+</table>
+
+<h2>三个常见误区</h2>
+<ul>
+<li><strong>「脱敏了就是匿名化了」——错</strong>。脱敏通常保留对照表（否则没法还原），所以本质还是去标识化：换个马甲还认得出你。匿名化要求把「对照表」彻底断掉，是比脱敏严得多的标准（前面概念卡专门讲过这组区别）。</li>
+<li><strong>「用了隐私计算就百分百安全」——不一定</strong>。计算结果有时也能反推出个体信息（比如两家的联合模型记住了某个独特样本）。所以隐私计算项目通常还要配套结果评估和合规审计，不能一个技术名词走天下。</li>
+<li><strong>「三招必须三选一」——不是</strong>。实际项目常常叠加用：数据集先脱敏再交付，联合建模走联邦学习，中间关键计算节点再套可信执行环境——分层兜底。</li>
+</ul>
+
+<h2>面试一句话总结</h2>
+<blockquote>「选哪招取决于数据流向：数据要出门给别人用，用脱敏；要公开发布永久给出去，必须做到匿名化；数据不出门大家只共享计算结果，用隐私计算。实际项目往往分层叠加，并且都要配合规评估留痕。」</blockquote>
+
+<div class="rel">相关延伸：概念卡 | 隐私计算：各家都能一起算账，但谁也不用亮出自己的底牌；概念卡 | 去标识化 vs 匿名化：涂掉名字，和把对照表烧掉，是两回事；概念卡 | 数据脱敏：给数据里的「隐私部位」打码，但还能用</div>
+<div class="note">来源说明：脱敏/去标识化/匿名化的概念边界参照 GB/T 37964-2019《信息安全技术 个人信息去标识化指南》及 GB/T 35273-2020《信息安全技术 个人信息安全规范》的通行表述；隐私计算路线划分同本卡主文（姚期智1982、Google联邦学习2016、GB/T 41388-2022）。「隐私计算结果仍可能被反推、需配套评估」为行业通行认识的一般性介绍，具体标准要求以官方发布文本为准。</div>
+</body>
+</html>
