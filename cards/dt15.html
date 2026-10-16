@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>概念卡 | 隐私计算：各家都能一起算账，但谁也不用亮出自己的底牌</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月17日 · 数据知识</div>
+<h1>概念卡 | 隐私计算：各家都能一起算账，但谁也不用亮出自己的底牌</h1>
+<div class="lead">前面学过脱敏、匿名化——那是给数据「打码」。但有些活光打码不够：两家银行想一起算谁在骗贷，谁也不能把客户名单给对方看。这就是隐私计算要解决的题：<strong>一起算结果，互不见底牌</strong>。它的口号只有八个字：「数据可用不可见」。</div>
+
+<h2>① 这东西是什么？三个生活比喻讲透三大门派</h2>
+<p>隐私计算（Privacy Computing）不是一个具体软件，而是<strong>一类技术的统称</strong>：在保护原始数据不外泄的前提下，让多方共同完成计算、只拿到结果。主流路线有三派，各记一个比喻就够了：</p>
+<table>
+<tr><th>门派</th><th>比喻</th><th>一句话原理</th></tr>
+<tr><td>多方安全计算（MPC）</td><td>打麻将：各家只看自己的牌，但大家可以一起算出「谁胡了」，谁也没看见别人的牌</td><td>靠加密的数学协议，多方各自出数，直接算出联合结果</td></tr>
+<tr><td>联邦学习（FL）</td><td>各家自带教材上课：教材不外借，只交流「学习心得」，最后汇总成一本共同的笔记</td><td>数据不动、模型动：各自用本地数据训练，只交换训练中间结果，合并成联合模型</td></tr>
+<tr><td>可信执行环境（TEE）</td><td>银行金库里隔出一间加密操作室：数据进屋算完锁走，连大楼管理员都看不见屋里的操作</td><td>靠芯片级别的硬件隔离，让数据在一个谁也偷看不了的「安全小房间」里计算</td></tr>
+</table>
+<blockquote>背景小知识：多方安全计算的思路是数学家姚期智1982年提出的（著名的「百万富翁问题」——两个都不想露富的人，怎么比出谁更有钱）；联邦学习是Google于2016年提出的（原意是让手机数据不出手机，也能共同改进输入法模型）；可信执行环境国内有对应国家标准 GB/T 41388-2022《信息安全技术 可信执行环境 基本安全规范》。</blockquote>
+<p>和你之前学的脱敏是什么关系？<strong>互补，不是二选一</strong>：脱敏是给「已经要拿出去」的数据打码；隐私计算是让数据<strong>根本不用拿出去</strong>，只在原地算个结果出来。</p>
+
+<h2>② 和北京国际数据服务有限公司、北数所什么关系？</h2>
+<p>这概念不是锦上添花，是这两家吃饭的技术底座之一：</p>
+<ul>
+<li><strong>网络数据安全合规实验室（北京国际数据服务有限公司运营）</strong>：做数据合规评估，判断「这批数据能不能给第三方用」时，有没有用隐私计算兜底是重要的技术依据之一——原始数据不出门，合规风险天然就小一截。做电子产品信息清除检测、数据合规评估这类业务，都绕不开「数据在流转过程中怎么保护」这道题。</li>
+<li><strong>北数所（数据交易撮合方）</strong>：数据交易最大的拦路虎是「供数方怕交出原始数据就失去控制权」。隐私计算让买方只拿到计算结果、拿不到原始数据，供数方才敢把数据放上交易平台——所以说它是数据要素市场能转起来的关键技术之一。</li>
+<li><strong>相关岗位</strong>：数据合规评估（评审项目时看懂隐私计算方案）、数据产品经理（设计「可用不可见」的数据产品）、售前/解决方案（你的老本行——给客户讲方案时，「数据可用不可见」是最常被问到的卖点，这条就是必答题）。</li>
+</ul>
+
+<h2>③ 面试被问到，2-3句话怎么答</h2>
+<blockquote>「隐私计算是在原始数据不泄露的前提下，实现多方数据联合计算的一类技术，主要路线有联邦学习、多方安全计算和可信执行环境，目标是『数据可用不可见』。它和脱敏是互补的：脱敏是给要流出的数据打码，隐私计算让数据根本不用流出。在数据交易所场景里，它是让供数方敢上架数据、交易能成交的关键保障。」</blockquote>
+<p><strong>加分小动作</strong>：答完可以补一句「实际项目里常是混合方案，比如联邦学习平台里再套TEE保护计算节点」——说明你知道工程落地不是单选，是搭配用。</p>
+
+<h2>今天记住的三句话</h2>
+<ol>
+<li>隐私计算 = 数据可用不可见：一起算结果，互不见底牌。</li>
+<li>三大门派各一个比喻：多方安全计算像各看各牌一起比大小；联邦学习像教材不外借只传心得；可信执行环境像金库里的加密操作室。</li>
+<li>和脱敏是互补关系：一个管「拿出去的」打码，一个让「根本不用拿出去」。</li>
+</ol>
+
+<div class="rel">相关延伸：概念卡 | 去标识化 vs 匿名化：涂掉名字，和把对照表烧掉，是两回事；概念卡 | 数据脱敏：给数据里的「隐私部位」打码，但还能用</div>
+<div class="note">来源说明：① 「隐私计算三大技术路线及目标」为业界通行分类，技术背景依据：姚期智《Protocols for Secure Computations》（1982年提出百万富翁问题）；B. McMahan 等《Communication-Efficient Learning of Deep Networks from Decentralized Data》（AISTATS 2017，Google 2016年提出联邦学习）；GB/T 41388-2022《信息安全技术 可信执行环境 基本安全规范》（全国信息安全标准化技术委员会，2022年发布）。② 北京国际数据服务有限公司的网络数据安全合规实验室、电子产品信息清除检测等业务描述，依据用户提供的公司背景资料（2026-10-08 更新），细节以公司官方信息为准。③ 隐私计算与数据交易的结合为行业通行说法的一般性介绍，未引用特定平台产品名。概念定义参照 DAMA-DMBOK 数据安全相关章节精神及上述国标表述，比喻仅作通俗理解用。</div>
+</body>
+</html>
