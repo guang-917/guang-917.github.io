@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：车轮图里「数据治理」为什么画在中间</title>
+<style>
+:root{--bg:#0f1115;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 12px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+h2{font-size:17px;margin:22px 0 8px;border-left:4px solid var(--accent2);padding-left:10px}
+p,li{font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">下钻解答 · 来自 10月18日 串讲卡</div>
+<h1>DAMA 车轮图：数据治理为什么在中间？</h1>
+
+<h2>图长什么样</h2>
+<p>车轮图（DAMA Wheel）是 DMBOK2 第1章的全书总图：中心一圈是<strong>数据治理</strong>，外圈是 11 个知识领域（数据架构、数据建模与设计、数据存储与操作、数据安全、数据集成和互操作、文件和内容管理、主数据与参考数据、数据仓库与商业智能、元数据管理、数据质量、大数据和数据科学）。</p>
+
+<h2>为什么治理在中心</h2>
+<p>因为外圈的每个活儿，都需要有人先定规矩、再盯着执行。打个比方：治理像小区<strong>业委会</strong>——它自己不搬砖不修水管，但它定「钱怎么花、谁负责什么、干得好不好怎么评」。装修（建模）、保安（安全）、保洁（质量）、搬运（集成）各家干活，都得按业委会定的规矩来，出了事也找它协调。</p>
+<ul>
+<li>定方向：各知识领域做什么、优先级怎么排，由治理说了算。</li>
+<li>定规矩：政策、标准、职责分工，从治理这一圈流向各个领域。</li>
+<li>管监督：各领域干得好不好，治理负责监督和问责。</li>
+</ul>
+
+<h2>考试与面试</h2>
+<p>CDGA 里这是高频结构题：「车轮图的中心是什么？」——答<strong>数据治理</strong>，最常见错误是把「数据质量」或「数据架构」放中心。DMBOK2 还把治理画成「同心圆」式（治理贯穿各领域），两种画法都是表达同一件事：治理不是其中一个部门，而是横跨所有领域的统筹职能。</p>
+<p>面试可用一句话：「数据治理管的是规矩和问责，其他领域是按规矩干活的；所以它必须画在中心。」</p>
+
+<blockquote>一句话总结：车轮图中心=定规矩的，外圈=干活的；记住「业委会和各家服务商」这个比喻，图就不会记错。</blockquote>
+<p style="color:#9aa3b2;font-size:13px">来源说明：内容依据 DAMA-DMBOK2（第2版）第1章对车轮图与数据治理的一般性介绍。</p>
+</body>
+</html>
