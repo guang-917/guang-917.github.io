@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第1章 数据管理知识体系概述｜1/共3 · 定义·业务驱动·目标</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0}
+.ans{color:#ffd166;font-size:14px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="meta">10月17日 · 数据知识 · 18:00 档</div>
+<h1>CDGA 第1章开张：数据管理到底在管什么</h1>
+<div class="lead">数据管理不是"把数据存起来"，更像给一屋子东西请个管家：算清楚要什么、放哪、谁能拿、怎么越用越值钱。今天这是第1章第一张卡——它是什么、为什么要有、要达成什么。</div>
+
+<p><strong>进度标记：CDGA｜第1章 数据管理知识体系概述｜1/共3</strong></p>
+
+<h2>考试怎么考</h2>
+<p>第1章只占 4 分，但它是全书的"目录页"，出题就三类：<strong>定义题</strong>（"数据管理是对什么进行开发、执行和监督？"正确选项关键词是"计划、政策（策略）、项目（项目群）、实践"，干扰项常写成"存储、备份、清洗"这类具体技术动作）；<strong>目标题</strong>（问数据管理的目标有哪些，干扰项会塞"让数据越多越好""把数据全部公开"这种明显不合理的话）；<strong>框架题</strong>（问 DAMA 车轮图中心是什么，答案是"数据治理"）。一句话抓手：<strong>考定义就选"计划/政策/实践 + 全生命周期 + 价值"三件套，看到纯技术动作的选项基本是干扰项。</strong></p>
+
+<h2>一、定义：它是什么</h2>
+<p>DMBOK2 第1章的定义（中文教材译法）大意是：<strong>数据管理是对贯穿数据与信息资产整个生命周期的"计划、政策（策略）、项目（项目群）和实践"进行开发、执行和监督，以交付、控制、保护和提升数据与信息资产的价值。</strong></p>
+<p>拆成大白话三块：</p>
+<ul>
+<li><strong>管什么</strong>：计划（明年干什么）、政策（规矩怎么定）、项目（具体上哪些活）、实践（日常怎么做）——四样一起管，不是只管技术。</li>
+<li><strong>怎么管</strong>：开发（定出来）、执行（干起来）、监督（查得住）。</li>
+<li><strong>为什么管</strong>：四个动词——交付（送到位）、控制（管住）、保护（护住）、提升（更值钱），对象是"资产"，时间跨度是"全生命周期"（从生到死）。</li>
+</ul>
+<p>生活比喻：这不是"找个仓库存东西"，更像<strong>请个管家管整套房子</strong>——定家规（政策）、排值日表（计划）、该修的修（项目）、每天擦桌子（实践），还盯着账本别被顺走（监督），目的是让房子越住越值钱。</p>
+
+<h2>二、业务驱动：为什么现在非得管</h2>
+<p>书里讲得很直白：<strong>数据管理最核心的驱动，就是让组织从数据资产里真正拿到价值</strong>——就像管好钱和物，才能从钱和物里拿到价值。反过来，"不管数据"约等于"不管资本"，结果是浪费和机会流失。</p>
+<p>书里还有一句更好懂：数据和信息被称为信息经济的"货币""命脉"，甚至"新石油"。意思是：不管你的分析做不做得出花来，没有数据连生意都做不成。</p>
+<p>套到目标公司：北京国际数据服务有限公司做数据分类分级、数据合规治理研究、数据流通合规服务这类"帮别人把数据管住、管合规"的生意。客户为什么肯花钱？正因为"数据不管会出事（泄露、处罚）、管好了才能流通变现"——这就是"业务驱动"最现实的版本。<em>（业务描述来源：北京市大兴区人民政府网站《北京国际数据服务有限公司落户大兴！》，2026年，https://www.bjdx.gov.cn/bjsdxqrmzf/zhyw/dxdt13/2365175/index.html ）</em></p>
+
+<h2>三、目标：管到什么样算合格</h2>
+<p>DMBOK2 第1章列的数据管理目标共 6 条，翻成大白话：</p>
+<table>
+<tr><th>教材目标</th><th>大白话</th></tr>
+<tr><td>理解并支持企业及相关方（客户、员工、业务伙伴）的信息需求</td><td>先搞清大家到底要什么数据，别自嗨</td></tr>
+<tr><td>获取、存储、保护数据资产并确保其完整性</td><td>拿得到、存得住、护得牢、不被改坏</td></tr>
+<tr><td>确保数据与信息的质量</td><td>数据得"能用、好用"，不是一堆错账</td></tr>
+<tr><td>确保相关方数据的隐私与机密性</td><td>别人的隐私不能漏</td></tr>
+<tr><td>防止未经授权或不恰当的数据访问、篡改或使用</td><td>没权限的人碰不到，碰了也改不了</td></tr>
+<tr><td>确保数据能被有效使用，为企业增加价值</td><td>最后得能变成钱、变成效率</td></tr>
+</table>
+<blockquote>记忆抓手：<strong>要得到（需求）→ 存得住（获取存储保护）→ 质量好 → 护隐私 → 防乱碰 → 能变现</strong>。六条其实是从"进门"到"出门赚钱"的一条流水线。</blockquote>
+
+<h2>四、顺手认识全书地图</h2>
+<p>第1章还负责摆出 DAMA 的"车轮图"：中间是<strong>数据治理</strong>，外面 11 个知识领域围着转——数据架构、数据建模与设计、数据存储与操作、数据安全、数据集成和互操作、文件和内容管理、主数据与参考数据、数据仓库与商业智能、元数据管理、数据质量（连治理本身共 11 项）。车轮外还有"环境因素"讲人、流程、技术怎么配合。这张图后面每章都会回来用，今天先混个脸熟。</p>
+<p><strong>与岗位的关系</strong>：北数所、北京数据集团体系里的数据治理岗、合规咨询岗，日常盯的正是这六条目标里的第3、4、5条（质量、隐私、防越权）；数据产品/售前岗主要盯第1条和第6条（需求、变现）。面试时你说"我做过投标和项目管理"，可以顺势翻译成"我习惯先问清客户要什么（需求），再排计划、定规矩、盯交付（计划/政策/监督）"——这恰好就是数据管理定义里的那几个动词。</p>
+
+<h2>自测一题</h2>
+<div class="quiz">
+<p><strong>自测：</strong>按照 DAMA-DMBOK2 的定义，数据管理是对贯穿数据生命周期的下列哪一组内容进行开发、执行和监督？</p>
+<p>A. 数据库、数据仓库、数据集市<br>
+B. 计划、政策（策略）、项目（项目群）和实践<br>
+C. 采集、清洗、转换、加载<br>
+D. 硬件、软件、网络与安全设备</p>
+<p class="ans"><strong>答案：B。</strong>定义考的就是"计划/政策/项目/实践"这四个管理性词，再配"交付、控制、保护、提升价值"和"全生命周期"。A、C 是具体技术对象或 ETL 动作，把"管理"降格成"干活"；D 属 IT 基础设施，归 IT 治理，不归数据管理定义。</p>
+</div>
+
+<div class="rel">相关延伸：数据分类分级：先把数据分堆排座次，再决定谁能碰；串讲日 | 本周知识地图：一份数据想进场交易，要走完的四道工序</div>
+<div class="note">来源说明：①DAMA International《DAMA-DMBOK2 数据管理知识体系指南（原书第2版）》第1章（英文原版 PDF：Technics Publications 官方发布页 https://technicspub.com/wp-content/uploads/2023/07/DAMA-DMBOK2.pdf ；中文版出版信息见 DAMA 中国 https://www.mydama.org.cn/chubanwu/ ）。②北京国际数据服务有限公司业务范围：北京市大兴区人民政府网站，https://www.bjdx.gov.cn/bjsdxqrmzf/zhyw/dxdt13/2365175/index.html 。③"管家"比喻为通俗化改写，不改变原定义。下一张（2/共3）讲第1章的原则：9 条数据管理原则，以及最爱混的"数据 vs 信息"。</div>
+</body>
+</html>
