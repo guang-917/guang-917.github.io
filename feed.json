@@ -1,27 +1,6 @@
 {
   "cards": [
     {
-      "id": "ai14",
-      "ch": "ai",
-      "title": "【脚本自检-勿读】push_feed 取号验票测试",
-      "date": "2026-10-18",
-      "date2": "10月18日",
-      "read": false,
-      "sum": "自检用临时卡片，测试完即删除",
-      "tags": [
-        "selftest"
-      ],
-      "star": false,
-      "lead": "自检",
-      "body": [
-        "a",
-        "b",
-        "c"
-      ],
-      "rel": [],
-      "link": "cards/ai14.html"
-    },
-    {
       "id": "dt24",
       "ch": "data",
       "title": "CDGA｜第3章 数据治理｜3/共5 · 工具·度量指标·落地步骤",
