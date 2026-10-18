@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第3章 数据治理｜2/共5 · 原则·输入·输出</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月18日 · 数据知识</div>
+<h1>CDGA｜第3章 数据治理｜2/共5 · 原则·输入·输出</h1>
+<div class="lead">这张讲治理的「流水账」：进门要带什么材料（输入）、按什么规矩办事（原则）、出门交回什么成果（输出）。治理这摊事最实在的产出不是报表，而是几张能被甲方、审计、监管拿去验收的纸。</div>
+
+<p><strong>进度标记：CDGA｜第3章 数据治理｜2/共5</strong>（备考进度 7/59，本章 10 分）</p>
+
+<h2>一、先看「原则」：治理守的四条底线</h2>
+<p>按 DAMA-DMBOK2 第 3 章的归纳，治理不是靠好人自觉，而是靠四条规矩撑着：</p>
+<ul>
+<li><strong>可持续发展</strong>：治理不是搞一场运动。像小区物业，不能换一任经理就换一套规矩——制度要能传下去，人走了还转得动。</li>
+<li><strong>嵌入式</strong>：治理规则要长进日常流程里。数据项目立项、模型上线、报表发布，每一步都自动过一遍治理的关卡，而不是年底集中查一次。</li>
+<li><strong>可度量</strong>：说「治理得不错」没用，得有数：多少指标有了所有者、多少争议按期裁了、多少制度真被执行。<strong>没法量的事，就等于没干。</strong></li>
+<li><strong>权威性</strong>：治理的决定得有人真听。委员会定了口径，业务部门不能照旧另起一套——这靠的是高层授权，不是流程文档写得多好。</li>
+</ul>
+<blockquote>大白话记法：<strong>能传下去、长在流程里、拿得出数、说话有人听</strong>——少一条，治理就成摆设。</blockquote>
+
+<h2>二、输入：开工前手里得有什么</h2>
+<p>治理不是凭空起步的。DMBOK2 的语境图里，治理的输入大致是这几样（不同版本措辞略有差异，以教材中文版为准）：</p>
+<ul>
+<li><strong>业务战略与目标</strong>：公司今年到底要干什么——是冲上市、冲合规、还是要把数据卖出去。治理得服务这个，不是自娱自乐。</li>
+<li><strong>IT 战略与系统现状</strong>：现有系统里长着哪些数据、谁能碰，治理方案不能脱离现实。</li>
+<li><strong>数据管理相关的制度与法规要求</strong>：外部硬约束，比如数据安全、个人信息保护方面的法规。</li>
+<li><strong>现有的组织与职责安排</strong>：现在谁在管、管到哪一步。</li>
+<li><strong>数据问题与事件的记录</strong>：吵架记录、审计发现、事故台账——治理最好从「真疼过的地方」下手。</li>
+</ul>
+
+<h2>三、输出：治理交回的几样「硬凭证」</h2>
+<table>
+<tr><th>输出物</th><th>大白话</th><th>生活比喻</th></tr>
+<tr><td>数据政策与制度</td><td>什么能做、什么不能做，写下来</td><td>小区的管理规约</td></tr>
+<tr><td>数据治理组织与角色任命</td><td>谁开会、谁拍板、谁干活，白纸黑字</td><td>业主委员会分工表</td></tr>
+<tr><td>决策权与升级路径</td><td>吵不出结果时，往上找谁</td><td>投诉到街道办的那条路</td></tr>
+<tr><td>问题管理与裁决记录</td><td>每场争议怎么裁的，留痕</td><td>物业纠纷调解记录</td></tr>
+<tr><td>治理计划与考核</td><td>今年干哪几件、干到什么程度算合格</td><td>年度维修计划</td></tr>
+<tr><td>考核结果与审计报告</td><td>干得怎么样，有没有人查</td><td>业委会年度审计</td></tr>
+</table>
+<p>考试爱考「下面哪个是治理的输出」：<strong>制度、组织、决策记录、治理计划、考核与审计</strong>是输出；<strong>数据模型、ETL 脚本、质量规则、加密策略</strong>这些是其它章节（建模、集成、质量、安全）的输出，别混。</p>
+
+<h2>四、一个高频干扰项要拆清楚</h2>
+<p>「数据标准」很容易被误写成治理的输出。教材里数据标准属于<strong>数据架构</strong>职能（第 4 章）在做的事，治理管的是「批不批、谁维护、违了怎么办」——也就是<strong>批准与裁决</strong>这个动作，而不是标准条文本身。</p>
+<p>同理，「数据质量报告」是数据质量职能（第 13 章）的产物。治理的输出更像「规则和裁决」，而不是「数据本身好不好」。</p>
+
+<h2>五、考试怎么考</h2>
+<ul>
+<li><strong>输入输出题</strong>：给一堆条目让你挑「哪个属于治理的输入/输出」。抓关键词：输出一定是<strong>制度、角色、决定、计划、报告</strong>这类「管人的纸」，不是「数据活」。</li>
+<li><strong>原则题</strong>：问「以下哪项不是治理原则」，干扰项常塞「技术优先」「成本最小化」这种自创说法。</li>
+<li><strong>情景题</strong>：某公司治理推不动，问根因。标准答案方向是「缺乏高层支持/职责不清/没有考核」——对应原则里的<strong>权威性</strong>与<strong>可度量</strong>。</li>
+</ul>
+
+<h2>六、和你目标岗位怎么接上</h2>
+<p>这一张对你几乎是「主场」：北京国际数据服务有限公司做数据合规评估，客户最终要的是<strong>可验收的纸</strong>——制度清单、职责矩阵、评估报告、整改记录。这跟投标要交「资格文件＋技术方案＋响应偏离表＋业绩证明」是完全同一套思维：<strong>每一条要求都得有对得上的证据，证据还得能被人抽查。</strong></p>
+<p>面试时可以这么说：「我做投标养成的习惯是『按条款逐项响应、每项留证据』。数据治理要的产出物本质一样——政策、角色、决策记录、审计报告，都是一个能拿去验收的证据包。」这句话既真实，又直接命中治理输出的考点。</p>
+
+<h2>七、自测一题</h2>
+<p><strong>自测：</strong>某集团成立数据治理委员会后，下面哪一项最可能被列为该委员会的「输出物」？</p>
+<p>A. 客户主题域的数据模型设计文档<br>
+B. 客户数据的去重清洗脚本<br>
+C. 客户数据口径争议的裁决记录与相应的职责任命<br>
+D. 客户数据加密算法的选型方案</p>
+<p><strong>答案：C。</strong>裁决记录和角色任命属于「权力与控制」的产物，是治理的典型输出。A 属数据建模与设计，B 属数据质量/数据集成，D 属数据安全——三者都是具体干活，不是定规矩和裁争议。</p>
+
+<h2>八、下一张预告</h2>
+<p>下一张 <strong>21:00</strong> 推「第3章 数据治理 3/共5 · 工具·度量指标·落地步骤」：治理靠什么抓手落地、用哪几个数证明自己没白干。今天第 5 张，看完就可以收工了，坚持住。</p>
+
+<div class="rel">相关延伸：CDGA｜第3章 数据治理｜1/共5 · 定义·业务驱动·目标；CDGA｜第2章 数据伦理｜2/共2 · 原则·输入·输出·工具</div>
+<div class="note">来源说明：<br>
+1. 数据治理的原则、输入、输出，依据 DAMA International《DAMA 数据管理知识体系指南（原书第 2 版）》第 3 章「语境图」。DAMA 各地分会对该语境图的公开转述中，治理输入列有「业务战略、IT 战略、数据管理相关的制度与法规要求、现有组织与职责、数据问题记录」等项，输出列有「数据政策、治理组织与角色、决策权与升级路径、问题管理与裁决、治理计划与考核、审计报告」等项；DAMA-MN 分会公开说明见 https://www.dama-mn.org/DMBOK_v2_Wheel_Governance 。中文措辞以机械工业出版社中文版教材为准，若与教材有差异以教材为准。<br>
+2. 「数据标准属于数据架构职能」「数据质量报告属于数据质量职能」的归属，依据 DMBOK2 各章语境图的分工，教材第 4 章、第 13 章。<br>
+3. 本期未涉及具体政策条款、机构动态与统计数据，故无相关外部引用。概念边界如与教材原文有出入，以教材为准。</div>
+</body>
+</html>
