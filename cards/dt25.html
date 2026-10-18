@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第3章 数据治理｜4/共5 · 高频考点·易混对比·情景题</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月18日 · 数据知识</div>
+<h1>CDGA｜第3章 数据治理｜4/共5 · 高频考点·易混对比·情景题</h1>
+<div class="lead">今天不讲新名词，专治「长得像、分不清」：数据治理和数据管理到底谁管谁？数据所有人和数据专员谁背锅？这两个对比是第3章选择题里最爱挖坑的地方。</div>
+
+<h2>易混对比一：数据治理 vs 数据管理</h2>
+<p>教材（DAMA-DMBOK2）的原话是：数据治理是<strong>对数据管理活动的「管理」</strong>——处在「高层定规矩、检查规矩」的位置；数据管理是<strong>具体干活</strong>的那一摊，包括建模、存库、保质量、管安全等等。打个比方：数据治理是小区业委会——定停车规则、检查物业干得行不行；数据管理是物业公司——真去修水管、扫楼道。业委会自己不扫楼道，但没有业委会，物业想怎么干就怎么干，小区迟早乱。</p>
+<p>考试要点：治理回答「谁来做决定（决策权、职责分工、规矩怎么定、谁监督）」，管理回答「怎么把活干出来」。正确选项常出现关键词「决策」「监督」「职责」，干扰项则是把治理描述成「具体执行技术操作」。</p>
+
+<h2>易混对比二：数据所有人（Data Owner）vs 数据专员/数据管理员（Data Steward）</h2>
+<p>这两个角色中文译法各地不完全一样，考试认准教材里的分工逻辑：</p>
+<table>
+<tr><th>角色</th><th>好比</th><th>主要干什么</th></tr>
+<tr><td>数据所有人（Data Owner，对数据负最终责任的负责人，多为业务部门负责人）</td><td>房子的「业主」</td><td>拍板：这数据谁能看、谁该管，出了事担最终责任</td></tr>
+<tr><td>数据专员/数据管理员（Data Steward，受托日常照看数据的人）</td><td>「管家」</td><td>天天照看：定标准、盯质量、协调问题、落实规则</td></tr>
+</table>
+<p>一句话记忆：<strong>所有人「拍板担责」，专员「干活操心」</strong>。考试常见坑：说「数据所有人负责每天维护数据质量」——错，那是专员的活；说「数据专员有权最终批准数据访问」——也不对，审批权在所有人那里。</p>
+
+<h2>易混对比三：数据治理委员会 vs 数据管理团队</h2>
+<p>治理委员会（或数据治理办公室）是<strong>跨部门做决策、定政策、裁争议</strong>的机构，成员往往是各部门负责人；数据管理团队是<strong>执行政策的</strong>。情景题里若出现「两个部门为一张客户表的口径吵起来了，谁来裁决」，答案指向治理层（委员会/治理办公室），而不是某个技术团队。</p>
+
+<h2>考试怎么考</h2>
+<ul>
+<li><strong>定义题</strong>：问「数据治理的主要职责」，正确项含「决策权与职责分工、制定政策、监督」；干扰项写「编写数据库脚本」「清洗数据」这类执行动作。</li>
+<li><strong>角色题</strong>：给一个情景（如「张经理批准谁能访问客户数据，小李日常检查数据是否合规」），让你判断谁是所有人、谁是专员。</li>
+<li><strong>情景应用题</strong>：数据质量出问题、两个部门口径打架，问「最应该先找谁/由谁决策」——答治理层（如数据治理委员会），不是先上技术手段。</li>
+</ul>
+
+<h2>自测一题</h2>
+<blockquote>
+<p>自测：某公司要明确「谁有权决定客户数据能否共享给外部合作方」。按照 DAMA-DMBOK2 的角色划分，这一决定权应属于谁？</p>
+<p>A. 数据专员（Data Steward）<br>
+B. 数据所有人（Data Owner）<br>
+C. 数据架构师<br>
+D. 数据库管理员（DBA）</p>
+<p><strong>答案：B。</strong>批准数据访问与共享属于「拍板担责」类决策，由数据所有人负责；A 的陷阱是专员虽天天照看数据，但只有「管家的执行权」，没有「业主的审批权」；C、D 是技术角色，不承担业务上的审批责任。</p>
+</blockquote>
+
+<h2>和你目标岗位的关系</h2>
+<p>你瞄准的北京国际数据服务有限公司，核心业务是数据合规评估、数据流通服务（如「可信数据全球通综合服务平台」），北数所的岗位也大量涉及「帮企业明确数据归谁管、能不能交易、出了事谁负责」。这套「所有人—专员」的责任划分，正是数据交易前合规评估里最常问的问题之一：这家企业的数据有没有明确的负责人？审批链条清不清楚？面试聊到数据治理落地，把「业委会—物业、业主—管家」这两个比方讲清楚，比背十个术语更加分。</p>
+
+<p>下一张（第5/共5）讲第3章收尾：治理高频情景题套路与易错点盘点，之后进入第4章 数据架构。快走到 10 分大章了，坚持住！</p>
+
+<div class="rel">相关延伸：CDGA｜第3章 数据治理｜1/共5 · 定义·业务驱动·目标；CDGA｜第3章 数据治理｜2/共5 · 原则·输入·输出；CDGA｜第3章 数据治理｜3/共5 · 工具·度量指标·落地步骤</div>
+<div class="note">来源说明：概念与角色划分依据 DAMA International《DAMA 数据管理知识体系指南（原书第 2 版）》第 3 章「数据治理」，角色译名以教材中文版通行译法为准。北京国际数据服务有限公司业务信息来自任务背景资料（2026-10-08 更新），未逐一二次核实，如需引用请以该公司官方发布为准。</div>
+</body>
+</html>
