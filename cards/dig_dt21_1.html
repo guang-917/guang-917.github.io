@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据匿名化做到什么程度才算真的「洗白了」？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-size:15px}
+.note{margin-top:22px;color:var(--ink2);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="meta">10月18日 · 下钻解答</div>
+<h1>数据匿名化做到什么程度才算真的「洗白了」？</h1>
+<p>先说结论：<strong>没有「涂掉名字就安全」这回事</strong>。判断标准不是「看不出是谁」，而是「别人用手上已有的信息，还能不能把你认出来」。</p>
+
+<h2>一、三种「遮身份」的办法，安全等级不一样</h2>
+<ul>
+<li><strong>脱敏（遮住）</strong>：把手机号中间四位打星、身份证只留后四位。效果是「屏幕上看不见」，但原始数据还在库里，有权限的人一查就还原——这叫「看得见的遮」，不是匿名。</li>
+<li><strong>去标识化（换掉/抹掉）</strong>：把姓名、身份证号这类直接标识删掉或替换成编号，同时保留一张「编号—真人」的对照表。只要对照表还在，理论上就能还原，法律上通常仍算个人信息。</li>
+<li><strong>匿名化（彻底断开）</strong>：连「通过组合信息重新认出你」的路也堵死，并且不可复原。这才是真正可以当「非个人信息」使用的状态。</li>
+</ul>
+<blockquote>打比方：脱敏是给人戴墨镜，去标识化是换件外套并留下换衣记录，匿名化是把这个人从人群里彻底「揉碎」，谁也拼不回去。</blockquote>
+
+<h2>二、最常见的翻车：拼图式重新识别</h2>
+<p>把姓名删了、身份证删了，还留着「出生日期＋性别＋邮编」，看着挺干净。但学术研究早就证明：这三项组合起来，就足以在一大片人群里把相当比例的人唯一定位出来。再加上消费记录、就诊记录、快递地址，拼图越拼越清楚。</p>
+<p>所以匿名化的技术活，核心是处理「准标识符」——那些单看不要紧、合起来能指认人的字段。常见做法是<strong>泛化</strong>（把「1993 年 5 月 12 日」变成「1990 年代」）和<strong>抑制</strong>（干脆删掉某些组合），代价是数据变粗、分析价值下降，这就是匿名化永恒的取舍。</p>
+
+<h2>三、放到你的岗位上怎么用</h2>
+<ul>
+<li><strong>做数据合规评估</strong>：不要只问「有没有脱敏」，要问「还留着哪些能拼起来的字段」「对照表存在哪、谁能取」「有没有做过重新识别测试」。</li>
+<li><strong>做匿名化产品/售前</strong>：客户最常问「你保证安全吗」。专业答法是讲清口径——我们做到什么级别、在什么假设下安全、还剩多少残余风险，而不是拍胸脯说「绝对认不出来」。</li>
+<li><strong>对接北数所挂牌</strong>：数据要流通，买方要能用；匿名化程度越高越安全、越不敏感，但也越不好卖。这个平衡点正是这个岗位的价值所在。</li>
+</ul>
+<p class="note">依据：DMBOK2 第2章「数据伦理」中关于混淆与编辑（数据聚合、数据标记、数据脱敏）不足以保护数据的论述，以及第7章「数据安全」中脱敏、去标识化相关概念；「出生日期＋性别＋邮编可唯一定位相当比例人群」的说法源自公开的统计披露研究成果，具体比例本文不引用，建议查原文核实。我国《个人信息保护法》对「匿名化」有专门定义（无法识别特定自然人且不能复原），引用时请以法条原文为准。</p>
+</body>
+</html>
