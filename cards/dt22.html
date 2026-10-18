@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第3章 数据治理｜1/共5 · 定义·业务驱动·目标</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月18日 · 数据知识</div>
+<h1>CDGA｜第3章 数据治理｜1/共5 · 定义·业务驱动·目标</h1>
+<div class="lead">全书最重的 10 分章开篇。这张只讲一件事：数据治理到底「治」的是谁——答案不是数据，是人：谁有权拍板、谁担责、出了问题找谁。搞清这一条，后面四张才有地方挂。</div>
+
+<p><strong>进度标记：CDGA｜第3章 数据治理｜1/共5</strong>（备考进度 6/59，本章考试 10 分）</p>
+
+<h2>一、它是什么：治理不是管数据，是管「拍板的人」</h2>
+<p>按 DAMA 的定义（DAMA 国际 DMBOK 原文表述）：数据治理是<strong>对数据资产管理行使权力和控制</strong>，具体动作是<strong>规划、监督、执行</strong>。注意三个词的落脚点——都不是「搬数据」，而是「定规矩、盯执行、追责任」。</p>
+<p>生活比喻：一栋写字楼的物业。物业不管你是做金融还是做餐饮（那是各家公司自己的事），物业管的是——谁能进哪层（权限）、装修要不要报批（流程）、消防谁来查（监督）、楼上漏水找谁赔（争议裁决）。<strong>数据治理就是这个「物业条例＋管理处」</strong>，它不下场干活，它决定「谁有权干什么、干错了怎么办」。</p>
+<p>最容易考的一句话：<strong>治理做决定，管理做执行。</strong>治理回答「谁来决定、按什么规矩决定」，管理回答「具体怎么把它做出来」。</p>
+
+<h2>二、它和数据管理差在哪：一张表记住</h2>
+<table>
+<tr><th>比什么</th><th>数据治理</th><th>数据管理</th></tr>
+<tr><td>核心问题</td><td>谁有权决定？按什么规则决定？</td><td>怎么把这件事做出来？</td></tr>
+<tr><td>典型产出</td><td>政策、制度、角色任命、决策纪要与裁决</td><td>数据模型、数据管道、报告、质量修复</td></tr>
+<tr><td>谁来干</td><td>业务负责人牵头（数据所有者、治理委员会）</td><td>数据工程师、分析师、DBA 等技术团队</td></tr>
+<tr><td>判断标准</td><td>决策有没有人认、落实没落实</td><td>数据准不准、跑得快不快</td></tr>
+</table>
+<p>考试爱在这里挖坑：题干里出现「部署加密」「清洗重复数据」「建数据仓库」——这些都是<strong>管理</strong>动作，不是治理。治理的选项一定带「决策权、政策、问责、委员会、升级路径」这类词。</p>
+
+<h2>三、为什么现在非得治理（业务驱动）</h2>
+<ul>
+<li><strong>监管变硬了</strong>：合规检查要的是「谁能证明这份数据是合规来的」。答不上「谁负责」，报告写得再漂亮也过不了。</li>
+<li><strong>部门各说各话</strong>：销售说客户有 80 万、财务说有 62 万——不是谁算错了，是「客户」这个词有两套定义。定义之争，只能靠治理裁决。</li>
+<li><strong>数据要拿去卖、拿去入表</strong>：一份数据想挂牌交易或计入资产，第一步就是证明权属清楚、来源正当、有人担责。没有治理，交易和入表都无从谈起。</li>
+<li><strong>AI 和大项目烧钱</strong>：数据不可信，模型再贵也白搭；治理是给后面所有投入打地基。</li>
+</ul>
+
+<h2>四、目标：治理做成什么样算成</h2>
+<p>书中对治理目标的表述是：<strong>让数据被正确地管理——按政策、按最佳实践</strong>。翻成大白话就是四条：</p>
+<ol>
+<li><strong>有人认账</strong>：每个关键数据都有明确的所有者；</li>
+<li><strong>有章可循</strong>：定义、权限、质量门槛都写下来，不靠口头传；</li>
+<li><strong>有争议能裁</strong>：两个部门吵起来，有明确的升级和裁决路径，而不是谁嗓门大听谁的；</li>
+<li><strong>能对外交代</strong>：面对监管、客户、审计，拿得出证据链。</li>
+</ol>
+
+<h2>五、考试怎么考</h2>
+<p><strong>定义题（最常见）</strong>：问「数据治理的定义」，正确选项的关键词是「<strong>权力/职权、控制、决策权、问责</strong>」；干扰项爱写成「数据质量提升」「数据安全防护」「数据标准制定」——这些都只是治理的<em>某一个</em>抓手，不是定义本身。</p>
+<p><strong>辨析题</strong>：给四个动作，问哪个属于治理。记住一条排除法——<strong>凡是「动手做」的，基本是管理；凡是「定谁来做、能不能做、做得对不对」的，才是治理。</strong></p>
+<p><strong>目的题</strong>：问「为什么要建数据治理」，正确选项往往落在「使数据管理与组织战略对齐」「明确职责与决策权」「支撑合规」；错误选项常把「减少 IT 成本」「提升系统性能」当答案。</p>
+
+<h2>六、和你目标岗位怎么接上</h2>
+<p>北京国际数据服务有限公司的三块业务，本质都是「替别人做治理」：</p>
+<ul>
+<li><strong>数据合规评估</strong>：进门先问的是「这份数据谁负责、来源哪来、授权到哪一步」——这就是治理三问。</li>
+<li><strong>数据分类分级</strong>：分几级、谁定级、谁批准，全是治理动作，不是技术活。</li>
+<li><strong>网络安全合规实验室的检测业务</strong>（如电子产品信息清除检测）：检测报告之所以有公信力，靠的是「谁授权检测、按哪个标准判、结果谁签」，同样是一套治理结构。据北京市科委中关村管委会网站 2026 年 9 月 15 日报道，该实验室由大兴区、中央网信办数据与技术保障中心、北京数据集团三方共建，北京国际数据服务有限公司负责日常运营；实验室设政策法规制度标准研究中心、电子产品信息清除检测中心、网络数据合规技术检测中心三大中心。</li>
+</ul>
+<p>北数所那边同理：挂牌审核岗天天在做的事，就是「替市场判断这份数据有没有人认账」。</p>
+
+<h2>七、自测一题</h2>
+<p><strong>自测：</strong>某公司决定：客户主数据由市场部副总裁担任数据所有者，负责批准访问权限和数据质量门槛；IT 部门据此在系统中配置权限、修复重复记录。按 DAMA-DMBOK 的划分，下列判断正确的是：</p>
+<p>A. 两者都属于数据治理，因为都围绕客户数据<br>
+B. 任命所有者和批准门槛属于数据治理，配置权限、修复记录属于数据管理<br>
+C. 两者都属于数据管理，因为最终都落在系统上<br>
+D. 任命所有者属于数据管理，配置权限属于数据治理</p>
+<p><strong>答案：B。</strong>治理的关键词是「权力与控制」——定角色、批规则、担责任；管理是按这些决定去执行。A 和 C 都把「沾了数据就算治理」当成标准，是典型干扰；D 正好说反了，配置权限是技术执行，任命所有者才是治理动作。</p>
+
+<h2>八、下一张预告</h2>
+<p>下一张 <strong>18:00</strong> 推「第3章 数据治理 2/共5 · 原则·输入·输出」：治理守哪几条规矩、吃进什么、吐出哪几样文件——这几样「产出物」，恰好是你写标书时最容易被要求提供的东西。坚持住，最硬的 10 分章已经开始了。</p>
+
+<div class="rel">相关延伸：CDGA｜第2章 数据伦理｜2/共2 · 原则·输入·输出·工具；本周串讲 | 第1章 数据管理知识体系概述：一条线走完「是什么→守规矩→怎么干」</div>
+<div class="note">来源说明：<br>
+1. 数据治理的定义（对数据资产管理行使权力和控制，含规划、监督、执行）及「治理指导其他数据管理职能」「目的是确保数据按政策与最佳实践被正确管理」，依据 DAMA International《DAMA 数据管理知识体系指南（原书第 2 版）》第 3 章；英文原文表述见 DAMA 落基山分会公开转载的 DMBOK 语境图说明（damarmc.org，https://www.damarmc.org/news/13242927）。教材中文译名以机械工业出版社中文版为准。<br>
+2. 「治理做决定、管理做执行」的区分，见 DAMA-MN 分会公开文章（https://www.dama-mn.org/DMBOK_v2_Wheel_Governance）与多家从业机构对 DMBOK2 的解读，表述一致。<br>
+3. 网络数据安全合规实验室的三方共建、三大中心、北京国际数据服务有限公司负责日常运营：北京市科委中关村管委会网站《高标准建设网络数据安全合规实验室》，2026-09-15，https://www.ncsti.gov.cn/kjdt/yqdy/yqdt/202609/t20260915_256232.html。<br>
+4. 本期未引用任何未能交叉核实的行业数据；如与教材原文有出入，以教材为准。</div>
+</body>
+</html>
