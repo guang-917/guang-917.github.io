@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下钻解答：AI 为什么会幻觉？</title>
+<style>
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:680px;margin:0 auto;padding:24px 18px;line-height:1.8;color:#2c3e50;background:#fafafa;}
+  h1{font-size:1.35em;color:#1a1a1a;border-bottom:3px solid #4a90d9;padding-bottom:10px;}
+  h2{font-size:1.1em;color:#4a90d9;margin-top:28px;}
+  .tip{background:#eef5fd;border-left:4px solid #4a90d9;padding:10px 14px;border-radius:6px;font-size:.95em;}
+  li{margin-bottom:8px;}
+  .foot{margin-top:36px;font-size:.85em;color:#888;border-top:1px dashed #ccc;padding-top:12px;}
+</style>
+</head>
+<body>
+<h1>下钻解答：问 AI"最新政策"，它为什么可能答错？</h1>
+
+<div class="tip">这是第01期第1题的延伸。你已经知道：大模型是"逐词预测"生成回答的，不是查现成答案。那幻觉具体是怎么产生的？</div>
+
+<h2>三个主要原因</h2>
+<ol>
+  <li><strong>训练数据有"截止时间"</strong>：模型的知识来自训练时用过的资料，训练完成后发生的最新政策、新文件，它根本不知道，但又想"有问必答"。</li>
+  <li><strong>逐词预测的机制天生会"顺嘴编"</strong>：模型的目标是生成"读起来最通顺"的下一个词，而不是"最真实"的。当它不知道确切信息时，可能会生成一个看起来合理、格式正确的假日期、假文件名——这就是幻觉。</li>
+  <li><strong>提问方式会诱导它</strong>：如果你问"XX 政策的具体金额是多少"，就等于暗示"确实有这么个政策"，模型可能顺着你的暗示往下编。</li>
+</ol>
+
+<h2>实用对策（在工作里怎么用）</h2>
+<ul>
+  <li>涉及<strong>具体数字、日期、文件名称、政策条款</strong>的回答，一律去官方渠道核实再采用。</li>
+  <li>让 AI 说清"哪些是确定的、哪些不确定的"，不确定的内容自己查证。</li>
+  <li>常识性、方法性的内容（怎么写邮件、怎么拆解任务）可以直接参考，出错风险低。</li>
+</ul>
+
+<h2>动手练一练</h2>
+<p>拿一个你关心的真实政策问题去问 AI，把回答里所有"具体数字和日期"圈出来，逐条到官网核实。你会发现：凡是它"编"出来的，往往格式完美但查无此事。</p>
+
+<div class="foot">来源说明：本文内容为 AI 领域公认的基础概念（大模型生成机制与幻觉成因的通行解释），不涉及具体数据、机构或政策名称，无外部引用。</div>
+</body>
+</html>
