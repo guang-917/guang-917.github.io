@@ -133,16 +133,6 @@ def main():
         card = new
         dig_add = None
 
-    # 可选第2、3参数：先上传完整 HTML 学习卡，再推卡片
-    if len(sys.argv) >= 3:
-        local_html = sys.argv[2]
-        repo_html = sys.argv[3] if len(sys.argv) >= 4 else ("cards/%s.html" % card.get("id", "card"))
-        if os.path.exists(local_html):
-            if not gh_put_file(tok, repo_html, local_html):
-                print("警告: 完整学习卡上传失败，卡片 link 将指向不存在的页面。")
-        else:
-            print("警告: 完整学习卡文件不存在: %s（卡片仍会推送，但 link 将 404）" % local_html)
-
     # 读当前 feed.json（拿 sha；404 说明还没建，用空壳）
     try:
         cur = gh_get(tok)
@@ -155,16 +145,42 @@ def main():
         else:
             print("读取 feed.json 失败:", e.read().decode("utf-8", "ignore"))
             sys.exit(4)
-    except Exception as e:
-        print("读取 feed.json 异常:", repr(e))
-        sys.exit(4)
+
+    # ---- 取号：一律从线上 feed 同前缀最大号 +1，禁止按期号推算 ----
+    # 事故背景（2026-10-18）：本期误用 ai04，与 10-04 旧卡撞号，
+    # 去重逻辑静默跳过且仍打印 OK，同时 cards/ai04.html 被同名覆盖。
+    prefix = "".join(ch for ch in str(card.get("id", "ai")) if ch.isalpha()).lower() or "ai"
+    old_id = card.get("id")
+    cid = alloc_id(tok, feed, prefix)
+    if old_id != cid:
+        print("ID 重分配: %s -> %s" % (old_id, cid))
+    card["id"] = cid
+    card["link"] = "cards/%s.html" % cid
+    if dig_add:
+        for i, d in enumerate([x for x in dig_add if isinstance(x, dict)], 1):
+            d["link"] = "cards/dig_%s_%d.html" % (cid, i)
+
+    # 可选第2、3参数：先上传完整 HTML 学习卡，再推卡片
+    if len(sys.argv) >= 3:
+        local_html = sys.argv[2]
+        repo_html = sys.argv[3] if len(sys.argv) >= 4 else card["link"]
+        if repo_html != card["link"]:
+            print("警告: 传入路径 %s 与卡片 link %s 不一致，已按卡片 link 上传" % (repo_html, card["link"]))
+            repo_html = card["link"]
+        if os.path.exists(local_html):
+            if not gh_put_file(tok, repo_html, local_html):
+                print("警告: 完整学习卡上传失败，卡片 link 将指向不存在的页面。")
+        else:
+            print("警告: 完整学习卡文件不存在: %s（卡片仍会推送，但 link 将 404）" % local_html)
 
     cards = feed.get("cards", [])
-    # 去重：同 id 不重复加
-    if not any(c.get("id") == card.get("id") for c in cards):
-        card.setdefault("read", False)
-        card.setdefault("star", False)
-        cards.insert(0, card)  # 最新置顶
+    # 去重：同 id 不重复加（现在 id 已重分配，正常不会命中；命中必须报警而非静默）
+    if any(c.get("id") == card.get("id") for c in cards):
+        print("错误: ID %s 已存在，本次卡片未写入" % card.get("id"))
+        sys.exit(5)
+    card.setdefault("read", False)
+    card.setdefault("star", False)
+    cards.insert(0, card)  # 最新置顶
     feed["cards"] = cards
 
     if dig_add:
@@ -186,6 +202,61 @@ def main():
     resp = gh_put(tok, sha, feed)
     url = resp.get("content", {}).get("html_url", "")
     print("OK 已推送 ->", url)
+
+    # ---- 验票：回读 feed 确认本卡真的写进去了 ----
+    try:
+        back = json.loads(base64.b64decode(gh_get(tok)["content"]).decode("utf-8"))
+        ids = [c.get("id") for c in back.get("cards", [])]
+    except Exception as e:
+        print("校验失败: 回读 feed 异常 %r" % (e,))
+        sys.exit(6)
+    if card.get("id") not in ids:
+        print("校验失败: 推送后 feed 中没有 %s" % card.get("id"))
+        sys.exit(6)
+    pos = ids.index(card.get("id"))
+    print("校验通过: %s 位于第 %d 位（共 %d 张）" % (card.get("id"), pos + 1, len(ids)))
+    if pos > 4:
+        print("提示: 有其他任务并发推送，%s 不在前 5 位" % card.get("id"))
+
+
+def alloc_id(tok, feed, prefix):
+    """按同前缀分配 ID：只统计 2 位纯数字尾号（ai01/jp11/dt24），忽略
+    jp20261009、jp1010e、jp285 等历史杂号；feed 已占用或仓库已有同名页面都跳过。"""
+    used, mx = set(), 0
+    for c in feed.get("cards", []):
+        cid = str(c.get("id", ""))
+        if cid.startswith(prefix):
+            tail = cid[len(prefix):]
+            if tail.isdigit() and len(tail) <= 2:
+                used.add(int(tail))
+                mx = max(mx, int(tail))
+    n = 1 if mx == 0 else mx + 1
+    while n < 1000:
+        cid = "%s%02d" % (prefix, n)
+        if n in used:
+            print("跳过 %s: feed 中已存在" % cid)
+        elif file_in_repo(tok, "cards/%s.html" % cid):
+            print("跳过 %s: 仓库已存在同名页面（防覆盖）" % cid)
+        else:
+            return cid
+        n += 1
+    raise SystemExit("找不到可用 ID，停止")
+
+
+def file_in_repo(tok, path):
+    api = "https://api.github.com/repos/%s/%s/contents/%s" % (OWNER, REPO, path)
+    req = urllib.request.Request(api, headers={
+        "Authorization": "Bearer " + tok,
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "kb-pusher",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=30):
+            return True
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return False
+        raise
 
 
 if __name__ == "__main__":
