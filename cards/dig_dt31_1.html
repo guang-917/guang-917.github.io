@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：为什么先看架构图更高效？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月19日 · 数据知识</div>
+<h1>深挖：为什么先看架构图更高效？</h1>
+<div class="lead">做合规评估先看架构图而不是先翻表结构，三个理由，一次讲清。</div>
+<h2>先问一句话：你要“点数”还是“摸家底”</h2>
+<p>做合规评估，第一周就钻进每张表的字段里，等于<b>搬新家第一天先给每根网线贴标签</b>——活儿没少干，方向全错。原因有三条：</p>
+<ul>
+<li><b>看不全。</b>一个中等规模的企业，核心系统十几套，表动辄上千张。按表看，一周也翻不完；按系统看，一张页面就能列全。</li>
+<li><b>看不懂。</b>表名多半是缩写（如 cust_info_his），字段常常没注释。而架构图上的“客户数据—订单数据—支付数据”是业务语言，客户自己的业务部门就能讲明白。</li>
+<li><b>看不出风险点。</b>合规关心的是“个人信息从哪进来、经过谁、落到哪、能不能删干净”。这是<b>流向</b>问题，不是某一列的类型问题。流向只画在架构图上。</li>
+</ul>
+
+<h2>具体怎么用架构视角做第一步</h2>
+<ol>
+<li><b>拉系统清单</b>：客户有哪些业务系统、各自装了什么数据。</li>
+<li><b>画三条流</b>：数据从哪来（采集/外部接入）、中间经过谁（处理、共享、出境）、最后落到哪（存储、归档、删除）。</li>
+<li><b>标敏感点</b>：哪几段流经过个人信息、重要数据。</li>
+<li><b>再往下钻</b>：只对第 3 步圈出来的那几段，去看具体的表和字段。</li>
+</ol>
+<blockquote>架构决定“看哪里”，模型决定“看得多细”。顺序反了，工作量翻三倍，结论还未必准。</blockquote>
+
+<h2>面试可以这么说</h2>
+<p>“我做合规评估的习惯是先把客户的系统清单和主要数据流向画出来，标出涉及个人信息的环节，再对这些环节做字段级核查。这样既能覆盖全，又不会一上来就被上千张表埋掉。”</p>
+
+<div class="rel">相关延伸：CDGA｜第4章 数据架构｜4/共5 · 高频考点·易混对比：架构≠模型</div>
+<div class="note">来源说明：本期为方法性说明，结构参照 DAMA-DMBOK2 中数据架构与数据建模的分工；企业业务描述依据国际科技创新中心网站 2026-09-15《高标准建设网络数据安全合规实验室》，链接：https://www.ncsti.gov.cn/kjdt/yqdy/yqdt/202609/t20260915_256232.html 。</div>
+</body>
+</html>
