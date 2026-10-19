@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第4章 数据架构｜3/共5 · 工具·度量指标·落地步骤</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月19日 · 数据知识</div>
+<h1>CDGA｜第4章 数据架构｜3/共5 · 工具·度量指标·落地步骤</h1>
+<div class="lead">前两张讲了图纸是什么、吃进什么、出什么。今天讲三件具体事：靠什么画、怎么算画得好、按什么顺序画。这一张里全是具体名词，选择题最爱在这里挖坑。</div>
+
+<p><strong>进度标记：CDGA｜第4章 数据架构｜3/共5</strong></p>
+
+<h2>一、工具：三类，别混用</h2>
+<p>打个比方，做一套家装图纸，你需要三样东西：<strong>画图的手</strong>、<strong>放图纸的档案柜</strong>、<strong>管审批盖章的流程本</strong>。数据架构也一样。</p>
+<table>
+<tr><th>类别</th><th>大白话</th><th>它管什么</th></tr>
+<tr><td>数据建模工具</td><td>画图的手</td><td>画概念模型、逻辑模型；能生成建表语句（DDL）；常见如各类建模软件</td></tr>
+<tr><td>元数据库 / 元数据仓储</td><td>放图纸的档案柜</td><td>把图画完存进去，谁都能查；能查「改这张表会牵连谁」（影响分析）</td></tr>
+<tr><td>数据架构管理工具</td><td>管审批盖章的流程本</td><td>管理架构的版本、评审、变更记录，让图纸不是谁想改就改</td></tr>
+</table>
+<p>干扰项通常长这样：把 <strong>ETL 工具、BI 报表工具、数据库本身</strong> 塞进「数据架构工具」的选项里。记住一句话——数据架构管的是「规划」，不是「干活」，干活的是集成和报表。</p>
+
+<h2>二、度量指标：怎么算画得好</h2>
+<p>书里给架构效果的衡量，落到四条「有没有」上，好记：</p>
+<ul>
+<li><strong>高管有没有支持</strong>——没人撑腰的图纸，最后只能贴在墙上；</li>
+<li><strong>有没有落实到项目</strong>——图纸不进项目，等于废纸；</li>
+<li><strong>有没有衡量指标</strong>——说不清好坏，就没法改进；</li>
+<li><strong>有没有专职架构师</strong>——兼职画图，永远排在别的事后面。</li>
+</ul>
+<p>再往细里，就是可以数出来的数：架构覆盖率（多少核心系统在蓝图里）、标准符合率（多少系统按约定命名和建表）、评审通过率、架构相关的需求变更率。考试如果问「哪一项不属于衡量架构效果的指标」，往往塞一个「数据库响应速度」来骗你——那是运维指标，不是架构指标。</p>
+
+<h2>三、落地步骤：一条线走完</h2>
+<ol>
+<li><strong>定范围</strong>：先划清这次管哪几块数据、哪些系统，别一上来就想管全公司；</li>
+<li><strong>看业务与现状</strong>：业务战略要什么、现在手里有什么（这是上一张讲的输入）；</li>
+<li><strong>建目标架构</strong>：画出「应该长成什么样」；</li>
+<li><strong>评审批准</strong>：让业务和技术一起点头——这一步过不了，硬推必反弹；</li>
+<li><strong>落到项目与路线图</strong>：哪年改哪个系统，写进计划；</li>
+<li><strong>持续维护</strong>：业务变了图纸跟着改，不然半年后又变成「历史文件」。</li>
+</ol>
+<blockquote>最常见的一个坑：<strong>把现有系统的结构直接当企业数据架构交上去</strong>。那只是「现在长什么样」的设计说明，不是「应该长什么样」的蓝图。考试里凡是把「现有系统」当架构依据或架构产物的选项，基本都是错的。</blockquote>
+
+<h2>四、考试怎么考</h2>
+<p>三种问法：<strong>名词归属题</strong>（这个工具归谁用）、<strong>度量题</strong>（哪项不是架构的衡量指标）、<strong>排序题</strong>（先评审还是先落地）。</p>
+<p>选对的关键词：概念/逻辑层、元数据库、专职架构师、基于业务战略、评审后落地。<br>看到就要警惕的词：以现有系统为基础、技术越新越好、成本最低、一步到位全覆盖。</p>
+
+<h2>五、自测一题</h2>
+<p><strong>自测：</strong>某企业要评估自己数据架构工作的成效，下列哪一项最适合作为数据架构的衡量指标？</p>
+<p>A. 核心业务系统的数据库响应时间<br>
+B. 核心系统的架构覆盖率（已纳入企业数据架构的系统占比）<br>
+C. 数据仓库中报表的数量<br>
+D. 数据集成任务的每日执行次数</p>
+<p><strong>答案：B。</strong> 架构管的是「规划覆盖到没覆盖到」，覆盖率直接反映蓝图有没有真正落地。A 是运维性能指标，C 是 BI 产出量，D 是集成作业量——三者都是「干活干得多不多」，跟「图纸画得对不对、用没用上」不是一回事，这正是本题的三个陷阱。</p>
+
+<h2>六、和你要投的岗位有什么关系</h2>
+<p>北京国际数据服务有限公司做的是<strong>数据合规评估、分类分级、跨境合规服务</strong>这类事。它给客户出的合规方案，第一步就绕不开「你有哪些数据、在哪些系统里、怎么流的」——这本质就是一次小范围的数据架构梳理。你未来若做售前或项目岗，能不能把客户的系统清单整理成一张「数据从哪来、到哪去」的图，直接决定方案写不写得实。</p>
+
+<h2>七、面试可以这么说</h2>
+<p>被问到「你没做过架构，怎么理解数据架构」时，可以答：「我理解数据架构不是画技术图，是先定规矩——数据分几层、从哪来到哪去、谁负责定义。它的产出要能落到项目里才有用。我以前做投标，最怕的就是各家系统各说各话、对不上数，架构解决的就是这个问题。」</p>
+
+<div class="rel">相关延伸：CDGA｜第4章 数据架构｜2/共5 · 原则·输入·输出；CDGA｜第4章 数据架构｜1/共5 · 定义·业务驱动·目标；CDGA｜第3章 数据治理｜3/共5 · 工具·度量指标·落地步骤</div>
+<div class="note">来源说明：本期概念依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 4 章「数据架构」的语境图（定义、业务驱动、目标、原则、输入、输出、工具、度量指标）组织；具体工具产品名称因版本与厂商差异未逐一列出。国内标准侧可参照全国数据标准化技术委员会（TC609）公开的《城市全域数字化转型 城市数字孪生 第2部分：数据参考架构》（计划号 20262810-T-907，状态为起草中）中对「数据参考架构」分层模型的表述，链接：https://www.tc609.org.cn/tc609/xhtml/bzkdetail.html?id=1063&type=gjbzjh 。企业业务描述依据国际科技创新中心网站 2026 年 9 月 15 日报道《高标准建设网络数据安全合规实验室》，链接：https://www.ncsti.gov.cn/kjdt/yqdy/yqdt/202609/t20260915_256232.html 。教材 PDF 在用户本地，本期未读取原件，个别条目以 DMBOK2 通行中文版表述为准，若与纸质书有出入以书为准。</div>
+</body>
+</html>
