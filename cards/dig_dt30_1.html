@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜为什么「拿现有系统当架构」是坑</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-size:15px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">深挖 · 接 dt30</div>
+<h1>为什么「拿现有系统当架构」是最常见的坑</h1>
+
+<p>先用一个比方。你要装修一套老房子，设计师问「你有什么需求」，你直接抱来一摞<strong>现在家里每件家具的摆放照片</strong>。照片没撒谎，但它答的是「现在长什么样」，而设计师要的是「你想住成什么样」。数据架构也一样：现有系统清单是<strong>病历</strong>，企业数据架构是<strong>治疗方案</strong>。</p>
+
+<h2>为什么大家都会掉进去</h2>
+<ul>
+<li><strong>它省事。</strong> 梳理现有接口，翻文档、问厂商就能凑出来；想目标架构，得先想清业务往哪走，难得多。</li>
+<li><strong>它看着专业。</strong> 一堆方框、一堆箭头，评审会上很唬人。</li>
+<li><strong>没人敢说不对。</strong> 业务方看不懂，技术方觉得「就是我做的」，于是顺顺利利通过。</li>
+</ul>
+
+<h2>代价在哪儿</h2>
+<p>按「现状图」建设，结果一定是<strong>把今天的重复和混乱固化下来</strong>：同一份客户信息还在五个系统各存一份，只是现在有了张漂亮的图。等到下一轮业务变化，这张图立刻过期，因为它的依据从来不是业务，而是系统。</p>
+
+<blockquote>考试里的识别口诀：只要选项出现「以现有系统为基础」「以现有IT架构为出发点」「按现状建架构」，基本可直接排除——教材把依据明确指向<strong>业务战略与业务架构</strong>。</blockquote>
+
+<h2>放到投标和面试里怎么用</h2>
+<p>你在写方案或答标时，可以主动区分这两层，反而显得专业：</p>
+<ol>
+<li><strong>现状梳理</strong>：贵单位目前有几套系统、数据在哪、接口怎么走——这部分用现有材料就够。</li>
+<li><strong>目标设计</strong>：按未来三年的业务目标，数据应该怎么分层、谁做权威源、哪些要打通——这部分必须谈业务。</li>
+<li><strong>差距与路线</strong>：从现状到目标分几步走，哪步先做。</li>
+</ol>
+<p>面试时一句话就够：「我理解的架构不是把现有系统画一遍，而是先问业务要往哪走，再倒推数据该怎么组织。」</p>
+
+<div class="note">说明：本期未联网补充新的案例来源，观点依据 DAMA-DMBOK2 第 4 章关于数据架构应以业务战略为输入、以现有系统为契机而非依据的通行表述。教材原文以你本地 PDF 为准。</div>
+</body>
+</html>
