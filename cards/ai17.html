@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>让 AI 一次答对的提问方式 · AI知识推送第02期</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+h3{font-size:16px;margin:20px 0 8px;color:#d7dbe2}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · AI 知识 · 第02期</div>
+<h1>让 AI 一次答对的提问方式</h1>
+<div class="lead">同样一个 AI，别人用着像老员工，你用着像实习生？八成不是 AI 的问题，是话没说全。这一期只讲一件事：怎么把话说完整。</div>
+
+<p style="color:#9aa3b2;font-size:14px">上期回顾一句话：大模型就是个"读过海量书的大型文字机器"——读得多、会现写，所以它能接住你的大白话。</p>
+
+<h2>先说痛点：为什么你的 AI 像实习生</h2>
+<p>这跟去饭店点菜一样：你说"随便来个菜"，厨师只能端个最保险的——结果就是<strong>"正确但没用"</strong>。AI 也一样，它不知道你的及格线在哪，只能给你一个"谁都能用"的答案。</p>
+
+<h2>提问四件套：角色、任务、约束、示例</h2>
+<p>补上这四样东西，命中率会明显不一样。</p>
+<table>
+<tr><th>四件套</th><th>要交代什么</th><th>点菜的比方</th><th>写法示范</th></tr>
+<tr><td>角色</td><td>让 AI 站在谁的位置说话</td><td>请川菜师傅还是粤菜师傅</td><td>"你是做了十年行政的老手"</td></tr>
+<tr><td>任务</td><td>到底要它干什么，越具体越好</td><td>要一道热菜，不是凉菜拼盘</td><td>"帮我写一份部门团建通知"</td></tr>
+<tr><td>约束</td><td>字数、语气、必须含什么、不能碰什么</td><td>不放辣、少油、预算50以内</td><td>"200字以内，别用'赋能''抓手'，要写清时间地点"</td></tr>
+<tr><td>示例</td><td>给它一个"样板"照着做</td><td>拿菜单上的图给它看</td><td>"格式参照：标题／时间／地点／请回复确认"</td></tr>
+</table>
+
+<h2>改前 vs 改后</h2>
+<p><strong>改前：</strong>帮我写个通知。<br>→ 结果通常是：一段空话，你还得大改。</p>
+<p><strong>改后：</strong></p>
+<blockquote>你是做了十年行政的老手。帮我写一份部门团建通知。200字以内，语气轻松但不油腻，不要用"赋能""抓手"这类词；写清时间、地点、交通和报名截止时间。格式参照：标题／一句话缘由／时间地点／怎么报名。</blockquote>
+<p>差别在哪？<strong>改前你把"怎么想"全推给了 AI；改后你把"标准"先给了它。</strong>AI 最怕的不是问题难，是不知道及格线在哪。</p>
+
+<h2>三个最容易漏的细节</h2>
+<ol>
+<li><strong>约束要写"不要什么"。</strong>大多数人只写"要什么"。明确说"别写套话""别加结尾客套"，删掉的东西比加上的更值钱。</li>
+<li><strong>示例比形容词管用。</strong>写一句"专业一点"，不如贴一段你认可的范文。样例是最好用的说明书。</li>
+<li><strong>一次只让它办一件事。</strong>连着让它"写方案+做预算+排版"，往往每件都只有六十分。分开问，每件能到八十五分。</li>
+</ol>
+
+<h2>两个常见误区</h2>
+<ul>
+<li><strong>不是越长越好。</strong>四件套是补"缺口"，不是凑字数。角色和约束对不上，写三百字反而互相打架。</li>
+<li><strong>不是一次就成。</strong>第一版拿骨架、第二版改细节。让 AI 改稿时直接说"第二段太啰嗦，压到两句"，比说"再优化一下"有效得多。</li>
+</ul>
+
+<h2>今天就能试</h2>
+<p>挑你最近一次问 AI 的问题，按"角色+任务+约束+示例"重写一遍，两版答案放一起比。3 分钟，差别通常一眼能看出来。</p>
+
+<h2>本期3条（读30秒）</h2>
+<ul>
+<li>国家网信办发布公告，新增"YOYO Claw""Xiaomi miclaw"等 <strong>3 款手机端侧</strong>生成式 AI 服务完成备案（cac.gov.cn，2026-09-23）。</li>
+<li>截至 2026 年 8 月 31 日，全国累计 <strong>1112 款</strong>生成式 AI 服务完成备案、731 款应用或功能完成登记（国家网信办，2026-09-14）。</li>
+<li>江苏网信办公告：截至 10 月 12 日，该省新增 26 款、累计 <strong>117 款</strong>生成式 AI 服务完成登记（网信江苏，2026-10-12）。</li>
+</ul>
+<p style="color:#9aa3b2;font-size:13px">说明：资讯只留一句话事实，不展开。DeepSeek 模型更新一事网络上有多种说法、未能从官方页面核实，本期不写入。</p>
+
+<h2>下期预告</h2>
+<p>第03期（第 2 步「会拆活」）：<strong>一件大事别一次丢给 AI</strong>——怎么把"写份季度总结"拆成 AI 能干的小活，一路拆到能直接改的程度。</p>
+
+<div class="rel">相关延伸：第01期《大模型是个啥？一次讲明白》讲清了"AI 为什么会写"，本期讲"怎么让它写对"；下期接着讲"怎么让它写大活"。</div>
+<div class="note">来源说明：1.《关于发布3款提供手机端侧生成式人工智能服务已备案信息的公告》，中国网信网，2026年9月23日，cac.gov.cn/2026-09/23/c_1791913977404975.htm；2.《关于发布生成式人工智能服务已备案信息的公告（2026年7月至8月）》，国家互联网信息办公室，2026年9月14日，cac.gov.cn/2026-09/14/c_1791136833136332.htm；3.《江苏省生成式人工智能服务登记信息公告（2026年10月12日）》，网信江苏微信公众号，未取得网页版原文链接。本期方法讲解为通用说明；文中团建通知为演示用虚构场景。</div>
+</body>
+</html>
