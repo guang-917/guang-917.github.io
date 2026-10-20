@@ -1376,7 +1376,7 @@ function toggleTopic(id){
    生成：进视图时自动触发；有缓存直接用，来了新卡只重跑受影响的主题（增量），
    逐主题串行调 AI，每完成一步就落一次盘（中途关页面不白干、下次续跑）。 */
 var LS_SHULI="kb_shuli";
-var SHULI_GEN_VER=2;                 /* 生成规则版本：改提示词↔+1，旧缓存自动失效（.41：导图要求分支/子项都带说明） */
+var SHULI_GEN_VER=3;                 /* 生成规则版本：改提示词/规范化↔+1，旧缓存自动失效（.42：修 String(对象) 被截成 [object Obje]） */
 var SHULI_SYS="你是知识图提炼助手。你只输出 JSON，不输出任何解释、开场白或 markdown 围栏。";
 
 function loadShuliMap(){ try{ return JSON.parse(localStorage.getItem(LS_SHULI)||"{}")||{}; }catch(e){ return {}; } }
@@ -1465,7 +1465,19 @@ function shuliNormGraphs(gs,cards){
     }else if(g.type==="mind"){
       if(!g.root) return;
       gg.root=String(g.root).slice(0,12);
-      gg.branches=(Array.isArray(g.branches)?g.branches:[]).slice(0,5).map(function(b){return {name:String((b&&b.name)||"").slice(0,10),items:((b&&Array.isArray(b.items))?b.items:[]).slice(0,6).map(function(x){return String(x).slice(0,12);})};}).filter(function(b){return b.name;});
+      /* `.42` 修：以前这里是 `String(x).slice(0,12)` —— 子项现在是 {t,d} 对象，
+         String(对象) 会得到 "[object Object]" 再被截成 "[object Obje]"（真机截图就是这个）。
+         现在按对象取 t/d；同时保留纯字符串的旧格式兼容。 */
+      gg.branches=(Array.isArray(g.branches)?g.branches:[]).slice(0,5).map(function(b){
+        return {
+          name:String((b&&b.name)||"").slice(0,10),
+          d:String((b&&b.d)||"").slice(0,40),
+          items:((b&&Array.isArray(b.items))?b.items:[]).slice(0,6).map(function(x){
+            if(x&&typeof x==="object") return {t:String(x.t||"").slice(0,14),d:String(x.d||"").slice(0,50)};
+            return {t:String(x||"").slice(0,14),d:""};
+          }).filter(function(x){return x.t;})
+        };
+      }).filter(function(b){return b.name;});
       if(!gg.branches.length) return;
     }else if(g.type==="flow"){
       gg.steps=(Array.isArray(g.steps)?g.steps:[]).slice(0,6).map(function(x){return {t:String((x&&x.t)||"").slice(0,14),d:String((x&&x.d)||"").slice(0,42)};}).filter(function(x){return x.t;});
@@ -3388,7 +3400,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.41';
+var _APP_VER_ = '2026-10-11.42';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
