@@ -368,6 +368,8 @@ body{
 .dig .go{position:absolute;right:13px;bottom:11px;font-size:11px;color:var(--ink-3)}
 .dig.done{opacity:.5}
 .dig.done .go{color:var(--ink-3)}
+/* `.54`：待挖掘划线，视觉对齐今日卡（去掉下划线下沉感，用中划线+变淡） */
+.dig.done .q{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
 .dig .dt{position:absolute;right:13px;top:11px;font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
 /* ---------- 摘要页（第 2 层）：分类标签 + 日期 / 摘要块 / 关键词 ---------- */
 .reader .rmeta{display:flex;align-items:center;gap:8px;margin:2px 0 12px}
@@ -583,6 +585,8 @@ body{
 /* `.47`：翻面盖章后的问答条目 —— 和今日卡一样变淡、划线 */
 .qitem.done{opacity:.55}
 .qitem.done .qq{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+/* `.54`：已读徽标 —— 划线条目上标个「已读」，让人知道 12 小时后会归档 */
+.qitem.done .qbadge::after{content:" · 12h后归档";font-weight:400;opacity:.75}
 .qitem .qq{font-size:14px;font-weight:600;line-height:1.5}
 .qmeta{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
 .qsrc{font-size:11.5px;color:var(--ink-3)}
@@ -2305,22 +2309,24 @@ function _fmtMD(ts,d){
 }
 function renderQA(){
   var all=loadQA();
-  /* 归档 = 已读 / 已忽略；主列表只看「还没看过的」 */
-  function isArch(x){var s=qaState(x);return s==="read"||s==="ignored";}
+  /* `.54`：已读先划线、满 12 小时才归档。isArch 只认「已忽略」和「已读且满 12h」；
+     已读但未满 12h 的仍留在主列表（带划线 done 态）。 */
+  function isArch(x){var s=qaState(x);if(s==="ignored")return true;if(s==="read")return archDue(x.id);return false;}
   var live=all.filter(function(x){return !isArch(x);});
   var ng=all.filter(function(x){return qaState(x)==="pending";}).length;
   var pg=all.filter(function(x){return qaState(x)==="pushed";}).length;
   var ag=archCount("qa");
-  /* `.47`：统计条已删，数字挂筛选按钮；「未读」= 还没翻面盖章的（read/ignored 之外都算未读） */
+  /* `.54`：「未读」= 没读过的 + 读过但未满 12h 的（后者划线显示）。
+     满 12h 的已进归档，已忽略的直接归档，都不算未读。 */
   var _setN=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
-  var nUnread=live.filter(function(x){var s=qaState(x);return s!=="read"&&s!=="ignored";}).length;
+  var nUnread=live.filter(function(x){var s=qaState(x);if(s==="ignored")return false;if(s==="read")return !archDue(x.id);return true;}).length;
   _setN("qfPend",ng); _setN("qfPush",pg); _setN("qfUnread",nUnread);
   _archBtn("mzArchBtn",ag);
   var box=document.getElementById("qaGroups");if(!box)return;
   var filt=QA_FILTER;
   var pool=live.filter(function(x){
     var s=qaState(x);
-    if(filt==="unread") return s!=="read"&&s!=="ignored";
+    if(filt==="unread"){ if(s==="ignored")return false; if(s==="read")return !archDue(x.id); return true; }
     return s===filt;
   });
   if(!pool.length){
@@ -2336,10 +2342,11 @@ function renderQA(){
   box.innerHTML=gs.map(function(g){
     var items=g.items.map(function(it){
       var s=qaState(it);
-      var badge={pending:"待生成",pushed:"已推送"}[s]||s;
+      var badge={pending:"待生成",pushed:"已推送",read:"已读"}[s]||s;
       var src=it.cardTitle?'<span class="qsrc">来自：'+esc(it.cardTitle)+'</span>':'<span class="qsrc">无来源卡</span>';
       var dt=_fmtMD(it.ts);
-      var _done=(s==="read"||s==="ignored")?" done":"";
+      /* `.54`：state=read（已翻面、未满12h）的条目留在列表并划线；满12h的已被 isArch 过滤 */
+      var _done=(s==="read")?" done":"";
       var _hasDet=it.detailCardId?1:0;
       /* `.52`：删掉「看详解」和「忽略」两个按钮，整条卡可点。
          有详解卡的才可点（点开看内容）；没有的给个提示。 */
@@ -2507,11 +2514,11 @@ function stampDigFirst(list){
   (list||[]).forEach(function(d){if(d&&d.q&&!m[d.q]){m[d.q]=d.date||digSourceDate(d)||today;chg=true;}});
   if(chg)saveDigFirst(m);
 }
-/* 归档条数（kind: "dig" | "qa"） */
+/* 归档条数（kind: "dig" | "qa"）。`.54`：已读要满 12h 才算归档 */
 function archCount(kind){
-  if(kind==="qa"){return loadQA().filter(function(x){var s=qaState(x);return s==="read"||s==="ignored";}).length;}
+  if(kind==="qa"){return loadQA().filter(function(x){var s=qaState(x);return s==="ignored"||(s==="read"&&archDue(x.id));}).length;}
   var read=loadDigRead(),del=loadDigDel();
-  return DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0;}).length;
+  return DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0&&archDue("dig:"+d.q);}).length;
 }
 function _archBtn(id,n){
   var b=document.getElementById(id);if(!b)return;
@@ -2522,7 +2529,12 @@ function renderDig(){
   var box=document.getElementById("digList");if(!box)return;
   stampDigFirst(DIG);
   var read=loadDigRead(),del=loadDigDel();
-  var live=DIG.filter(function(d){return read.indexOf(d.q)<0&&del.indexOf(d.q)<0;});
+  /* `.54`：未读 + 已读未满 12h 的都显示（后者划线）；已读满 12h 或已粉碎的才从主列表消失（归档） */
+  var live=DIG.filter(function(d){
+    if(del.indexOf(d.q)>=0)return false;
+    if(read.indexOf(d.q)<0)return true;                 /* 未读：照常显示 */
+    return !archDue("dig:"+d.q);                         /* 已读：满 12h 才隐藏，否则划线显示 */
+  });
   var chs=["data","ai","jp"],h=[];
   if(!live.length)h.push('<div class="qempty">没看过的线索都挖完了 👍 新的会在下次推送后出现。想回顾看过的，点右上角「归档」。</div>');
   for(var i=0;i<chs.length;i++){
@@ -2592,7 +2604,7 @@ function renderArch(){
     return;
   }
   if(title)title.textContent="归档 · 问答";
-  var qs=loadQA().filter(function(x){var s=qaState(x);return s==="read"||s==="ignored";});
+  var qs=loadQA().filter(function(x){var s=qaState(x);return s==="ignored"||(s==="read"&&archDue(x.id));});
   qs.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
   if(!qs.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>问答里标记为「已读」或「已忽略」的，会自动收到这里。</div>';return;}
   archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点一条，就能重看你<b>当初看到的那版详解</b>；点「放回」可以让它回到问答案板；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
@@ -2694,6 +2706,16 @@ function loadLocal(){try{var s=JSON.parse(localStorage.getItem(LS_KEY)||"{}");if
   return s;}catch(e){return {};}}
 function saveLocal(s){try{localStorage.setItem(LS_KEY,JSON.stringify(s));}catch(e){}}
 function setRead(id,val){var s=loadLocal();s.read=s.read||{};(val?s.read[id]=true:delete s.read[id]);saveLocal(s);var c=getCard(id);if(c)c.read=!!val;}
+/* ===== `.54`：12 小时延迟归档 =====
+   已读只划线（不消失），满 12 小时才真正归档。时间戳统一存 kb_readat。
+   惰性检查：打开 App / 进入相关列表时扫一遍，够 12h 才归档，不靠后台定时器。 */
+var LS_READAT="kb_readat";
+var ARCH_DELAY=12*3600*1000;   /* 12 小时 */
+function loadReadAt(){try{return JSON.parse(localStorage.getItem(LS_READAT)||"{}")||{};}catch(e){return {};}}
+function saveReadAt(m){try{localStorage.setItem(LS_READAT,JSON.stringify(m));}catch(e){}}
+function stampReadAt(key){var m=loadReadAt();if(!m[key]){m[key]=Date.now();saveReadAt(m);}}
+/* 某 key 是否已满 12 小时（没有时间戳视为未归档） */
+function archDue(key){var m=loadReadAt();return !!m[key] && (Date.now()-m[key])>=ARCH_DELAY;}
 function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=true:delete s.star[id]);saveLocal(s);var c=getCard(id);if(c)c.star=!!val;}
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
@@ -3277,22 +3299,32 @@ function flipRead(el){
       },FOLD);
     },FOLD+HOLD);
   },FOLD);
-  /* `.47`：按条目类型记账 —— 今日卡写 read、问答改 state、待挖掘记进 kb_digread */
+  /* `.47`+`.54`：按条目类型记账 —— 今日卡写 read 并联动其问答、问答改 state、待挖掘记 kb_digread */
   if(id){
     var c=getCard(id);
     if(!c||!c.read){setRead(id,true);refreshRead();}
+    stampReadAt(id);   /* 记已读时间戳，满 12h 后归档 */
+    /* `.54` 联动：这张今日卡（cardId 关联）的所有问答条目，一并标已读+划线 */
+    var _q2=loadQA(),_chg=false;
+    for(var k=0;k<_q2.length;k++){
+      if(_q2[k].cardId===id && _q2[k].state!=="read" && _q2[k].state!=="ignored"){
+        _q2[k].state="read"; stampReadAt(_q2[k].id); _chg=true;
+      }
+    }
+    if(_chg){saveQA(_q2);updateMzBdg();}
   }else if(qid){
     var a=loadQA();
     for(var i=0;i<a.length;i++){
-      if(a[i].id===qid){ if(a[i].state!=="read"&&a[i].state!=="ignored"){a[i].state="read";saveQA(a);} break; }
+      if(a[i].id===qid){ if(a[i].state!=="read"&&a[i].state!=="ignored"){a[i].state="read";saveQA(a);stampReadAt(qid);} break; }
     }
     updateMzBdg();
-    if(typeof renderQA==="function"&&curView==="mz"&&mzSub==="qa") renderQA();   /* 重绘：让条目立刻变淡、数字立刻减 1 */
+    if(typeof renderQA==="function"&&curView==="mz"&&mzSub==="qa") renderQA();   /* 重绘：让条目立刻划线 */
   }else if(dq){
     var _rd=loadDigRead();
     if(_rd.indexOf(dq)<0){_rd.push(dq);saveDigRead(_rd);}
+    stampReadAt("dig:"+dq);
     updateMzBdg();
-    if(typeof renderDig==="function"&&curView==="mz"&&mzSub==="dig") renderDig();  /* 同上：待挖掘列表立刻变淡 */
+    if(typeof renderDig==="function"&&curView==="mz"&&mzSub==="dig") renderDig();  /* 同上：待挖掘列表立刻划线 */
   }
   toast("翻过即已读 ✓");
 }
@@ -3573,7 +3605,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.53';
+var _APP_VER_ = '2026-10-11.54';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
