@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：三范式到底怎么数？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px;font-size:15px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin-top:24px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid #262b34;padding:9px 11px;text-align:left}
+th{background:#171a21}
+.note{margin-top:24px;color:#9aa3b2;font-size:13px}
+</style></head>
+<body>
+<h1>深挖：三范式到底怎么数？</h1>
+<p>这张深挖页回答你上一张卡留下的悬念：既然数据仓库故意「逆规范化」，那三范式到底是什么？为什么业务系统都遵守它？</p>
+<h2>用「登记表」比喻三范式</h2>
+<p>想象你在设计一张学生登记表，三范式就是三条收纳规矩：</p>
+<table>
+<tr><th>范式</th><th>规矩（大白话）</th><th>违反会怎样</th></tr>
+<tr><td>第一范式（1NF）</td><td>每格只写一件事——「电话」栏不许同时塞座机和手机两个号码</td><td>一格塞多值，后面没法查、没法筛</td></tr>
+<tr><td>第二范式（2NF）</td><td>先过 1NF，且表里没有「部分依赖」——比如「成绩」表的主键是（学号+课程号），那「课程名」就不能放这张表里，因为课程名只跟课程号有关、跟学号无关</td><td>同一门课的名字在成千上万行里重复存，改一次名要改一万行</td></tr>
+<tr><td>第三范式（3NF）</td><td>先过 2NF，且没有「传递依赖」——表里已有「学号→院系」，就不能再存「院系→院系电话」，因为电话是通过院系绕出来的，该拆到院系表里</td><td>院系电话一换，全表几百处都要改，漏改一处就出脏数据</td></tr>
+</table>
+<h2>一句话记住三范式</h2>
+<p><b>1NF：一格一件事；2NF：别把「只跟一部分钥匙有关」的东西塞进来；3NF：别把「绕两道才推出来」的东西塞进来。</b>核心动机都一样——<b>减少冗余，一处事实只存一份，改也只改一处</b>。</p>
+<h2>那数据仓库为什么敢违反它？</h2>
+<p>因为业务系统（OLTP）天天被「写入、修改」，冗余是灾难——改一处漏一处就是错账。而数据仓库（OLAP）是「写一次、读万遍」：数据进来就基本不改，最怕的是查询慢。所以维度建模故意把名字重复几份存，用空间换速度。这就是第5章那条主线：OLTP 讲规矩（三范式），OLAP 讲速度（星型、逆规范化）。</p>
+<p class="note">依据 DAMA-DMBOK2 第5章及数据库基础通用知识整理；范式细节以教材与数据库理论经典表述（如 E.F. Codd 关系模型）为准。</p>
+</body>
+</html>
