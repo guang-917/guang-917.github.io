@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第5章 数据建模与设计｜1/共5 · 定义·业务驱动·目标</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0}
+.ans{border-left:4px solid #46b47a;background:var(--card);border-radius:0 12px 12px 0;padding:10px 14px;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 数据知识 · CDGA 概念卡</div>
+<h1>CDGA｜第5章 数据建模与设计｜1/共5 · 定义·业务驱动·目标</h1>
+<div class="lead">第4章那张「城市规划图」画完了，今天进第5章：真正动手画房间、摆家具。这张先讲清楚——数据建模到底干什么、为什么非做不可、做到什么程度算合格。</div>
+
+<h2>一、先用一个比喻说清：盖楼先画施工图</h2>
+<p>盖一栋楼，光有「这块地要盖商场」的规划（第4章的数据架构）不够。你还得有施工图：商场几层、每层几个铺位、铺位之间哪扇门通哪扇门、电线从哪儿走。没有这张图，工人上来就砌墙，最后电梯井和承重墙打架，返工三倍价钱。</p>
+<p><b>数据建模</b>就是给数据画这种「施工图」：把业务里真实存在的东西——客户、订单、产品、合同——以及它们之间的关系，用一套画法画成图，再变成数据库里能用的表。</p>
+<p>用一句教材口吻的话：<b>数据建模与设计就是发现、分析、表示数据需求，并把这些需求传达出去、最终落成一个可用的数据存储结构的过程。</b>它有两条腿：一条叫<b>建模</b>（想清楚要存什么），一条叫<b>设计</b>（具体怎么建表建字段）。</p>
+
+<h2>二、业务驱动：为什么非画图纸不可？</h2>
+<p>不建模直接上手会怎样？三个常见惨状，恰好就是教材归纳的三个驱动理由：</p>
+<ul>
+  <li><b>各画各的图纸，图纸对不上。</b>财务的「客户」和市场部的「客户」编号规则不一样，月底对账差三百万。建模的第一个驱动，是<b>提供一套共同的数据语言</b>——全公司对同一个东西叫同一个名。</li>
+  <li><b>系统一换，数据搬不动。</b>老系统里的「订单」有 40 个字段，新系统只要 15 个，没人知道另外 25 个是干嘛的、能不能扔。建模要把「每个字段什么意思、从哪来、给谁用」写清楚，这就是<b>可维护、可迁移</b>。</li>
+  <li><b>数据不安全、不合规。</b>一个「身份证号」散落在 8 张表里，有的加密有的明文，出了事根本查不干净。建模能在图上一次性标清敏感字段，这是<b>安全与合规的基础</b>。</li>
+</ul>
+<p>所以本章的目标可以归成五句话：<b>统一语义、支撑多种用途、保证质量、便于变更、支撑安全合规</b>。</p>
+
+<h2>三、目标：什么样的模型算「画好了」</h2>
+<table>
+<tr><th>目标</th><th>大白话</th></tr>
+<tr><td>准确、完整</td><td>业务里有的东西都画上，业务里没有的别硬凑</td></tr>
+<tr><td>可理解、可沟通</td><td>业务方看得懂，不用程序员在旁边当翻译</td></tr>
+<tr><td>可复用、可扩展</td><td>明年加条新业务线，不用推倒重来</td></tr>
+<tr><td>支撑多种落地方式</td><td>同一份模型，能建到关系库，也能落到大数据平台</td></tr>
+</table>
+
+<h2>四、最关键的分层：概念→逻辑→物理</h2>
+<p>这是本章后几张的地基，也是考试最爱考的分类题。还是用盖房子打比方：</p>
+<ul>
+  <li><b>概念模型</b>——像小区总平图，只标「这儿有超市、那儿有住宅、中间有条路」，不标水管多粗。它<b>面向业务、讲口径、不谈技术</b>，通常一个概念模型覆盖一个大业务领域。</li>
+  <li><b>逻辑模型</b>——像户型施工图，每个房间几平米、门朝哪开都写清，但还没定用哪家的材料。它已经把「客户」「订单」拆成带属性、带主键的实体，但<b>不绑定具体哪种数据库</b>。</li>
+  <li><b>物理模型</b>——像真正的水电图和材料单：用哪款数据库、字段什么类型、建什么索引、怎么分区。<b>到这一层才跟具体技术产品挂钩</b>。</li>
+</ul>
+<blockquote>记法：越往上越像「谈生意」，越往下越像「谈施工」。问「不依赖具体数据库技术的模型」→ 逻辑模型；问「包含索引、分区、存储参数」→ 物理模型。</blockquote>
+
+<h2>五、考试怎么考</h2>
+<p>这个点通常出<b>定义题</b>和<b>分类题</b>：</p>
+<ul>
+  <li><b>定义题</b>常问「数据建模与设计的主要目的是？」正确选项关键词落在「<b>表示数据需求、传达出去、形成可用的数据结构</b>」；干扰项爱写「提高查询速度」「压缩存储成本」「替代数据治理」——前两个是手段，第三个是别的章。</li>
+  <li><b>分类题</b>常问三层模型各关注什么。关键词：概念=业务语义、逻辑=属性与关系且技术中立、物理=具体 DBMS 实现。</li>
+  <li><b>易混干扰项</b>：把「数据架构」和「数据建模」混着说。分工是——架构管<b>整体规划与数据流向</b>（第4章），建模管<b>单个主题怎么画细、怎么建表</b>（第5章）。</li>
+</ul>
+
+<h2>六、和你目标岗位的关系</h2>
+<ul>
+  <li><b>数据合规评估岗：</b>评估前要先「摸清数据长什么样」——哪些表有人信息、哪些字段能关联到人。建模基础让你读得懂对方给的数据字典和 ER 图，不至于听天书。</li>
+  <li><b>网络数据安全合规实验室的技术方案岗：</b>判断一份数据「脱敏后还能不能还原」，得先看懂模型里有没有能串起来做关联的键（比如手机号+订单号）。</li>
+  <li><b>北数所的数据产品/交易相关岗：</b>上架数据产品时说明书里的「数据项、字段口径、更新频率」，本质就是一份轻量逻辑模型。</li>
+</ul>
+
+<h2>七、自测一题</h2>
+<div class="q">
+<p>自测：下列关于数据模型层次的描述，最准确的是：</p>
+<p>A. 概念模型必须标明主键、外键和数据类型<br>
+B. 逻辑模型与具体数据库产品无关，但已包含实体、属性和关系<br>
+C. 物理模型主要用于与业务人员沟通需求<br>
+D. 三个层次的模型内容完全相同，只是叫法不同</p>
+</div>
+<div class="ans">
+<p><b>答案：B。</b>逻辑模型已经到了「有实体、有属性、有关系、有主键」的程度，但还没绑定 MySQL 还是 Oracle，所以技术中立。</p>
+<p>陷阱拆解：A 错在把主键类型这类实现细节提前塞进概念模型，概念模型只谈业务口径；C 反了——跟业务沟通是概念模型的活儿，物理模型是给 DBA 和开发看的；D 是瞎话。</p>
+</div>
+
+<h2>八、下一张</h2>
+<p>下一张讲本章的「规矩」：建模六条原则、建模要吃进哪些输入、最后吐出哪些东西。今天先把「概念/逻辑/物理」这三个词念顺，后面全靠它。</p>
+
+<div class="rel">相关延伸：CDGA｜第4章 数据架构｜5/共5 · 章末清账：常考七件事 + 数据仓库架构三问；CDGA｜第4章 数据架构｜4/共5 · 高频考点·易混对比：架构≠模型</div>
+<div class="note">来源说明：本期概念框架依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 5 章「数据建模与设计」（DAMA International 著，教材中文版）的一般性内容组织，未逐字引用原文；概念/逻辑/物理三层模型的划分属 DMBOK2 与业界通行表述，非本卡自创。教材原文页数以纸质书为准，本卡不注页码，以免误引。本期为概念讲解，未引用外部新闻或政策原文，故无外链。</div>
+</body>
+</html>
