@@ -1772,6 +1772,18 @@ document.getElementById("treeList").addEventListener("click",function(e){
   }catch(e){}
 })();
 
+/* ===== `.49` 二次兜底：把「待挖掘」彻底恢复成原始全量 =====
+   `.48` 只清了"已读"，但如果之前右滑粉碎过一批线索（`kb_digdel` 黑名单），
+   它们仍然会被过滤掉，表现就是"待挖掘 0 / 归档 0"。
+   用户明确要求「全部保留」，所以这里把删除黑名单也清掉——一次，只跑一次。 */
+(function(){
+  try{
+    if(localStorage.getItem("kb_mig49")==="1") return;
+    localStorage.setItem("kb_digdel","[]");
+    localStorage.setItem("kb_mig49","1");
+  }catch(e){}
+})();
+
 /* ====================== 卡片内问答 + 兴趣记录 ====================== */
 var LS_QA="kb_qa",LS_INT="kb_interest",LS_QADEL="kb_qadel";
 function loadQaDel(){try{return JSON.parse(localStorage.getItem(LS_QADEL)||"[]")||[];}catch(e){return [];}}
@@ -3526,7 +3538,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.48';
+var _APP_VER_ = '2026-10-11.49';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
