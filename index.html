@@ -720,10 +720,9 @@ body{
       <div class="qaWrap">
         <!-- `.47`：筛选改为 全部 / 待生成 / 已推送 / 未读（原「归档」并入「未读」） -->
         <div class="qfilters" id="qaFilters">
-          <button class="filter on" data-f="all">全部<b id="qfAll">0</b></button>
           <button class="filter" data-f="pending">待生成<b id="qfPend">0</b></button>
           <button class="filter" data-f="pushed">已推送<b id="qfPush">0</b></button>
-          <button class="filter" data-f="unread">未读<b id="qfUnread">0</b></button>
+          <button class="filter on" data-f="unread">未读<b id="qfUnread">0</b></button>
         </div>
         <div id="qaGroups"></div>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
@@ -2290,7 +2289,7 @@ function remindNewDetail(kp,id){
   toast("已生成详解：「"+(kp||"")+"」· 去「今日」或「问答」查看");
 }
 /* 问答 tab 总览（按知识点分组 + 组内按时间从新到旧 + 已读/已忽略自动收进归档） */
-var QA_FILTER="all";
+var QA_FILTER="unread";
 /* 提问日期：优先用条目自带日期，其次用提问时间戳 */
 function _fmtMD(ts,d){
   if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d)){var m=d.split("-");return (+m[1])+"月"+(+m[2])+"日";}
@@ -2308,13 +2307,12 @@ function renderQA(){
   /* `.47`：统计条已删，数字挂筛选按钮；「未读」= 还没翻面盖章的（read/ignored 之外都算未读） */
   var _setN=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
   var nUnread=live.filter(function(x){var s=qaState(x);return s!=="read"&&s!=="ignored";}).length;
-  _setN("qfAll",live.length); _setN("qfPend",ng); _setN("qfPush",pg); _setN("qfUnread",nUnread);
+  _setN("qfPend",ng); _setN("qfPush",pg); _setN("qfUnread",nUnread);
   _archBtn("mzArchBtn",ag);
   var box=document.getElementById("qaGroups");if(!box)return;
   var filt=QA_FILTER;
   var pool=live.filter(function(x){
     var s=qaState(x);
-    if(filt==="all") return true;
     if(filt==="unread") return s!=="read"&&s!=="ignored";
     return s===filt;
   });
@@ -3544,7 +3542,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.50';
+var _APP_VER_ = '2026-10-11.51';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
