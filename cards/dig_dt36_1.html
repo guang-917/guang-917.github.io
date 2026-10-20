@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：为什么非要「概念模型」，直接画表不行吗？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:17px;margin:24px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 深挖</div>
+<h1>为什么非要「概念模型」，直接画表不行吗？</h1>
+<div class="lead">很多新手的直觉是：反正最后都要变成表，不如一步到位直接建表。这一页讲清楚，为什么专业团队宁可多花一周画那张"看起来没用"的图。</div>
+
+<h2>一、直接建表的三个真实代价</h2>
+<ul>
+<li><strong>口径之争提前爆发在技术上。</strong>财务说"客户"是签合同的那家公司，市场说"客户"是下单的那个人。直接建表时，这个分歧只能在字段名和注释里无声妥协，谁也没拍板。等报表出来，两边互相说对方错了——返工成本是当初坐下来讨论的十倍。</li>
+<li><strong>模型被第一家系统的技术栈绑架。</strong>直接按某个数据库的特性建表（比如为了跑得快，把订单明细塞进一个大字段），三年后要换平台或对外做数据共享，这套表搬不出去，只能重来。</li>
+<li><strong>敏感字段没人在图上标。</strong>直接建表时，开发只关心能不能跑通，没人有义务全局标注"哪些字段能识别到自然人"。等要做合规评估或匿名化，只能在几十上百张表里逐个翻。</li>
+</ul>
+
+<h2>二、概念模型真正干的活：把"吵什么"和"怎么建"分开</h2>
+<p>概念模型面向业务，只回答三件事：<strong>业务里有哪些东西（实体）、它们之间是什么关系、同一件事在不同部门叫什么。</strong>它不写字段类型、不写主键、不碰任何技术，所以业务方能直接参与、当场拍板。</p>
+<blockquote>类比：盖商场先开一次"业态会"，定一层卖什么、二层卖什么、货梯通哪里。这个会不需要讨论用哪个牌子的钢筋。业态定了再交给施工方出图——顺序反了，就是推倒重来。</blockquote>
+
+<h2>三、落到你的面试里怎么答</h2>
+<p>被问"你怎么理解三层模型"，可以这么答：</p>
+<p>"概念模型是跟业务定口径的；逻辑模型把口径翻译成有实体、属性、关系但不绑定产品的结构；物理模型才是具体到某个数据库怎么建。三层分开，是为了让口径的争论在成本最低的阶段解决。"</p>
+<p>再加一句贴岗位的："做数据合规评估时，我最先要的其实是对方的逻辑模型——它既不像概念模型那么抽象，也没被某个系统绑死，正适合判断哪些字段能关联到人。"</p>
+
+<div class="note">来源说明：本页为 DMBOK2 第5章「数据建模与设计」中三层模型划分的应用性延伸解读，属概念解释，未逐字引用原文；举例为通俗类比，不代表教材原例。</div>
+</body>
+</html>
