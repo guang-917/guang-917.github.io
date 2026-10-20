@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>延伸：数据建模工具 vs 数据剖析工具，差在哪？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 数据知识</div>
+<h1>延伸：数据建模工具 vs 数据剖析工具，差在哪？</h1>
+<div class="lead">一个管「设计」，一个管「体检」。分清这两件事，名词归属题直接拿分，工作中排查「模型和库对不上」也有标准动作。</div>
+<h2>先分清两件工具</h2>
+<p>这两个名字只差一个字，但干的活完全相反：</p>
+<ul>
+<li><b>数据建模工具</b>——像<b>画图纸的笔</b>。你在上面画方框（实体）、连线条（关系）、写注释（定义），画出来的是「应该长什么样」。</li>
+<li><b>数据剖析工具</b>——像<b>拿尺子和放大镜去量已经砌好的墙</b>。它不设计任何东西，只跑到真实数据里抽样统计：这个字段有多少空值？手机号有没有混进字母？数据量和系统里记录的对得上吗？</li>
+</ul>
+<p>一句话：<b>建模工具管「设计」，剖析工具管「体检」。</b></p>
+
+<h2>为什么考试爱把它们放一起</h2>
+<p>因为它们是「纸面」和「现实」的一体两面。教材讲建模活动时，把「剖析现有数据」作为建模的输入之一：你得先知道真实数据有多脏、跟旧模型差多少，才画得出能落地的图。出题人最爱设的陷阱，就是让你把「体检工具」说成「设计工具」，或者反过来。</p>
+<blockquote>判题小口诀：题干里有「画」「设计」「定义」→ 建模工具；有「统计」「抽样」「校验」「比对」→ 剖析工具。</blockquote>
+
+<h2>面试/工作里怎么用</h2>
+<p>到了北京国际数据服务有限公司做合规评估、信息清除检测这类活，客户常说「我们的模型跟库里对不上」。这时候的标准动作是：</p>
+<ol>
+<li>用<b>建模工具</b>导出模型，看设计的是什么；</li>
+<li>用<b>剖析工具</b>扫真实库，看实际是什么；</li>
+<li>两边一比，差异清单就是整改清单。</li>
+</ol>
+<p>这套「设计—实际—差异」的三步说法，比背定义更能让对方信你懂行。</p>
+
+<h2>容易混的第三样：数据质量工具</h2>
+<p>很多选项还会塞「数据质量工具」。它跟剖析工具确实有重叠——都要扫数据。区别在于目的：剖析是<b>为了建模和探索而了解数据</b>，质量工具是<b>按既定规则长期监控、报警、出整改单</b>，属于第13章数据质量的地盘。考试若问「属于哪一章的活动」，别答错门牌号。</p>
+
+<div class="rel">相关延伸：CDGA｜第5章 数据建模与设计｜3/共5 · 工具·度量指标·落地步骤</div>
+<div class="note">来源说明：依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第5章关于数据建模工具与数据剖析工具的分类，以及第13章数据质量相关活动的划分；具体页码请以你手上的教材版本核对。</div>
+</body>
+</html>
