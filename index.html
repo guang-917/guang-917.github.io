@@ -571,6 +571,9 @@ body{
 .qgrp{margin-bottom:14px}
 .qgrph{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px;padding-left:2px}
 .qitem{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+/* `.52`：整条卡可点（点开看详解），给个可点的手势提示 */
+.qitem[data-det]{cursor:pointer}
+.qitem[data-det]:active{background:var(--bg)}
 .qitem.ig{opacity:.5}
 /* `.47`：翻面盖章后的问答条目 —— 和今日卡一样变淡、划线 */
 .qitem.done{opacity:.55}
@@ -585,7 +588,6 @@ body{
 .b-read{background:#e8eefc;color:#2f5fd0}
 .b-ignored{background:#f0f0f0;color:#888}
 .qacts{display:flex;gap:8px;margin-top:7px;align-items:center}
-.qignore{background:none;border:1px solid var(--line);color:var(--ink-3);border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer}
 .qhint{font-size:11.5px;color:var(--ink-3)}
 
 /* ---------- 底部抽屉 ---------- */
@@ -2331,11 +2333,12 @@ function renderQA(){
       var s=qaState(it);
       var badge={pending:"待生成",pushed:"已推送"}[s]||s;
       var src=it.cardTitle?'<span class="qsrc">来自：'+esc(it.cardTitle)+'</span>':'<span class="qsrc">无来源卡</span>';
-      var link=it.detailCardId?'<button class="qlink" data-det="'+esc(it.detailCardId)+'">看详解 →</button>':'';
-      var ig='<button class="qignore" data-qid="'+esc(it.id)+'">忽略，收进归档</button>';
       var dt=_fmtMD(it.ts);
       var _done=(s==="read"||s==="ignored")?" done":"";
-      return '<div class="qitem'+_done+'" data-qid="'+esc(it.id)+'"><div class="qq">'+esc(it.q)+'</div><div class="qmeta">'+src+'<span class="qbadge b-'+s+'">'+badge+'</span>'+(dt?'<span class="qdate">'+esc(dt)+'</span>':'')+'</div><div class="qacts">'+link+ig+'</div></div>';
+      var _hasDet=it.detailCardId?1:0;
+      /* `.52`：删掉「看详解」和「忽略」两个按钮，整条卡可点。
+         有详解卡的才可点（点开看内容）；没有的给个提示。 */
+      return '<div class="qitem'+_done+'" data-qid="'+esc(it.id)+'" data-det="'+esc(it.detailCardId||'')+'"><div class="qq">'+esc(it.q)+'</div><div class="qmeta">'+src+'<span class="qbadge b-'+s+'">'+badge+'</span>'+(dt?'<span class="qdate">'+esc(dt)+'</span>':'')+'</div></div>';
     }).join("");
     return '<div class="qgrp"><div class="qgrph">'+esc(g.kp)+' · '+g.items.length+' 问</div>'+items+'</div>';
   }).join("");
@@ -2397,23 +2400,19 @@ function mzAsk(){
   });
 })();
 document.getElementById("qaGroups").addEventListener("click",function(e){
-  var lnk=e.target.closest(".qlink");
-  if(lnk){
-    var did=lnk.getAttribute("data-det"),c=getCard(did)||getDetail(did);
-    if(c){
-      /* 【别再绕道今日页】以前这里是 switchTab("today") 再开卡——详解卡确实排在今日列表最前，动画好看，
-         但代价是：① 看完侧滑返回落回「今日」，人在问答页点进来的却退到了另一页；
-                    ② 导航栈里还记着「tab:qa」，页面却已是今日 → 再点「问答」图标会被当成"已经在这页了"而整个吃掉（点不动）。
-         现在：就地撑开，起点/落点都取刚点的这一条，动画从这条长出来、再缩回这条。 */
-      var row=e.target.closest(".qitem")||lnk,rr=row.getBoundingClientRect();
-      var src={left:rr.left,top:rr.top,width:rr.width,height:rr.height};
-      lastRect=src;                       /* 收回时落回这条（详解卡在隐藏的今日页里量不到位置，靠这个兜底） */
-      openReader(c,src);
-    }
-    return;
+  /* `.52`：整条卡可点，删掉「看详解」和「忽略」按钮（忽略已被左翻已读替代，逻辑重复） */
+  var row=e.target.closest(".qitem");
+  if(!row)return;
+  var did=row.getAttribute("data-det");
+  if(!did){ toast("这条还没有详解卡，等 AI 生成后再点"); return; }
+  var c=getCard(did)||getDetail(did);
+  if(c){
+    /* 就地撑开：起点/落点都取刚点的这一条，动画从这条长出来、再缩回这条 */
+    var rr=row.getBoundingClientRect();
+    var src={left:rr.left,top:rr.top,width:rr.width,height:rr.height};
+    lastRect=src;
+    openReader(c,src);
   }
-  var ig=e.target.closest(".qignore");
-  if(ig){var a=loadQA();for(var i=0;i<a.length;i++){if(a[i].id===ig.getAttribute("data-qid")){a[i].state="ignored";break;}}saveQA(a);renderQA();updateMzBdg();toast("已忽略，收进归档");return;}
 });
 document.getElementById("qaSend").addEventListener("click",function(){
   var ta=document.getElementById("qaText");var q=ta.value.trim();
@@ -3542,7 +3541,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.51';
+var _APP_VER_ = '2026-10-11.52';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
