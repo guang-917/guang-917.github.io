@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第5章 数据建模与设计｜3/共5 · 工具·度量指标·落地步骤</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 数据知识</div>
+<h1>CDGA｜第5章 数据建模与设计｜3/共5 · 工具·度量指标·落地步骤</h1>
+<div class="lead">前两张讲了施工图是什么、守什么规矩。今天讲「拿什么画、怎么算画得好、按什么顺序画」——这张是选择题里最容易出具体工具名词的地方。</div>
+
+<blockquote>进度：<b>第5章 数据建模与设计｜3/共5</b>（本章还剩 2 张：高频考点与易混对比、章末清账）</blockquote>
+
+<h2>一、这张图要解决的三件事</h2>
+<p>数据建模说白了就是<b>盖楼前先画好施工图</b>。前两张讲的是「图要画成什么样」「画图守哪几条规矩」，今天讲实操：工具（用什么笔和尺子画）、度量（怎么算画得好）、步骤（从接需求到定稿按什么顺序走）。</p>
+
+<h2>二、工具：四类家伙什，别互相串门</h2>
+<table>
+<tr><th>类型</th><th>大白话</th><th>干什么用</th></tr>
+<tr><td>数据建模工具</td><td>画图的那支笔</td><td>画概念 / 逻辑 / 物理模型，出实体关系图</td></tr>
+<tr><td>数据剖析工具</td><td>拿尺子量实物</td><td>抽样看真实数据长什么样：空值多不多、格式乱不乱、和图上写的一不一致</td></tr>
+<tr><td>模型管理 / 版本库</td><td>图纸档案室</td><td>谁什么时候改了什么，留痕、能回溯</td></tr>
+<tr><td>元数据 / 影响分析工具</td><td>查「这条线连着哪」</td><td>改一个字段，能查到下游哪些报表、接口会被波及（数据血缘）</td></tr>
+</table>
+<p><b>常见干扰项</b>：把 ETL 调度工具、BI 报表工具、数据库管理工具塞进「建模工具」里。记一句：<b>建模管的是「图」和「定义」，不是「搬数据」也不是「出报表」</b>。</p>
+
+<h2>三、度量指标：怎么算这张图画得好</h2>
+<p>这一章关心的不是「图画得多漂亮」，而是「这件事有没有被真正管起来」。落到可数的指标，大致两类：</p>
+<ul>
+<li><b>过程类</b>：模型评审覆盖率、模型与实际库表的一致率、变更是否全部留痕、建模规范符合率；</li>
+<li><b>结果类</b>：口径冲突数（同一个「客户数」在不同报表里打架的次数）、返工次数、从提出需求到模型定稿的周期。</li>
+</ul>
+<p><b>排除法</b>：选项里出现「服务器响应速度」「存储成本下降」「报表打开更快」——这些是第6章数据存储与操作、第11章数据仓库与商业智能的地盘，不是建模的度量。</p>
+
+<h2>四、落地步骤：一条线走完</h2>
+<ol>
+<li><b>定范围与业务问题</b>：先问清楚「这张图给谁、解决什么问题」；</li>
+<li><b>收集需求与现有资料</b>：业务访谈、单据、现有表结构、术语表；</li>
+<li><b>画概念模型</b>：只用业务语言，把「有哪些东西、怎么挂靠」讲清楚，跟业务当面确认口径；</li>
+<li><b>细化逻辑模型</b>：加实体、属性、主键、关系，此时仍不绑定具体数据库；</li>
+<li><b>转物理模型</b>：定字段类型、索引、分区，交 DBA 建库；</li>
+<li><b>评审发布 + 持续维护</b>：走评审、进版本库、随业务变化更新。</li>
+</ol>
+<p><b>顺序题的抓手</b>：「先对齐业务口径，再谈技术落地」。凡是「先建表、后补图」「先买工具、后问需求」的选项，一律排除。</p>
+
+<h2>五、考试怎么考</h2>
+<ul>
+<li><b>名词归属题</b>：给一个工具名，问它属于哪类活动。「剖析工具」「版本库」「血缘分析」是高频词；</li>
+<li><b>排序题</b>：概念→逻辑→物理，或「需求→模型→评审→发布」；</li>
+<li><b>情景应用题</b>：描述「模型和数据库对不上、下游报表被改崩」的场景，问该用哪类工具——答案指向影响分析 / 元数据工具。</li>
+</ul>
+<p>正确选项的关键词通常是：<b>业务需求先行、分层递进、评审与版本管理、可追溯</b>。</p>
+
+<h2>六、自测一题</h2>
+<p>某团队接到「客户统一视图」项目，项目经理要求「先让 DBA 把表建出来，图以后再补」。按 DMBOK2 的建模流程，最该先做的是？</p>
+<p>A. 直接物理建模建表<br>B. 先画概念模型，与业务确认「客户」的口径<br>C. 先采购一款数据建模工具<br>D. 先做数据清洗</p>
+<div class="lead"><b>答案 B。</b>建模的第一步是发现、分析并表达业务对数据的真实需求。口径没对齐就建表，后面必然大改。<br>A 跳过前两步、本末倒置；C 工具是手段不是起点；D 数据清洗属于第13章数据质量，而且要先有目标模型，才知道「干净」的标准是什么。</div>
+
+<div class="rel">相关延伸：CDGA｜第5章 数据建模与设计｜2/共5 · 原则·输入·输出；CDGA｜第5章 数据建模与设计｜1/共5 · 定义·业务驱动·目标；CDGA｜第4章 数据架构｜3/共5 · 工具·度量指标·落地步骤</div>
+<div class="note">来源说明：本期依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第5章「数据建模与设计」的语境图（工具、度量指标、活动）组织，章节与知识框架以教材为准。本期未引用外部新闻或政策文件；具体页码与原文表述请以你手上的教材版本核对，未取得原文页码的部分仅按知识框架做一般性讲解。</div>
+</body>
+</html>
