@@ -248,6 +248,17 @@ body{
 .sh-mbr .bl{flex:none;font-size:11.5px;font-weight:700;color:var(--ink);background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;min-width:52px;text-align:center}
 .sh-mbr .chips{display:flex;flex-wrap:wrap;gap:6px;padding-top:3px;min-width:0}
 .sh-chip{font-size:11px;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:3px 9px;line-height:1.4}
+/* `.41` 导图新结构：分支标题 + 说明 + 带解释的子项 */
+.sh-mbr2{display:block;background:var(--card-2);border:1px solid var(--line-2);border-radius:12px;padding:11px 13px;margin-bottom:9px}
+.sh-mbr2:last-child{margin-bottom:2px}
+.sh-bh{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:8px}
+.sh-bh .bl{background:var(--ai-soft);color:var(--ai);border:1px solid var(--ai);border-radius:8px;padding:2px 9px;font-size:11.5px;font-weight:700}
+.sh-bh .bd{font-size:11.5px;color:var(--ink-3);line-height:1.5}
+.sh-items{display:flex;flex-direction:column;gap:7px;padding-left:2px}
+.sh-item{display:flex;gap:8px;align-items:baseline;font-size:12.5px;line-height:1.6}
+.sh-item .it{flex:none;color:var(--ink);font-weight:600;max-width:42%;position:relative;padding-left:10px}
+.sh-item .it::before{content:"";position:absolute;left:0;top:.62em;width:4px;height:4px;border-radius:50%;background:var(--data)}
+.sh-item .id{flex:1;color:var(--ink-2);min-width:0}
 /* 对比表 */
 .sh-cmp{border:1px solid var(--line-2);border-radius:11px;overflow:hidden}
 .sh-cmp .row{display:grid;grid-template-columns:60px 1fr 1fr}
@@ -517,10 +528,10 @@ body{
 .qaans.rich{white-space:normal}
 .qaans .aSum{font-size:14px;font-weight:600;color:var(--ink);line-height:1.65;margin-bottom:7px}
 .qaans .aLead{font-size:12.5px;color:var(--ink-2);line-height:1.7;padding-bottom:9px;margin-bottom:9px;border-bottom:1px dashed var(--line)}
-.qaans .aPts{display:flex;flex-direction:column;gap:8px}
-.qaans .aPt{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;line-height:1.72;color:var(--ink-2)}
-.qaans .aNum{flex:none;width:17px;height:17px;border-radius:50%;background:var(--ai-soft);color:var(--ai);font-size:10.5px;font-weight:700;line-height:17px;text-align:center;margin-top:3px}
-.qaans .aTxt b{color:var(--ink)}
+.qaans .aPts{display:flex;flex-direction:column;gap:9px}
+.qaans .aPt{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.72;color:var(--ink-2);background:var(--card-2);border:1px solid var(--line-2);border-radius:11px;padding:10px 12px}
+.qaans .aNum{flex:none;width:18px;height:18px;border-radius:50%;background:var(--ai-soft);color:var(--ai);font-size:10.5px;font-weight:700;line-height:18px;text-align:center;margin-top:2px}
+.qaans .aTxt b{color:var(--ai);font-weight:700}
 .qaans .aTags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .qaans .aTag{font-size:11.5px;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:3px 9px;color:var(--ink-3)}
 .qaans .aFoot{margin-top:11px;padding-top:9px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--ink-3);line-height:1.6}
@@ -1365,7 +1376,7 @@ function toggleTopic(id){
    生成：进视图时自动触发；有缓存直接用，来了新卡只重跑受影响的主题（增量），
    逐主题串行调 AI，每完成一步就落一次盘（中途关页面不白干、下次续跑）。 */
 var LS_SHULI="kb_shuli";
-var SHULI_GEN_VER=1;                 /* 生成规则版本：改提示词↔+1，旧缓存自动失效 */
+var SHULI_GEN_VER=2;                 /* 生成规则版本：改提示词↔+1，旧缓存自动失效（.41：导图要求分支/子项都带说明） */
 var SHULI_SYS="你是知识图提炼助手。你只输出 JSON，不输出任何解释、开场白或 markdown 围栏。";
 
 function loadShuliMap(){ try{ return JSON.parse(localStorage.getItem(LS_SHULI)||"{}")||{}; }catch(e){ return {}; } }
@@ -1406,15 +1417,17 @@ function shuliTopicPrompt(cards,topicName){
     +"- table：两张卡在讲容易混淆的一对概念（A vs B）\n\n"
     +"【卡片清单】\n"+cards.map(shuliCardLine).join("\n")+"\n\n"
     +"【输出】只输出下面这个 JSON（不要 markdown 围栏、不要任何解释文字）：\n"
-    +'{"graphs":[{"type":"mind","title":"8~16字","d":"把这张图讲透的一段话，60~120字","root":"中心词","branches":[{"name":"分支名","items":["子项1","子项2"]}],"from":[1,2]},{"type":"table","title":"8~16字","d":"把这张图讲透的一段话，60~120字","cols":["左列名","右列名"],"rows":[{"label":"行标签","cells":["左格","右格"]}],"from":[1,3]}]}\n\n'
+    +'{"graphs":[{"type":"mind","title":"8~16字","d":"把这张图讲透的一段话，60~120字","root":"中心词","branches":[{"name":"分支名","d":"这条分支在讲什么，一句话","items":[{"t":"子项名","d":"一句话说明这件事是什么/干什么"}]}],"from":[1,2]},{"type":"table","title":"8~16字","d":"把这张图讲透的一段话，60~120字","cols":["左列名","右列名"],"rows":[{"label":"行标签","cells":["左格","右格"]}],"from":[1,3]}]}\n\n'
     +"三种图型各自用这些字段（按 type 选其一）：\n"
     +"- table：cols(2个) + rows(2~4行，每行 label + cells两个)\n"
-    +"- mind：root(中心词) + branches(2~4个，每个 {name, items:[2~4个短词]})\n"
+    +"- mind：root(中心词) + branches(2~4个，每个 {name, d, items})\n"
+    +"   · name 是分支名（≤10字）；d 用一句话说清这条分支在讲什么（≤30字）；\n"
+    +"   · items 2~4 个，**每项必须写成 {t:\"子项名(≤12字)\", d:\"一句话说明(≤40字)\"}**——d 要讲清它是什么 / 干什么，**绝不许只给一个词**\n"
     +"- flow：steps(3~5个，每个 {t:短名, d:一句话}) + note(可选，一句提醒)\n\n"
     +"【提炼要领】\n"
     +"① 如果卡片里有「串讲 / 知识地图 / 小测验 / 复习」类的总览卡，优先以它的框架为骨架——这类卡就是为\"串联\"准备的；\n"
     +"② 做对比表时，优先挑一对\"同宗同源又明显区别\"的易混概念，行标签用具体维度（如：一句话 / 常见做法 / 怎么配合），不要做\"概念/定义\"这种清单表；\n"
-    +"③ 做思维导图时，分支要归纳成 2~4 个\"类别\"，不要把每张卡名平铺成分支。\n\n"
+    +"③ 做思维导图时，分支要归纳成 2~4 个\"类别\"，不要把每张卡名平铺成分支；**每个子项都必须带一句说明（d），把「它是什么、解决什么问题」讲出来——只有名词、没有解释的导图对学习没用**。\n\n"
     +"【硬性要求】\n"
     +"① 只根据卡片真实内容提炼，不编造；不要画「学习过程 / 学习阶段」这类流程图（那是学习安排，不是知识关系）；\n"
     +"② title、d、from 三个字段每张图都必须有，d 写 60~120 字；\n"
@@ -1532,8 +1545,15 @@ function shuliGraphHTML(gid,g){
     if(g.note) h+='<div class="sh-note">'+esc(g.note)+'</div>';
   }else if(g.type==="mind"){
     h+='<div class="sh-mroot">'+esc(g.root)+'</div>';
+    /* `.41`：每个分支 = 分支名 + 一句话说明 + 子项列表；子项带解释，不再是"关键词药丸"。
+       兼容旧缓存（items 是纯字符串、没有 d）。 */
     (g.branches||[]).forEach(function(b){
-      h+='<div class="sh-mbr"><span class="bl">'+esc(b.name)+'</span><span class="chips">'+(b.items||[]).map(function(it){return '<span class="sh-chip">'+esc(it)+'</span>';}).join("")+'</span></div>';
+      h+='<div class="sh-mbr sh-mbr2"><div class="sh-bh"><span class="bl">'+esc(b.name)+'</span>'+(b.d?'<span class="bd">'+esc(b.d)+'</span>':'')+'</div>';
+      h+='<div class="sh-items">'+(b.items||[]).map(function(it){
+        var t=(it&&typeof it==="object")?(it.t||""):String(it||"");
+        var d=(it&&typeof it==="object")?(it.d||""):"";
+        return '<div class="sh-item"><span class="it">'+esc(t)+'</span>'+(d?'<span class="id">'+esc(d)+'</span>':'')+'</div>';
+      }).join("")+'</div></div>';
     });
   }else{
     h+='<div class="sh-cmp">';
@@ -1882,9 +1902,15 @@ var AI_ANS_FMT = "\n\n【作答要求｜优先于你平时的表达习惯】\n"
  + "篇幅由问题决定：该长就长、该短就短，不为凑字数灌水。\n"
  + "\n【输出格式｜必须照这个骨架写，App 靠它排版】\n"
  + "结论：（一句话，完整通顺，不许截断，也不许把正文第一条抄过来）\n"
- + "正文：（紧接着写展开内容。可以分段，也可以用「- 」分点；条数不限，够说清就行）\n"
+ + "正文：（下面每行一条，**每条不超过 100 字**，说清就停；统一写成「小标题：说明」）\n"
+ + "- 是什么：（一句话定义，≤100 字）\n"
+ + "- 解决什么问题：（≤100 字，讲清楚「没有它会怎样」）\n"
+ + "- 怎么做到的：（≤100 字；是步骤就直接写「第一步：…」「第二步：…」）\n"
+ + "- 打个比方：（**必须有**，≤100 字，用日常生活里摸得着的东西打比方，让人一眼就懂）\n"
+ + "- 一句话记住：（**必须有**，≤40 字，像口诀，能背下来）\n"
+ + "- 最容易误解：（≤100 字；确实没有这一条就整行省略）\n"
  + "标签：（关键词一、关键词二、关键词三）\n"
- + "硬性要求：① 只写「结论 / 正文 / 标签」三段，**不要写「导读」**；② 不要开场白和结束语；③ 不要用 markdown 符号（#、**、```），分点用「- 」；④ 每条都要有实质内容，说不清就不写。";
+ + "硬性要求：① 只写「结论 / 正文 / 标签」三段，**不要写「导读」**；② 不要开场白和结束语；③ 不要用 markdown 符号（#、**、```），分点用「- 」；④ **宁可每行短一点、多写几行，绝不许把几百字堆成一大段**；⑤ 每条都要有实质内容，说不清就不写。";
 /* ===== 把 AI 的回答解析成「正式卡片」结构：{sum, lead, body[], tags[]} =====
    模型偶尔不按格式来 → 自动降级：按句号切段，保证界面上不会再出现"一整坨不分段"的文字。 */
 function parseAnsCard(text){
@@ -3362,7 +3388,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.39';
+var _APP_VER_ = '2026-10-11.41';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
