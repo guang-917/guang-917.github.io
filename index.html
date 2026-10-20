@@ -573,6 +573,11 @@ body{
 .qitem{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--shadow-sm)}
 /* `.52`：整条卡可点（点开看详解），给个可点的手势提示 */
 .qitem[data-det]{cursor:pointer}
+/* `.53`：今日卡正文结构化 —— 标签小标题 + 列表 */
+.klabel{font-size:13px;font-weight:800;color:var(--ai);margin:12px 0 4px;padding-left:8px;border-left:3px solid var(--ai)}
+.klabel-inline{color:var(--ai);font-weight:800}
+.klist{margin:4px 0 8px;padding-left:20px}
+.klist li{margin:5px 0;font-size:14.5px;line-height:1.7}
 .qitem[data-det]:active{background:var(--bg)}
 .qitem.ig{opacity:.5}
 /* `.47`：翻面盖章后的问答条目 —— 和今日卡一样变淡、划线 */
@@ -2692,8 +2697,31 @@ function setRead(id,val){var s=loadLocal();s.read=s.read||{};(val?s.read[id]=tru
 function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=true:delete s.star[id]);saveLocal(s);var c=getCard(id);if(c)c.star=!!val;}
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
-function openReader(data,srcRect){
-  data=data||{};
+/* `.53`：把推送卡 body 的「标签：内容；内容；内容」拆成 标签加粗 + 列表 ——
+   跟问答卡 parseAnsCard 一个观感。识别不了结构的条目原样成段，不会弄坏。 */
+function fmtBody(items){
+  var out="";
+  (items||[]).forEach(function(raw){
+    var s=String(raw||"").trim();
+    if(!s){return;}
+    var m=s.match(/^(【?[^：]{2,8}】?)：\s*([\s\S]+)$/);
+    if(m){
+      var label=m[1].replace(/[【】]/g,""),rest=m[2].trim();
+      var parts=rest.split(/[；;]/).map(function(x){return x.trim();}).filter(function(x){return x;});
+      if(parts.length>=3&&rest.length>60){
+        out+='<div class="klabel">'+esc(label)+'</div><ul class="klist">';
+        parts.forEach(function(p){out+='<li>'+esc(p)+'</li>';});
+        out+='</ul>';
+        return;
+      }
+      out+='<p><b class="klabel-inline">'+esc(label)+'：</b>'+esc(rest)+'</p>';
+      return;
+    }
+    out+='<p>'+esc(s)+'</p>';
+  });
+  return out;
+}
+function openReader(data,srcRect){  data=data||{};
   _rdScrollY=Math.round(window.scrollY||window.pageYOffset||0);   /* 记住"你现在看到哪儿"，返回时滚回来 */
   pushNav("reader");
   _ensureGuard();
@@ -2719,9 +2747,13 @@ function openReader(data,srcRect){
   /* 没有「完整学习卡」的卡（含 AI 当场生成的详解卡）：兜底显示要点，避免点开是空白。
      要点一多会很长 → 套一层折叠，先露一截、底下给「展开完整回答」。 */
   if(!full.link&&full.body&&full.body.length){
-    body+='<h4>要点</h4><div class="coll">';
-    for(var i=0;i<full.body.length;i++)body+='<p>'+esc(full.body[i])+'</p>';
-    body+='</div><button type="button" class="cbtn">展开完整回答</button>';
+    body+='<h4>要点</h4><div class="coll">'+fmtBody(full.body)+'</div><button type="button" class="cbtn">展开完整回答</button>';
+  }
+  /* `.53`：有完整学习卡的今日卡，也在 App 内排一版结构化正文（原来只有摘要+外跳按钮，
+     点开外链才看得到内容、且推送 AI 常把 body 写成一坨分号长句）。
+     fmtBody 会把「原则：xxx；yyy；zzz」这类条目拆成 标签加粗 + 列表，跟问答卡一个观感。 */
+  if(full.link&&full.body&&full.body.length){
+    body+='<h4>正文要点</h4><div class="coll">'+fmtBody(full.body)+'</div><button type="button" class="cbtn">展开完整回答</button>';
   }
   /* 完整学习卡入口：日语卡 → App 内直接跟读（真人音频，不外跳浏览器）；其他卡 → 原样外跳 */
   if(full.link){
@@ -3541,7 +3573,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.52';
+var _APP_VER_ = '2026-10-11.53';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
