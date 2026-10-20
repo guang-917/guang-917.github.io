@@ -1748,6 +1748,30 @@ document.getElementById("treeList").addEventListener("click",function(e){
    「✎ 编辑」按钮已删除（用户反馈：设计冗余）——梳理视图的图由系统从卡片自动提炼，
    主题/连线也由系统维护，不需要手动编辑。原 openTreeEditor() 整块随之移除。 */
 
+/* ===== `.48` 一次性迁移：撤销 `.47` 之前「点开即已读」留下的历史记录 =====
+   为什么要有这一步：`.47` 之前，点开待挖掘条目、或详解卡生成后，都会**自动**把条目记成已读；
+   而 `.47` 改成"主列表只显示未读"之后，这些被自动标过的老内容就全被藏起来了
+   （用户反馈：原来待挖掘和问答的内容都不见了）。
+   那时还没有"左滑翻面"这个动作，所以这些"已读"一定是自动产生的，撤销是安全的。
+   只跑一次（kb_mig48 标记）。 */
+(function(){
+  try{
+    if(localStorage.getItem("kb_mig48")==="1") return;
+    /* ① 待挖掘：清空"点开即已读"的记录 → 全部恢复为未读 */
+    localStorage.setItem("kb_digread","[]");
+    /* ② 问答：把自动标成 read 的还原（有详解卡 → 已推送；没卡 → 待生成），「已忽略」保留不动 */
+    var raw=localStorage.getItem("kb_qa");
+    if(raw){
+      var a=JSON.parse(raw)||[],chg=false;
+      a.forEach(function(x){
+        if(x&&x.state==="read"){ x.state=x.detailCardId?"pushed":"pending"; chg=true; }
+      });
+      if(chg) localStorage.setItem("kb_qa",JSON.stringify(a));
+    }
+    localStorage.setItem("kb_mig48","1");
+  }catch(e){}
+})();
+
 /* ====================== 卡片内问答 + 兴趣记录 ====================== */
 var LS_QA="kb_qa",LS_INT="kb_interest",LS_QADEL="kb_qadel";
 function loadQaDel(){try{return JSON.parse(localStorage.getItem(LS_QADEL)||"[]")||[];}catch(e){return [];}}
@@ -3502,7 +3526,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.47';
+var _APP_VER_ = '2026-10-11.48';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
