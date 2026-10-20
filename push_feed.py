@@ -31,6 +31,37 @@ API = "https://api.github.com/repos/%s/%s/contents/%s" % (OWNER, REPO, PATH)
 RAW = "https://raw.githubusercontent.com/%s/%s/main/%s" % (OWNER, REPO, PATH)
 
 
+def _api_get(tok, url):
+    req = urllib.request.Request(url, headers={
+        "Authorization": "Bearer " + tok,
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "kb-pusher",
+    })
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.load(r)
+
+
+def restore_dig_from_history(tok):
+    """写回前保护：若 feed 的 dig 被上游"清理"操作误删（为空但 cards 非空），
+    自动从 Git 历史里最近一次 dig 非空的提交恢复 dig 与 updated。
+    背景（2026-10-20 事故）：某次"清理重复卡"把 feed.json 整体覆盖成只剩 cards，
+    导致待挖掘线索全部丢失。此闸在每次推送时兜底，防止再次发生。"""
+    commits = _api_get(tok, "https://api.github.com/repos/%s/%s/commits?path=%s&per_page=30" % (OWNER, REPO, PATH))
+    for c in commits:
+        sha = c.get("sha")
+        if not sha:
+            continue
+        try:
+            obj = _api_get(tok, "https://api.github.com/repos/%s/%s/contents/%s?ref=%s" % (OWNER, REPO, PATH, sha))
+            hist = json.loads(base64.b64decode(obj["content"]).decode("utf-8"))
+        except Exception:
+            continue
+        hd = hist.get("dig")
+        if isinstance(hd, list) and hd:
+            return {"dig": hd, "updated": hist.get("updated", datetime.date.today().isoformat())}
+    return None
+
+
 def get_token():
     t = os.environ.get("GH_PAT")
     if t:
@@ -198,6 +229,15 @@ def main():
         feed["dig"] = uniq
 
     feed["updated"] = datetime.date.today().isoformat()
+
+    # ---- 保护闸：dig 被意外清空则从历史恢复（2026-10-20 事故兜底）----
+    if not feed.get("dig") and feed.get("cards"):
+        bak = restore_dig_from_history(tok)
+        if bak:
+            feed["dig"] = bak["dig"]
+            if not feed.get("updated"):
+                feed["updated"] = bak["updated"]
+            print("保护闸: 检测到 dig 为空，已从历史恢复 %d 条" % len(bak["dig"]))
 
     resp = gh_put(tok, sha, feed)
     url = resp.get("content", {}).get("html_url", "")
