@@ -147,6 +147,13 @@ body{
 @keyframes flipPulse{from{filter:brightness(1)}to{filter:brightness(1.18)}}
 /* 翻卡进行中：把这张卡抬到邻卡之上，翻折时不会被压住 */
 .card.flipping,.cardrow.flipping{z-index:3}
+/* `.55`：问答 / 待挖掘的条目翻面时也要抬起来，否则折到侧棱会被邻条压住 */
+.qitem.flipping,.dig.flipping{z-index:3}
+/* `.55`：这两类条目比卡片矮，章要按比例缩小，否则会溢出裁掉 */
+.qitem .flipback .fbIn,.dig .flipback .fbIn{padding:4px 14px;gap:1px;border-radius:9px;transform:rotate(-4deg)}
+.qitem .flipback .fbIn b,.dig .flipback .fbIn b{font-size:12px;letter-spacing:.26em;text-indent:.26em}
+.qitem .flipback .fbD,.dig .flipback .fbD{font-size:9px}
+.qitem .flipback .fbIc svg,.dig .flipback .fbIc svg{width:14px;height:14px}
 /* 背面：一张平铺在卡片上的「已读」章（默认透明，翻折到侧棱时才亮出来）
    注意：翻折角度全程不超过 90°，所以永远不可能出现「反字」——
    一开始用「整圈 360° + backface-visibility」的写法，静止时是对的，
@@ -3299,7 +3306,12 @@ function flipRead(el){
       },FOLD);
     },FOLD+HOLD);
   },FOLD);
-  /* `.47`+`.54`：按条目类型记账 —— 今日卡写 read 并联动其问答、问答改 state、待挖掘记 kb_digread */
+  /* `.47`+`.54`：按条目类型记账 —— 今日卡写 read 并联动其问答、问答改 state、待挖掘记 kb_digread
+     ⚠️ `.55` 关键修复：问答/待挖掘的**重绘必须推迟到翻面动画结束之后**。
+        原来这里是同步调 renderQA()/renderDig()，而它们会重写整个列表 innerHTML，
+        正在翻折的那张卡当场被销毁 → 用户只看到划线结果，看不到「折起→盖章→折回」的过程。
+        今日卡用的是 refreshRead()（只改 class，不重建 DOM），所以一直没这个问题。 */
+  var _afterFlip=FOLD*3+HOLD+260;   /* 折起+换面+停顿+折回 的总时长，动画收尾后再重绘 */
   if(id){
     var c=getCard(id);
     if(!c||!c.read){setRead(id,true);refreshRead();}
@@ -3318,13 +3330,17 @@ function flipRead(el){
       if(a[i].id===qid){ if(a[i].state!=="read"&&a[i].state!=="ignored"){a[i].state="read";saveQA(a);stampReadAt(qid);} break; }
     }
     updateMzBdg();
-    if(typeof renderQA==="function"&&curView==="mz"&&mzSub==="qa") renderQA();   /* 重绘：让条目立刻划线 */
+    setTimeout(function(){   /* 等动画放完再重绘，否则会把正在翻的那张卡删掉 */
+      if(typeof renderQA==="function"&&curView==="mz"&&mzSub==="qa") renderQA();
+    },_afterFlip);
   }else if(dq){
     var _rd=loadDigRead();
     if(_rd.indexOf(dq)<0){_rd.push(dq);saveDigRead(_rd);}
     stampReadAt("dig:"+dq);
     updateMzBdg();
-    if(typeof renderDig==="function"&&curView==="mz"&&mzSub==="dig") renderDig();  /* 同上：待挖掘列表立刻划线 */
+    setTimeout(function(){
+      if(typeof renderDig==="function"&&curView==="mz"&&mzSub==="dig") renderDig();
+    },_afterFlip);
   }
   toast("翻过即已读 ✓");
 }
@@ -3605,7 +3621,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.54';
+var _APP_VER_ = '2026-10-11.55';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
