@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据仓库里常听到「星型模型」和「雪花模型」，实际项目到底该选哪个？</title><style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+p{margin:10px 0;font-size:15px}strong{color:#ffd479}
+.note{margin-top:22px;color:var(--ink2);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+</style></head><body>
+<div class="meta">数据知识 · 延伸解答</div><h1>数据仓库里常听到「星型模型」和「雪花模型」，实际项目到底该选哪个？</h1>
+<p><strong>一句话：能星就星，维度太胖或变化太频繁才拆雪花。</strong></p><p>用大白话讲：星型模型是把每个维度做成一张「大宽表」，比如商品维度表里直接把品类、品牌、规格都写进去，查报表时只连一次；雪花模型是把这张大表再拆成「商品→品类→品牌」几层小表，省了重复，但每查一次就多连几次表。</p><p><strong>星型的代价</strong>：维度表里有重复值，占空间多一点。好处是查询快、结构简单，业务人员自己拖拉拽也能用。</p><p><strong>雪花的代价</strong>：连接次数多，查询慢一些，结构复杂。好处是改一个品类名只改一处，不会出现同一品类两种写法。</p><p><strong>实操判断</strong>：① 维度层级稳定、层级不深（月份→季度→年这种）→ 直接星型；② 维度属性多、变更频繁、需要严格一致 → 拆成雪花或单独建维度；③ 数据量特别大、查询性能紧张 → 宁可星型。</p><p>面试可以直接这么答：「我们会先按星型搭，遇到维度属性膨胀或口径需要强一致时再局部拆雪花，核心判断标准是查询性能和一致性哪个更要紧。」这句话既不空，也说明你懂取舍。</p>
+<div class="note">来源：DAMA-DMBOK2 第5章「数据建模与设计」中关于维度建模、星型与雪花设计的叙述；辅以亿信华辰《数据建模方法标准及在装备管理领域中的应用》一文交叉印证。教材原书在本地，本期未核页码，具体表述以教材为准。</div>
+</body></html>
