@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第4章 数据架构｜5/共5 · 章末清账：常考七件事 + 数据仓库架构三问</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 数据知识</div>
+<h1>CDGA｜第4章 数据架构｜5/共5 · 章末清账：常考七件事 + 数据仓库架构三问</h1>
+<div class="lead">第4章最后一站。前四张讲了「是什么、吃进什么吐出什么、靠什么干、架构和模型怎么分」，这张把整章收成一张清单，顺手补上本章最爱连着一起考的一块：<b>数据仓库的几种搭法</b>（教材里它放在数据架构章里讲，但它的具体施工属于第11章）。</div>
+
+<h2>一、整章清账：这七件事反复考</h2>
+<table>
+<tr><th>考点</th><th>一句话记住</th></tr>
+<tr><td>定义</td><td>数据架构 = 企业数据模型 + 数据流设计两件套，只画到概念/逻辑层。</td></tr>
+<tr><td>业务驱动</td><td>让数据能像水电一样按设计流动，别让每个系统自己乱接管子。</td></tr>
+<tr><td>目标</td><td>在业务战略和技术实现之间搭桥。</td></tr>
+<tr><td>原则</td><td>数据架构是数据战略的先行条件；业务需求和技术需求两头都要代表。</td></tr>
+<tr><td>输入 / 输出</td><td>吃进：业务战略、IT与数据现状、治理标准、业务流程、合规要求、技术趋势。吐出：概念/逻辑模型、数据流、数据价值链、路线图、数据定义与映射规范。</td></tr>
+<tr><td>工具 / 度量</td><td>画图的、管图的、管流程的三类工具；度量看高管支持、落到项目、有指标、有专职架构师。</td></tr>
+<tr><td>易混</td><td>架构是「规划」，模型是「落地」；物理建表属第5章，不归架构。</td></tr>
+</table>
+
+<h2>二、补一块：数据仓库的几种搭法</h2>
+<p>教材在数据架构里讨论了数据仓库架构的几个关键问题，最常见的选择就三类。用大白话比：</p>
+<ul>
+<li><b>集中式</b>：全公司只用一个大仓库，像全城共用一座自来水厂。好处是口径统一、不重复建；坏处是一处堵全城停。</li>
+<li><b>联邦式</b>：不搬数据，只把各处的查询「派单」过去，像点外卖平台——饭还在各家厨房做，平台只负责调度。好处是快、不折腾存量；坏处是性能受各家系统状态影响。</li>
+<li><b>数据集市</b>：按部门切出来的小仓库，像小区里的便利店。好处是贴近业务、上手快；坏处是容易各自一套口径，最后对不上账。</li>
+</ul>
+<p>考试常用「给定场景选架构」的方式问：强调<b>统一口径、全企业一致</b>→偏集中式；强调<b>不动存量、跨系统快速取数</b>→偏联邦式；强调<b>部门自用、快速见效</b>→数据集市，但要提防口径分裂。</p>
+<blockquote>这一块的细节施工、分层建模、维度设计，是第11章（数据仓库与商业智能，10分）的正片，到时候再展开。</blockquote>
+
+<h2>三、考试怎么考</h2>
+<p>本章 10 分，选择题的三大问法：</p>
+<ol>
+<li><b>名词归属题</b>：给你一串产物，问哪个不属于数据架构输出。关键词「概念/逻辑模型、数据流、路线图」是对的；「物理表结构、ETL脚本、备份策略」是干扰项。</li>
+<li><b>原则题</b>：正确项爱写「基于业务战略」「同时代表业务与技术需求」；干扰项爱写「技术越新越好」「以现有系统为出发点」「成本最低优先」。</li>
+<li><b>情景应用题</b>：先判断题目问的是「规划」还是「施工」。问规划找架构，问建表找建模（第5章），问跑批找存储与操作（第6章）。</li>
+</ol>
+
+<h2>四、落到岗位上：这章能帮你答什么</h2>
+<p>北京国际数据服务有限公司做的是合规评估、实验室检测、可信数据流通平台这类活。面试里如果被问「你怎么理解数据架构」，别背定义，讲场景：</p>
+<p>像「可信数据全球通」这种平台，要接多家机构的数据，第一步不是写代码，而是先画清楚——哪些数据在谁手里、按什么标准描述、流到平台哪一层、谁能取。这张图就是数据架构。它决定后面合规评估能不能对上口径、检测报告能不能复用。</p>
+<p>北数所那边，交易标的要登记、要描述、要能对上买方系统，同样先要有这套「图」和「词典」，否则每笔交易都从零解释一遍。</p>
+
+<h2>五、自测一题</h2>
+<p><b>自测：</b>某集团要让全公司报表口径统一、杜绝各部门各建一套数仓，最应优先考虑的数据仓库架构是：</p>
+<p>A. 联邦式架构　B. 集中式架构　C. 部门数据集市　D. 点对点直连取数</p>
+<p><b>答案：B。</b>题干两个关键词「全公司口径统一」「杜绝各建一套」，正对集中式的优势（单一数据源、口径一致）。A 联邦式胜在不动存量、取数快，但不解决口径统一；C 数据集市恰恰是「各建一套」的温床；D 点对点直连是架构失控的典型症状，通常出现在「现状问题」选项里。</p>
+
+<h2>六、下一张预告</h2>
+<p>第4章收官，下一张进第5章数据建模与设计（10分）第 1 张：模型是什么、为什么要建模、做到什么算好——还是老规矩，先用生活里的比方讲透，再讲考试怎么问。一天 6 张，慢慢来，别贪多。</p>
+
+<div class="rel">相关延伸：CDGA｜第4章 数据架构｜4/共5 · 高频考点·易混对比：架构≠模型；CDGA｜第4章 数据架构｜3/共5 · 工具·度量指标·落地步骤；CDGA｜第4章 数据架构｜2/共5 · 原则·输入·输出；CDGA｜第4章 数据架构｜1/共5 · 定义·业务驱动·目标</div>
+<div class="note">来源说明：本章概念框架依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第4章「数据架构」的语境图八要素与数据仓库架构讨论（教材 PDF 在用户本地，本期未直接引用原文页码，仅按通行中文版结构与术语表述）。数据仓库架构三类的划分与适用场景为教材通行表述，具体分层与建模细节见第11章。岗位相关内容为一般性说明，未引用该公司未公开信息。本期未取得新的外部政策或行业来源。</div>
+</body>
+</html>
