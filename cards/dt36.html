@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第5章 数据建模与设计｜2/共5 · 原则·输入·输出</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月20日 · 数据知识</div>
+<h1>CDGA｜第5章 数据建模与设计｜2/共5 · 原则·输入·输出</h1>
+<div class="lead">昨天讲了「施工图是什么」，今天讲画图的规矩：守哪几根柱子、开工前手里必须有哪几样料、画完要交出哪几样东西。这三块是选择题里「输入输出题」的高发区。</div>
+
+<p><strong>CDGA｜第5章 数据建模与设计｜2/共5</strong></p>
+
+<h2>一、先复习那张「语境图八要素」</h2>
+<p>教材对每个知识领域都用同一副骨架讲：定义（是什么）、业务驱动（为什么干）、目标（干成什么）、原则（守什么规矩）、输入（吃进什么）、输出（吐出什么）、工具（拿什么干）、度量指标（怎么算干得好）。第1张讲了前三样，这一张专攻<strong>原则、输入、输出</strong>，工具和度量留给第3张。</p>
+<blockquote>类比：装修队进场前先立规矩——不砸承重墙、水电先定位、材料进出都登记；再清点带来的工具和材料（输入）；完工交钥匙、图纸和保修单（输出）。建模一模一样。</blockquote>
+
+<h2>二、原则：画图时必须守的几条</h2>
+<p>DMBOK2 第5章给出的建模原则，落到大白话主要是这几条：</p>
+<ul>
+<li><strong>把「只该记一次的东西」挑出来。</strong>一个客户就是一个客户，不该在订单表、合同表、发票表里各存一份带拼写差异的名字。这就是「规范化」的初衷：减少重复，避免改一处、漏三处。</li>
+<li><strong>模型要能被业务方看懂、能拿去跟人沟通。</strong>画给自己看的图没有价值，画出来的东西必须能跟业务确认口径。</li>
+<li><strong>模型是活文档，不是一次性交付物。</strong>业务变了模型要跟着改，改动要留记录，不能谁顺手就动一下。</li>
+<li><strong>同一个概念，全公司用同一个名字、同一个定义。</strong>「客户」和「用户」到底是不是一回事，必须在模型里定死，否则后面所有报表都在打架。</li>
+<li><strong>敏感信息在模型层面就要看得见。</strong>身份证号、手机号、住址这类字段，在图上就得标出来，不能等出事再翻库。</li>
+</ul>
+<p>这几条有一个共同点：<strong>都在防未来的麻烦，而不是让今天的图好看。</strong>考试里凡是把原则写成「提高查询性能」「节省存储空间」的选项，基本都是干扰项——那是第6章数据存储与操作的关注点。</p>
+
+<h2>三、输入与输出：吃进去什么，交出来什么</h2>
+<table>
+<tr><th>环节</th><th>内容（大白话）</th></tr>
+<tr><td>输入</td><td>业务需求与业务流程说明（业务到底要记哪些事）；现有的数据模型、数据字典、术语表；数据架构定好的主题域与数据流向；企业的建模规范与命名规则；相关标准与合规要求</td></tr>
+<tr><td>输出</td><td>概念模型 / 逻辑模型 / 物理模型（按需要做到哪一层）；配套的<strong>数据定义</strong>（每个实体、属性、允许值是什么意思）；<strong>数据血缘</strong>（这个字段从哪来、到哪去）；以及交回给数据架构、元数据管理、数据质量等领域使用的成果</td></tr>
+</table>
+<p>一个高频易错点：<strong>「数据定义」最容易被忽略。</strong>很多人以为建模输出就是一张 ER 图，其实图只是壳，真正被下游用的是那份说明书——每个字段叫什么、什么含义、允许什么值。没有它，这张图三个月后连自己都看不懂。</p>
+<p>再记住一条分界线：<strong>建模的输出去喂第6章建库、喂第12章元数据、喂第13章数据质量。</strong>考「谁给谁供料」这类题时，这条线很管用。</p>
+
+<h2>四、考试怎么考</h2>
+<ul>
+<li><strong>输入输出题</strong>：问「下列哪一项是数据建模的典型输出？」正确选项关键词是「概念/逻辑/物理模型」「数据定义」「数据血缘」；干扰项常混进「数据质量报告」「数据服务接口」「备份策略」——那分别是第13章、第8章、第6章的活儿。</li>
+<li><strong>原则题</strong>：问「下列哪项不属于建模原则？」干扰项最爱写成性能优化类表述。</li>
+<li><strong>情景题</strong>：给一段「客户信息在三个系统里对不上」的描述，问第一步该做什么——先统一概念模型的口径，而不是先买工具。</li>
+</ul>
+
+<h2>五、和你目标岗位的关系</h2>
+<p>北京国际数据服务有限公司做的是网络数据安全合规实验室、数据合规评估、电子产品信息清除检测这类活儿，这类工作的第一步几乎都是「摸清数据长什么样」：</p>
+<ul>
+<li><strong>数据合规评估</strong>：报告里要写清「本系统涉及哪些个人信息字段、散在哪几张表」，本质就是抽一份逻辑模型清单。你懂建模，才知道对方递来的图，哪里可能漏了。</li>
+<li><strong>电子产品信息清除检测</strong>：要判断设备里的数据「清没清干净」，先得知道数据原来存在哪儿——模型里哪些是主数据、哪些是副本，决定你查哪些位置。</li>
+<li><strong>售前与项目管理（你的强项）</strong>：客户问「你们能不能做数据治理」，你反手问一句「你们有统一的数据模型和术语表吗」，在客户眼里这就是懂行。</li>
+</ul>
+
+<h2>六、自测一题</h2>
+<p>自测：按 DMBOK2 的划分，下列哪一项最不可能作为「数据建模与设计」这一知识领域的输出？</p>
+<p>A. 概念数据模型<br>B. 逻辑数据模型<br>C. 数据定义（实体、属性、取值范围的说明）<br>D. 数据库备份与恢复策略</p>
+<p><strong>答案：D。</strong>备份与恢复属于第6章「数据存储与操作」。A、B、C 都是建模的典型产出，其中 C 最容易被忽略——图是壳，定义才是图纸上的注释。陷阱在 D：它听起来很技术、很像数据工作的一部分，但归口不同。</p>
+
+<h2>七、下一张</h2>
+<p>下一张讲本章的「工具 + 度量指标 + 落地步骤」：画图都用什么软件、怎么判断一个模型做得好不好、真上手做按什么顺序来。这三样凑齐，第5章的选择题和情景题基本够用。</p>
+
+<div class="rel">相关延伸：CDGA｜第5章 数据建模与设计｜1/共5 · 定义·业务驱动·目标；CDGA｜第4章 数据架构｜4/共5 · 高频考点·易混对比：架构≠模型</div>
+<div class="note">来源说明：本期概念框架依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 5 章「数据建模与设计」的一般性内容组织，属概念性归纳，未逐字引用原文；「原则/输入/输出」的分类沿用 DMBOK 语境图（Context Diagram）八要素框架，非本卡自创。教材原文表述与页数以纸质书为准，本卡不注页码，以免误引。本期为概念讲解，未引用外部新闻或政策原文，故无外链。</div>
+</body>
+</html>
