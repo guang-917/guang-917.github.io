@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第7章 数据安全｜1/共4 · 定义·业务驱动·目标</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月21日 · 数据知识</div>
+<h1>CDGA｜第7章 数据安全｜1/共4 · 定义·业务驱动·目标</h1>
+<div class="lead">存储那章收尾后，进入全书最"贵"的一章——第7章数据安全，8分。对你目标公司（做数据合规评估、网络数据安全合规实验室）来说，这一章几乎是岗位说明书的原文。第1张先讲清：数据安全到底管什么、为什么现在必须专门有人管、它想达到什么状态。</div>
+
+<h2>一、先用一句人话定义它</h2>
+<p><strong>数据安全＝给数据上锁、发钥匙、留记录。</strong>上锁是防外人，发钥匙是决定谁能进哪扇门，留记录是事后能查"谁在什么时候动过什么"。</p>
+<p>教材（DAMA-DMBOK2 第7章）把数据安全列为一个独立的知识领域，管的是<strong>策略、标准、制度和技术手段的整套组合</strong>，不是只装个防火墙就完事。用生活比喻：一栋楼的安全不只是门锁，还包括谁能办门禁卡、哪层楼限行、监控录像存多久、出事谁来查。</p>
+<blockquote>注意一个常见误解：数据安全 ≠ 网络安全。网络安全守的是"网络这条管道"，数据安全守的是"数据这个资产本身"——数据被拷到U盘带走、被内部人截图外发，网络一点没坏，但数据已经不安全了。</blockquote>
+
+<h2>二、为什么现在必须专门有人管（业务驱动）</h2>
+<ul>
+<li><strong>代价从"罚点钱"变成"停业级"。</strong>《数据安全法》《个人信息保护法》都规定了罚款、暂停业务、吊销执照等处罚梯度。企业算过账：与其出事再赔，不如提前花钱建制度。</li>
+<li><strong>数据越集中越值钱，也越容易"一锅端"。</strong>过去每个部门各存一份，丢也只丢一部分；现在统一进数据中台、数据仓库，一次权限配错就是全公司数据裸奔。</li>
+<li><strong>安全能力变成投标的入场券。</strong>客户和监管在签约、验收前都会审安全能力——你拿不出制度、拿不出日志，生意谈不成。这一点对做售前和投标的人最有体感。</li>
+</ul>
+
+<h2>三、目标：CIA 三件套 + 一条"可证明"</h2>
+<table>
+<tr><th>目标</th><th>大白话</th><th>对应手段举例</th></tr>
+<tr><td>保密性 Confidentiality</td><td>不该看的人看不到</td><td>加密、脱敏、访问控制、权限最小化</td></tr>
+<tr><td>完整性 Integrity</td><td>数据没被偷偷改</td><td>校验值、变更审批、操作留痕</td></tr>
+<tr><td>可用性 Availability</td><td>要用的时候取得到</td><td>备份、容灾、容量与性能保障</td></tr>
+<tr><td>合规可证明</td><td>出事了拿得出证据</td><td>制度文件、审计日志、定期评估报告</td></tr>
+</table>
+<p>最后一条不是教材原文里的第四个字母，而是考试和实务里反复出现的落点：<strong>安全做到什么程度算够？答：能证明。</strong>这也是北京国际数据服务有限公司这类做数据合规评估的机构，评估报告里真正要写的东西——不是"我们很安全"，而是"依据哪条制度、哪份日志、哪次演练"。</p>
+
+<h2>四、合规评估里最常被问的三句话</h2>
+<ol>
+<li><strong>数据放在哪？</strong>（存储位置、是否跨境、是否分区）</li>
+<li><strong>谁能访问？</strong>（账号、角色、审批、最小权限）</li>
+<li><strong>动过之后有没有痕迹？</strong>（日志、审计、异常告警）</li>
+</ol>
+<p>这三句分别对应第7章后面三张要讲的内容：原则与输入输出、工具与度量、以及最容易被追问的"角色与职责"。</p>
+
+<h2>五、考试怎么考</h2>
+<p>本章 8 分，属于"必拿区"。开篇这一张的考法通常是<strong>定义题</strong>和<strong>目标分类题</strong>：</p>
+<ul>
+<li>正确选项的关键词：<em>保密性、完整性、可用性</em>，以及"策略、标准、规程"这类制度性词。</li>
+<li>常见干扰项："数据不丢失"（只覆盖一部分）、"系统不宕机"（那是可用性的一部分，不是全部）、"通过了等级保护测评就等于数据安全达标"（测评是手段不是目标终点）。</li>
+<li>另一类爱考的是<strong>数据安全 vs 数据隐私</strong>：安全管"别人能不能拿到"，隐私管"拿到了之后该不该这么用"——这和第2章数据伦理是连着的。</li>
+</ul>
+
+<h2>六、和你目标岗位的关系</h2>
+<p>北京国际数据服务有限公司是三方共建"网络数据安全合规实验室"的运营单位，也做数据合规评估、电子产品信息清除检测这类活。这些工作听上去高深，剥开来就是这张卡里的三件事：<strong>查数据放哪、查谁能看、查有没有留痕</strong>。你有投标和售前的底子，最熟的是"把客户的要求翻译成可交付的清单"——这恰好是安全评估报告的写法。</p>
+
+<h2>七、自测一题</h2>
+<blockquote>
+<p><strong>自测：</strong>某公司在数据安全方案里写明"我们对所有敏感数据加密存储，并每日备份"。按 DMBOK 对数据安全目标的界定，这句话主要覆盖了下列哪一项？</p>
+<p>A. 保密性与可用性　B. 仅保密性　C. 完整性与保密性　D. 满足了数据安全的全部目标</p>
+<p><strong>答案：A。</strong>加密存储对应保密性（不该看的人看到的是密文），每日备份对应可用性（数据毁了还能取回来）。"没被偷偷改"（完整性）和"制度、审计记录"（合规可证明）它都没提，所以 C 是过度推断，D 把"部分"说成"全部"，B 漏掉了备份这一半。</p>
+</blockquote>
+
+<h2>下一张讲什么</h2>
+<p>第7章 2/共4：<strong>原则·输入·输出</strong>——安全这件事守哪几条铁规（最小权限、知其所需、默认拒绝），吃进什么（业务要求、法规清单、数据分级结果），交出什么（安全策略、访问矩阵、审计报告）。</p>
+
+<div class="rel">相关延伸：CDGA｜第6章 数据存储与操作｜2/共2 · 原则·输入·输出·工具·度量（章末收尾）；CDGA｜第2章 数据伦理｜1/共2 · 定义·业务驱动·目标；CDGA｜第3章 数据治理｜1/共5 · 定义·业务驱动·目标</div>
+<div class="note">来源说明：本期概念以 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第2版）》第7章「数据安全」的知识领域框架（目标、原则、输入输出）为依据；保密性/完整性/可用性三性的通用表述见 GB/T 25069《信息安全技术 术语》与 GB/T 22239《信息安全技术 网络安全等级保护基本要求》。法规提及《中华人民共和国数据安全法》《中华人民共和国个人信息保护法》为法律名称引用，未逐条引述条款原文。关于北京国际数据服务有限公司的业务描述（网络数据安全合规实验室运营单位、数据合规评估、电子产品信息清除检测）沿用用户提供的背景信息，本期未另行核实其最新业务清单，如需引用请以公司官方公告为准。</div>
+</body>
+</html>
