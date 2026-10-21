@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第6章 数据存储与操作｜2/共2 · 原则·输入·输出·工具·度量（章末收尾）</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月21日 · 数据知识 · CDGA 概念卡</div>
+<h1>CDGA｜第6章 数据存储与操作｜2/共2 · 原则·输入·输出·工具·度量（章末收尾）</h1>
+<div class="lead">上一张说了数据存储与操作是「看仓库」——把模型真正落库并日常看管。这一张把这套活的规矩、产出、家什和量尺一次讲完，再送你一对考试必考的易混词：RPO 和 RTO。第6章讲完，全书进度来到 10/59 张，第7章数据安全（8分大章）在前面等你。</div>
+
+<h2>先记两条原则</h2>
+<p>DMBOK2 给这一章定的原则其实就两条，都不玄：</p>
+<ul>
+<li><b>数据是资产，得有人专门管。</b>就像仓库不能靠顺手的人随便看着，得有专职仓管员——公司里这个角色就是数据库管理员（DBA）。没人认账的库，迟早变成没人敢动、也没人敢删的「数据垃圾山」。</li>
+<li><b>数据得被保护。</b>仓库要防火防盗，数据库要防丢、防坏、防泄露。丢了能不能找回来、坏了能不能修，这就是「操作」二字的核心。</li>
+</ul>
+
+<h2>吃进什么、交出什么</h2>
+<p>按「语境图」的骨架来记：</p>
+<ul>
+<li><b>输入</b>：业务需求（要存什么、多快能查）和服务承诺（SLA，比如「每天 24 小时能用」「坏了 4 小时内恢复」）。SLA 你可以理解成快递公司承诺的「次日达」——它是后面所有备份恢复方案的标准。</li>
+<li><b>输出</b>：能正常跑的数据库、备份与恢复方案、应急预案、归档方案和运维记录（审计留痕）。注意：交出去的不是「建了个库」这么一句话，而是一整套<b>能被检查、能被验收</b>的东西。</li>
+</ul>
+<blockquote>和你目标岗位的关系：北京国际数据服务有限公司做数据合规评估、电子产品信息清除检测，检查的第一步往往就是看「你这库有没有备份方案、应急预案、操作留痕」——这些正是本章的输出物。北数所上架交易的数据产品，背后也全靠这些日常操作兜底。</blockquote>
+
+<h2>靠什么干（工具）</h2>
+<p>三类，一张表记牢：</p>
+<table>
+<tr><th>工具</th><th>干什么</th><th>生活比喻</th></tr>
+<tr><td>DBMS（数据库管理系统）</td><td>存数据、管数据的软件本体</td><td>仓库本身</td></tr>
+<tr><td>监控工具</td><td>性能监控、安全监控、审计</td><td>仓库的摄像头和温度计</td></tr>
+<tr><td>备份恢复与归档工具</td><td>定期拷底账、出事回滚、旧账封存</td><td>保险柜 + 旧档案室</td></tr>
+</table>
+
+<h2>怎么衡量干得好（度量）</h2>
+<ul>
+<li><b>性能</b>：响应快不快（用户查一次等多久）、吞吐大不大（一秒能处理多少笔）。</li>
+<li><b>可用性</b>：一年 365 天是不是随时都能用，宕机多久。</li>
+<li><b>恢复能力</b>：出了事能不能按承诺恢复——这正是下面 RPO/RTO 要管的。</li>
+<li><b>成本</b>：存储这一堆数据花的钱值不值。</li>
+</ul>
+
+<h2>必考易混词：RPO vs RTO</h2>
+<p>这对词是第6章选择题的头号坑，用大白话一次分清：</p>
+<ul>
+<li><b>RPO（恢复点目标）＝最多能丢多少数据。</b>比如 RPO 是 1 小时，意思是出事时最多丢最近 1 小时内写进去的数据——因为备份是每小时拷一次。它答的是「<b>丢多少</b>」。</li>
+<li><b>RTO（恢复时间目标）＝多久能恢复开门。</b>比如 RTO 是 4 小时，意思是系统瘫了，4 小时内必须重新能用。它答的是「<b>等多久</b>」。</li>
+</ul>
+<p>记忆窍门：RPO 看「<b>P</b>oint」（时间点，回到哪个点、丢那个点之后的数据），RTO 看「<b>T</b>ime」（时间，恢复花多长时间）。</p>
+
+<h2>考试怎么考</h2>
+<p>本章考点集中在三种问法：①<b>定义题</b>——直接问 RPO/RTO/归档/备份的区别，认准关键词「丢多少」vs「等多久」「归档=长期封存备查、备份=出事能回滚」；②<b>角色题</b>——问「谁负责数据库日常操作」，答案是 DBA，干扰项常放「数据架构师」（画图纸的）或「数据管理员」（管规矩的）；③<b>情景题</b>——给你一句「公司要求宕机不超过 X 小时」，问你这是 RTO；「最多允许丢 Y 分钟数据」问的就是 RPO。</p>
+
+<h2>自测一题</h2>
+<blockquote>
+<p><b>自测：</b>某公司数据库夜间备份，早上 8 点完成。上午 10 点半机房断电，11 点半系统恢复并从昨晚备份还原。按此方案，本次事故最贴近哪个指标要求？</p>
+<p>A. RTO 为 1 小时　B. RPO 约为 2.5 小时　C. RPO 为 0　D. RTO 为 14 小时</p>
+<p><b>答案：B。</b>从早上 8 点最后一次备份到 10 点半出事，之间写入的数据丢了约 2.5 小时，所以 RPO≈2.5 小时。A 错在把「恢复花了 1 小时」当成了丢数据量（那是实际恢复时长）；C 错在 RPO 为 0 意味着一点不丢，需要实时备份才行；D 错在把两次备份的间隔当成了恢复时长。丢多少看 RPO，等多久看 RTO。</p>
+</blockquote>
+
+<p><b>下一张预告</b>：第6章收官，下一张进第7章「数据安全」（考试 8 分）第 1 张——先讲定义、业务驱动和目标。数据安全和你想做数据匿名化的方向贴得最近，别掉队，明天 06:00 见。</p>
+
+<div class="rel">相关延伸：CDGA｜第6章 数据存储与操作｜1/共2 · 定义·业务驱动·目标；CDGA｜第5章 数据建模与设计｜5/共5 · 章末清账：易混对比 + 情景题；CDGA｜第4章 数据架构｜5/共5 · 章末清账：常考七件事 + 数据仓库架构三问</div>
+<div class="note">来源说明：本章内容依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 6 章「数据存储与操作」通行框架整理（RPO/RTO、原则、活动与工具分类为该章标准内容）；术语译名参照 DAMA 中国官方译法。用户教材 PDF 在本地，本文为云端复习卡，具体表述请以手中教材原文为准。</div>
+</body>
+</html>
