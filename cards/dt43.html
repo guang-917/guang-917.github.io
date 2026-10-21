@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第7章 数据安全｜2/共4 · 原则·输入·输出</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月21日 · 数据知识</div>
+<h1>CDGA｜第7章 数据安全｜2/共4 · 原则·输入·输出</h1>
+<div class="lead">昨天讲了数据安全"是什么、为什么"，今天讲它"守什么规矩、吃进什么、交出什么"。这一块是输入输出题的重灾区，4 个原则和 4 类输出务必背熟。</div>
+
+<h2>一、四大原则：装摄像头的四条规矩</h2>
+<p>数据安全（DMBOK2 中文译名：数据安全）有 4 条基本原则，可以想象成小区物业装摄像头前要守的四条规矩：</p>
+<ol>
+<li><b>协作</b>——安全不能一个人关小黑屋里搞。物业装摄像头得跟居委会、住户商量，而不是保安队长一拍脑袋就装。数据安全也一样，要跟法务、IT、业务部门配合着做。</li>
+<li><b>基于企业风险的方法</b>——不搞一刀切。小区正门人来人往要装，仓库后面已经有围栏就不必层层加码。安全措施跟着"哪里风险大"走。</li>
+<li><b>安全措施与风险相称（按比例）</b>——别为了防小偷把大门焊死，把住户自己也困在里面。花多大的防护成本，要看数据值多少钱、泄露了多大事。</li>
+<li><b>保障数据安全的同时保证易访问</b>——安全不是把数据锁起来让谁都看不见。就像门禁要识别住户：外人挡住，住户刷卡就能进。只管锁不管开，业务就被你卡死了。</li>
+</ol>
+<blockquote>记忆口诀：一起商量（协作）、看风险下手（基于风险）、下多重的手看值多少（相称）、锁得住也要开得开（易访问）。</blockquote>
+
+<h2>二、输入：干这个活之前，要摸清哪些底</h2>
+<ul>
+<li><b>业务需求</b>：业务部门要哪些数据、怎么用——先知道家里谁要用厨房。</li>
+<li><b>法律法规</b>：网安法、个保法、数安法等合规要求——哪些事国家明令禁止。</li>
+<li><b>现有安全流程与制度</b>：公司已经有哪些安全措施——老锁都装在哪些门上。</li>
+<li><b>数据架构</b>：数据都在哪、怎么流转——户型图都拿到了，才能布点。</li>
+</ul>
+
+<h2>三、输出：干完之后，交出这四样东西</h2>
+<table>
+<tr><th>输出</th><th>大白话</th></tr>
+<tr><td>数据安全策略与标准</td><td>公司级的"安全守则"——哪些数据能放哪、谁能碰</td></tr>
+<tr><td>数据安全流程与规程</td><td>具体的"操作手册"——审批怎么走、泄露了怎么上报</td></tr>
+<tr><td>安全实施项目（具体举措）</td><td>实际干的事：权限梳理、脱敏、加密、审计上线</td></tr>
+<tr><td>风险评估与整改报告</td><td>定期"体检报告"——查出什么风险、怎么治</td></tr>
+</table>
+<p>考试怎么考：输入输出题最爱考"以下哪项属于数据安全的输入/输出"。判断口诀：<b>输入是"情况和要求"（需求、法规、现状、架构），输出是"制度、手册、工程、报告"</b>。干扰项常把"数据质量报告""元数据"混进来——那些是别的章节的产出，别选。</p>
+
+<h2>四、和目标岗位怎么连</h2>
+<ul>
+<li>北京国际数据服务有限公司的"网络数据安全合规实验室"做合规评估，日常就是拿着"输入"（法规 + 客户现状）产出"输出"（评估报告、整改建议）——今天讲的输入输出清单，就是他们的工作流程模板。</li>
+<li>北数所的数据交易场景里，"安全措施与风险相称"是定价逻辑的底层：数据越敏感、可交易范围越窄，脱敏和授权要求越严。</li>
+</ul>
+
+<h2>考试怎么考（本张小结）</h2>
+<p>这个点在 CDGA 里以两类题为主：<b>分类题</b>（4 个原则 4 个输出，考"哪项不属于"）和<b>情景应用题</b>（给一段"为了安全把系统全锁死了、业务没法用"的描述，问违反了哪条原则——答案是"保障安全的同时保证易访问"）。正确选项的关键词是"风险相称""易访问"；干扰项常写成"最严格防护""一刀切统一密级"，一听就太绝对的基本是错的。</p>
+
+<h2>自测一题</h2>
+<p><b>自测：</b>某公司为防止数据泄露，把所有业务系统的数据权限全部收紧为"仅数据部门可读"，导致业务部门无法正常开展分析工作。根据 DMBOK2 的数据安全原则，该公司最主要违反了哪一条？</p>
+<p>A. 协作　B. 基于企业风险的方法　C. 保障数据安全的同时保证数据的易访问性　D. 安全措施与风险相称</p>
+<p><b>答案：C。</b>只管锁、不管开，业务被卡死，正是违反"易访问"原则。A 协作指部门间配合不足；B 和 D 强调防护力度要与风险匹配——本题问题是"锁得太狠影响使用"，最贴切的还是 C。</p>
+
+<div class="rel">相关延伸：CDGA｜第7章 数据安全｜1/共4 · 定义·业务驱动·目标</div>
+<div class="note">来源说明：本期概念依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 7 章"数据安全"（教材 PDF 在用户本地，未联网核对原文，表述以通行的 DMBOK2 中文译法为准，具体措辞请以手头教材为准）。岗位关联信息引自用户提供的北京国际数据服务有限公司背景资料。</div>
+</body>
+</html>
