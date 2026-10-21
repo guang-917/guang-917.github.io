@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第7章 数据安全｜3/共4 · 工具·度量指标·落地步骤</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月21日 · 数据知识</div>
+<h1>CDGA｜第7章 数据安全｜3/共4 · 工具·度量指标·落地步骤</h1>
+<div class="lead">前两张讲了数据安全"是什么"（保住保密、完整、可用这三样）和"守什么规矩、吃进什么、产出什么"。这一张讲怎么干活：用什么工具、看什么仪表盘、按什么步骤落地。8 分的重点章，这三样都是爱考点。</div>
+
+<p>进度标记：CDGA｜第7章 数据安全｜3/共4</p>
+
+<h2>先打个比方：守护一座博物馆</h2>
+<p>把公司的数据想成一座博物馆的藏品，数据安全团队就是保安队长。今天讲的三件套就是：<b>用什么装备</b>（工具）、<b>每天看哪些安全报表</b>（指标）、<b>按什么流程布防</b>（步骤）。</p>
+
+<h2>一、工具：保安队装备库（用大白话说）</h2>
+<ul>
+<li><b>身份认证与访问管理</b>：博物馆大门的"验票+人脸识别"。先确认你是谁（认证），再决定你能进哪个展厅（授权）。常考的一对词：认证（Authentication，你是谁）≠ 授权（Authorization，你能干啥）。</li>
+<li><b>数据脱敏（掩蔽）</b>：给展品罩上面罩再对外展出。真实手机号 13812345678 变成 138****5678，测试和展示环境用的是"假脸"，真脸只留在生产环境。</li>
+<li><b>加密</b>：把藏品锁进保险柜，没钥匙（密钥）谁也拿不走。分两道：存着的加密（数据躺在柜子里，好比入库上锁）和传输中的加密（押运途中上锁，比如网址开头的 https）。</li>
+<li><b>数据库活动监控与审计</b>：博物馆里的监控摄像头，谁、什么时候、碰了哪件藏品，全录下来。出事后能倒查，平时能发现"有人半夜在库房乱翻"的异常行为。</li>
+<li><b>防泄漏（DLP）</b>：出口安检门，谁想夹带"藏品"（敏感数据）出门，机器会报警拦截。</li>
+</ul>
+
+<h2>二、度量指标：保安队长每天盯什么</h2>
+<table>
+<tr><th>指标</th><th>大白话意思</th></tr>
+<tr><td>安全事件数量与处置时长</td><td>这个月报了几起"撬门事件"，平均多久控制住。处理得越快越好。</td></tr>
+<tr><td>漏洞修复及时率</td><td>发现墙上有洞后，多少洞在规定时间内补上了。有洞不可怕，拖着不补才可怕。</td></tr>
+<tr><td>越权访问/异常访问次数</td><td>有多少人试图刷别人的门禁卡进库房。</td></tr>
+<tr><td>培训覆盖率与钓鱼演练通过率</td><td>全员安全培训有没有漏网之人；发假钓鱼邮件测员工，多少人没上当。数据安全最大的漏洞往往是"人"。</td></tr>
+</table>
+
+<h2>三、落地步骤：布防五步走</h2>
+<ol>
+<li><b>先给藏品定级</b>：哪些是镇馆之宝（核心敏感数据）、哪些是普通展品。不同级别不同待遇——这是所有后续动作的地基，考试也爱考"安全措施从数据分类分级开始"。</li>
+<li><b>摸清家底</b>：敏感数据都存在哪、谁在用、流到哪去（数据发现与梳理）。</li>
+<li><b>分级布防</b>：镇馆之宝上三道锁（加密+严格授权+全程审计），普通展品上基础锁（正常权限管理）。</li>
+<li><b>持续监控</b>：摄像头 24 小时开着，发现异常按预案处置（先止血再查因）。</li>
+<li><b>定期演练与复盘</b>：像消防演习一样定期做安全演练，事后复盘改进。</li>
+</ol>
+<blockquote>口诀：<b>先分级、再摸底、按级布防、盯紧出口、定期演练</b>。情景题问"第一步做什么"，选"数据分类分级"的居多。</blockquote>
+
+<h2>考试怎么考</h2>
+<ul>
+<li><b>工具分类题</b>：给你一句描述（"把生产数据换成假数据给测试用"）选对应工具——答案脱敏。干扰项爱放"加密"和"数据掩蔽"混淆：脱敏是换假数据、不可逆；加密是上锁、有钥匙可还原。</li>
+<li><b>概念辨析题</b>：认证 vs 授权、加密 vs 脱敏，是本章最常设的两对陷阱。</li>
+<li><b>情景应用题</b>：问"新系统上线前应先做什么"——先做数据分类分级和安全需求评估，而不是"先买最贵的防火墙"。</li>
+</ul>
+
+<h2>和你目标岗位的关系</h2>
+<p>这一章几乎就是你目标公司的主营业务说明书。北京国际数据服务有限公司运营的"网络数据安全合规实验室"，干的正是"帮企业做数据安全合规评估"；数据脱敏、数据清除（把数据删干净且恢复不回来）都是其电子数据清除检测业务的日常话题。北数所体系的数据交易岗位，核心也是"数据能流通、但不能裸奔"——先脱敏分级、再授权流通。面试聊到数据安全，能把"分级→脱敏→加密→审计"这条线讲顺，比背十个名词管用。</p>
+
+<h2>自测一题</h2>
+<p><b>自测：</b>某公司要把生产环境的客户数据复制一份给开发团队做测试，为了不泄露真实客户信息，最合适的做法是？</p>
+<ul>
+<li>A. 对复制的数据进行脱敏处理，用假名假号码替代真实信息</li>
+<li>B. 把数据加密后直接给开发团队，钥匙由开发组长保管</li>
+<li>C. 签署保密协议后原样提供真实数据</li>
+<li>D. 只提供给开发团队数据字典，不给任何数据</li>
+</ul>
+<p><b>答案：A。</b>测试场景要的是"数据长什么样"而不是真数据，脱敏后既能开发测试又不泄露真实客户。B 的陷阱在"加密但钥匙在开发手里"——开发能解开等于没脱敏；C 靠人防不靠技术防，审计上站不住；D 太极端，没数据没法测试。</p>
+
+<h2>下一张预告</h2>
+<p>明天推第 7 章最后一张（4/共4）：高频考点与易混对比收尾——安全三要素、四种角色职责、政策标准怎么落，把 8 分章钉死。之后进入第 8 章「数据集成和互操作」。坚持住，越到重点章越值钱。</p>
+
+<div class="rel">相关延伸：CDGA｜第7章 数据安全｜2/共4 · 原则·输入·输出，CDGA｜第6章 数据存储与操作｜2/共2 · 原则·输入·输出·工具·度量（章末收尾）</div>
+<div class="note">来源说明：本卡依据 DAMA-DMBOK2《DAMA 数据管理知识体系指南（原书第 2 版）》第 7 章"数据安全"的通用知识框架整理；与北京国际数据服务有限公司业务的关联为一般性介绍，具体岗位内容以其公开招聘信息为准。</div>
+</body>
+</html>
