@@ -191,18 +191,49 @@ def main():
         for i, d in enumerate([x for x in dig_add if isinstance(x, dict)], 1):
             d["link"] = "cards/dig_%s_%d.html" % (cid, i)
 
-    # 可选第2、3参数：先上传完整 HTML 学习卡，再推卡片
-    if len(sys.argv) >= 3:
-        local_html = sys.argv[2]
-        repo_html = sys.argv[3] if len(sys.argv) >= 4 else card["link"]
-        if repo_html != card["link"]:
-            print("警告: 传入路径 %s 与卡片 link %s 不一致，已按卡片 link 上传" % (repo_html, card["link"]))
-            repo_html = card["link"]
-        if os.path.exists(local_html):
-            if not gh_put_file(tok, repo_html, local_html):
-                print("警告: 完整学习卡上传失败，卡片 link 将指向不存在的页面。")
-        else:
-            print("警告: 完整学习卡文件不存在: %s（卡片仍会推送，但 link 将 404）" % local_html)
+    # 第2、3参数：必须先上传完整 HTML 学习卡，再推卡片。
+    # 2026-10-22 改：完整页缺失/上传失败一律中止，绝不再推出一张"打不开"的卡。
+    if len(sys.argv) < 3:
+        print("错误: 缺少完整学习卡 HTML 参数。推送一张没有详情页的卡片会让用户点开就 404，已中止。")
+        print("正确用法: python3 push_feed.py <新卡片.json> /workspace/card_full.html cards/<id>.html")
+        sys.exit(8)
+    local_html = sys.argv[2]
+    repo_html = sys.argv[3] if len(sys.argv) >= 4 else card["link"]
+    if repo_html != card["link"]:
+        print("警告: 传入路径 %s 与卡片 link %s 不一致，已按卡片 link 上传" % (repo_html, card["link"]))
+        repo_html = card["link"]
+    if not os.path.exists(local_html):
+        print("错误: 完整学习卡文件不存在: %s，已中止（不推送会 404 的卡）。" % local_html)
+        sys.exit(8)
+    try:
+        ok = gh_put_file(tok, repo_html, local_html)
+    except Exception as e:
+        print("错误: 完整学习卡上传异常 %r，已中止。" % (e,))
+        sys.exit(8)
+    if not ok:
+        print("错误: 完整学习卡上传失败，已中止（不推送会 404 的卡）。")
+        sys.exit(8)
+
+    # 待挖掘解答页：/workspace/dig_1.html、dig_2.html …… 按 dig 顺序上传。
+    # 找不到本地文件时直接去掉 link，宁可不显示"去挖"按钮，也不留一个点开就 404 的入口。
+    if dig_add:
+        for i, d in enumerate([x for x in dig_add if isinstance(x, dict)], 1):
+            local = None
+            for cand in ("/workspace/dig_%d.html" % i,
+                         "/workspace/dig_%s_%d.html" % (card["id"], i),
+                         os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), "dig_%d.html" % i)):
+                if os.path.exists(cand):
+                    local = cand
+                    break
+            if not local:
+                print("提示: 第 %d 条挖掘页本地文件缺失，已移除它的 link（%s 不会出现死链）" % (i, d.get("link")))
+                d.pop("link", None)
+                continue
+            try:
+                gh_put_file(tok, d["link"], local)
+            except Exception as e:
+                print("提示: 第 %d 条挖掘页上传失败 %r，已移除 link" % (i, e))
+                d.pop("link", None)
 
     cards = feed.get("cards", [])
     # 去重：同 id 不重复加（现在 id 已重分配，正常不会命中；命中必须报警而非静默）
