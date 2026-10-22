@@ -2721,8 +2721,20 @@ var ARCH_DELAY=12*3600*1000;   /* 12 小时 */
 function loadReadAt(){try{return JSON.parse(localStorage.getItem(LS_READAT)||"{}")||{};}catch(e){return {};}}
 function saveReadAt(m){try{localStorage.setItem(LS_READAT,JSON.stringify(m));}catch(e){}}
 function stampReadAt(key){var m=loadReadAt();if(!m[key]){m[key]=Date.now();saveReadAt(m);}}
-/* 某 key 是否已满 12 小时（没有时间戳视为未归档） */
-function archDue(key){var m=loadReadAt();return !!m[key] && (Date.now()-m[key])>=ARCH_DELAY;}
+/* 某 key 是否已满 12 小时（`.56` 修正）
+   ⚠ 旧实现：`!!m[key] && 差值>=12h` —— 没有时间戳就**永远返回 false**，
+      于是这类「已读」条目会永远卡在列表里、永远不归档（真机复现确认为根因）。
+   什么时候会没有时间戳？
+     ① `.54` 之前就把问答标成已读的老数据（那时还没这套机制）；
+     ② 换设备 / 清缓存 / 无痕窗口：`kb_qa.state` 可能还在，但 `kb_readat` 是纯本机数据，没了；
+     ③ 云端恢复回来的已读条目（云端从不存 readat）。
+   现在：没有时间戳 → 视为早已经过 12 小时，顺手补一个「12 小时前」的戳并立即到期。
+   （只在第一次判断时补写，之后按正常差值算；不会每次刷新都重写。） */
+function archDue(key){
+  var m=loadReadAt();
+  if(!m[key]){ m[key]=Date.now()-ARCH_DELAY; saveReadAt(m); return true; }
+  return (Date.now()-m[key])>=ARCH_DELAY;
+}
 function setStar(id,val){var s=loadLocal();s.star=s.star||{};(val?s.star[id]=true:delete s.star[id]);saveLocal(s);var c=getCard(id);if(c)c.star=!!val;}
 function setTags(id,arr){var s=loadLocal();s.tags=s.tags||{};if(arr&&arr.length)s.tags[id]=arr;else delete s.tags[id];saveLocal(s);var c=getCard(id);if(c)c.tags=arr?arr.slice():arr;}
 function addLocalDig(item){var s=loadLocal();s.dig=s.dig||[];if(!s.dig.some(function(d){return d.q===item.q;}))s.dig.unshift(item);saveLocal(s);DIG.unshift(item);}
@@ -3621,7 +3633,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.55';
+var _APP_VER_ = '2026-10-11.56';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
