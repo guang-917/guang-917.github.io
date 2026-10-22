@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 知识问答 第 1 期｜巩固：大模型·智能体·提示词</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.ans{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月5日 · AI 知识问答 · 第 1 期</div>
+<h1>AI 知识问答 第 1 期｜巩固：大模型·智能体·提示词</h1>
+<div class="lead">周一是巩固日。这期 3 道题，把上一周讲过的「提示词、大模型、智能体」再嚼一遍——先自己答，再往下看讲解。</div>
+<h2>第 1 题（选择）｜智能体和大模型，差别到底在哪？</h2>
+<p>题目：下面哪句话把「智能体」和「大模型」的关系说对了？</p>
+<div class="ans"><b>答案：智能体 = 大模型当「大脑」+ 能调工具干活的「手脚」，会自己定计划把活干完；大模型只是「会出主意的军师」，自己不动手。</b></div>
+<p>拆开看两件事：</p>
+<ul>
+<li><b>大模型</b>只做一件事——你问它，它吐字。它读不到你的文件、按不了你的按钮、发不了你的邮件。</li>
+<li><b>智能体</b>在大模型外面套了一圈「手和脚」：可以查网页、跑代码、开表格、发消息，还能自己拆步骤、一步步往下做，做完再回头检查。</li>
+</ul>
+<p>生活比方：大模型像餐厅里的<b>军师</b>，能告诉你这道菜该怎么做；智能体像<b>完整的一套后厨</b>——军师出主意，灶台、刀、盘子一起动手，最后把菜端上桌。</p>
+<p><b>面试怎么用：</b>被问「你怎么看大模型和智能体」，一句话就够——「大模型是能力，智能体是把这份能力接到具体活儿上的那套手脚，能不能自己动手，是两者的分水岭。」</p>
+
+<h2>第 2 题（简答）｜好提示词的三件套</h2>
+<div class="ans"><b>答案：目标 + 背景 + 格式。三者齐了，AI 基本一次就听懂。</b></div>
+<ul>
+<li><b>目标</b>——你要它干什么（写一封请假邮件、把这段文字压成三点）。</li>
+<li><b>背景</b>——它不知道的事得告诉它（给谁看、什么场合、多长、有没有禁忌）。</li>
+<li><b>格式</b>——你要什么形状的产出（表格 / 分点 / 200 字以内 / 先结论后理由）。</li>
+</ul>
+<p>同一个需求，两种问法对比：</p>
+<blockquote>❌「帮我写个周报。」<br>✅「帮我写本周周报（<b>目标</b>）。我是投标岗，这周做了 3 件事：xx、xx、xx（<b>背景</b>）。写成 5 条要点，每条一句话，开头先给一句总结（<b>格式</b>）。」</blockquote>
+<p>只写目标、不写背景和格式，AI 只能靠猜——猜错了你还得来回改三遍，反而更慢。</p>
+
+<h2>第 3 题（实战）｜用三件套让 AI 排一份 2 天 1 夜行程</h2>
+<p>达标标准：产出的行程<b>能直接照着走</b>——每天不超过 3 个点、写清交通、给出一个下雨备选。</p>
+<p>示范指令（可以照抄改地名）：</p>
+<blockquote>帮我排一份周末 2 天 1 夜的杭州行程（<b>目标</b>）。两个人，从上海出发坐高铁，不爬山、走不动太多路，预算一人 800 以内，住在西湖附近（<b>背景</b>）。按「时间 / 去哪 / 怎么去 / 花多久 / 花多少钱」做成表格，每天最多 3 个点，最后单独给一个下雨天的替换方案（<b>格式</b>）。</blockquote>
+<p>这条指令里三件套都齐了：目标（排行程）、背景（两人/高铁/不爬山/预算/住哪）、格式（表格 + 每天 3 点 + 雨天备选）。AI 一次就能给出能用的东西。</p>
+<div class="rel">相关延伸：大模型、智能体、算力，到底谁是谁？（细分概念深挖）｜零基础怎么学 AI 才算不踩坑？（学习路径建议）</div>
+<div class="note">本页对应 2026 年 10 月 5 日《AI 知识问答》第 1 期。题目与讲解为学习整理，不涉及外部数据引用。</div>
+</body>
+</html>
