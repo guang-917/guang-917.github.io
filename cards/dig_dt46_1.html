@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>系统对接最容易出问题的四个地方</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">10月22日 · 数据知识 · 深挖解答（来自卡片 dt46）</div>
+<h1>做数据合规评估时，系统对接最容易出问题的是哪几处？</h1>
+
+<p>把两个系统接起来，跟两家公司合资开一家店很像：招牌挂上了不算成，得把账、人、货都对上才算。实际项目里翻车的位置，基本就这四处。</p>
+
+<h2>一、口径没对齐：都叫"客户"，含义不一样</h2>
+<p>最常见也最贵。A 系统按"签约主体"算客户，B 系统按"实际收货方"算；A 的"销售额"含税，B 的不含税。数据搬过去没报错，报表出来却差一截。所以对接第一步不是写代码，是双方各出一张"字段口径表"，把每个字段的含义、算法、单位写死并签字确认。</p>
+
+<h2>二、标识不统一：同一个人对不上号</h2>
+<p>同一家公司在三个系统里三个编号，没有唯一标识，合并时就只能靠"名称+电话"这种模糊匹配，错配、重号的概率极高。合规场景更要小心：一旦错配，A 客户的个人信息可能被算进 B 客户名下，这在个人信息保护上是实打实的风险。</p>
+
+<h2>三、字段里藏着个人信息，对接前没做处理</h2>
+<p>这是合规评估最该盯的点。对方要的是"分析用的宽表"，你顺手把身份证号、手机号原样推过去，等于做了一次未经同意的个人信息提供。规矩是先做字段级梳理——哪些是标识符、哪些是敏感个人信息、对方到底需不需要原文；不需要的原样脱敏或只给统计结果，需要原文的必须有合法基础（同意、合同必需、法定义务等）和书面约定。</p>
+
+<h2>四、传完了没人能证明传了什么</h2>
+<p>接口通了、日志没留，事后被问"到底给了哪些字段、给了多少条、谁批的"，一问三不知。合规评估里这属于典型的"措施有、证据无"。基本要求是：每次传输留可核对的记录（时间、字段清单、条数、审批人、接收方），并按约定定期清理。</p>
+
+<h2>一句话总结</h2>
+<p>对接不怕技术难，怕的是"口径不写清、标识不统一、敏感字段不筛、过程不留痕"。这四件事全是流程和文档的活，恰恰是投标、售前、项目管理出身的人最容易上手的地方。</p>
+
+<div class="note">来源说明：本期为基于 DAMA-DMBOK2 第8章"数据集成和互操作"与《个人信息保护法》一般原则的实务讲解，未引用具体案例或机构数据；具体合规要求以法律法规原文及主管部门规定为准。</div>
+</body>
+</html>
