@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>两个系统数据对不上，面试怎么答</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">数据知识 · 待挖掘</div>
+<h1>面试官问「两个系统的数据对不上，你怎么查」</h1>
+<div class="lead">这题其实在考三件事：你懂不懂数据怎么流、会不会按顺序排查、能不能说清谁负责。记住四步，照着说就行。</div>
+
+<h2>第一步：先搞清楚"对不上"是哪一种</h2>
+<p>别急着查数据，先问三句话：是数不一样、还是根本找不到这条、还是同一个名字指的是两拨人？</p>
+<ul>
+<li><b>数不一样</b>：A 系统客户 1 万，B 系统 9800。可能是漏搬了，也可能是重复合并。</li>
+<li><b>找不到这条</b>：新客户只进了 A 没进 B。多半是搬数任务没跑完或跑失败了。</li>
+<li><b>指的不是同一拨人</b>：两个系统对"客户"的定义不同——A 把试用也算客户，B 只算付过钱的。这就是口径问题，不是数据错。</li>
+</ul>
+<p>面试时先说这句，就显得有章法：<b>"我先分三类——搬漏了、搬错了、定义不一样。"</b></p>
+
+<h2>第二步：顺着链路倒查</h2>
+<p>数据从 A 到 B 会经过：原系统 → 抽取 → 转换 → 装入。任何一段都可能出问题。</p>
+<ul>
+<li>看搬数任务今天有没有跑、成功没成功、最后一次成功的时点是什么时候。</li>
+<li>抽几条对不上的具体记录，看它们在中间环节长什么样——是在抽取时就少了，还是转换时被规则干掉或改写了。</li>
+<li>查有没有"过滤条件"偷偷把它们排除了，比如只搬"状态=有效"的记录。</li>
+</ul>
+
+<h2>第三步：比口径</h2>
+<p>如果链路没毛病，那就是两边算的不是一回事。把两边的计算规则摆在一起对：统计的时间范围、算不算退货、算不算试用、一个人开两个账号算一个还是两个。<b>这一步最容易被企业忽略，也最容易产生"都觉得自己对"的争论。</b></p>
+
+<h2>第四步：说清谁负责、怎么防</h2>
+<p>面试高分点在这里：不只解决问题，还说得出长效机制。</p>
+<ul>
+<li>口径由业务方拍板、写进文档，不是各系统自己定；</li>
+<li>搬数过程留日志，能重跑、能追溯；</li>
+<li>设一个对账机制，每天自动比一次关键数字，差多少就报警。</li>
+</ul>
+
+<blockquote>收尾一句可以这么说："我的习惯是先定口径、再查链路、最后补机制——因为只修一次数据，问题下周还会回来。"</blockquote>
+
+<div class="note">说明：本期内容为面试应答思路的整理，方法论对应 DAMA-DMBOK2 第 8 章「数据集成和互操作」中关于集成链路、数据沿袭与度量的通行内容（教材为用户本地持有，云端未核读原文）。具体到某家公司的岗位要求，请以其公开招聘信息为准。</div>
+</body>
+</html>
