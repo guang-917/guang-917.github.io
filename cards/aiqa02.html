@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 知识问答 · 第01期</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.ans{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月19日 · AI 知识问答</div>
+<h1>AI 知识问答 · 第01期</h1>
+<div class="lead">3 道题巩固 AI 入门基础：大模型怎么生成回答、提示词怎么写、AI 幻觉怎么核实。先自己答，再看下面的答案与讲解。</div>
+<h2>第 1 题（选择）｜大模型是怎么「回答」你的？</h2>
+<p>题目：大语言模型生成回答的方式是？</p>
+<div class="ans"><b>答案：C —— 逐词预测「下一个最可能出现的词」。它不是去查现成答案，这也正是幻觉的根源。</b></div>
+<p>把它想成一个「接话高手」：你说上半句，它按见过的海量文字，猜下半句最该接哪个词；接完一个再猜下一个，一个词一个词往外蹦。</p>
+<ul>
+<li>所以它<b>说得顺</b>——语法、语气、结构都像人写的。</li>
+<li>所以它<b>未必说得对</b>——它优化的是「像不像」，不是「对不对」。遇到没见过的事，它照样会顺畅地接下去，接出来的就是幻觉。</li>
+</ul>
+<p>记住这句话：<b>流畅 ≠ 正确</b>。AI 说错的概率，和它说得有多顺，没有关系。</p>
+
+<h2>第 2 题（简答）｜提示词怎么写更有效？</h2>
+<div class="ans"><b>答案要点（写出任意两条即可）：</b>① 说清背景和目标；② 给具体要求和格式；③ 提供示例或参考材料；④ 让它分步思考；⑤ 多轮追问、逐步改进。</div>
+<table>
+<tr><th>做法</th><th>为什么管用</th><th>一句话例子</th></tr>
+<tr><td>说清背景和目标</td><td>它不知道你的处境，只能靠猜</td><td>「给不懂技术的领导看」</td></tr>
+<tr><td>给格式要求</td><td>省掉你返工重排的时间</td><td>「分 3 点，每点不超过 40 字」</td></tr>
+<tr><td>给示例/材料</td><td>照着样子写，比讲道理准</td><td>「照这段的口气改」</td></tr>
+<tr><td>让它分步想</td><td>复杂题先列步骤，错得少</td><td>「先列 3 步，再逐步做」</td></tr>
+<tr><td>多轮追问</td><td>一次问不清，第二轮补条件</td><td>「第 2 点太虚，给个具体做法」</td></tr>
+</table>
+
+<h2>第 3 题（实战）｜用 AI 查一条和你有关的信息，然后核实它</h2>
+<p>步骤（照着做一遍，比看十篇文章有用）：</p>
+<ol>
+<li>让 AI 给一条<b>和你有关</b>的信息，里面必须带具体事实——日期、数字、机构名、金额。</li>
+<li>拿着这条事实，去<b>官方渠道</b>核对（政府/公司官网、官方公告、原始文件），不要用别人的转述。</li>
+<li>记录三行：<b>AI 原话 → 核实结果 → 是否一致</b>。</li>
+<li>最后写一句你自己的启发：这类问题以后该信它几分。</li>
+</ol>
+<p>达标标准：三行记录齐全；「是否一致」这一栏是你自己核对后填的，不是 AI 说的。</p>
+<p>这一步练的是<b>验货的习惯</b>——AI 可以帮你起草、帮你找方向，但凡是数字、日期、政策、人名，最后都得你自己落到源头上看一眼。</p>
+<div class="rel">相关延伸：让 AI 一次答对的提问方式｜AI 说得头头是道，怎么知道它是不是在编？（安全与合规）</div>
+<div class="note">本页对应 2026 年 10 月 19 日《AI 知识问答》。题目与讲解为学习整理，不涉及外部数据引用。</div>
+</body>
+</html>
