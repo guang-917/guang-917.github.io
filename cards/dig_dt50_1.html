@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：主数据和交易数据到底怎么区分？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:19px}p,li{font-size:15px}code{background:#171a21;padding:2px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<h1>主数据和交易数据到底怎么区分？</h1>
+<p>一把钥匙：看<strong>变化频率</strong>和<strong>它描述谁</strong>。</p>
+<p>主数据描述"实体"——客户、产品、供应商、员工。它们像公司名册上的名字，几周几个月才变一次。交易数据描述"事情"——下单、付款、发货，每秒都在发生。打个比方：主数据是通讯录（人名和电话），交易数据是通话记录（几点打给谁、聊了几分钟）。通讯录不常改，通话记录蹭蹭涨。</p>
+<p>考试里常见的坑是把"账户"和"流水"搞混：账户是主数据（描述客户与公司的关系，相对稳定），账户里每笔进出的流水是交易数据。同理，"产品档案"是主数据，"每天的销量"是交易数据。</p>
+<p>还有一种介于中间的：<strong>参考数据</strong>（代码表、选项菜单），它不描述实体也不记录事情，而是给前两者"提供标准选项"，比如币种代码、地区代码。做题时按"实体→主数据、事件→交易数据、标准选项→参考数据"三步对号入座，基本不会错。</p>
+<p>来源：定义依据 DAMA-DMBOK2 第 10 章通行内容整理，细节以教材原文为准。</p>
+</body>
+</html>
