@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>合规评估现场的三句追问：耦合·时延·语义</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:17px;margin:24px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+li{margin:7px 0;font-size:15px}
+ul{padding-left:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0;font-size:15px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">10月22日 · 深挖 · 第8章延伸</div>
+<h1>合规评估现场的三句追问</h1>
+<p>数据交换合规评估听起来很「裁判」，实际干的活很像<strong>装修验收</strong>：不看效果图，看管子接没接对、水压够不够、出了事能不能找到是哪一截漏的。第8章那三个词，正好能变成现场三句大白话的追问。</p>
+
+<h2>第一问（语义）：你这个字段，跟对方说的是一个意思吗？</h2>
+<p>不要问「有没有接口文档」，而要问「<strong>『客户编号』在你这儿和在他那儿，是同一个东西吗</strong>」。现实中常见：你叫「客户ID」存的是身份证号，对方存的是内部流水号。字段名一样，含义不一样，这叫语义不一致——数据传过去不报错，但报表全错。</p>
+<p>验收动作：抽 3 个关键字段，让双方的业务人员各自口述一遍含义，对不上就是问题。</p>
+<div class="card">你能说的行话：这不是「格式没对齐」，而是<strong>语义层没有约定</strong>；光改格式治不了。</div>
+
+<h2>第二问（耦合）：一边停了，另一边会不会跟着停？</h2>
+<p>耦合就是两个系统<strong>缠得多紧</strong>。紧耦合典型症状：A 系统一停机，B 系统就报错、排队、卡死。放在合规评估里，这不只是技术问题——它意味着<strong>可用性风险和连带责任</strong>写不清。</p>
+<p>验收动作：问「如果对方系统凌晨维护两小时，你这边业务是什么表现？」答「正常排队、恢复后自动补齐」算过得去；答「那就不能开票了」，就得在合同里写清时延和兜底方案。</p>
+
+<h2>第三问（时延）：数据产生到我能用，中间隔多久？</h2>
+<p>时延就是这段间隔。追问时要具体到数字和场景：「昨天下午 3 点的一笔交易，今天上午 9 点能在报表里看到吗？」对方要是说「一般是第二天」，那它实际是<strong>批处理</strong>级别，不能对外承诺「实时」。</p>
+<p>这一问在投标时极其值钱：很多方案书把「实时」当形容词用，你在答疑里把它改成数字（T+1、小时级、分钟级），评委立刻知道你懂行。</p>
+
+<h2>为什么这三问对你特别有用</h2>
+<ul>
+<li>你现在的强项是<strong>投标、售前、项目管理</strong>——这三问不需要你会写代码，只需要你会问、会记录、会把答案翻译成合同条款和验收清单。</li>
+<li>北京国际数据服务公司的合规评估、实验室对接类岗位，本质上也是「问对问题 + 留证据」。这三问就是最好的开场白。</li>
+<li>面试被问「你没有数据经验怎么干」，可以答：「我会把技术问题翻译成业务能验收的三句话——含义对不对、一边停了另一边扛不扛得住、数据多久能到。」</li>
+</ul>
+
+<h2>来源说明</h2>
+<p class="note">耦合、时延（Latency）、语义一致性等概念出自 DAMA-DMBOK 第 8 章术语（Application Coupling、Latency、Canonical Model）；ETL/ELT 与数据虚拟化的差异参见 IBM 中国《什么是 ETL》 https://www.ibm.com/cn-zh/topics/etl 。文中客户现场举例为通用场景说明，非特定机构事实陈述。</p>
+</body>
+</html>
