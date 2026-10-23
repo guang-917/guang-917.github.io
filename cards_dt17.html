@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第1章 数据管理｜1/共3 · 数据·信息·知识 + 定义 + 目标 + 业务驱动</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff;--ok:#2f9e78}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin:14px 0;font-size:14.5px}
+h2{font-size:17px;margin:24px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:9px 0;font-size:15px}
+.clist{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:12px 0}
+.clist ol{margin:6px 0;padding-left:20px}
+.clist li{margin:5px 0;font-size:14.5px}
+.kp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:14px 0}
+.kp .name{font-size:15.5px;font-weight:800;color:var(--accent);margin-bottom:8px}
+.row{font-size:14.5px;margin:6px 0}
+.row .lb{color:var(--ink2);font-size:12px;letter-spacing:.06em;display:block;margin-bottom:1px}
+.quote{border-left:3px solid var(--line);padding-left:10px;color:#c7ccd6;font-size:14px}
+.q{background:#12161d;border:1px dashed #33405a;border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}
+.q .ans{color:var(--ok);font-weight:700}
+.trap{color:#ffb3b5;font-size:14px}
+.mem{background:rgba(47,158,120,.12);border-left:3px solid var(--ok);padding:8px 12px;border-radius:0 8px 8px 0;font-size:14.5px;margin:8px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--card)}
+.check{background:#12161d;border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:16px 0;font-size:13.5px;color:var(--ink2)}
+.check b{color:var(--ink)}
+.note{margin-top:18px;color:var(--ink2);font-size:12.5px}
+blockquote{margin:10px 0;padding:9px 13px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="meta">2026-10-23 · 数据知识 · 本张对应教材 p1–p8</div>
+<h1>第 1 章 数据管理｜1/共3<br>数据·信息·知识 / 定义 / 6 个目标 / 业务驱动</h1>
+<div class="lead">本章 4 分，题不难但<b>送分题全在这儿</b>。全章题库 29 道，其中 <b>19 道都在考「数据 / 信息 / 知识」的区分</b>——比"数据管理的定义"还高频。所以别把这三者当常识滑过去，它是本章第一大考点。</div>
+
+<div class="clist">
+<b>本张考点（7 个）</b>
+<ol>
+<li>数据 / 信息 / 知识 三者怎么分（最高频）</li>
+<li>数据管理的定义（四个关键词，要能默写）</li>
+<li>数据管理专业人员 ≠ 数据管理员</li>
+<li>业务驱动因素：从数据资产里拿价值</li>
+<li>数据管理的 6 个目标（逐条 + 干扰项）</li>
+<li>数据管理是业务需求，要"驱动"IT 决策</li>
+<li>哪些算数据管理活动（数据科学不算）</li>
+</ol>
+</div>
+
+<h2>1 · 数据 / 信息 / 知识</h2>
+<div class="kp">
+<div class="name">考点名：数据是符号，信息是有语境的数据，知识是能拿去做决定的信息</div>
+<div class="row"><span class="lb">教材原话</span><span class="quote">教材把数据、信息、知识分开定义：数据是对事实的表示；信息是经过处理、赋予语境后的数据；知识是信息与经验、理解结合后的产物。</span></div>
+<div class="row"><span class="lb">真题怎么问（题库第 3 题）</span></div>
+<div class="q">下列属于「信息」的是？<br>A. 2018 年世界杯现场直播节目内容　B.《2020 年春节联欢晚会》DVD 光盘　C.《电脑爱好者》杂志　D. 索尼数码相机<br><span class="ans">答案 A</span> —— 节目内容是被组织、被赋予语境的数据；B/C/D 都是承载数据的<b>物理载体</b>。</div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">出题人专把"载体"和"内容"混着放：光盘、杂志、相机是载体（物），里的内容才是信息。看到"光盘 / 杂志 / 设备"先划掉。</span></div>
+<div class="mem">口诀：<b>数据是原料，信息是加工好的菜，知识是你会做这道菜</b>；光盘和相机只是装菜的盘子。</div>
+</div>
+
+<h2>2 · 数据管理的定义</h2>
+<div class="kp">
+<div class="name">考点名：为了「交付、控制、保护、提升」数据资产价值，在全生命周期里「计划、制度、规程、实践」并「执行、监督」</div>
+<div class="row"><span class="lb">教材原话（p6）</span><span class="quote">数据管理是为了交付、控制、保护并提升数据和信息资产的价值，在其整个生命周期中制定计划、制度、规程和实践活动，并执行和监督的过程。</span></div>
+<div class="row"><span class="lb">怎么考</span>给一句话让你判断"这是不是数据管理的定义"。认住<b>两组词</b>：<b>交付 / 控制 / 保护 / 提升</b> + <b>计划 / 制度 / 规程 / 实践</b>，再加"全生命周期""执行和监督"。</div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">干扰项常把定义改窄——只说"存储数据""保证数据准确""负责数据安全"，或只讲技术层面。定义是<b>全生命周期 + 业务与技术共担</b>，缺一块就不完整。</span></div>
+<div class="mem">口诀：<b>四个动词保价值，四个词建规矩，一辈子管到底。</b></div>
+</div>
+
+<h2>3 · 数据管理专业人员 ≠ 数据管理员</h2>
+<div class="kp">
+<div class="name">考点名：专业人员指"从技术管理到确保数据被合理利用"的全部角色</div>
+<div class="row"><span class="lb">教材原话（p6）</span><span class="quote">数据管理专业人员是指从事数据管理各方面的工作（从数据全生命周期的技术管理工作，到确保数据的合理利用及发挥作用），并通过其工作发挥数据管理价值。</span></div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">别把它等同于"数据管理员 / DBA"。<b>范围大得多</b>：数据治理、架构、建模、安全、质量、元数据……都算；而且包含"确保合理利用"这一层，不只是"管好不丢"。</span></div>
+<div class="mem">口诀：<b>从技术管到用法，都叫数据管理专业人员。</b></div>
+</div>
+
+<h2>4 · 业务驱动因素</h2>
+<div class="kp">
+<div class="name">考点名：唯一驱动力——让组织从数据资产中获取价值</div>
+<div class="row"><span class="lb">教材原话（p6）</span><span class="quote">数据管理的主要驱动力：使组织能够从其数据资产中获取价值。</span></div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">干扰项写成"降低存储成本""减少数据量""满足审计要求"——这些是<b>手段或附带结果</b>，不是驱动力。教材只给了一个驱动：<b>获取价值</b>。</span></div>
+<div class="mem">口诀：<b>驱动只有一个字——值。</b></div>
+</div>
+
+<h2>5 · 6 个目标（必须能逐条认出来）</h2>
+<div class="kp">
+<div class="name">考点名：六条目标，分别管"需求 / 资产 / 质量 / 隐私 / 授权 / 增值"</div>
+<div class="row"><span class="lb">教材原话（p7，逐条）</span></div>
+<table>
+<tr><th>#</th><th>目标</th><th>关键词</th></tr>
+<tr><td>1</td><td>理解并支撑企业及其利益相关方的<b>信息需求</b>得到满足</td><td>需求</td></tr>
+<tr><td>2</td><td><b>获取、存储、保护</b>数据，确保数据资产的<b>完整性</b></td><td>资产</td></tr>
+<tr><td>3</td><td>确保数据和<b>信息质量</b></td><td>质量</td></tr>
+<tr><td>4</td><td>确保利益相关方的数据<b>隐私和保密性</b></td><td>隐私</td></tr>
+<tr><td>5</td><td>防止数据被<b>未经授权或不当</b>访问、操作及使用</td><td>授权</td></tr>
+<tr><td>6</td><td>确保数据能有效地服务于企业<b>增值</b>的目标</td><td>增值</td></tr>
+</table>
+<div class="row"><span class="lb">陷阱</span><span class="trap">① 数错条数（是 <b>6 条</b>，不是 5 条也不是 7 条）；② 把"确保数据安全"当第 6 条——第 6 条是<b>增值</b>；③ 把"降低存储成本"塞进选项。</span></div>
+<div class="mem">口诀：<b>需求、资产、质量、隐私、授权、增值</b>——六个词背下来，目标题全对。</div>
+</div>
+
+<h2>6 · 数据管理是业务需求，不是 IT 需求</h2>
+<div class="kp">
+<div class="name">考点名：数据管理必须「驱动」IT 决策，不是被 IT 牵着走</div>
+<div class="row"><span class="lb">真题怎么问（题库第 8 题）</span></div>
+<div class="q">关于"数据管理需求是业务的需求"，正确的是？<br>A. 管理数据意味着对数据做质量管理　B. 需要元数据来管理数据　C. 数据管理须驱动信息技术决策　D. 以上都正确<br><span class="ans">答案 D</span> —— 三个说法都对，C 是本章原则的原话（第 11 条原则）。</div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">反向表述是经典错项：「IT 决策驱动数据管理」——反了。另外"数据管理只是 IT 部门的事"也必错。</span></div>
+<div class="mem">口诀：<b>业务提要求，IT 来落地</b>——谁驱动谁，别搞反。</div>
+</div>
+
+<h2>7 · 哪些算「数据管理活动」</h2>
+<div class="kp">
+<div class="name">考点名：DMBOK 的知识领域算，数据科学不算</div>
+<div class="row"><span class="lb">真题怎么问（题库第 6 题）</span></div>
+<div class="q">下列哪项<b>不属于</b>数据管理活动范畴？<br>A. 数据科学　B. 数据架构　C. 数据安全　D. 数据伦理<br><span class="ans">答案 A</span> —— 数据科学在第 14 章才讲，是<b>相关领域</b>，不属于本章定义的数据管理活动。</div>
+<div class="row"><span class="lb">陷阱</span><span class="trap">"数据科学""大数据"听着像一家人，但在这题里是<b>最近的邻居 ≠ 家里人</b>；数据分析也常被当干扰项。</span></div>
+<div class="mem">口诀：<b>架构、安全、伦理在册，科学在册外。</b></div>
+</div>
+
+<h2>一张表把易混对记住</h2>
+<table>
+<tr><th>易混对</th><th>正确说法</th><th>错项长什么样</th></tr>
+<tr><td>数据 / 信息 / 知识</td><td>符号 → 有语境 → 能决策</td><td>把光盘、杂志当信息</td></tr>
+<tr><td>数据管理 vs IT 管理</td><td>数据管理驱动 IT 决策</td><td>IT 决策驱动数据管理</td></tr>
+<tr><td>专业人员 vs 数据管理员</td><td>全生命周期 + 确保合理利用</td><td>等同于 DBA</td></tr>
+<tr><td>数据管理 vs 数据科学</td><td>科学是邻域，不在管理活动里</td><td>把数据科学算作管理活动</td></tr>
+<tr><td>驱动力</td><td>从数据资产获取价值</td><td>降低存储成本 / 减少数据量</td></tr>
+</table>
+
+<blockquote>自测一题：某公司把"数据管理"理解成"把数据存好、别丢、别被黑"，并交给 IT 部门独家负责。<br>按本章，这个理解错了<b>两处</b>——你能说出是哪两处吗？<br><span style="color:var(--ink2);font-size:13px">（答：① 漏了"提升价值"和"全生命周期"，定义被改窄；② 主体错了，数据管理是业务需求、业务与技术共担，不是 IT 一家的事。）</span></blockquote>
+
+<div class="check">
+<b>本张覆盖考点：</b>数据/信息/知识 · 定义 · 专业人员 · 业务驱动 · 6 个目标 · 业务驱动IT · 活动范畴（共 7 个）<br>
+<b>本章剩余考点：</b>12 条原则（图 1-1 五组）留给 2/共3；SAM / AIM / DMBOK 三大框架 · 语境关系图 6 块 + P/C/D/O 四阶段 · 战略规划可交付成果 · 数据管理挑战，留给 3/共3
+</div>
+
+<div class="note">来源：DAMA-DMBOK2（原书第 2 版 修订版）第 1 章 p1–p8；题目取自本地题库第 1 章第 3、6、8 题（含答案）。本卡只覆盖本章考点，不等于覆盖教材全文。</div>
+</body>
+</html>
