@@ -2278,12 +2278,8 @@ function checkAndGenDetails(){
 }
 function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
 function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}if(obj.focus)mergeFocus(obj.focus);renderTree();updateMzBdg();toast('已从文件恢复');}
-function updateMzBdg(){
-  var n=loadQA().filter(function(x){var s=qaState(x);return s==="pending"||s==="pushed";}).length;
-  var b=document.getElementById("mzBdg");
-  if(b){b.textContent=n;b.style.display=n?"":"none";}
-  _archBtn("mzArchBtn",archCount("qa"));   /* 归档条数跟着一起刷新（粉碎/放回后不会留旧数字） */
-}
+/* `.57` 删掉了一份重复的 updateMzBdg（同名函数后者覆盖前者，这份是死代码，
+   而且只算问答角标；留着以后改哪份都不对）。现役版本在 setMzSub 下面。 */
 /* 阅读器里渲染某卡的问答（底部「我在这张卡上的提问」块） */
 function renderCardQA(cardId){
   var box=document.getElementById("qaBox");if(!box)return;
@@ -2322,7 +2318,7 @@ function renderQA(){
   var live=all.filter(function(x){return !isArch(x);});
   var ng=all.filter(function(x){return qaState(x)==="pending";}).length;
   var pg=all.filter(function(x){return qaState(x)==="pushed";}).length;
-  var ag=archCount("qa");
+  var ag=archCount(mzSub);
   /* `.54`：「未读」= 没读过的 + 读过但未满 12h 的（后者划线显示）。
      满 12h 的已进归档，已忽略的直接归档，都不算未读。 */
   var _setN=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
@@ -2564,7 +2560,7 @@ function renderDig(){
   box.innerHTML=h.join("");
   var n=live.length;
   var db=document.getElementById("mzBdg");if(db){db.textContent=n;db.style.display=n?"":"none";}
-  _archBtn("mzArchBtn",archCount("dig"));
+  _archBtn("mzArchBtn",archCount(mzSub));
 }
 /* 待挖掘「已看」记录（本地），角标按未看数显示 */
 var LS_DIGREAD="kb_digread";
@@ -2577,7 +2573,7 @@ function markDigRead(q){
   var unread=DIG.filter(function(d){return a.indexOf(d.q)<0&&del.indexOf(d.q)<0;}).length;
   if(typeof updateMzBdg==="function") updateMzBdg();
   var b=document.getElementById("mzBdg");if(b){b.textContent=unread;b.style.display=unread?"":"none";}
-  _archBtn("mzArchBtn",archCount("dig"));
+  _archBtn("mzArchBtn",archCount(mzSub));
 }
 
 /* ====================== 归档（待挖掘 / 问答 共用全屏层） ====================== */
@@ -2664,9 +2660,11 @@ archBodyEl.addEventListener("click",function(e){
   }
 });
 document.getElementById("archClose").addEventListener("click",navBack);
-/* 归档入口：待挖掘 / 问答 右上角各一个（此前只写了"更新按钮上的数字"、漏了"点了要干什么"，点了没反应） */
-document.getElementById("mzArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch("dig");});
-document.getElementById("mzArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch("qa");});
+/* 归档入口：待挖掘 / 问答是**同一个按钮**（就在分段行里），所以只能挂一个监听、
+   并且按当前分段决定打开哪个归档。`.57` 修：此前同一个元素上挂了两条监听
+   （dig 一条、qa 一条），点一次会连着开两个归档，后开的问答归档把前面的盖掉
+   —— 结果无论站在哪个分段，点「归档」看到的都是问答归档。 */
+document.getElementById("mzArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch(mzSub);});
 
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
@@ -3539,7 +3537,7 @@ var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on");},1600);}
 
 /* ====================== 初始 ====================== */
-initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount("qa"));checkAndGenDetails();
+initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));checkAndGenDetails();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 /* 建立历史基线：replaceState 占住当前条目（首页），再压一条「守卫」。
@@ -3576,7 +3574,7 @@ function loadFeed(onDone){
       backfillAnswers();
       loadCloudKB();
       if(s.dig&&s.dig.length)s.dig.forEach(function(dg){if(!DIG.some(function(x){return x.q===dg.q;}))DIG.unshift(dg);});
-      renderToday();renderChannels();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount("qa"));
+      renderToday();renderChannels();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));
       if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
       renderTreePills();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderShuli();
     })
@@ -3633,7 +3631,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-11.56';
+var _APP_VER_ = '2026-10-23.57';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
