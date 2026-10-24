@@ -2804,10 +2804,9 @@ function openReader(data,srcRect){  data=data||{};
   }
   document.getElementById("readerBody").innerHTML=body;
   fitCollapse(document.getElementById("readerBody"));   /* 先量一遍（此时阅读器可能还没显示，量到 0 也没关系，下面显示后会再量一次） */
-  /* 正文含日文 → 追加「日语跟读」块（手机自带朗读，逐句） */
-  var _jpTxt=String(full.title||"")+"。"+String(full.sum||"")+"。"+String(full.lead||"")+"。"+((full.body||[]).join("。"));
-  var _jpH=jpBlockHTML(_jpTxt);
-  if(_jpH)document.getElementById("readerBody").insertAdjacentHTML("beforeend",_jpH);
+  /* `.58`：摘要页**不再自动追加**「日语跟读」逐句块（用户 2026-10-24 要求删掉）。
+     跟读改为只保留底部的「🎧 跟读练习」按钮（内容在独立全屏页）。
+     注意：jpBlockHTML() 本身没删——问答答案里（renderAns）仍在用。 */
   rsc.scrollTop=0;
   /* 已读状态不再靠底部按钮切换（按钮已删）：列表里向左滑翻卡即视为已读 */
   /* 详解卡才显示"让 AI 重讲一遍"（老卡内容是早前生成的，一键换新） */
@@ -3631,7 +3630,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-23.57';
+var _APP_VER_ = '2026-10-24.58';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
