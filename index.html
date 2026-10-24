@@ -2975,11 +2975,10 @@ var jpRead=document.getElementById("jpRead"),
     jpReadLoad=document.getElementById("jpReadLoad"),
     jpReadTitle=document.getElementById("jpReadTitle"),
     jpReadOpen=document.getElementById("jpReadOpen");
-var jpReadTimer=null;
+var jpReadTimer=null, jpReadLoaded=false;
 function revealJpFrame(){
   if(!jpRead||!jpRead.classList.contains("on"))return;
-  var s=jpReadFrame.getAttribute("src");
-  if(!s||s==="about:blank")return;
+  if(!jpReadLoaded)return;
   jpReadLoad.style.display="none";jpReadFrame.classList.remove("hide");
 }
 function openJpRead(link,title){
@@ -2988,8 +2987,14 @@ function openJpRead(link,title){
   jpReadTitle.textContent=title||"跟读练习";
   jpReadOpen.href=link;
   jpRead.classList.add("on");
+  jpReadLoaded=false;
   jpReadLoad.style.display="";jpReadFrame.classList.add("hide");
-  jpReadFrame.src=link;
+  /* `.59` 修：**不要**写 jpReadFrame.src=link。给 iframe 换地址会往浏览器历史里多塞一条，
+     这条"空记录"夹在 jpRead 和 reader 之间，用户下次返回就会被它吃掉（表现为"点了返回没反应"），
+     再把守卫账目搅乱，最后一路退到桌面。改用 location.replace（替换当前条目，不新增）。 */
+  var ok=false;
+  try{ jpReadFrame.contentWindow.location.replace(link); ok=true; }catch(e){}
+  if(!ok){ jpReadFrame.src=link; }
   /* 兜底：1.2 秒后无条件把画面亮出来（个别机型/网络下 load 事件可能来得晚甚至不来） */
   clearTimeout(jpReadTimer);
   jpReadTimer=setTimeout(revealJpFrame,1200);
@@ -2998,11 +3003,14 @@ function closeJpRead(){
   if(!jpRead||!jpRead.classList.contains("on"))return;
   clearTimeout(jpReadTimer);
   jpRead.classList.remove("on");
-  try{jpReadFrame.src="about:blank";}catch(e){}   /* 清空帧：停掉正在播的音频 */
+  jpReadLoaded=false;
+  /* 同理：清空帧也要用 replace，否则关掉的动作本身又塞一条空历史（下次返回又被吞） */
+  try{ jpReadFrame.contentWindow.location.replace("about:blank"); }
+  catch(e){ try{ jpReadFrame.src="about:blank"; }catch(e2){} }
   jpReadLoad.style.display="";jpReadFrame.classList.add("hide");
 }
 if(jpReadFrame&&jpReadFrame.addEventListener){
-  jpReadFrame.addEventListener("load",revealJpFrame);
+  jpReadFrame.addEventListener("load",function(){ jpReadLoaded=true; revealJpFrame(); });
 }
 document.getElementById("jpReadClose").addEventListener("click",navBack);
 /* 详情页里点「🎧 跟读练习」→ 就地打开（事件委托，卡片内容每次重绘都有效） */
@@ -3630,7 +3638,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-24.58';
+var _APP_VER_ = '2026-10-24.59';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
