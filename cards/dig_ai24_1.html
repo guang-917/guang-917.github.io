@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>为什么搜"退货"能找到"退款流程"？向量怎么比远近？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">深挖 · 来自 AI知识｜M4-1 Embedding｜1/32</div>
+<h1>为什么搜"退货"能找到"退款流程"？向量怎么比远近？</h1>
+
+<h2>一句话答案</h2>
+<p>因为"退货"和"退款流程"这两段文字，被模型转成向量后在数字空间里挨得很近。判断"挨得多近"最常用的尺子叫<strong>余弦相似度</strong>：看两串数字指的方向是否一致，方向越一致、分数越接近 1，就认为意思越接近。它不看长度，只看方向——就像两个人从同一地点出发，一个走了 1 公里、一个走了 3 公里，只要走的是同一个方向，就算"去的同一个地方"。</p>
+
+<h2>为什么字不同也能匹配上</h2>
+<p>关键词搜索是"对字"：你搜"退货"，写"退款"的文档一个字都对不上，就搜不到。而 Embedding 是在大量语料上训练出来的：模型见过海量文本里"退货""退款""售后"经常出现在相似的上下文中，于是把它们放到了数字空间里相邻的位置。这个"相邻"不是人规定的，是从语言使用规律里学出来的。</p>
+
+<h2>比远近的具体做法</h2>
+<ul>
+<li>把你的问题转成向量（一段 1536 个数字，以 OpenAI text-embedding-3-small 为例）。</li>
+<li>把库里每段资料也算出向量。</li>
+<li>逐段算余弦相似度，按分数从高到低排序，取前几段——这就是"召回"。</li>
+<li>实践中常用专门的向量库（如 Faiss、Milvus）来加速，几百万段也能毫秒级比完。</li>
+</ul>
+
+<h2>一个提醒</h2>
+<blockquote>相似 ≠ 正确。向量只能保证"意思领域接近"，不能保证答案对。所以取回的资料仍要交给大模型去读、去组织答案——这正是下一期 M4-2「RAG 全流程」要讲的事。</blockquote>
+
+<p style="color:var(--ink2);font-size:13px;margin-top:24px">来源说明：余弦相似度与向量检索为公开技术常识；1536 维参数来源 OpenAI 官方文档 text-embedding-3-small 模型页（platform.openai.com）。本期未取得更多外部来源，仅作一般性介绍。</p>
+</body>
+</html>
