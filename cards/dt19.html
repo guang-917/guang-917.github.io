@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第1章 数据管理｜3/共3</title>
+<style>
+  body{background:#121417;color:#d8dce2;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.85;margin:0;padding:24px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#8a919c;font-size:13px;margin-bottom:8px;}
+  h1{font-size:22px;color:#f2f4f7;line-height:1.5;margin:6px 0 14px;}
+  .lead{background:#1c2026;border-left:4px solid #4c8dff;border-radius:8px;padding:12px 14px;margin:14px 0;font-size:15px;color:#c3cad4;}
+  h2{font-size:17px;color:#7fb2ff;margin:26px 0 8px;}
+  p{margin:10px 0;font-size:15px;}
+  ul,ol{padding-left:22px;margin:8px 0;}
+  li{margin:6px 0;font-size:15px;}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14px;}
+  th,td{border:1px solid #2c313a;padding:7px 9px;text-align:left;}
+  th{background:#1c2026;color:#9fb6d4;}
+  blockquote{border-left:3px solid #3a4150;margin:10px 0;padding:6px 14px;color:#aeb6c2;background:#181b20;}
+  .quiz{background:#1c2026;border-radius:10px;padding:14px 16px;margin:18px 0;}
+  .quiz .q{color:#f0d78c;font-weight:600;}
+  .src{font-size:13px;color:#79818d;border-top:1px solid #2c313a;margin-top:28px;padding-top:12px;}
+  .tag{display:inline-block;background:#243040;color:#7fb2ff;border-radius:6px;padding:1px 8px;font-size:12px;margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026年10月25日 · 周日 · 数据知识 · CDGA 备考</div>
+  <h1>CDGA｜第1章 数据管理｜3/共3 · 数据管理框架：三张"地图"分清谁管什么</h1>
+  <div class="lead">本张对应教材 p14–p21。第 1 章最后一张：把教材里的几套框架图一次讲清——它们是教材的"目录地图"，考试里问"这个说法出自哪个模型/哪一类活动"，靠的就是今天这张卡。</div>
+
+  <h2>一、教材给了几个框架？分三层看（p14 原文）</h2>
+  <p>教材一口气介绍了好几个模型，先别慌，它们其实是三层关系：</p>
+  <ul>
+    <li><strong>第一层·高阶关系模型</strong>：战略一致性模型（SAM）和阿姆斯特丹信息模型（AIM）。打个比方，这两张是"城市规划总图"——只画大区块，告诉你业务和 IT、和数据之间大概什么关系，不画到每一栋房子。</li>
+    <li><strong>第二层·知识领域地图</strong>：DAMA-DMBOK 框架（包括 DAMA 车轮图、六边形图和语境关系图），描述由 DAMA 定义的数据管理知识领域，以及它们之间的关系。这相当于"分区详图"——把数据管理分成一个个具体板块（治理、质量、安全……），每个板块管什么、和邻居什么关系。</li>
+    <li><strong>第三层·重新排列的图</strong>：以 DAMA 车轮图为起点重新排列各个部分，便于人们更好地理解和描述各个知识领域之间的关系。可以理解为"为了不同用途重新剪裁的地图"，内容还是那些板块，只是摆法不同。</li>
+  </ul>
+  <p><strong>考试怎么考（框架定位题）</strong>：题干问"下列哪个模型描述了数据管理知识领域"——答案是 DAMA-DMBOK 框架；把 SAM 或 AIM 塞进正确选项是常见干扰项，它们只是"高阶关系"模型，不描述具体知识领域。反过来问"SAM 关注的核心是什么"，别选成"知识领域划分"。</p>
+
+  <h2>二、战略一致性模型 SAM（p14）</h2>
+  <p>SAM 的核心是<strong>数据与信息之间的关系</strong>：信息通常与业务战略和数据的运营使用相关联，数据则与信息技术和支持数据可用的流程相关联。围绕这一概念有 4 个基本领域的战略选择：</p>
+  <ol>
+    <li>业务战略</li>
+    <li>信息技术战略</li>
+    <li>组织基础设施与流程</li>
+    <li>信息技术基础设施与流程</li>
+  </ol>
+  <p>打个比方：信息是"店里卖给客人的菜"，数据是"后厨的食材和灶台"。菜怎么卖（业务战略）要跟后厨怎么备料（IT 战略）对上号，否则客人点的菜后厨做不出来。SAM 就是检查这两边有没有"对上号"的图。</p>
+  <p><strong>考试怎么考</strong>：给 4 个领域挑"哪项不属于 SAM 的基本领域"，干扰项常放"数据质量战略""组织文化"这类看着合理但书上没有的词。认准原词：两个"战略"＋两个"基础设施与流程"，其中两个带"信息技术"。</p>
+
+  <h2>三、语境关系图（图 1-7，p17）—— 每章都会遇到的骨架</h2>
+  <p>从第 2 章开始，教材每个知识领域都有一张语境关系图，长一个模子。今天必须把它记熟：</p>
+  <ul>
+    <li><strong>组成</strong>（6 块文字 + 3 类角色）：<strong>定义</strong>（简明扼要地定义知识领域）、<strong>目标</strong>（宗旨及指导各项活动的基本原则）、<strong>活动</strong>、<strong>输入</strong>、<strong>成果/交付物</strong>、<strong>方法/工具/度量指标</strong>；角色：<strong>供给者、参与者、消费者</strong>。打个比方：像一张"餐厅运营说明书"——谁送菜来（供给者）、谁在厨房干活（参与者）、谁端给客人（消费者），进什么料（输入）、出什么菜（交付物）、用什么锅什么火候（方法/工具）。</li>
+    <li><strong>活动分 4 个阶段</strong>：① <strong>规划活动（Planning, P）</strong>——确定战略和战术路线，需要定期进行；② <strong>控制活动（Control, C）</strong>——持续确保数据质量，以及数据访问和使用系统的完整性、可靠性和安全性；③ <strong>开发活动（Development, D）</strong>——围绕系统开发生命周期（SDLC），即分析、设计、构建、测试、准备和部署；④ <strong>运营活动（Operational, O）</strong>——支持使用、维护和改进供访问和使用数据的系统和流程。打个比方：P 是"定全年菜单"，C 是"每天尝菜把质量关"，D 是"装修新厨房/上新菜"，O 是"每天开门营业、修设备"。</li>
+    <li><strong>记忆点</strong>：<strong>输入通常是其他知识领域的输出；交付物通常又是其他知识领域的输入</strong>。像流水线：上一道工序的成品就是下一道工序的原料——所以第 1 章学的东西会一路"供货"到后面 16 章。</li>
+  </ul>
+  <p><strong>考试怎么考（活动归属题·高频）</strong>：给一句情景，问属于 P/C/D/O 哪个阶段。抓关键词：见到"战略、战术路线、定期"选 P；见到"持续确保质量、完整性、安全性"选 C；见到"分析、设计、构建、测试、部署"选 D；见到"支持使用、维护、改进"选 O。干扰项爱把"一次性的战略确定"说成控制，或把"每天例行的质量检查"说成规划——记住 C 是"持续"的。</p>
+
+  <h2>四、本章易混对比（第 1 章收尾）</h2>
+  <table>
+    <tr><th>易混点</th><th>正确的说法</th><th>错误的说法（干扰项长相）</th></tr>
+    <tr><td>数据管理 vs 信息技术管理</td><td>数据管理必须<strong>驱动</strong> IT 决策（第 11 条原则）</td><td>"IT 部门主导数据管理"</td></tr>
+    <tr><td>谁来做数据管理</td><td>业务角色与技术角色<strong>共同承担</strong></td><td>"纯属技术人员的事"</td></tr>
+    <tr><td>SAM / AIM vs DAMA-DMBOK 框架</td><td>前两个是高阶关系模型；DMBOK 框架才描述知识领域</td><td>"SAM 描述了各知识领域"</td></tr>
+    <tr><td>原则条数</td><td><strong>12 条</strong>，归成 5 组（图 1-1）</td><td>"13 条"（旧版说法）</td></tr>
+    <tr><td>输入/交付物</td><td>输入常是别的领域输出，交付物又供给别的领域</td><td>"各知识领域各自独立、互不相干"</td></tr>
+  </table>
+
+  <h2>五、本周串联（本周覆盖考试 4+2=6 分）</h2>
+  <ul>
+    <li><strong>周一</strong>：数据管理的定义（开发、执行、监督"规划、制度、程序和实践活动"，全生命周期、提升数据价值）＋ 6 个目标＋业务驱动。</li>
+    <li><strong>周六</strong>：12 条原则分 5 组——数据有资产属性、要领导支持、管数据就是管质量和元数据、跨职能要企业级视角、贯穿全生命周期并管风险。</li>
+    <li><strong>今天</strong>：三张"地图"——SAM/AIM 管大局、DMBOK 框架管知识领域、语境关系图的 P/C/D/O 四阶段是后面每章的骨架。</li>
+    <li>一句话串起来：<strong>把数据当资产去经营（第1张），按 12 条原则去做（第2张），靠框架把事分工做下去（第3张）</strong>。</li>
+  </ul>
+
+  <h2>六、考试怎么考（第 1 章 4 分总复习）</h2>
+  <ul>
+    <li><strong>定义题</strong>：抓关键词"规划、制度、程序和实践""开发、执行、监督""全生命周期""提升数据的价值"。</li>
+    <li><strong>原则题</strong>：数条数（12 条）、认归属、挑错（"数据使用后会被消耗"是反话，数据用了不消耗）。</li>
+    <li><strong>目标题</strong>：第 1 条"理解并满足信息需求"、第 6 条"确保数据被有效利用，为企业增加价值"；干扰项常见"降低存储成本""减少数据量"。</li>
+    <li><strong>框架题</strong>：SAM/AIM/DMBOK 三者定位；P/C/D/O 四阶段各自管什么；活动归属题抓关键词。</li>
+  </ul>
+
+  <div class="quiz">
+    <p class="q">自测一题</p>
+    <p>某企业数据管理团队每季度召开一次会议，评审数据管理战略和战术路线是否需要调整；日常则持续监控数据质量与系统访问安全。按照语境关系图，这两类活动分别属于：</p>
+    <ol type="A" style="list-style-type:upper-alpha;padding-left:22px;">
+      <li>规划活动、控制活动</li>
+      <li>控制活动、运营活动</li>
+      <li>规划活动、开发活动</li>
+      <li>开发活动、控制活动</li>
+    </ol>
+    <p><strong>答案：A</strong>。定期确定/评审战略和战术路线是<strong>规划活动（P）</strong>；持续确保数据质量和访问的完整性、可靠性、安全性是<strong>控制活动（C）</strong>。陷阱提示：B 把规划误当控制；C 把"持续监控质量"错配到开发（开发围绕系统开发生命周期的分析设计构建测试部署）；D 两个都错——"每季度评审战略"是定期规划而非开发。</p>
+  </div>
+
+  <h2>七、本章没讲到的点（自己翻书补）</h2>
+  <ul>
+    <li>数据与信息的关系（DIKW 那套，教材把"数据""信息""知识"分开定义，考试爱拿四者排序做干扰项）——教材 p2–p4。</li>
+    <li>阿姆斯特丹信息模型（AIM）九宫格具体怎么排、和 SAM 什么关系——教材 p15–p16。</li>
+    <li>DAMA 国际与 DMBOK 的定位（DAMA 是什么组织、DMBOK 在 CDGA 体系里扮演什么角色）——教材 p22–p24。</li>
+  </ul>
+
+  <p><strong>下一张预告</strong>：明天进入第 2 章《数据处理伦理》第 1/共2 张——"在没有人注意的情况下也正确地做事"到底是什么意思。第 1 章走完，坚持住了！</p>
+
+  <div class="src">
+    <p><strong>来源说明</strong>：本卡概念与原句均转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》（机械工业出版社）第 1 章 p1–p24，以用户逐页转录底稿为准；本卡不含底稿之外的网络信息。</p>
+  </div>
+</div>
+</body>
+</html>
