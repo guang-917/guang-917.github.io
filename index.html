@@ -1312,7 +1312,13 @@ function renderChanList(ch){
   document.getElementById("chanList").innerHTML='<p class="sub">这个频道的全部推送都在这里，含历史 · 点卡片进入全屏</p>'
     +'<div id="clBody"></div>';
   var body=document.getElementById("clBody");var h=[];
-  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;
+  /* `.60`：频道列表 = 这个频道的**推送历史**，必须按日期从新到旧排。
+     旧写法直接按 CARDS 数组顺序输出，而问答生成的「详解卡」是 unshift 进来的（日期又是今天）
+     → 一进频道先看到的全是问答。这里①排除详解卡 ②按 date 倒序，同一天保持原顺序。 */
+  var list=[];
+  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;if(c.isDetail)continue;list.push({c:c,i:i});}
+  list.sort(function(a,b){var A=String(a.c.date||""),B=String(b.c.date||"");if(A!==B)return A<B?1:-1;return a.i-b.i;});
+  for(var k=0;k<list.length;k++){var c=list[k].c;
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
       +'<span class="chip '+m.c+'">'+m.n+'</span>'
       +'<h3>'+esc(c.title)+'</h3></div>'
@@ -3638,7 +3644,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-24.59';
+var _APP_VER_ = '2026-10-25.60';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
