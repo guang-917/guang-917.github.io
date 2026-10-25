@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-1 Embedding：给每句话发张"语义身份证"｜1/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月26日 · AI 知识</div>
+<h1>AI知识｜M4-1 Embedding：给每句话发张"语义身份证"｜1/32</h1>
+<div class="lead">新一轮"AI 系统课"第 1 期，本模块讲 RAG 与个人知识库。地基只有一个：让电脑"懂意思"的 Embedding。看懂它，后面 7 期都是顺水推舟。</div>
+
+<h2>一句话结论</h2>
+<p>Embedding 解决的问题是：<strong>电脑不认识字，怎么判断两段话说的是不是一回事</strong>。它的办法是把每段文字变成一串数字（专业叫"向量"），意思越接近，这串数字就越接近。可以理解为给每句话发一张"语义身份证"，证号相近的，意思就相近。</p>
+
+<h2>它是什么</h2>
+<p>你把"怎么退货"这四个字丢给一个 Embedding 模型，它会吐出类似 [0.021, -0.153, 0.087, …] 的一长串数字——不是几个，而是上千个。比如 OpenAI 的 text-embedding-3-small 模型，每段文字固定输出 1536 个数字。这 1536 个数字合起来，就是这句话在"意思地图"上的坐标。</p>
+
+<h2>生活比方</h2>
+<p>把所有文字想成地图上的店：Embedding 就是给每家店标一个 GPS 坐标。"奶茶店"和"咖啡店"坐标挨得很近，"修车铺"离得很远。你想找"能喝东西的地方"，不用报店名，只要在地图上指一个位置，把附近几家都找出来就行。<strong>搜索从"对暗号"变成了"找附近"</strong>——这就是它和传统关键词搜索的本质区别。</p>
+
+<h2>为什么重要</h2>
+<ul>
+<li>关键词搜索只会对字：你搜"退货"，写着"退款流程"的笔记一个字都对不上，永远搜不到。</li>
+<li>Embedding 对意思：两段文字哪怕用词完全不同，只要意思接近，坐标就接近，就能互相找到。</li>
+<li>它是整个 RAG（Retrieval-Augmented Generation，检索增强生成）体系的地基：后面讲的切块、向量库、混合检索、个人知识库，全部建立在"每段文字都有一个坐标"之上。没有它，AI 就没法在你的资料里按意思找答案。</li>
+</ul>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li><strong>切</strong>：把你的文档切成一段一段的小块（下期 M4-3 细讲怎么切才不切碎意思）。</li>
+<li><strong>转</strong>：每小块送进 Embedding 模型，得到一串坐标数字。多数大模型平台都有现成接口，几行代码就能调，一块钱的量通常能转几十万字的量级（各平台定价不同，用时自己核）。</li>
+<li><strong>比</strong>：用户提问时，把问题也转成坐标，然后跟库里所有小块比远近（常用"余弦相似度"这把尺子），取最近的几段，塞给大模型当参考资料。</li>
+</ol>
+
+<h2>两条硬知识</h2>
+<ul>
+<li>"文字变数字向量"这条路，2013 年就被 Google 团队 Mikolov 等人的 word2vec 论文（《Efficient Estimation of Word Representations in Vector Space》）跑通，到今天已发展了十多年，是工业界验证过的成熟技术。</li>
+<li>今天主流文本向量规模是上千维：如 OpenAI text-embedding-3-small 输出 1536 维。维度可以粗略理解为"地图上的坐标用了 1536 个刻度来定位意思"，刻度越多，能分辨的细微差别越多，算起来也越贵。</li>
+</ul>
+
+<h2>今天就能用</h2>
+<p>花 5 分钟体验一次"按意思找文字"：打开 OpenAI 的 OpenAI Platform（platform.openai.com）或国内任一模型平台的"文本向量化 / Embedding"接口文档页，把两段话各转一次向量——一段是"怎么申请退货退款"，一段是"7 天无理由退换货流程说明"。然后手算（或让 AI 帮你算）这两串数字的余弦相似度，你会看到一个接近 0.8~0.9 的高分（具体数值随模型版本不同，以你实测为准）；再拿一段"今天中午吃什么"来比，分数会明显掉下去。亲眼看到这个落差，你就真正懂了 Embedding。</p>
+
+<h2>政策/行业动态（仅上期之后新增）</h2>
+<ul>
+<li><strong>商务部、科技部拟增列 AI 技术出口管制</strong>：10 月 16 日，两部门就修订《中国禁止出口限制出口技术目录》公开征求意见，拟新增 AI、生物医药、光伏领域共 40 项技术，其中 AI 领域含大模型、智能体、算力集群、信息处理相关 23 项，意见征求至 11 月 15 日；已开源或以论文形式公开的技术不纳入管理。对普通人影响不大，但对做 AI 出海、技术授权的从业者，出口前要先在商务部平台登记。（来源：人民日报客户端 2026-10-16，peopleapp.com/column/30053355315-500007743299；新华网 2026-10-16，chinaview.cn 交叉验证一致）</li>
+<li><strong>江苏省网信办公布新一批 AI 服务登记信息</strong>：10 月 12 日公告显示，江苏新增 26 款已完成登记的生成式 AI 服务，累计登记 117 款；调用已备案大模型能力、面向公众提供服务的应用，需采用登记管理方式并在显著位置标明上线编号。意味着"套壳应用"合规门槛更低但必须亮编号，普通用户选 AI 应用时可留意页面上有没有这个编号。（来源：江苏省无锡市政府网转发江苏省网信办公告 2026-10-12，jswx.gov.cn）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>AI知识｜M4-2 RAG 全流程：让 AI 先查资料再回答｜2/32</strong>——有了身份证，怎么把它们串成一条"AI 先查你资料、再开口回答"的流水线。</p>
+
+<div class="rel">相关延伸：深挖页《为什么搜"退货"能找到"退款流程"？向量怎么比远近？》讲余弦相似度；下一期 M4-2 RAG 全流程。</div>
+<div class="note">来源说明：① word2vec 论文：Mikolov, T. et al., "Efficient Estimation of Word Representations in Vector Space", arXiv:1301.3781, 2013；② 1536 维：OpenAI 官方文档 text-embedding-3-small 模型页（platform.openai.com/docs）；③ 政策动态两条见文中标注，均经官方渠道核实，未见矛盾说法。余弦相似度为公开数学常识，仅作一般性介绍。</div>
+</body>
+</html>
