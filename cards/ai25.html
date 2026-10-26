@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-2 RAG 全流程：让AI先翻资料再回答｜2/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月27日 · AI 知识</div>
+<h1>AI知识｜M4-2 RAG 全流程：让AI先翻资料再回答｜2/32</h1>
+<div class="lead">大模型不知道你公司昨天发的通知，也不该让它瞎编——RAG 的办法很简单：让它答题前先查你的资料，照着查到的内容作答。</div>
+
+<h2>一句话结论</h2>
+<p>RAG（检索增强生成）解决的问题是：<strong>让 AI 用"它没学过的资料"回答问题，而且答得有出处</strong>。相当于给一个口才很好但没看过你档案的人配了一个资料柜——他每次开口前先翻档案，再照着说。</p>
+
+<h2>是什么</h2>
+<p>RAG 的全称是 Retrieval-Augmented Generation，中文叫"检索增强生成"。这个思路由 Meta（当时的 Facebook AI）团队的 Patrick Lewis 等人在 2020 年的 NeurIPS 论文《Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks》中正式提出。名字听着唬人，动作其实只有两步：</p>
+<ul>
+<li><strong>检索</strong>：收到你的问题后，先去你的资料库里找出最相关的几段文字；</li>
+<li><strong>生成</strong>：把这几段文字和你的问题一起塞给大模型，要求它"只根据这些材料回答"。</li>
+</ul>
+
+<h2>为什么重要</h2>
+<p>大模型的知识有两个死穴：一是有截止日期，昨天发生的事它不知道；二是它不知道你的私有内容——你的合同、笔记、公司制度，训练时压根没见过。硬问它，它就"编"（这就是幻觉）。RAG 把"记知识"这件事从模型身上卸下来，搬到外部资料库里：资料今天更新，AI 今天就懂，而且每句话都能标注"来自哪份材料第几段"，可查证。</p>
+
+<h2>全流程五步（生活比方：准备一场开卷考试）</h2>
+<table>
+<tr><th>步骤</th><th>做什么</th><th>比方</th></tr>
+<tr><td>1. 切块</td><td>把文档切成小段（如每 500 字一段）</td><td>把课本拆成一页页小抄</td></tr>
+<tr><td>2. 向量化</td><td>每段用 Embedding 模型变成数字坐标（上期讲过）</td><td>每张小抄贴上内容标签</td></tr>
+<tr><td>3. 存库</td><td>坐标和小抄一起存进向量数据库</td><td>标签好的小抄按标签归档进柜子</td></tr>
+<tr><td>4. 检索</td><td>问题也转成坐标，找出最相近的几段</td><td>考题一出，按标签抽出最相关的小抄</td></tr>
+<tr><td>5. 生成</td><td>把抽出的段落+问题交给大模型作答</td><td>照着小抄写答案，不凭记忆瞎写</td></tr>
+</table>
+
+<h2>怎么用（3 步上手）</h2>
+<ol>
+<li><strong>最省事</strong>：直接用现成产品。很多笔记工具和 AI 助手已内置"知识库/上传文档问答"功能，把你的 PDF、Word 传进去就能问。</li>
+<li><strong>自己搭</strong>：用 Dify、AnythingLLM 这类开源/低代码平台，把文档拖进去、选个模型，五步流程它替你跑完。</li>
+<li><strong>进阶验证</strong>：问一个"只有你的资料里才有答案"的问题（比如你们公司年假天数），看它答不答得准、给不给出处——这是检验 RAG 是否真在工作的金标准。</li>
+</ol>
+<blockquote>判断一个 AI 产品是不是真 RAG：问它一个训练数据里不可能有的私有信息。答不上来或说"资料里没有"，说明它在老实检索；张口就来，多半没接资料。</blockquote>
+
+<h2>今天就能用</h2>
+<p>把手里一份最常用的文档（如员工手册、课程讲义、产品说明书）上传到你正在用的 AI 工具的"知识库/文件问答"功能，然后连问三个问题：两个文档里有答案的，一个文档里没有的。观察它：有答案的答得准不准？没有的那个，它说"资料里没提到"还是硬编？这个 5 分钟实验能让你直观看到检索和生成的分界。</p>
+
+<div class="rel">相关延伸：上一期讲了 RAG 的地基 Embedding（给文字发"语义身份证"）；下一期讲全流程的第一环"切块"——切得好不好，直接决定检索准不准，切大了答非所问、切小了断章取义。</div>
+
+<div class="note">来源说明：① RAG 概念与提出时间：Patrick Lewis 等，《Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks》，NeurIPS 2020（arXiv:2005.11401，Meta/Facebook AI Research）。② OpenAI text-embedding-3-small 输出维度 1536：OpenAI 官方文档《Embeddings》（platform.openai.com/docs/guides/embeddings）。③ Dify、AnythingLLM 为公开开源项目（GitHub）。本文技术原理部分为一般性介绍；政策/行业动态见下。</div>
+</body>
+</html>
