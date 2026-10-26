@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RAG 答案跑偏，怎么定位坏在哪一环？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">深挖 · 来自 2/32 M4-2 RAG 全流程</div>
+<h1>RAG 答案跑偏，怎么定位坏在哪一环？</h1>
+
+<p>RAG 是流水线：切块→向量化→存库→检索→生成。答案不对，别急着换模型，先按顺序排查——<strong>十有八九坏在检索，而不是生成</strong>。</p>
+
+<h2>第一步：看检索回来的是什么</h2>
+<p>好的 RAG 工具都能显示"引用了哪些段落"。直接看：<strong>引用里有没有正确答案？</strong></p>
+<ul>
+<li>有正确段落，但答案还是错的 → 问题在<strong>生成</strong>：模型没好好读材料，或材料塞太多淹没了重点。对策：换更强的模型，或减少塞入段落数。</li>
+<li>正确段落根本没被找回来 → 问题在<strong>检索及之前</strong>，继续往下查。</li>
+</ul>
+
+<h2>第二步：查切块</h2>
+<p>打开你上传的原文，看答案所在的段落是不是被切断了。比如"年假天数"写在一段的末尾，而切分把后半段切到了下一块，检索到的半段里没有答案。对策：调大块尺寸、设置块之间重叠（overlap），或按标题/段落自然边界切。</p>
+
+<h2>第三步：查提问方式</h2>
+<p>检索是拿"你的问题"和"资料段落"比远近。你问"我能休几天假？"，资料里写"带薪年休假按工龄计算"——意思对但用词差得远，可能召不回来。对策：把问题改写得更像资料原文的措辞再试；如果改写后立刻能检索到，说明是该上"混合检索/改写优化"了（后面 M4-5 会专门讲）。</p>
+
+<blockquote>一句话口诀：先看引用有没有，再看切块断没断，最后改写试问题——三步定位，不猜不赌。</blockquote>
+
+<p>排查时要固定变量：同一问题、同一份文档，每次只改一个环节，才能确定是谁的锅。</p>
+</body>
+</html>
