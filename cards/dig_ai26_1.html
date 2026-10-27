@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜切块大小有没有万能数值？</title>
+<style>
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;line-height:1.8;padding:20px 18px 60px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin:24px 0 8px}
+p,li{font-size:15px}blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<h1>切块大小到底怎么定？有没有万能数值？</h1>
+<p>先给结论：<strong>没有万能数值，只有一套"按文档类型定起点 + 按测试调优"的方法</strong>。网上流传的"300 字最好""512 token 最优"都是针对某类文档的经验值，换个文档就可能翻车。</p>
+
+<h2>按文档类型定起点</h2>
+<ul>
+<li><strong>规章制度、合同、FAQ</strong>：条目本身短而独立，一条切一块，200～400 字，别把两条制度混进一块。</li>
+<li><strong>报告、论文、长文</strong>：按小节切，每段 400～600 字，保留小节标题作为上下文。</li>
+<li><strong>对话记录、客服日志</strong>：按一轮完整对话切，宁小勿大。</li>
+<li><strong>代码、表格</strong>：按函数/按行块切，别按字数剁。</li>
+</ul>
+
+<h2>调优就一个动作：拿真实问题测试</h2>
+<p>收集 5～10 个用户真的会问的问题，每次调完切块就重跑一遍，看检索出来的段落"是否完整回答了问题的一半以上内容"。三个信号对照改：</p>
+<ul>
+<li>检索到的段落<strong>话题太杂</strong> → 切太大，减半试试；</li>
+<li>检索到的段落<strong>读不通、缺上下文</strong> → 切太小，加大并检查重叠；</li>
+<li>答案<strong>总是漏掉关键一句</strong> → 多半是没留重叠，把重叠调到 10%～20%。</li>
+</ul>
+
+<blockquote>记忆口诀：切块的粒度，就是用户提问的粒度。用户问的是"一条规则"，你就切出"一条规则"那么大。</blockquote>
+
+<p>另一个折中技巧叫"小块检索、大块喂给模型"：入库和检索用小块（准），命中后把它前后的相邻块一起拼上再喂给大模型（全）。两头的便宜都能占到，主流框架都支持这个做法（如 LlamaIndex 的 sentence-window、auto-merging 检索）。</p>
+</body>
+</html>
