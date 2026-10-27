@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-3 切块：把长文档切成AI好翻的“资料卡”｜3/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月28日 · AI 知识</div>
+<h1>AI知识｜M4-3 切块：把长文档切成AI好翻的“资料卡”｜3/32</h1>
+<div class="lead">上期给每句话发了“语义身份证”（Embedding），今天解决下一个问题：一份几十页的文档，到底按什么粒度发身份证？切错了，后面检索全乱。</div>
+
+<h2>一句话结论</h2>
+<p>切块解决的是“AI 翻资料的翻法”问题：把长文档切成一段一段独立的小资料卡，让 AI 查的时候能一卡一卡精准地翻，而不是抱着整本书大海捞针。</p>
+
+<h2>是什么</h2>
+<p>切块（Chunking）就是在做向量入库之前，先把长文档切成几百字一段的独立小段，每一段单独去做 Embedding、单独存进库。用户提问时，检索到的不是整份文档，而是其中最相关的一两段。</p>
+
+<h2>为什么重要</h2>
+<p><strong>切块粒度 = 检索粒度</strong>。这是 RAG 效果里最容易被忽视、又最常出问题的一环：</p>
+<ul>
+<li><strong>切太大</strong>：一段里塞进报销制度、请假制度、考勤制度三个话题，Embedding 只能算出这段的“平均话题”——像把三种果汁倒进一个杯子，喝起来哪个味都不正。查哪个制度都查不准。</li>
+<li><strong>切太小</strong>：每次只翻到孤零零半句话，“……赔偿标准为月工资的……”，上文是谁的工资、什么赔偿全被切断，找到了也看不懂。</li>
+</ul>
+
+<h2>怎么用（三步）</h2>
+<ol>
+<li><strong>优先按天然结构切</strong>：标题、章节、段落本来就是文档自带的“缝”，顺着缝切，每段话题天然完整。别机械地每 300 字剁一刀，把一段话说拦腰斩断。</li>
+<li><strong>控制大小、留重叠</strong>：中文场景常用 200～500 字一段；相邻两段之间留 10%～20% 的重叠，防止关键句正好横跨两块时两边都只剩半句。工具默认值可参考：LangChain 的 RecursiveCharacterTextSplitter 默认 chunk_size=4000 字符、chunk_overlap=200（来源：LangChain 官方文档），中文实际用一般要比它切得更碎。</li>
+<li><strong>每块挂元数据</strong>：给每段记上“出自哪份文档、哪个章节”，回答时能标注出处，用户能点回去核对原文。</li>
+</ol>
+
+<h2>生活比方</h2>
+<blockquote>图书馆不会把整本书编成一张卡片，也不会把每个字编一张，而是按“条目”编卡片——你查“借阅规则”，一下就翻到那张卡。切块，就是给文档编卡片。而“重叠”就像切蛋糕时每一刀都稍微带一点上一刀的边，相邻两块有一句重复，缝里的东西就永远丢不了。</blockquote>
+
+<h2>今天就能用</h2>
+<p>拿你手头一份长文档（比如员工手册 PDF），做个 10 分钟对照实验：</p>
+<ol>
+<li>打开任何一个支持知识库/RAG 的工具（如 Coze、Dify、或网盘自带的“AI 问答”）；</li>
+<li>上传时把切块设置从默认改小：块大小调到约 400 字、重叠 50～80 字；</li>
+<li>分别用默认设置和调过的设置，问 3 个具体问题（如“试用期请病假工资怎么算”），对比哪个版本的回答更准、更少扯远。</li>
+</ol>
+<p>验证方法很简单：看 AI 引用的原文段落，如果引用里混进了不相关话题，就是切太大；如果引用读起来半句不通，就是切太小。</p>
+
+<h2>政策/行业动态（上期之后新增）</h2>
+<ul>
+<li><strong>国办部署“就业友好型 AI”</strong>：10 月 23 日，国务院办公厅印发《关于适应人工智能技术发展助力构建就业友好型发展方式的意见》，提出 6 方面 18 项任务，要求减缓 AI 应用的就业替代影响，鼓励企业探索“失业缓冲期制度”、提前告知受影响劳动者。对普通人意味着：政策开始明确给“被 AI 换岗”的人兜底转岗支持。来源：国务院办公厅文件，经《清华金融评论》2026-10-27 刊发解读（链接：https://www.toutiao.com/article/7701303864951128595）。</li>
+<li><strong>16 项 AI 国家标准发布</strong>：市场监管总局（国家标准委）10 月 27 日消息，批准发布 515 项重要国家标准，其中人工智能、人形机器人、工业环境机器人等 16 项国家标准，涉及人工智能系统安全、机器人技术要求，划定安全底线、统一技术规范。对从业者意味着：AI 产品做安全设计时有国标可依了。来源：国家市场监督管理总局官网 2026-10-27（链接：https://www.samr.gov.cn:3030/xw/mtjj/art/2026/art_43f9c9e8f1b9484a94b00d2173790481.html）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M4-4 向量库与相似度</strong>：身份证发完了，卡片存进哪个柜子、怎么按“长得像”快速翻出来——下期讲向量数据库和相似度计算。</p>
+
+<div class="rel">相关延伸：M4-1 讲了 Embedding——切块之后每段才能领到“语义身份证”；M4-2 讲了 RAG 五步全流程——切块正是第一步，也是最常出问题的一步。</div>
+<div class="note">来源说明：① LangChain RecursiveCharacterTextSplitter 默认参数（chunk_size=4000、chunk_overlap=200）来自 LangChain 官方文档；② 国办《关于适应人工智能技术发展助力构建就业友好型发展方式的意见》（2026-10-23 印发）经清华金融评论、今日头条 2026-10-27 报道；③ 市场监管总局 515 项国家标准发布信息来自其官网 2026-10-27 消息。切块粒度的“200～500 字”为业界常用经验值，非强制标准，实际效果以你自己的文档测试为准。</div>
+</body>
+</html>
