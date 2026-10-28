@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜知识库检索不对题，怎么调？</title>
+<style>
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 18px 60px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin:24px 0 8px}
+p,li{font-size:15px}blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<h1>知识库检索出来总不对题，先调什么？</h1>
+<blockquote>先说结论：多数情况不是向量库选错了，而是 top-k 数量、相似度阈值和切块质量没对齐。换库通常是最后一步。</blockquote>
+<h2>第一步：把 top-k 从 3 调到 5～8 试试</h2>
+<p>top-k 是每次检索取"最像的前 K 条"。K=3 时，真正相关的资料如果排在第 4、5 名，模型根本看不到。把 K 调到 5～8，让答案的"原材料"多一点，是成本最低的改进。代价是上下文变长、可能混入噪音，所以第二步要配合阈值。</p>
+<h2>第二步：设一个相似度下限</h2>
+<p>余弦相似度取值约 -1 到 1，越接近 1 越相关。很多向量库支持设置最小相似度（如 score_threshold），低于阈值的候选直接丢弃。常见做法是从 0.3～0.5 附近开始试验（不同向量模型分数量纲不同，没有万能数），观察被过滤掉的内容是不是明显跑题，再微调。</p>
+<h2>第三步：检查"病根"是否在上游</h2>
+<p>如果调了 K 和阈值还不对题，问题多半不在检索环节，而在前两步：① 切块把一个完整话题切成了两半，哪半都不像你的问题；② 你的问题和文档用词差异太大（文档写"差旅报销"，你问"出差住宿钱怎么算"）。前者回到切块调整粒度与重叠；后者优先换更强的 Embedding 模型，或在知识库里补一份同义词说明。</p>
+<h2>什么时候才值得换向量库</h2>
+<p>当数据量到了几十万条以上、检索明显变慢，或需要按人员/部门过滤权限时，再考虑从轻量库（如 Chroma）换到 Milvus、FAISS 这类更专业的方案。库与库之间"算相似度"的数学是一样的，换库本身不会让答案更准。</p>
+<p style="color:#9aa3b2;font-size:13px">下钻自：AI知识｜M4-4 向量库与相似度（4/32）</p>
+</body>
+</html>
