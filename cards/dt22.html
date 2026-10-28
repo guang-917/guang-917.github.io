@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第3章 数据治理｜1/共5</title>
+<style>
+  body{background:#111418;color:#d8dde3;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;margin:0;padding:24px 16px 48px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#7d8794;font-size:13px;margin-bottom:8px;}
+  h1{font-size:22px;line-height:1.4;color:#f0f3f6;margin:4px 0 16px;}
+  .lead{background:#1a1f27;border-left:3px solid #4a9eff;padding:12px 14px;border-radius:6px;color:#c3cbd5;font-size:15px;margin-bottom:22px;}
+  h2{font-size:17px;color:#7fb8ff;margin:26px 0 10px;}
+  p{margin:10px 0;font-size:15px;}
+  ul{padding-left:20px;margin:10px 0;}
+  li{margin:6px 0;font-size:15px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid #2a313b;padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:#1a2029;color:#aeb8c4;}
+  .em{color:#ffd166;font-weight:600;}
+  .quiz{background:#1a1f27;border:1px solid #2a313b;border-radius:8px;padding:14px 16px;margin:20px 0;}
+  .quiz h2{margin-top:0;}
+  .check{background:#141a14;border-left:3px solid #5cb85c;padding:10px 14px;border-radius:6px;font-size:14px;color:#b9c4b9;margin:18px 0;}
+  .src{color:#7d8794;font-size:13px;margin-top:26px;border-top:1px solid #232a34;padding-top:12px;}
+  .next{color:#8fa3b8;font-size:14px;margin-top:20px;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">2026年10月28日 · 数据知识 · CDGA 教材《DAMA 数据管理知识体系指南（原书第2版 修订版）》</div>
+<h1>CDGA｜第3章 数据治理｜1/共5 · 定义与8项职能：治理管的是“谁说了算”</h1>
+<div class="lead">本张对应教材 p42–p44。第3章开始，考试10分的大章，5张卡走完。今天三件事：把定义原句拆开、把8项职能认全、把“治理 vs 管理”这条分界线画清楚。</div>
+
+<h2>考点清单（6 个）</h2>
+<ul>
+<li>① 定义原句怎么拆：职权＋管控四动作（p42）</li>
+<li>② 治理 vs 管理：决策 vs 执行，车轮图圆心</li>
+<li>③ 8项职能逐个认脸＋记法口诀</li>
+<li>④ 修订版改名：只叫“标准”，不是“标准和质量”</li>
+<li>⑤ 业务驱动两条线：降低风险3条＋优化流程5条（p44）</li>
+<li>⑥ 反向题：治理不是目标、是持续性的；组织文化是最大挑战</li>
+</ul>
+
+<h2>① 定义原句怎么拆（p42）</h2>
+<p>教材p42原句：<span class="em">“数据治理（Data Governance, DG）是对数据管理工作履行职权和实施管控（规划、实施、监督和执行）的行为。”</span>拆两半记：一半是<span class="em">“职权”</span>——谁有资格做决定；一半是<span class="em">“管控”</span>——规划、实施、监督、执行四个动作。生活化比喻：治理就是给一家店定“谁拍板、怎么监督账本”，四动作就是“先规划、再动手、盯着点、执行到底”。真题爱把括号里的四个词偷换一个（比如换成“评估、改进”），看到不同就选它当错项。补充教材原意：无论组织有没有正式设立治理职能，都会对数据管理活动做出决策；只有正式建立了治理职能，才能更有目的地行使这些权力（Seiner, 2014）。</p>
+
+<h2>② 治理 vs 管理（必考分界线）</h2>
+<p>教材p42的对比：<span class="em">数据管理总体的驱动因素是让组织从数据中获取价值；数据治理聚焦“如何对数据做出决策，以及要求人员和流程在与数据相关的行为方面应该如何表现”</span>。比喻：管理是开店卖货的，治理是定规矩说“这家店谁拍板、员工该怎么干”的。还有一句必背：数据治理职能<span class="em">可以指导所有其他数据管理职能</span>——在DAMA车轮图里它坐圆心（方向盘位置）。⚠ 按题库数据，“语境关系图”在本章65题里只出现1次，圆心位置记住即可，别把八要素当主菜。</p>
+
+<h2>③ 8项职能逐个认脸（p42）</h2>
+<table>
+<tr><th>#</th><th>职能</th><th>干什么（教材原意）</th></tr>
+<tr><td>1</td><td>战略</td><td>界定、沟通和推动数据战略与数据治理战略的执行（管方向）</td></tr>
+<tr><td>2</td><td>制度</td><td>制定和执行数据及元数据生命周期（创建、访问、使用、安全、质量、文档化、处置）的制度（管底线）</td></tr>
+<tr><td>3</td><td>标准</td><td>制定和执行数据管理标准（管统一）</td></tr>
+<tr><td>4</td><td>监督</td><td>在质量、隐私、安全等关键领域开展监察、审计和纠正</td></tr>
+<tr><td>5</td><td>合规</td><td>确保组织满足数据相关法规的合规性要求</td></tr>
+<tr><td>6</td><td>问题管理</td><td>识别、界定、提升和解决数据安全/访问/质量/合规/所有权等问题</td></tr>
+<tr><td>7</td><td>数据管理项目</td><td>发起改善数据管理实践的举措</td></tr>
+<tr><td>8</td><td>数据资产估值</td><td>为评估数据资产的业务价值制定一致的标准和流程</td></tr>
+</table>
+<p>记法口诀：<span class="em">“战制标监合，问项估值”</span>。本章最爱的题型是“以下哪项不属于”：拿别章的词混进来，比如“数据质量提升”是业务驱动（p44）里的词，不属于8项职能。</p>
+
+<h2>④ 修订版改名（送分提醒）</h2>
+<p>第3项在修订版只叫<span class="em">“标准”</span>，不是旧讲义/旧题里的“标准和质量”。遇到旧题库把“质量和标准”当正确项，按修订版判：那是错误表述。这是2026年12月这场考试用新教材最直接的得分点。</p>
+
+<h2>⑤ 业务驱动两条线（p44）</h2>
+<p>最常见的驱动是<span class="em">监管合规</span>，尤其是金融服务和医疗健康这类强监管行业；高级分析和数据科学的涌现也带来额外驱动力；还有一类业务需求路径：缺可信数据资产→先做主数据管理→才意识到需要进一步的数据治理。</p>
+<table>
+<tr><th>线</th><th>条数</th><th>内容</th></tr>
+<tr><td class="em">降低风险</td><td>3</td><td>一般风险管理（含电子举证等法律/监管应对）｜数据安全（有效性、可用性、完整性、一致性、可审计性及安全性）｜隐私（管PII——个人身份信息，如身份证号、手机号）</td></tr>
+<tr><td class="em">优化流程</td><td>5</td><td>监管合规（高效、一致地响应监管要求）｜数据质量提升｜元数据管理（建业务术语表）｜开发项目的效率（改进SDLC、管技术负债）｜供应商管理（云存储、外包数据运营等合约）</td></tr>
+</table>
+<p>易混对：<span class="em">隐私归“降低风险”、监管合规归“优化流程”</span>——一个管别惹祸，一个管办事快。归属题问“隐私属于哪条线”，答降低风险。</p>
+
+<h2>⑥ 反向题常客（p44）</h2>
+<ul>
+<li><span class="em">治理不是目标</span>：目标是使数据管理与组织战略相协调；治理是持续性的，并非一次性的，聚焦从数据中获取价值并降低相关风险。看到“最终目标是建好治理体系”＝把手段当目的，判错。</li>
+<li><span class="em">组织文化是重大挑战</span>：即使有最好的数据战略，不改变行为也不会成功；变革管理的基本原则之一是“组织变革需要个体变革”（Hiatt &amp; Creasey, 2012）。比喻：光贴新家规没用，得让家里每个人都改习惯。情景题给“买了工具、定了制度但没人照做”，答案指向文化与变革。</li>
+<li><span class="em">数字预案</span>（本章考题密度表）：原则6条、职能8项、治理机构5类、专员7类、运营模型3种、职责重点4项、准备评估3项、术语表目标4个。今天先记总数，后面几张逐个拆。</li>
+</ul>
+
+<h2>考试怎么考</h2>
+<p>本章10分、题库65题，这一张对应三种问法：①<span class="em">定义题</span>——“对数据管理工作履行职权和实施管控”是谁的行为，正确项“数据治理”，干扰项把“数据治理”换成“数据管理”；②<span class="em">条数/归属题</span>——“以下哪项不属于数据治理职能”，拿“数据质量提升”之类冒充，正确做法是背熟8项名单；③<span class="em">反向题</span>——“以下哪项错误”，常见错误选项：治理是一次性项目、治理的目标是建体系、“标准和质量”是职能之一。</p>
+
+<div class="quiz">
+<h2>自测一题</h2>
+<p><b>自测：</b>根据 DAMA-DMBOK（修订版），下列哪项<b>不属于</b>数据治理职能的内容？</p>
+<p>A. 战略<br>B. 数据资产估值<br>C. 标准和质量<br>D. 问题管理</p>
+<p><b>答案：C。</b>修订版第3项职能只叫“标准”，“标准和质量”是旧表述，正是新教材的送分陷阱。A、B、D 都是8项职能的原词（p42）。记忆口诀：“战制标监合，问项估值”。</p>
+</div>
+
+<h2>今日行业动态（2 条，均已双源核验）</h2>
+<p><span class="em">1. 数据产权登记“一证互认”落地，北数所进了国家目录。</span>全国统一的数据产权登记制度进入落地实施新阶段，北京国际大数据交易所（北数所）与上海、深圳两家交易所被纳入全国数据产权登记机构目录，数据产权凭证“一次登记、全国互认”。对想进这行的人：数据“确权”是治理最底层的活儿，登记、合规类岗位正是目标公司体系里在增长的方向。（来源：新华社/中国经济信息社，2026-10-27，https://www.toutiao.com/article/7701184808109474319/；法治网，2026-10-27，https://www.legaldaily.com.cn/newzt/content/2026-10/27/content_9479022.html）</p>
+<p><span class="em">2. 北京首单数字人民币结算的数据交易在北数所完成。</span>交易标的是40G已精细化标注的AI训练动物图片数据集，实现数据交付核验后实时资金划转、交易流程与资金流向全程留痕。对想进这行的人：数据交易从“能登记”走向“能结算”，交易平台的运营、合规、结算类岗位需求在增加——正是北数所与北京国际数据服务所在体系的业务主线。（来源：新浪财经·移动支付网，2026-10-26，https://finance.sina.com.cn/blockchain/2026-10-26/doc-iniwpfnc2449610.shtml；数智湃（据新京报/北京市国资委），2026-10-26，http://mp.weixin.qq.com/s?__biz=MzkyNDMyMTQ2OA==&amp;mid=2247513151&amp;idx=1&amp;sn=6d0c721c4bf83ac833de5a271511417e）</p>
+
+<div class="check">本张覆盖考点：3.1 定义 · 治理vs管理（车轮图圆心） · 8项职能 · 修订版“标准” · 业务驱动两类 · 反向题三连（共 6 个）<br>本章剩余考点：3个“必须”目标与6条原则（留给 2/共5）、组织与角色（留给 3/共5）、制度与数据资产估值（留给 4/共5）、活动四阶段与工具度量（留给 5/共5）</div>
+
+<p class="next">下一张（2/共5）讲数据治理的3个“必须”目标和6条原则——又是数字题大户。明天见，坚持住。</p>
+
+<div class="src">来源说明：① 考点内容依据《DAMA 数据管理知识体系指南（原书第2版 修订版）》p42–p44（教材底稿逐页转录）；② 行业动态两条来源见文中标注，均为官方/权威媒体且经两个独立来源交叉核验；检索时间 2026-10-28。</div>
+</div></body>
+</html>
