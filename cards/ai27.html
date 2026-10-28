@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-4 向量库与相似度：把“语义身份证”存进柜子，按“长得像”来翻｜4/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月29日 · AI 知识</div>
+<h1>AI知识｜M4-4 向量库与相似度：把“语义身份证”存进柜子，按“长得像”来翻｜4/32</h1>
+<div class="lead">前几期给每段话发了“语义身份证”（向量），上期把长文档切成了资料卡。今天讲最后两块拼图：这些身份证存到哪个柜子里？怎么在一秒钟内从几万张里翻出“意思最像”的那几张？这就是向量库和相似度计算干的活。</div>
+
+<h2>一句话结论</h2>
+<p>向量库解决“几万条向量存哪、怎么一秒翻出来”，相似度计算解决“怎么判断两条内容意思像不像”——两者合起来，就是 RAG 里“翻资料”那一步的全部技术底座。</p>
+
+<h2>是什么</h2>
+<p><strong>向量数据库</strong>，说白了就是一个专门存向量的仓库，外加一套“按长得像来找”的检索引擎。它和普通数据库的区别一句话讲清：普通数据库查“等于”——比如 WHERE id=5，精确匹配一条；向量库查“最像的前 K 条”（行话叫 top-k），返回一批“意思最接近”的候选。RAG 流程里 AI“先翻资料”，翻的就是这一次 top-k 检索。</p>
+<p>主流选择有三个：<strong>Milvus</strong>（2019 年开源，现为 Linux 基金会旗下 LF AI &amp; Data 基金会毕业项目，功能全、适合大项目）、<strong>FAISS</strong>（Meta（Facebook）开源的检索算法库，不是完整数据库但速度快，很多工具拿它当内核）、<strong>Chroma</strong>（轻量级，几行代码就能跑，自建个人知识库最常用的入门款）。</p>
+<p><strong>相似度计算</strong>，最常用的是“余弦相似度”。你的问题会被转成一个向量，和库里每条资料向量比一比“方向”。</p>
+
+<h2>为什么是“夹角”而不是“距离”</h2>
+<p>把一条向量想成从原点射出的一支箭。余弦相似度不看箭有多长，只看两支箭的夹角：<strong>夹角为 0（同方向），得分 1，意思最像；互相垂直，得分 0，不相关</strong>。为什么不直接比数字差多少（那叫欧氏距离）？因为一段话长一段话短，向量长短会差很多，但“说的是不是同一件事”只跟方向有关——就像两篇 500 字和 2000 字的文章可能讲的是同一个话题。</p>
+
+<h2>为什么快：HNSW 算法</h2>
+<p>有人会问：几万条向量一条条比，得比到猴年马月？确实，精确比对太慢，所以实际系统都用“近似检索”，目前最主流的算法叫 <strong>HNSW</strong>（Malkov 与 Yashunin 在 2018 年的论文中提出）。它像给小区画楼栋地图：先看你问的事大概在几号楼，再进楼栋逐户比对，不用全小区跑一遍。<strong>牺牲一点点准确率，换几百上千倍的检索速度</strong>——这就是它能“一秒翻完几万张卡”的秘密。</p>
+
+<h2>生活比方</h2>
+<blockquote>向量库像图书馆的分类柜：每条资料入库时按“内容方向”归好类。余弦相似度像那位老练的馆员：你不记得书名，只说“我想找讲怎么给旧房子做保温的”，他不会拿书名一个字一个字对，而是凭“话题像不像”从柜子里抽出三五本最对路的递给你。</blockquote>
+
+<h2>主流向量库怎么选（一张表）</h2>
+<table>
+<tr><th>选择</th><th>适合谁</th><th>特点</th></tr>
+<tr><td>Chroma</td><td>个人知识库、原型验证</td><td>轻量，几行代码起步，本地就能跑</td></tr>
+<tr><td>FAISS</td><td>追求检索速度的开发者</td><td>Meta 开源的算法库，常作其他系统的内核</td></tr>
+<tr><td>Milvus</td><td>团队/企业级、数据量大</td><td>2019 年开源，LF AI &amp; Data 基金会毕业项目，支持权限、分布式</td></tr>
+</table>
+
+<h2>今天就能用</h2>
+<p>用 Python 在本机 10 分钟搭一个最小向量检索，亲手看到“按意思找”的效果：</p>
+<ol>
+<li>安装：<code>pip install chromadb</code>（Python 3.9+）；</li>
+<li>新建 <code>test.py</code>，粘贴：<code>import chromadb; c = chromadb.Client(); col = c.create_collection("kb")</code>；</li>
+<li>存三条资料：<code>col.add(documents=["出差住宿可以报销每晚300元","周二例会改到下午三点","公司年度体检安排在11月"], ids=["1","2","3"])</code>；</li>
+<li>按“意思”查询：<code>print(col.query(query_texts=["去外地住宾馆的钱怎么算"], n_results=2))</code>；</li>
+<li>验证：注意你的问题里没有“报销”“出差”这些词，返回的第一条仍然是“住宿报销”那条——这就是余弦相似度在按意思匹配，不是按字面匹配。</li>
+</ol>
+
+<h2>政策/行业动态（上期之后新增）</h2>
+<ul>
+<li><strong>浙江五部门给“一人公司”（AI OPC）发十条支持举措</strong>：10 月 28 日，浙江省市场监管局等 5 部门印发《关于支持杭州等地人工智能 OPC 创新发展先行先试工作的通知》，提出“工位注册”登记、算力券和 Token 券补贴、开放医疗等领域高质量公共数据、开放大模型 API 等十条举措，并在杭州、宁波、温州、嘉兴先行先试。对普通人意味着：靠 AI 一个人跑通一门生意这种轻创业形态，开始在浙江有官方扶持和注册通道了。来源：南方都市报 2026-10-28（链接：https://www.toutiao.com/article/7701634719594627627/）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M4-5 混合检索与重排</strong>：光按“意思像”翻卡还不够——专有名词、编号这类精确词，相似度反而抓不准。下期讲怎么把“关键词检索”和“向量检索”两条路合并，再用重排把最相关的顶到最前面。</p>
+
+<div class="rel">相关延伸：M4-1 Embedding——每条资料入库前先领“语义身份证”；M4-2 RAG 全流程——今天讲的 top-k 检索就是其中的“翻资料”一步；M4-3 切块——入库的最小单位就是上期切好的资料卡。</div>
+
+<div class="note">来源说明：① Milvus 2019 年开源及 LF AI &amp; Data 基金会毕业项目身份，来源：Milvus 官方文档与 LF AI &amp; Data 官网（https://milvus.io / https://lfaidata.foundation）；② FAISS 为 Meta 开源项目，来源：FAISS 官方 GitHub（https://github.com/facebookresearch/faiss）；③ HNSW 算法，来源：Yu. A. Malkov, D. A. Yashunin, "Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs", IEEE TPAMI, 2018（https://arxiv.org/abs/1603.09320）；④ 余弦相似度定义与取值范围为数学通识；⑤ 浙江 OPC 政策来源：南方都市报 2026-10-28 报道（链接见正文）。本文技术部分为一般性介绍，具体参数以各工具官方文档为准。</div>
+</body>
+</html>
