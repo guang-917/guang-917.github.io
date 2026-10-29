@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-5 混合检索与重排：关键词和“意思像”两条腿走路，再挑出最好的｜5/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月30日 · AI 知识</div>
+<h1>AI知识｜M4-5 混合检索与重排：关键词和“意思像”两条腿走路，再挑出最好的｜5/32</h1>
+<div class="lead">上期我们把“语义身份证”存进了向量柜，按“长得像”翻卡。但只走这一条路会翻车：问“Q3 报销制度 GB-07 条款”，一篇意思相近的闲聊反而排在真制度前面。今天讲怎么让“关键词”和“意思”两条路一起翻，再请一位“阅卷老师”把最相关的顶到最前。</div>
+
+<h2>一句话结论</h2>
+<p>混合检索与重排解决的问题是：<strong>只按“意思像”翻资料，会漏掉专有名词、型号、编号这类必须一字不差的词</strong>；解决办法是关键词检索和向量检索两路合并粗筛，再用重排模型精挑，保证最后塞给大模型的几条资料又全又准。</p>
+
+<h2>为什么一条路不够</h2>
+<p>两种检索各有一块天生的盲区：</p>
+<table>
+<tr><th>检索方式</th><th>擅长</th><th>盲区</th></tr>
+<tr><td>关键词检索（如 BM25）</td><td>专有名词、编号、型号，一字不差就必中</td><td>换个说法就抓瞎：你问“差旅怎么报”，它找不到写着“出差费用核销”的那篇</td></tr>
+<tr><td>向量检索（语义相似）</td><td>懂同义改写，问法和写法不一样也能对上</td><td>对精确词不敏感：“GB-07”和一篇泛谈报销的文章，在它眼里意思差不多</td></tr>
+</table>
+<p>生活比方：<strong>关键词检索像按书名索引卡精确翻书，向量检索像问图书管理员“讲这个主题的书在哪个架子上”。</strong>只靠索引卡会错过好书，只靠管理员又找不到那本封面没写主题词的。两路一起问，才两头不落空。</p>
+
+<h2>第一步：混合检索——两路合并怎么算</h2>
+<p>做法很简单：两路各取前 20 条，然后用 <strong>RRF（倒数排名融合）</strong>公式合并打分：</p>
+<blockquote>某条资料的总分 = Σ 1/(60 + 它在每一路里的名次)。在某一路排第 1 名就得 1/61，排第 5 名得 1/65。两路都靠前的，总分自然最高。</blockquote>
+<p>这个“60”是平滑常数，防止第一名权重过大。RRF 出自 Cormack、Clarke、Buettcher 2009 年的论文《Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods》（SIGIR 2009），因为它简单、不需要调参，至今仍是主流向量库混合检索的默认融合方法。</p>
+<p>关键洞察：<strong>某条资料不需要在两路里都排第一，只要“两路都不差”，它大概率就是正确答案。</strong>精确命中靠关键词那一路，意思对得上靠向量那一路。</p>
+
+<h2>第二步：重排——把好货顶到最前面</h2>
+<p>混合检索只解决了“不漏”，还没解决“不准”。粗筛好比海选，最后还需要一位阅卷老师：</p>
+<ul>
+<li><strong>粗筛（快而糙）</strong>：向量检索和关键词检索都是把问题和文章各自算好分数再对表，为了快牺牲了精细，几百万条资料里毫秒级捞出前 20 条。</li>
+<li><strong>重排（慢而准）</strong>：把“你的问题 + 候选文章”拼在一起，逐条交给重排模型精读打分。这种“问题文章一起看”的结构叫交叉编码器，理解能力远强于粗筛，但每条都要现算，慢、贵。</li>
+<li><strong>分工</strong>：所以流程是“百万条 → 粗筛 20 条 → 重排 → 取前 3~5 条给大模型”。快活在粗筛，准活在重排，各干各的。</li>
+</ul>
+<p>比方：粗筛是从图书馆抱回一摞可能相关的书，<strong>重排是请一位真正读过这些书的人，帮你挑出最对题的三本</strong>。你最终读的是这三本，不是一摞。</p>
+
+<h2>今天就能用</h2>
+<p>如果你在用 AnythingLLM、Dify、FastGPT 这类工具搭知识库，5 分钟做个对照实验：</p>
+<ol>
+<li>选一个带精确词的问题，如“差旅报销标准是哪一条？”先用默认的纯向量检索问一遍，记下答案和引用的原文。</li>
+<li>进知识库/检索设置，把检索方式改成“混合（Hybrid）”，如果界面里有 Rerank 开关就打开（可接 Jina、Cohere 的 reranker 接口，均有免费额度）。</li>
+<li>同一个问题再问一遍，对比引用来源是否更准。多数情况下，你会看到原来排不进前几名的正确条款被顶了上来。</li>
+</ol>
+
+<h2>政策/行业动态（上期之后新增）</h2>
+<p><strong>河北邯郸出台十条措施扶持人工智能 OPC 创新创业</strong>：10 月 28 日，邯郸市发布《邯郸市支持人工智能 OPC 创新发展十条政策措施》，依托总规模 10 亿元的科创基金对符合条件的 OPC 科技企业开展市场化股权投资，对创业主体的大模型服务、智能算力租赁费用按实际支出给予 30% 奖励（奖励额度 5000 万元），并提出每年释放不少于 100 个 AI 应用场景。对普通人意味着：继浙江之后，又一个城市给“一个人 + AI 跑通一门生意”的轻创业模式配了真金白银的落地方案。来源：中国新闻网河北频道 2026-10-29（链接：https://www.heb.chinanews.com.cn/cjzx/20261029460949.shtml）。</p>
+
+<h2>下期预告</h2>
+<p><strong>M4-6 从零搭个人知识库</strong>：前面学的切块、向量库、混合检索、重排，都是零件。下期把它们组装起来——手把手走一遍“收资料 → 入库 → 提问”的完整搭建流程，用免费工具落地属于你自己的第二大脑。</p>
+
+<div class="rel">相关延伸：M4-4 向量库与相似度——今天两条路里“意思像”的那一路就是它；M4-3 切块——被检索的最小单位是上上期切好的“资料卡”；M4-2 RAG 全流程——本期讲的正是其中“翻资料”这一步的升级版。</div>
+
+<div class="note">来源说明：① RRF 公式与出处，来源：Cormack, Clarke, Buettcher, "Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods", SIGIR 2009（https://dl.acm.org/doi/10.1145/1571941.1572114）；BM25 为 1990 年代 Robertson 等人在 Okapi 系统中提出的概率检索模型，来源：Okapi BM25 学术文献（https://en.wikipedia.org/wiki/Okapi_BM25）。② 邯郸 OPC 政策，来源：中国新闻网河北频道 2026-10-29（https://www.heb.chinanews.com.cn/cjzx/20261029460949.shtml）。各工具的混合检索与 Rerank 设置项以其官方文档为准。</div>
+</body>
+</html>
