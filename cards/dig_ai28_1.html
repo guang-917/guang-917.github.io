@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：RRF 融合打分怎么手算？</title>
+<style>
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 18px 60px;font-size:15px}
+h1{font-size:19px}h2{font-size:16px;border-left:4px solid #4f8cff;padding-left:8px}
+code,pre{background:#171a21;border:1px solid #262b34;border-radius:8px}
+code{padding:1px 6px}pre{padding:12px;overflow-x:auto;font-size:13px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{border:1px solid #262b34;padding:7px 9px;text-align:left}th{background:#171a21}
+.note{color:#9aa3b2;font-size:13px;margin-top:20px}
+</style>
+</head>
+<body>
+<h1>深挖：RRF 融合打分，Excel 也能算</h1>
+<p>上一张卡说混合检索用 RRF（倒数排名融合）把关键词检索和向量检索两路结果合并。这个公式其实只有一行：<strong>总分 = 1/(60+名次) 的累加</strong>。下面手算一遍，你马上就懂它为什么好使。</p>
+<h2>第 1 步：拿两路结果</h2>
+<p>假设问"差旅报销标准是哪一条"，两路各取前 3 名：</p>
+<ul>
+<li>关键词路：A（第1）、B（第2）、C（第3）——因为问题里有"差旅报销"这些字，含这些字的文档必中。</li>
+<li>向量路：D（第1）、A（第2）、E（第3）——A 讲的是"出差费用核销"，用词不同但意思对。</li>
+</ul>
+<h2>第 2 步：逐条打分（k=60）</h2>
+<table>
+<tr><th>文档</th><th>关键词路名次</th><th>向量路名次</th><th>RRF 总分</th></tr>
+<tr><td>A</td><td>1 → 1/61≈0.0164</td><td>2 → 1/62≈0.0161</td><td><strong>0.0325（最高）</strong></td></tr>
+<tr><td>D</td><td>没上榜 → 0</td><td>1 → 0.0164</td><td>0.0164</td></tr>
+<tr><td>B</td><td>2 → 0.0161</td><td>没上榜 → 0</td><td>0.0161</td></tr>
+</table>
+<p>A 两路都靠前，总分遥遥领先——这正是我们想要的：既精确命中、又意思对上的文档，才是真答案。</p>
+<h2>第 3 步：理解那个 60</h2>
+<p>60 是论文里实验出来的平滑常数。名次从 1 涨到 5，分数只从 0.0164 降到 0.0161，差距被"抹平"了——这样第一名不至于碾压一切，两路的意见权重更均衡。你把 60 换成别的数（比如 0 或 100）结果排序通常也不变，它只是让打分更"温和"。</p>
+<h2>一句话记住</h2>
+<p>RRF 不看两路各自的原始分数（一个 0~1、一个十几分，没法直接加），只看<strong>名次</strong>，所以两路天差地别的打分体系能公平融合。哪条文档"两路都不差"，哪条就赢。</p>
+<p class="note">出处：Cormack, Clarke & Buettcher, SIGIR 2009《Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods》。这是检索领域被广泛引用的结论：RRF 的融合效果常常优于任何单一路径。</p>
+</body>
+</html>
