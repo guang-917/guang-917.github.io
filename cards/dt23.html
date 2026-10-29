@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第3章 数据治理｜2/共5</title>
+<style>
+  body{background:#111418;color:#d8dde3;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;margin:0;padding:24px 16px 48px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#7d8794;font-size:13px;margin-bottom:8px;}
+  h1{font-size:22px;line-height:1.4;color:#f0f3f6;margin:4px 0 16px;}
+  .lead{background:#1a1f27;border-left:3px solid #4a9eff;padding:12px 14px;border-radius:6px;color:#c3cbd5;font-size:15px;margin-bottom:22px;}
+  h2{font-size:17px;color:#7fb8ff;margin:26px 0 10px;}
+  p{margin:10px 0;font-size:15px;}
+  ul{padding-left:20px;margin:10px 0;}
+  li{margin:6px 0;font-size:15px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+  th,td{border:1px solid #2a313b;padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:#1a2029;color:#aeb8c4;}
+  .em{color:#ffd166;font-weight:600;}
+  .quiz{background:#1a1f27;border:1px solid #2a313b;border-radius:8px;padding:14px 16px;margin:20px 0;}
+  .quiz h2{margin-top:0;}
+  .check{background:#141a14;border-left:3px solid #5cb85c;padding:10px 14px;border-radius:6px;font-size:14px;color:#b9c4b9;margin:18px 0;}
+  .src{color:#7d8794;font-size:13px;margin-top:26px;border-top:1px solid #232a34;padding-top:12px;}
+  .next{color:#8fa3b8;font-size:14px;margin-top:20px;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">2026年10月29日 · 数据知识 · CDGA 教材《DAMA 数据管理知识体系指南（原书第2版 修订版）》</div>
+<h1>CDGA｜第3章 数据治理｜2/共5 · 目标与6条原则：3个“必须”要背牢</h1>
+<div class="lead">本张对应教材 p45。今天两件事：一是数据治理实现总目标的3个“必须”（可持续/可融合/可衡量），二是6条原则逐个认脸。p45这页是条数题和归属题的富矿，也是最容易和第1章12条原则串号的地方——今天把界线划死。</div>
+
+<h2>考点清单（6 个）</h2>
+<ul>
+<li>① 总目标原话：使组织能够将数据视为资产来管理（p45）</li>
+<li>② 3个“必须”逐个拆：可持续 / 可融合 / 可衡量</li>
+<li>③ 条数预案：3个必须 + 6条原则</li>
+<li>④ 6条原则逐条讲：怎么考、干扰项长什么样</li>
+<li>⑤ 易错三连：多层面vs多层次、共同所有权vs共担责任、5/6条合并</li>
+<li>⑥ 跨章划界：第1章12条 vs 第3章6条</li>
+</ul>
+
+<h2>① 总目标原话（p45）</h2>
+<p>教材p45原句：<span class="em">数据治理的目标是“使组织能够将数据视为资产来管理”，并提供原则、制度、流程、框架、指标和监督。</span>比喻：把数据像家里的存款和房产一样——登记造册、有人看管、能升值。前半句是目标本身，后半句那串“原则、制度、流程、框架、指标、监督”是治理交出来的<span class="em">工具包</span>；干扰项常拿工具包里的一样（比如只说“提供制度”）冒充完整目标，注意“使组织能够将数据视为资产来管理”才是核心半句。</p>
+
+<h2>② 3个“必须”逐个拆（p45）</h2>
+<p>要实现总目标，数据治理职能必须做到三件事，教材原编号：</p>
+<table>
+<tr><th>必须</th><th>教材原意</th><th>陷阱</th></tr>
+<tr><td class="em">1. 可持续</td><td>治理职能必须有“黏性”——不是有明确结束时间的项目，而是需要组织承诺持续投入的企业职能；可持续依赖<span class="em">业务领导力、资金和所有权</span>三样东西</td><td>依赖项换成“IT领导力、技术资金”就错——靠的是业务侧</td></tr>
+<tr><td class="em">2. 可融合</td><td>治理<span class="em">不是一个附加流程</span>；治理活动需要融入软件开发方法、数据分析、主数据管理、风险管理及其他活动</td><td>“治理是独立于业务流程之外单独搭建的环节”＝错。比喻：不是给车外挂一个箱子，而是把导航装进车里</td></tr>
+<tr><td class="em">3. 可衡量</td><td>良好的数据治理能产生积极的财务影响，但要证明影响，需要了解初始情况，并规划可衡量的方案</td><td>“治理效果无法衡量所以不用衡量”＝错——教材说的是能产生财务影响，且要提前规划怎么量</td></tr>
+</table>
+<p>口诀：<span class="em">“续融量”</span>——能续命、能融进去、能算得清。条数题问“以下哪项不属于三个必须”，干扰项爱编“可复制、可扩展、可量化”这类长得像的词。</p>
+
+<h2>③ 6条原则逐条认脸（p45，21世纪早期制定）</h2>
+<table>
+<tr><th>#</th><th>原则</th><th>要点与考法</th></tr>
+<tr><td>1</td><td class="em">领导力和战略</td><td>成功的数据治理始于有远见、有担当的领导。方向链条必背：<span class="em">企业业务战略驱动数据战略，数据战略引领数据管理活动</span>。陷阱：把链条倒过来（说数据战略驱动业务战略）就错——业务在前、数据在后</td></tr>
+<tr><td>2</td><td class="em">业务驱动</td><td>数据治理是一项业务职能，必须像治理与数据交互的业务一样，治理与数据相关的IT决策。干扰项：“数据治理是IT部门的职能”＝错</td></tr>
+<tr><td>3</td><td class="em">共担责任</td><td>在所有数据管理知识领域，数据治理是<span class="em">业务数据管理专员和技术数据管理专员</span>的共同责任。干扰项：写成“业务部门单独负责”或“IT单独负责”</td></tr>
+<tr><td>4</td><td class="em">多层次的</td><td>治理在企业全局或局部范围内都有发生，并且<span class="em">经常发生在中间各层级</span>。别漏掉“中间各层级”这半句——不是只有公司顶层才做治理</td></tr>
+<tr><td>5</td><td class="em">基于框架</td><td>治理活动需要跨职能、跨领域进行协调，所以必须建立一个能<span class="em">界定责任与交互的运营框架</span></td></tr>
+<tr><td>6</td><td class="em">基于原则</td><td>指导原则是数据治理活动的基础，对数据治理制度尤其如此</td></tr>
+</table>
+
+<h2>④ 易错三连（p45原注）</h2>
+<ul>
+<li><span class="em">是6条</span>——不是5条、也不是7条。数条数是这页最白给的分。</li>
+<li>把“多层次的”写成<span class="em">“多层面”</span>——那是旧译，遇到按修订版判。</li>
+<li>把“共担责任”写成<span class="em">“共同所有权”</span>；把“基于框架/基于原则”当成一条。这三个坑教材原注都点了名。</li>
+</ul>
+
+<h2>⑤ 跨章划界（条数题保命线）</h2>
+<p>第1章是数据管理的<span class="em">12条原则</span>（图1-1归成5组），第3章是数据治理的<span class="em">6条原则</span>——两个数字、两份名单。考试最爱跨章混：题干问“数据治理的原则”，选项里塞一条“数据是一种具有独特属性的资产”（那是第1章的）；反过来问“数据管理的原则”时，“共担责任”“基于框架”就是干扰项。做条数题先问自己：题干问的是治理还是管理。想深挖这两份名单的关系，点本期“去挖”看对比表。</p>
+
+<h2>考试怎么考</h2>
+<p>这一张对应三种问法：①<span class="em">条数题</span>——“数据治理职能必须做到哪三项”/“以下哪项不属于数据治理原则”，背熟“续融量”和6条名单就能秒杀；②<span class="em">归属题</span>——“业务战略驱动数据战略”是哪条原则，答领导力和战略；说“治理是业务和技术专员的共同责任”问原则归属，答共担责任；③<span class="em">反向题</span>——“治理是一个独立于业务流程之外的附加环节”＝错（违反可融合），“数据治理依赖IT领导力和资金”＝错（应为业务领导力、资金、所有权）。正确选项的关键词：黏性、融入、可衡量、共同责任、运营框架。</p>
+
+<div class="quiz">
+<h2>自测一题</h2>
+<p><b>自测：</b>根据 DAMA-DMBOK（修订版），为实现总体目标，数据治理职能必须做到的三个“必须”是？</p>
+<p>A. 可持续、可融合、可衡量<br>B. 可持续、可复制、可衡量<br>C. 可扩展、可融合、可量化<br>D. 可持续、可衡量、可审计</p>
+<p><b>答案：A。</b>教材p45原编号就是可持续、可融合、可衡量。B的“可复制”、C的“可扩展/可量化”、D的“可审计”都是编出来冒充的——三个“必须”每个词都对应教材原句：可持续讲“黏性”、可融合讲“不是附加流程”、可衡量讲“产生积极的财务影响且要提前规划怎么量”。</p>
+</div>
+
+<div class="check">本张覆盖考点：3.4 总目标 · 3个“必须”（可持续/可融合/可衡量） · 6条原则 · 易错三连 · 跨章12条vs6条（共 5 个）<br>本章剩余考点：组织与角色——三级结构、5类机构、3种运营模型、7类专员（留给 3/共5）、制度与数据资产估值（留给 4/共5）、活动四阶段与工具度量（留给 5/共5）</div>
+
+<p class="next">下一张（3/共5）讲本章最重的考点：组织与角色——三级结构、5类治理机构、3种运营模型、7类数据管理专员，题库里出现18次的大户。今天背牢“续融量”和6条名单，明天见，继续稳住。</p>
+
+<div class="src">来源说明：考点内容依据《DAMA 数据管理知识体系指南（原书第2版 修订版）》p45（教材底稿逐页转录），跨章对比引自同教材 p5–p6；本张无行业动态（周四档不设），未引用网络信息。</div>
+</div></body>
+</html>
