@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：个人知识库答不准，先查哪个环节？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+h2{font-size:17px;margin:24px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">AI 知识下钻 · 6/32 · M4-6 延伸</div>
+<h1>个人知识库答不准，先查哪个环节？</h1>
+<p>答案不准有三种典型病，按顺序排查，每次只动一个环节，别一上来就换工具。</p>
+<h2>第一步：查检索（80%的病在这）</h2>
+<p>直接问一个你已经知道答案在哪个文件里的问题，然后看工具展示的"引用来源"。如果引用的不是那个文件、或只截了半段，说明是<strong>检索没找到</strong>，不是模型笨。对应前几期：换更好的切块方式（M4-3），或开混合检索、调大"取前几条"的数量（M4-5）。生活比方：管理员根本没从柜子里翻出那张卡，你却怪他嘴笨。</p>
+<h2>第二步：查切块</h2>
+<p>如果引用对了但内容被切断——比如答案跨在两张卡片上、各只有半句话——是切块粒度问题。做法：把切块调大一点（比如从500字调到800字上下，允许少量重叠），让"一句话的上下文"别被腰斩。</p>
+<h2>第三步：查提问方式</h2>
+<p>引用对了、内容完整、答案还是跑偏——这时才是提问的问题。在问题里加一句约束："只根据我上传的资料回答，资料里没有就说没有。"这能有效压住模型自己编的冲动。</p>
+<blockquote>一句话记：先看引用来源，再动切块，最后改提问。顺序反了，你会白折腾一下午还以为是工具不行。</blockquote>
+<p>下一个相关知识点是 M4-7「RAG 适用与不适用」——有些问题压根不该指望知识库，提前知道能省很多力气。</p>
+</body>
+</html>
