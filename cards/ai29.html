@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-6 从零搭个人知识库：五块积木拼一个"只回答你的AI"｜6/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">10月31日 · AI 知识</div>
+<h1>AI知识｜M4-6 从零搭个人知识库：五块积木拼一个"只回答你的AI"｜6/32</h1>
+<div class="lead">前5期我们攒齐了零件：给文字发"语义身份证"（M4-1）、AI先翻资料再回答（M4-2）、切资料卡（M4-3）、存卡的柜子（M4-4）、两条腿找卡（M4-5）。今天把它们拼起来——从零搭一个只属于你的个人知识库，动手只要10分钟。</div>
+
+<h2>一句话结论</h2>
+<p>个人知识库 = 把你自己的文档做成"AI能查的资料室"：问问题时，AI先翻你的资料再回答，只说你的事，不泛泛而谈。它解决的问题是——大模型没读过你的工作笔记、合同、聊天记录，直接问它，它要么不知道、要么瞎编。</p>
+
+<h2>是什么：五块积木拼一台机器</h2>
+<p>把前5期讲过的零件串起来，整台机器只有5个部件：</p>
+<table>
+<tr><th>部件</th><th>干嘛的</th><th>对应期数</th></tr>
+<tr><td>你的文档</td><td>原料：PDF、笔记、聊天记录</td><td>本期准备</td></tr>
+<tr><td>切块器</td><td>把长文档切成"资料卡"</td><td>M4-3</td></tr>
+<tr><td>Embedding</td><td>给每张卡发"语义身份证"</td><td>M4-1</td></tr>
+<tr><td>向量库</td><td>按"意思相近"存卡、翻卡的柜子</td><td>M4-4</td></tr>
+<tr><td>检索+生成</td><td>关键词和语义两条腿找卡，模型照卡作答</td><td>M4-2 / M4-5</td></tr>
+</table>
+<p>你现在不需要逐块搭建——现成工具已经把中间四块全部打包好了。</p>
+
+<h2>为什么值得自己搭一个</h2>
+<ul>
+<li><strong>答案有你自己的料</strong>：直接问大模型"我们公司的报销制度是什么"，它只能编；知识库版会去翻你上传的员工手册。</li>
+<li><strong>带引用，可验证</strong>：好工具会标出答案出自哪个文件哪一段，错了能查到源头，这正是治幻觉（M2-6讲过成因）的思路。</li>
+<li><strong>数据自己攥着</strong>：本地工具文档不出你的电脑，比把文件贴进聊天框更稳。</li>
+</ul>
+
+<h2>怎么用：3步搭起来</h2>
+<ol>
+<li><strong>选料</strong>：挑10~20份你最常查的文件（员工手册、项目文档、读书笔记）。PDF、Word、Markdown都行，先把明显过期的删掉——资料室的卡是错的，管理员答得再流畅也是错的。</li>
+<li><strong>选工具入库</strong>：手机端可以用腾讯ima（App里建知识库、传文件、提问）；电脑端可以用AnythingLLM或Cherry Studio（都自带向量库和Embedding，装上就能拖文件进去，零代码）。</li>
+<li><strong>提问验证</strong>：问一个答案明确在某份文件里的问题，检查它给的引用来源对不对。引用对了才算搭成；引用错了回去调切块（M4-3）。</li>
+</ol>
+
+<blockquote><strong>生活比方</strong>：你雇了个读书破万卷的图书管理员（大模型），但他没看过你抽屉里的私人笔记。个人知识库就是把你家的笔记复印成卡片（切块+Embedding），放进他手边的柜子（向量库）。他回答你之前先翻柜子——答出来的，才全是你自己的事。</blockquote>
+
+<h2>今天就能用</h2>
+<p>用手机10分钟搭一个（以ima为例）：①应用商店搜"ima"下载，用微信登录；②点底部"知识库"→新建一个库，起名"我的资料室"；③从微信聊天记录或本机选1~3个PDF/Word文件传入，等它提示"解析完成"；④在库里提问，比如针对一份合同问"付款周期是多久"，核对答案下方引用的原文段落是否对得上。电脑党可换AnythingLLM：官网下载桌面版→选内置模型→把文件夹拖进工作区→提问。验证标准统一：<strong>答案必须带正确的原文引用</strong>。</p>
+
+<h2>政策/行业动态（上期之后新增）</h2>
+<ul>
+<li><strong>江苏省公布最新一批生成式AI服务备案信息</strong>：截至2026年10月30日，江苏新增2款已备案、25款已登记的生成式AI服务，累计备案112款、登记142款，并要求已上线应用在显著位置公示所用模型的名称和备案号。对普通人的意义：用AI产品时可以留意页面有没有备案号，相当于这个服务的"身份证"。（来源：江苏网信网，2026-10-30，https://www.jswx.gov.cn/fwhd/tzgg/202610/t20261030_1368905.shtml）</li>
+<li><strong>工信部等8部门印发《产业基础能力提升"十五五"规划》，提出培育"模型即服务、智能体即服务"新业态</strong>：意味着以后"租用AI能力"会像租水电一样普遍，个人和小团队不用自己养大模型也能搭应用。（来源：中国经济时报报道，2026-10-30，https://k.sina.com.cn/article_1749604875_6848da0b01901oe0o.html）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>AI知识｜M4-7 RAG 适用与不适用：哪些问题别指望知识库（7/32）。</p>
+
+<div class="rel">相关延伸：本期是M4-1~M4-5的"总装期"。搭完后如果答不准，排查顺序是：先看引用来源（检索问题）→再调切块大小→最后改提问方式。M4-7会讲哪些事根本不该交给知识库。</div>
+<div class="note">来源说明：①江苏省生成式AI服务备案信息公告——江苏网信网2026-10-30；②《产业基础能力提升"十五五"规划》相关报道——中国经济时报2026-10-30（经新浪财经转载）。文中工具操作步骤为一般性使用介绍，功能以各产品当前版本为准。</div>
+</body>
+</html>
