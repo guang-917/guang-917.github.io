@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CDGA 每日一练｜第 2 期 · 第3章 数据治理</title>
+<style>
+  :root{
+    --bg:#0c0f13; --panel:#161a21; --panel2:#1d222a; --line:#2a313b;
+    --fg:#e7eaf0; --fg2:#a9b2c0; --fg3:#78828f;
+    --accent:#6fd3a8; --warn:#f0b46b;
+  }
+  *{box-sizing:border-box;-webkit-text-size-adjust:100%}
+  body{
+    margin:0;padding:24px 16px 56px;background:var(--bg);color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.78;font-size:16px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .meta{font-size:13px;color:var(--fg3);letter-spacing:.04em;margin-bottom:10px}
+  h1{font-size:23px;line-height:1.42;margin:0 0 14px;font-weight:700;letter-spacing:-.01em}
+  h1 .no{color:var(--accent)}
+  .lead{color:var(--fg2);font-size:15px;margin:0 0 26px;padding:14px 16px;background:var(--panel);
+        border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
+  h2{font-size:18px;margin:38px 0 16px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:700}
+  h2 .cnt{font-size:13px;color:var(--fg3);font-weight:400;margin-left:8px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 14px}
+  .q .qn{font-size:12px;color:var(--accent);letter-spacing:.08em;margin-bottom:7px;font-weight:600}
+  .q .qt{font-size:16px;margin-bottom:11px;line-height:1.7}
+  .q ol{list-style:none;margin:0;padding:0}
+  .q li{position:relative;padding:5px 0 5px 30px;color:var(--fg2);font-size:15px}
+  .q li b{position:absolute;left:0;top:5px;width:21px;height:21px;line-height:21px;text-align:center;
+          border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--fg3);font-weight:600}
+  .a{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 18px;margin:0 0 13px}
+  .a .ah{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  .a .id{font-size:12px;color:var(--fg3);letter-spacing:.03em}
+  .a .ans{font-size:13px;font-weight:700;color:#0c0f13;background:var(--accent);border-radius:20px;padding:2px 12px}
+  .a .why{font-size:15px;color:var(--fg);margin:0 0 10px}
+  .a .trap{font-size:14px;color:var(--fg2);margin:0;padding-top:9px;border-top:1px dashed var(--line)}
+  .a .trap em{color:var(--warn);font-style:normal;font-weight:600}
+  .kp{background:linear-gradient(180deg,#1b2321,#161a21);border:1px solid #2f4a3f;border-radius:14px;
+      padding:18px 20px;font-size:17px;line-height:1.85}
+  .kp b{color:var(--accent)}
+  .next{background:var(--panel2);border-radius:12px;padding:14px 18px;font-size:15px;color:var(--fg2)}
+  .src{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--fg3);line-height:1.75}
+  .src b{color:var(--fg2);font-weight:600}
+  .disc{display:inline-block;font-size:12px;color:var(--warn);border:1px solid #4a3b23;border-radius:6px;padding:1px 7px;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="meta">2026-10-31 · CDGA 每日一练 · 距考试 39 天</div>
+  <h1><span class="no">第 2 期</span> · 第3章 数据治理（5 题）</h1>
+
+  <p class="lead">今天练第 3 章《数据治理》，共 5 题。<b>先自己做，答案在最后。</b>上午那张卡讲“数据制度与数据资产估值”，所以这 5 题里三道考“制度管什么、数据值多少钱”，最后一道回到本章最重的“组织”。</p>
+
+  <h2>一、先做题<span class="cnt">不看答案</span></h2>
+
+  <div class="q">
+    <div class="qn">第 1 题 · c3-049</div>
+    <div class="qt">数据只有在使用时才有价值，使用数据时还会产生风险管理相关的成本，以下数据资产估值的方式错误的是？</div>
+    <ol>
+      <li><b>A</b>替换成本</li>
+      <li><b>B</b>风险成本</li>
+      <li><b>C</b>市场估值</li>
+      <li><b>D</b>发现商机</li>
+    </ol>
+  </div>
+
+  <div class="q">
+    <div class="qn">第 2 题 · c3-045</div>
+    <div class="qt">数据及内容对于组织的成功、持续运营和管理至关重要，即它们不是为实现目标的临时手段，也不是业务的副产品，这是属于数据资产会计准则的哪一条原则？</div>
+    <ol>
+      <li><b>A</b>审计原则</li>
+      <li><b>B</b>持续经营原则</li>
+      <li><b>C</b>估值级别原则</li>
+      <li><b>D</b>责任原则</li>
+    </ol>
+  </div>
+
+  <div class="q">
+    <div class="qn">第 3 题 · c3-064</div>
+    <div class="qt">制定什么可以实现在组织内部共享词汇的一种方法。开发、记录标准数据定义，可以减少歧义混乱，提升沟通效率？</div>
+    <ol>
+      <li><b>A</b>数据资产估值</li>
+      <li><b>B</b>团队协作</li>
+      <li><b>C</b>数据标准和规程</li>
+      <li><b>D</b>业务术语表</li>
+    </ol>
+  </div>
+
+  <div class="q">
+    <div class="qn">第 4 题 · c3-050</div>
+    <div class="qt">一般由（　）起草数据标准，由数据治理办公室或授权工作组审查、批准和采用</div>
+    <ol>
+      <li><b>A</b>数据管理专员</li>
+      <li><b>B</b>业务管理专员</li>
+      <li><b>C</b>技术管理专员</li>
+      <li><b>D</b>数据拥有者</li>
+    </ol>
+  </div>
+
+  <div class="q">
+    <div class="qn">第 5 题 · c3-029</div>
+    <div class="qt">CDO 组织触点说明在首席数据官直接权力之外，支持企业数据治理和数据管理一致性和凝聚力的组织触点。以下不属于指定组织触点的选项是？</div>
+    <ol>
+      <li><b>A</b>采购和合同</li>
+      <li><b>B</b>预算和资金</li>
+      <li><b>C</b>遵从可持续发展</li>
+      <li><b>D</b>SDLC/开发框架</li>
+    </ol>
+  </div>
+
+  <h2>二、答案与解析</h2>
+
+  <div class="a">
+    <div class="ah"><span class="id">题号 c3-049</span><span class="ans">答案 C</span></div>
+    <p class="why"><b>为什么：</b>教材 p51 列出了衡量数据资产价值的其他办法，一共五种——替换成本、市场价值、识别商机、销售数据、风险成本。这四个选项里，A 替换成本、B 风险成本、D 发现商机都在册，只有 C 被写成“市场估值”。一字之差，不是原文表述，题库按原文判它错。</p>
+    <p class="trap"><b>陷阱：</b><em>A 替换成本</em>＝重新弄一份同样的数据要花多少钱，是正解之一；<em>B 风险成本</em>＝用错数据要赔的钱，也是正解之一；<em>D 发现商机</em>＝靠数据找到新生意，还是正解之一；<em>C 市场估值</em>只错在措辞——书上是“市场价值”。这类题考的是把名词背准。</p>
+  </div>
+
+  <div class="a">
+    <div class="ah"><span class="id">题号 c3-045</span><span class="ans">答案 B</span></div>
+    <p class="why"><b>为什么：</b>“持续经营”是会计里的老概念——先假设这家单位会一直开下去、不打算明天关门清仓，账才可以按长期来记。数据也是这样：它是长期支撑组织运转的资产，不是为某个项目临时凑的手段，也不是业务顺带掉下来的副产品，所以归<b>持续经营原则</b>。</p>
+    <p class="trap"><b>陷阱：</b><em>A 审计原则</em>管的是查账、能不能被核查；<em>C 估值级别原则</em>管按哪一层级去估；<em>D 责任原则</em>管谁对数据负责。三个都不是“长期存在、不是临时手段”这层意思，题干里的“持续运营”才是钩子。<br><span class="disc">题库只给页码 p52，底稿列了原则名未展开原文，答案以题库为准</span></p>
+  </div>
+
+  <div class="a">
+    <div class="ah"><span class="id">题号 c3-064</span><span class="ans">答案 D</span></div>
+    <p class="why"><b>为什么：</b>p62 的“制订业务术语表”给了四个目标：① 对核心概念有共同理解 ② 降低因理解不一致导致的数据误用风险 ③ 改进技术资产与业务组织之间的一致性 ④ 最大限度提高搜索能力并获得记录在案的组织知识。题干说的“共享词汇、记录标准数据定义、减少歧义”，就是这四条的大白话版。</p>
+    <p class="trap"><b>陷阱：</b><em>C 数据标准和规程</em>最容易骗人——它管的是“做什么、怎么做”的规则，是一本规矩，不是一本对词的词典；<em>A 数据资产估值</em>算的是钱；<em>B 团队协作</em>是手段，不是那个“被制定出来的东西”。</p>
+  </div>
+
+  <div class="a">
+    <div class="ah"><span class="id">题号 c3-050</span><span class="ans">答案 A</span></div>
+    <p class="why"><b>为什么：</b>p61“发起标准和规程”的链条是三步：数据管理（专业）人员起草 → 数据治理办公室（DGO）或授权工作组（如数据标准指导委员会）审查批准 → 全组织采用。选项里的“数据管理专员”就是这批执笔人。</p>
+    <p class="trap"><b>陷阱：</b><em>D 数据拥有者</em>是业务人员，握的是决策审批权，不执笔写标准；<em>B 业务管理专员</em>、<em>C 技术管理专员</em>只是 7 类专员里的两类，各管一摊；题干后半句已经写明“由 DGO 或授权工作组审查批准”，前半句就不可能也是审批方。</p>
+  </div>
+
+  <div class="a">
+    <div class="ah"><span class="id">题号 c3-029</span><span class="ans">答案 C</span></div>
+    <p class="why"><b>为什么：</b>p54 列的组织触点是：采购和合同、预算和资金、法规遵从性、开发框架（SDLC）。这四处的共同点是“流程关口”——钱、合同、合规、开发框架，都能在事情刚开始时把数据要求塞进去，所以叫 CDO 伸出去的手。</p>
+    <p class="trap"><b>陷阱：</b><em>C 遵从可持续发展</em>把“法规遵从性”换成了“可持续发展”，字面很像却不在清单里；<em>A 采购和合同</em>、<em>B 预算和资金</em>、<em>D SDLC/开发框架</em>都是原文列的触点。组织这块在本章 65 题里出现 18 次，是最重的考点。</p>
+  </div>
+
+  <h2>三、今天记住这一句</h2>
+  <div class="kp">
+    估值五法：<b>换、市、机、卖、险</b>——替换成本、市场价值、发现商机、销售数据、风险成本。<br>
+    三句话分家：制度说<b>做什么</b>，标准说<b>怎么做</b>，术语表管<b>叫什么</b>。
+  </div>
+
+  <h2>四、明天练什么</h2>
+  <div class="next">第 3 章最后一张（5/共5）讲活动四阶段和工具度量，明天这 5 题就练 P/D/C/O 四组活动、准备情况评估那 3 项、以及度量指标 4 组——都是“条数题”的集中地。</div>
+
+  <p class="src"><b>来源说明：</b>5 道题全部取自 cdga_pool.json 第 3 章（该章共 65 题），题干与选项按原文照录，仅去掉了 PDF 抽取时插进词与词之间的多余空格；答案以题库为准。解析中标注 p51／p54／p61／p62 的，对应教材《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》页码，内容出自 cdga_notes.md 第 3 章底稿；c3-045 涉及的会计准则原文底稿尚未展开，已在该题内单独标注。</p>
+
+</div>
+</body>
+</html>
