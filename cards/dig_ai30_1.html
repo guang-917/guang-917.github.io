@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：资料在库里，AI 还是答错，先查哪里？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">下钻问答 · 来自 M4-7｜7/32</div>
+<h1>资料在库里，AI 还是答错，先查哪里？</h1>
+<p>排查顺序固定，从便宜到贵，别上来就换模型、调参数——那是最后一步。</p>
+<h2>第一步：先看它引用了什么</h2>
+<p>大多数知识库工具能显示"这次检索命中了哪几段"。先看命中片段里有没有答案。命中片段对 → 是生成端的问题（提示词让它"只按资料答"、或模型太弱）；命中片段错 → 是检索问题，进第二步。</p>
+<h2>第二步：改提问，别急着改库</h2>
+<p>你的问法可能跟资料用词对不上。资料写"离职交接"，你问"辞职怎么办"，语义身份证对不上号。把问题改回资料里的原词再试一次，命中率往往立刻回升。</p>
+<h2>第三步：查切块与过滤</h2>
+<p>答案横跨两段被切开的文字，是最常见的漏检原因。缓解办法：把切块调大一点（比如从 300 字调到 500–800 字），或让每个切块多带一点上下文重叠。另外检查是不是加了"只搜某文件夹/某标签"的过滤条件，把答案所在文件排除在外了。</p>
+<h2>第四步：问对了题型吗</h2>
+<p>如果问题是算数、跨多份文件汇总、比较推理——这不是检索能救的，M4-7 正文说过：答案拼不起来，硬问就是逼它编。该拆成几个小问题分别问，或换普通对话直接把原文贴给它。</p>
+<blockquote>记忆口诀：先看引用 → 再改问法 → 后调切块 → 最后才怀疑工具本身。90% 的"答不准"死在前两步。</blockquote>
+<div class="note">本页为 M4-7 的下钻补充，操作以所用工具（如 AnythingLLM、Cherry Studio、ima）当前版本功能为准。</div>
+</body>
+</html>
