@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>数据到底值多少钱 · 五种估值法</title>
+<style>
+  :root{
+    --bg:#0c0f13; --panel:#161a21; --line:#2a313b;
+    --fg:#e7eaf0; --fg2:#a9b2c0; --fg3:#78828f;
+    --accent:#6fd3a8; --warn:#f0b46b;
+  }
+  *{box-sizing:border-box;-webkit-text-size-adjust:100%}
+  body{
+    margin:0;padding:24px 16px 56px;background:var(--bg);color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.8;font-size:16px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .meta{font-size:13px;color:var(--fg3);letter-spacing:.04em;margin-bottom:10px}
+  h1{font-size:22px;line-height:1.45;margin:0 0 16px;font-weight:700}
+  h1 .no{color:var(--accent)}
+  .lead{color:var(--fg2);font-size:15px;margin:0 0 24px;padding:14px 16px;background:var(--panel);
+        border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
+  h2{font-size:17px;margin:32px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);font-weight:700}
+  .item{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px 17px;margin:0 0 11px}
+  .item .t{font-size:16px;font-weight:700;color:var(--accent);margin-bottom:5px}
+  .item .d{font-size:15px;color:var(--fg2);margin:0}
+  .item .d b{color:var(--fg);font-weight:600}
+  .kp{background:linear-gradient(180deg,#1b2321,#161a21);border:1px solid #2f4a3f;border-radius:14px;
+      padding:16px 19px;font-size:17px;line-height:1.85;margin-top:16px}
+  .kp b{color:var(--accent)}
+  ul{padding-left:20px;margin:0;color:var(--fg2);font-size:15px}
+  ul li{margin-bottom:9px}
+  ul li b{color:var(--fg)}
+  .src{margin-top:30px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--fg3);line-height:1.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="meta">2026-10-31 · CDGA 每日一练 · 第 2 期·下钻</div>
+  <h1><span class="no">下钻</span> 数据到底值多少钱？五种估值法一次分清</h1>
+
+  <p class="lead">教材 p51 有句话很关键：数据<b>只有被使用时才产生价值</b>，而使用的同时也会带来风险管理成本。所以“给数据估值”不是算这块硬盘值几百块，而是算这堆数据<b>对这个组织值多少</b>。</p>
+
+  <h2>五种算法，用一辆旧货车来打比方</h2>
+
+  <div class="item">
+    <div class="t">1. 替换成本</div>
+    <p class="d"><b>重新弄一份一模一样的数据，要花多少钱。</b>好比车被偷了，你要买一辆同配置的车，得掏多少钱——这就是它对你的价值下限。</p>
+  </div>
+
+  <div class="item">
+    <div class="t">2. 市场价值</div>
+    <p class="d"><b>别人在市场上买卖这类数据，大概是什么价。</b>好比二手车市场的行情价。注意：书上原文是“市场<b>价值</b>”，不是“市场估值”，一字之差就是错项（本期第 1 题就考这个）。</p>
+  </div>
+
+  <div class="item">
+    <div class="t">3. 发现商机（识别商机）</div>
+    <p class="d"><b>靠这批数据找到新生意、多赚回来的钱。</b>好比用行车记录发现一条更省油的路，省下的油钱就是它创造的价值。题干里出现“通过交易数据发现商机获得的收入”，就是它。</p>
+  </div>
+
+  <div class="item">
+    <div class="t">4. 销售数据</div>
+    <p class="d"><b>把数据本身卖出去换来的钱。</b>好比把车租出去收租金。数据能对外卖，本身就是一个可计量的价值口子。</p>
+  </div>
+
+  <div class="item">
+    <div class="t">5. 风险成本</div>
+    <p class="d"><b>没有这批数据、或者数据错了，要赔多少。</b>好比没买保险出了事自己掏的钱。书上还给了它四个来源：缺了该有的数据、多了不该有的数据、错数据造成客户／财产／声誉损失、以及风险被降低后省下的那部分。</p>
+  </div>
+
+  <h2>考场上就这三种问法</h2>
+  <ul>
+    <li><b>归属题：</b>给你一个场景，问属于五种里的哪一种。抓关键词——“重新做一份”找替换成本，“找到新生意”找发现商机，“卖给外面”找销售数据。</li>
+    <li><b>反向题：</b>问“以下哪个不是”。这类基本靠背准原文名词，措辞偏一点都不算。</li>
+    <li><b>数量题：</b>就是五种，不多不少。多选题里凑第六个（比如“买入数据”）就是陷阱。</li>
+  </ul>
+
+  <div class="kp">背这五个字就够：<b>换、市、机、卖、险</b>——替换成本、市场价值、发现商机、销售数据、风险成本。</div>
+
+  <p class="src"><b>来源：</b>教材《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》p50–p51；本章底稿 3.9 节。题库对应题号 c3-011、c3-024、c3-049。</p>
+
+</div>
+</body>
+</html>
