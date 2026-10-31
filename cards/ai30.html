@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-7 RAG 适用与不适用：哪些问题别指望知识库｜7/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月1日 · AI 知识</div>
+<h1>AI知识｜M4-7 RAG 适用与不适用：哪些问题别指望知识库｜7/32</h1>
+<div class="lead">搭好知识库后最容易踩的坑，是把它当"什么都会的顾问"。今天讲清它真正的分工：哪类问题它稳赢，哪类问题它必翻车，省下你反复调参白花的功夫。</div>
+
+<h2>一句话结论</h2>
+<p>知识库（RAG）的本质是"帮你翻资料"。它只擅长一种问题：<strong>答案就在你的资料里，只是难找</strong>。答案不在资料里的问题，它要么一本正经地编，要么答非所问——这不是它坏了，是问错了题型。</p>
+
+<h2>是什么：它其实是个"图书馆管理员"</h2>
+<p>生活比方：知识库像一个<strong>只认文字的图书馆管理员</strong>。他能飞快地告诉你"哪本书哪一页写了退货政策"，但他不会替你算账，更不会替你拿主意。你问"书里哪页写了退货政策"，他秒答；你问"你觉得我该不该退货"，他只能翻几页凑合说——凑不齐就开始编。</p>
+
+<h2>为什么重要：三道门槛，问前先过一遍</h2>
+<table>
+<tr><th>门槛</th><th>判断</th><th>例子</th></tr>
+<tr><td>① 答案在资料里吗</td><td>在→适合；不在→别用</td><td>"我的报销标准是多少"✅；"今年该投什么"❌</td></tr>
+<tr><td>② 要算数或跨文件推理吗</td><td>要→不适合</td><td>"3份合同加起来的总责任上限"❌</td></tr>
+<tr><td>③ 是事实还是判断</td><td>事实→适合；判断→不适合</td><td>"条款原文是什么"✅；"我该选哪个方案"❌</td></tr>
+</table>
+<p>最容易翻车的是<strong>"半在半不在"</strong>：资料里只有零散片段，问题却要拼起来理解。检索工具把几段不相干的片段各找一点回来，模型把它们硬拼成一个看似通顺的答案——这是知识库答错的主要原因，而且错得理直气壮。</p>
+<p>真实案例：加拿大航空（Air Canada）官网客服机器人对"亲人去世能否事后申请丧亲票价减免"给出了错误拼接的答复，乘客据此索赔被拒后申请仲裁。2024年2月，加拿大不列颠哥伦比亚省民事仲裁庭裁定：公司要为自家机器人说的话负责，照机器人答复赔偿约650加元（案件 Moffatt v. Air Canada）。这就是"半在半不在"的资料 + 管理员硬拼的典型后果。</p>
+
+<h2>怎么用：3 步给问题"过安检"</h2>
+<ol>
+<li><strong>先定型</strong>：问自己一句——这个答案能不能用手指在资料里指出来？指不出来就别丢给知识库。</li>
+<li><strong>拆问题</strong>：需要比较、汇总、算数的，拆成几个"能指出原文"的小问题，分别问，自己再拼结论。</li>
+<li><strong>留一句兜底</strong>：提问时加一句"只根据资料回答，资料里没有就直说没有"，让管理员宁可说不知道，不许编。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>打开你上期搭的知识库，做一次"翻车测试"：先问一个<strong>资料里有的问题</strong>（如你的某条笔记原文），再问一个<strong>资料里没有的</strong>（如"下周该做什么计划"）。观察第二问它是否硬答——如果它编了，说明你没加兜底指令，现在就把"只根据资料回答，没有就说没有"写进默认提问模板。前后两种表现你亲眼各看一遍，比看十篇教程都记得牢。</p>
+
+<h2>政策/行业动态（上期之后新增）</h2>
+<ul>
+<li>国务院办公厅印发《关于适应人工智能技术发展助力构建就业友好型发展方式的意见》（国办发〔2026〕29号，2026年10月23日公开发布），部署6个方面18项任务，提出建立人工智能应用就业风险评估机制、对可能造成较大就业冲击的AI应用场景项目在评审时同步开展就业风险评估。对普通人的意义：政策明确"稳慎"在劳动密集型行业推AI，企业大规模上AI前要提前告知并提供转岗支持，受影响的劳动者可关注失业缓冲与转岗培训等配套措施。（来源：中国政府网，2026-10-23，https://www.gov.cn/zhengce/content/202610/content_7084107.htm；新华社/光明日报报道，2026-10-24）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>AI知识｜M4-8 权限与隐私：知识库别变成"谁都能翻的抽屉"（8/32）。</p>
+
+<div class="rel">相关延伸：本期是M4模块的"收尾判断题"。前面M4-1~M4-6解决"怎么搭"，今天解决"什么该搭"。适合的知识库场景是"答案可指出原文"（制度、笔记、手册、聊天记录）；不适合的留给下一期讲隐私边界时一并收束。</div>
+<div class="note">来源说明：①Moffatt v. Air Canada，加拿大不列颠哥伦比亚省民事仲裁庭裁决，2024年2月（本案经加拿大广播公司CBC等媒体广泛报道，赔偿金额约650.88加元）；②《国务院办公厅关于适应人工智能技术发展助力构建就业友好型发展方式的意见》——中国政府网2026-10-23发布，国办发〔2026〕29号，新华社2026-10-23电讯交叉印证。工具操作步骤为一般性使用介绍，以各产品当前版本为准。</div>
+</body>
+</html>
