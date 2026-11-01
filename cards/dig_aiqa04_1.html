@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：为什么知识库有时一本正经地胡说八道？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月2日 · AI 知识问答 · 下钻</div>
+<h1>为什么知识库有时一本正经地胡说八道？</h1>
+<div class="lead">明明配了知识库，AI 还会瞎编？问题往往不在模型，而在"翻资料"这一步。本期下钻 RAG 的适用边界（M4-7）和检索环节的三个翻车点。</div>
+
+<h2>先分清两种"胡说"</h2>
+<p>第一种：资料里根本没有答案，模型却硬答——这属于 RAG 的适用边界问题。知识库只擅长"资料里写清楚、答案能整段搬出来"的事实型问题（M4-7）；让它做主观判断、算精确数字、总结资料没写的推断，翻不到料它就容易顺着话头编。第二种：资料里有答案，但没翻到——这才是检索环节的问题，下面三个翻车点最常见。</p>
+
+<h2>检索环节的三个翻车点</h2>
+<ul>
+<li><b>翻错卡（检索不准）</b>：专有名词、编号靠向量检索抓不住（M4-5），语义相近的闲聊反而排前面。解法是改混合检索+重排，AnythingLLM/Dify 里就能一键改。</li>
+<li><b>卡片切坏了（粒度不对）</b>：一段混多个话题，向量被平均得谁都不像；或切得太碎、没留重叠，关键句只剩半句（M4-3）。</li>
+<li><b>翻到了却没用上（生成跑偏）</b>：给模型的资料太少或没在提示词里强调"只根据资料回答"，模型就用自己的记忆补——即使资料已拼接进去也会偏（M4-2）。</li>
+</ul>
+
+<h2>一条自查口诀</h2>
+<blockquote>先看资料里有没有答案（边界）→ 再看翻到没有（检索）→ 最后看它照没照着答（生成）。三步顺序排查，多数"胡说"都能定位到具体一环。</blockquote>
+
+<div class="rel">相关延伸：M4-5 混合检索与重排、M4-7 RAG 适用与不适用（均已推送）。</div>
+<div class="note">依据本系列 M4-2/4-3/4-5/4-7 卡片内容整理；RAG 概念出处为 Lewis 等 2020 年 NeurIPS 论文（Meta AI）。个别工具设置项以你所用软件的实际界面为准，建议进一步核实。</div>
+</body>
+</html>
