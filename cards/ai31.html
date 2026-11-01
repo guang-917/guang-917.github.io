@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-8 权限与隐私：给你的知识库上把"门锁"，别让AI变成泄密口｜8/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月2日 · AI 知识</div>
+<h1>AI知识｜M4-8 权限与隐私：给你的知识库上把"门锁"，别让AI变成泄密口｜8/32</h1>
+<div class="lead">知识库让AI"只回答你的资料"很爽，但等于把你的笔记、合同、聊天记录搬进了一个新房间——这个房间谁有钥匙、钥匙能给谁，就是本期要讲的"权限与隐私"，也是模块4的收官。</div>
+
+<h2>一句话结论</h2>
+<p>权限与隐私解决的问题是：<strong>让你能控制"谁能看到哪些数据"，而不是把全部身家一股脑交给一个软件。</strong>前七期你把资料喂给了知识库，今天教你把门锁好。</p>
+
+<h2>讲透：是什么 → 为什么重要 → 怎么用</h2>
+<h3>1. 是什么</h3>
+<p>权限管理回答"谁能访问什么"：谁能读、谁能改、谁能删。隐私保护回答"哪些数据不该离开你的控制"：身份证号、银行卡号、合同金额、聊天记录、他人的私人信息。对个人知识库来说，核心是三件事——<strong>数据放哪、谁能看到、出事了能不能删干净</strong>。</p>
+<h3>2. 为什么重要</h3>
+<p>你搭知识库时喂进去的，往往是全网最全的"你的档案"：病历、合同、家庭开支、工作机密。一旦这些被第三方服务器存了一份、拿去训练了模型、或被别人看到，就收不回来了。这不是吓唬人——中国现行法规对此有明确要求：</p>
+<blockquote>《生成式人工智能服务管理暂行办法》第11条：服务提供者"不得收集非必要个人信息，不得非法留存能够识别使用者身份的输入信息和使用记录，不得非法向他人提供使用者的输入信息和使用记录"。（国家网信办等七部门令第15号，自2023年8月15日起施行）</blockquote>
+<p>也就是说，法律给AI服务商划了线；但线内的"你自己决定喂什么"，责任在你。另外，《个人信息保护法》（2021年11月1日施行）赋予你查阅、更正、删除个人信息的权利——换到知识库场景，就是你得知道自己的数据存哪、怎么删。</p>
+<h3>3. 怎么用（三步）</h3>
+<p><strong>第一步：选对存放位置。</strong>数据敏感性越高，越往本地放。优先级：完全本地（如 Obsidian + 本地向量库、Ollama 本地模型）＞ 私有云/自己租的服务器 ＞ 公有云服务。纯个人日记类，能本地的就别上传。</p>
+<p><strong>第二步：入库前脱敏。</strong>把身份证号写成"身份证号：[已隐]"，具体金额写成"约X万元"，他人姓名用代号。检索靠的是"语义像不像"，不是精确号码，脱敏几乎不影响查找效果。</p>
+<p><strong>第三步：配权限、留退路。</strong>如果是团队知识库，给文档分组：公开、内部、机密，机密组默认不进检索范围；同时确认服务商有"删除"入口——找不到删除入口的服务，慎用。</p>
+<h3>生活比方</h3>
+<p>知识库就像把家里东西搬进寄存仓库：公有云AI是大仓库——方便、便宜，但柜子钥匙在仓库老板手里；本地知识库是你家书房——小一点，钥匙全在你兜里。身份证、房本这类东西，你会寄存在别人仓库吗？同理，别把最敏感的内容交给"传上去就存在别人服务器里"的服务。</p>
+
+<h2>今天就能用</h2>
+<p>花10分钟做一次"知识库安检"：打开你的AI应用/知识库设置，找到"数据与隐私"（或"数据管理"）页面，依次确认三件事——①我上传的数据会不会被用于模型训练（找"Improving the model/用于改进服务"开关，能关就关）；②有没有"删除会话/删除数据"功能，试着删一条旧对话并确认它真的消失；③回忆本月喂进去的最敏感一条内容，判断按今天的三步法它是否该放这。三个问题各花3分钟，做不完就先关掉"用于训练"那个开关。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>网络安全法完成大修，AI治理需求入法。</strong>2025年10月28日，十四届全国人大常委会第十八次会议表决通过关于修改网络安全法的决定，这部施行8年多的基础性法律迎来修改，回应人工智能发展和治理的新需求。对普通人意味着：AI服务的合规底线被写进了更上位的法律，服务商处理你数据的义务更明确。来源：人民日报客户端文章《"互联网这一关必须要过"》（2026-11-01），https://www.peopleapp.com/column/30053463738-500007766537</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>AI知识｜M5-1 Agent 是什么：AI从"会聊天"到"会干活"的分水岭｜9/32</strong>。模块4到此收官，下一模块讲智能体。</p>
+
+<div class="rel">相关延伸：本期是 RAG 模块（M4）最后一课。想回顾知识库怎么搭，见 M4-6《从零搭个人知识库》；想回顾哪些事不该交给知识库，见 M4-7《RAG 适用与不适用》。下一模块 M5 讲智能体，M5-7 还会再谈权限与安全边界，本期是它的铺垫。</div>
+<div class="note">来源说明：①《生成式人工智能服务管理暂行办法》第11条及施行日期，见中国政府网（gov.cn，令第15号，2023-07-10发布）：https://www.gov.cn/zhengce/zhengceku/202307/content_6891752.htm；②《个人信息保护法》施行日期（2021-11-01），见中国人大网公开法律文本；③网安法修改决定通过日期（2025-10-28）来源：人民日报客户端，2026-11-01刊文。本文为一般性介绍，不构成法律意见；涉及具体合规问题请咨询专业人士。</div>
+</body>
+</html>
