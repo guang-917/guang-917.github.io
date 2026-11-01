@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识问答｜第3期｜覆盖 M4-1~M4-7</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0}
+summary{cursor:pointer;color:var(--accent2);font-size:14px}
+</style>
+</head>
+<body>
+<div class="meta">11月2日 · AI 知识问答</div>
+<h1>AI知识问答｜第3期｜覆盖 M4-1~M4-7</h1>
+<div class="lead">本期只考最近两周推过的 RAG 知识库七讲：从给文字发"语义身份证"（Embedding），到切块、向量柜、混合检索、五块积木拼知识库，再到"哪些问题别指望知识库"。3 道题，写完直接发我，我来批改。</div>
+
+<h2>第1题 · 选择题</h2>
+<p>你问知识库："Q3 报销制度 GB-07 条款具体说了什么？"答案却扯到一篇泛泛谈报销的文章。最对症的解决办法是？</p>
+<ul>
+<li>A. 换一个参数更大的大模型</li>
+<li>B. 把检索方式改成混合检索（关键词+向量），必要时加重排</li>
+<li>C. 把所有文档切成更小的块</li>
+<li>D. 把文档重新训练进模型里</li>
+</ul>
+<details><summary>查看答案与解析</summary>
+<p><b>答案：B。</b>专有名词、编号这类精确词是向量检索的盲区（M4-5），关键词检索正好抓得准；两路并用再加重排，是最对症的解法。</p>
+<p>干扰项：A 治不了"资料没找对"——模型再大，翻不到资料也白搭（那是 M4-2 的流程问题）；C 切块只解决"粒度"问题（M4-3），跟"编号抓不准"不是一回事；D 是老思路，RAG 的价值恰恰是不用重新训练、随时换资料（M4-2）。</p>
+</details>
+
+<h2>第2题 · 简答题</h2>
+<p>用你自己的话解释：为什么长文档入库前要先"切块"？切得太大和切得太小分别会出什么问题？（提示：想想图书馆编卡片的比方）</p>
+<details><summary>参考答案要点</summary>
+<ul>
+<li>切块=检索粒度：Embedding 和检索都以"段"为单位，粒度决定 AI 翻到的资料长什么样（M4-3）。</li>
+<li>切太大：一段混多个话题，向量被"平均"得谁都不像，哪个都查不准。</li>
+<li>切太小：上下文被切断，找到的句子看不懂——所以要留 10%～20% 重叠，缝里的信息丢不了。</li>
+</ul>
+</details>
+
+<h2>第3题 · 场景实战题</h2>
+<p>任务：用 RAG 思路给你自己的资料库做个"私人问答机"。挑一类你常查的资料（比如公司通知、课程笔记、聊天记录），把它整理成 AI 能查的知识库，并向它提 2 个问题验证效果。</p>
+<details><summary>达标标准（3 条）</summary>
+<ul>
+<li>① 资料经过整理切块后入库（有工具自动做切块+Embedding 也算，如 ima / AnythingLLM / Cherry Studio），而不是整篇扔进去。</li>
+<li>② 至少有 1 次回答附了出处（能说出答案来自哪篇文档），体现"先翻资料再回答"（M4-2）。</li>
+<li>③ 做过一次"考倒它"的实验：问一个资料里没有的问题，确认它会答不上或承认不知道，而不是瞎编（对应 M4-7 的适用边界）。</li>
+</ul>
+</details>
+
+<div class="rel">相关延伸：本系列全部 7 讲见 <a style="color:var(--accent2)" href="https://guang-917.github.io/">首页卡片流</a>；下钻问题《为什么知识库有时一本正经地胡说八道？》见 <a style="color:var(--accent2)" href="https://guang-917.github.io/cards/dig_aiqa03_1.html">dig_aiqa03_1</a>。</div>
+<div class="note">出题范围与参考答案依据 2026-10-26 至 2026-11-01 推送的 M4-1~M4-7 七张卡片（feed.json 可查）。论文出处：Embedding 思路源自 Mikolov 等 2013 word2vec（Google）；RAG 概念源自 Lewis 等 2020 NeurIPS（Meta）；RRF 融合源自 Cormack 等 2009；HNSW 源自 Malkov &amp; Yashunin 2018。批改方式：把答案发到对话里即可。</div>
+</body>
+</html>
