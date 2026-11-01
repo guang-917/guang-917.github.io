@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA 每日一练 · 第 3 期 · 第3章 数据治理</title>
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1d212a;
+  --line:#2a2f3a; --txt:#e8ebf0; --dim:#9aa3b2;
+  --acc:#ffb84d; --ok:#4dd6a8; --bad:#ff7a7a;
+}
+*{box-sizing:border-box;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font:16px/1.85 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  padding:22px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+.meta{font-size:13px;color:var(--dim);letter-spacing:.3px;margin-bottom:10px}
+.meta i{font-style:normal;color:var(--acc)}
+h1{font-size:23px;line-height:1.5;margin:6px 0 14px;font-weight:700}
+.lead{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);
+  border-radius:10px;padding:13px 15px;color:#d7dce5;font-size:15px;margin-bottom:24px}
+h2{font-size:18px;margin:30px 0 13px;padding-bottom:8px;border-bottom:1px solid var(--line);font-weight:700}
+.q{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 15px 11px;margin-bottom:12px}
+.qh{display:flex;gap:10px;align-items:flex-start}
+.num{flex:0 0 26px;height:26px;border-radius:8px;background:var(--panel2);color:var(--acc);
+  font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:3px}
+.qt{font-size:15.5px;font-weight:600;line-height:1.75}
+ul.opts{list-style:none;margin:9px 0 2px;padding:0 0 0 36px}
+ul.opts li{padding:4px 0;color:#cdd3de;font-size:15px}
+.a{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-bottom:12px}
+.atop{font-size:14px;font-weight:700;color:var(--ok);letter-spacing:.3px}
+.ans{display:inline-block;background:rgba(77,214,168,.14);color:var(--ok);
+  border-radius:6px;padding:1px 9px;margin-left:8px;font-size:14px}
+.lbl{color:var(--acc);font-weight:700}
+.a p{margin:7px 0 0;font-size:14.8px;color:#d7dce5}
+.trap .lbl{color:var(--bad)}
+.key{background:linear-gradient(180deg,#1d212a,#191d25);border:1px solid #3a3222;
+  border-radius:12px;padding:15px 17px;font-size:15.5px;line-height:1.9;color:#ffe6b8}
+.next{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;font-size:14.8px;color:#d7dce5}
+.src{margin-top:26px;padding-top:13px;border-top:1px solid var(--line);font-size:12.5px;color:#7f8797;line-height:1.9}
+.tag{display:inline-block;font-size:12px;color:var(--dim);border:1px solid var(--line);
+  border-radius:20px;padding:1px 9px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="meta">2026-11-01 · CDGA 每日一练 · 距考试 <i>38</i> 天</div>
+<h1>CDGA 每日一练｜第 3 期<br>第3章 数据治理（5 题）</h1>
+
+<div class="lead">
+今天练第 3 章《数据治理》，共 5 题。<b>先自己做，答案在最后。</b><br>
+这 5 题专挑最容易混的一条线：一边是「活动」（要做什么事），一边是「度量指标」（拿什么量）。
+</div>
+
+<h2>一、题目（5 题）</h2>
+
+<div class="q">
+  <div class="qh"><div class="num">1</div><div class="qt">数据治理的工具和方法繁多，以下哪项属于其中之一？</div></div>
+  <ul class="opts">
+    <li>A. 数据治理规则卡</li>
+    <li>B. 工作流程图</li>
+    <li>C. 数据治理计分卡</li>
+    <li>D. 数据治理指南</li>
+  </ul>
+</div>
+
+<div class="q">
+  <div class="qh"><div class="num">2</div><div class="qt">在数据治理的度量指标中，关于有效性的描述错误的是？</div></div>
+  <ul class="opts">
+    <li>A. 目标的实现</li>
+    <li>B. 沟通的有效性</li>
+    <li>C. 数据管理专员正在使用的工具没有扩展</li>
+    <li>D. 培训的有效性</li>
+  </ul>
+</div>
+
+<div class="q">
+  <div class="qh"><div class="num">3</div><div class="qt">数据治理与管理职责的活动不包括哪项？</div></div>
+  <ul class="opts">
+    <li>A. 实施数据治理</li>
+    <li>B. 嵌入数据治理</li>
+    <li>C. 遵从法规和规范</li>
+    <li>D. 执行就绪评估</li>
+  </ul>
+</div>
+
+<div class="q">
+  <div class="qh"><div class="num">4</div><div class="qt">数据治理的开始工作不包括（）</div></div>
+  <ul class="opts">
+    <li>A. 协作准备情况</li>
+    <li>B. 数据管理成熟度评估</li>
+    <li>C. SDLC/开发框架</li>
+    <li>D. 数据库选型</li>
+  </ul>
+</div>
+
+<div class="q">
+  <div class="qh"><div class="num">5</div><div class="qt">在构建组织的运营模型时需要考虑</div></div>
+  <ul class="opts">
+    <li>A. 数据对组织的价值</li>
+    <li>B. 业务模式</li>
+    <li>C. 文化因素</li>
+    <li>D. 以上都需要考虑</li>
+  </ul>
+</div>
+
+<h2>二、答案与解析</h2>
+
+<div class="a">
+  <div class="atop">题号 c3-019<span class="ans">答案 C</span></div>
+  <p><span class="lbl">为什么：</span>题库只给了章节位「DMBOK 2-3.3 工具和方法」，按底稿 3.11（教材 p43 图 3-1）展开：<b>工具</b>＝网站、业务词汇表工具、工作流工具、文档管理工具、<b>数据治理计分卡</b>；<b>方法</b>＝简洁的消息传递、联系人列表、徽标。计分卡就是把四组指标汇成一张表、拿去给治理委员会看的体检单。</p>
+  <p class="trap"><span class="lbl">陷阱：</span>A 规则卡——清单里没这东西；B 工作流程图——清单里的正式名是"工作流工具"；D 指南——是文档资料，不算工具。</p>
+</div>
+
+<div class="a">
+  <div class="atop">题号 c3-001<span class="ans">答案 C</span></div>
+  <p><span class="lbl">为什么：</span>题库同样只给「DMBOK 2-3.5 度量指标」，按底稿 3.11 记：<b>有效性五项</b>＝目标的实现、<b>扩展</b>专员正在使用的相关工具、沟通的有效性、培训的有效性、采纳变革的速度。C 把"扩展"翻成"没有扩展"，正好反着说，所以它就是"错误的是"。</p>
+  <p class="trap"><span class="lbl">陷阱：</span>A/B/D 全照原话抄，不可能错；反向题只在正确表述里塞一个"没有""不是"，读题先圈否定词。</p>
+</div>
+
+<div class="a">
+  <div class="atop">题号 c3-008<span class="ans">答案 C</span></div>
+  <p><span class="lbl">为什么：</span>题库给「DMBOK 2-3.2 活动」。底稿 3.10 的四组活动是：① 定义数据治理策略 ② 定义数据治理组织 ③ 实施数据治理 ④ 嵌入数据治理。A 是第三组、B 是第四组，D「执行就绪评估」就是准备情况评估，属第一组里的一步。</p>
+  <p class="trap"><span class="lbl">陷阱：</span>C 其实是<b>度量指标第一条</b>（遵守监管和内部数据制度）——量结果的尺子，不是活儿。活动里只有"评估监管合规性要求"，那是去查合规，不是遵从。</p>
+</div>
+
+<div class="a">
+  <div class="atop">题号 c3-062<span class="ans">答案 D</span></div>
+  <p><span class="lbl">为什么：</span>题库给「P53–P55 数据治理活动」。按底稿 3.10，准备情况评估是三项：<b>数据管理成熟度</b>（现在什么水平）、<b>变革能力</b>（人愿不愿改）、<b>协作准备度</b>（部门能不能一起干）；接着找<b>组织触点</b>，示例含采购合同、预算资金、法规遵从性、开发框架（SDLC）。A/B/C 都在里面。</p>
+  <p class="trap"><span class="lbl">陷阱：</span>D 数据库选型是技术实施。治理开局要弄清"能不能干、愿不愿干、在哪下手"，还没到挑库这步。</p>
+</div>
+
+<div class="a">
+  <div class="atop">题号 c3-026<span class="ans">答案 D</span></div>
+  <p><span class="lbl">为什么：</span>题库只标「P55」。按底稿 3.10「定义运营框架」要考量四件事：<b>数据对组织的价值</b>、<b>业务模式</b>（分散还是集中、本地化还是国际化）、<b>文化因素</b>、<b>监管影响</b>。三项都在清单上，所以选"以上都需要"。这题踩的正是本章最重的组织与角色。</p>
+  <p class="trap"><span class="lbl">陷阱：</span>A/B/C 各只说四件事里的一件；见"以上都需要"先数清单齐不齐，齐了就选它。</p>
+</div>
+
+<h2>三、今天记住这一句</h2>
+<div class="key">
+「活动管<b>做什么</b>：定义策略 → 定义组织 → 实施 → 嵌入；指标管<b>量得怎么样</b>：合规、价值、有效性、可持续。<br>
+看到「遵从法规和规范」，那是尺子，不是动作。」
+</div>
+
+<h2>四、明天练什么</h2>
+<div class="next">
+明天早上 9:00 若出第 4 章《数据架构》的教材卡，晚上就跟第 4 章；若第 4 章底稿还没就绪、教材卡停推，就按分值权重从第 5 章《数据建模和设计》（10 分）起练。
+</div>
+
+<div class="src">
+<div><span class="tag">题目来源</span>cdga_pool.json，题干与选项一字未改　<span class="tag">解析依据</span>题库 exp + cdga_notes.md 第 3 章底稿 3.10 / 3.11（教材 p43 图 3-1）</div>
+<div><span class="tag">说明</span>五题题库解析仅给章节位或页码，讲解按底稿补</div>
+</div>
+
+</div>
+</body>
+</html>
