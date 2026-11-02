@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-1 Agent 是什么：从“问答机”到“办事员”｜9/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月3日 · AI 知识</div>
+<h1>AI知识｜M5-1 Agent 是什么：从“问答机”到“办事员”｜9/32</h1>
+<div class="lead">从今天起进入模块5：智能体（Agent）。本期先解决最基础的问题——Agent和普通AI聊天到底差在哪？一句话：普通AI是问答机，Agent是办事员，它把“回答你”变成了“替你办”。</div>
+
+<h2>一句话结论</h2>
+<p>Agent解决的是“AI只会说、不会做”的问题：普通模型你问一句它答一句，答案对不对、事办没办，全靠你自己；Agent则接到一个任务后，自己拆步骤、自己动手、自己检查，直到把事办完。</p>
+
+<h2>讲透：Agent到底是什么</h2>
+<p><strong>是什么。</strong>Agent＝大模型当“大脑”＋一组工具当“手脚”＋一个循环当“工作习惯”。它的核心动作是一个不断重复的循环：</p>
+<ol>
+<li><strong>接活拆步骤</strong>：你说“帮我订下周三上午的会议室”，它先拆成“查日程→查空房间→提交预订”三步；</li>
+<li><strong>调工具执行</strong>：每一步去调用具体工具（查日历的接口、订房间的按钮）；</li>
+<li><strong>看结果</strong>：工具返回“该时段没空房”；</li>
+<li><strong>修正再来</strong>：它自动换到周四上午再试，而不是把“没订到”丢回给你。</li>
+</ol>
+<p><strong>为什么重要。</strong>上一轮我们讲的RAG，本质还是“答题前先查资料”——查完仍然是在<strong>回答你</strong>。Agent的区别是查完之后<strong>还要动手</strong>：写入文件、发出邮件、下单订票。这中间“拆步骤—执行—看结果—修正”的循环，全部由它自己完成，你只负责开头交代任务、结尾验收成果。</p>
+<blockquote>生活比方：普通AI像一位站在柜台后的咨询员——你问什么，他答什么，事情还是你自己去跑；Agent像你雇的办事员——你说“把这单退款办了”，他自己打电话、填表格、寄快递，中间卡壳了自己想办法，办完回来跟你汇报。</blockquote>
+<p><strong>怎么用（三步以内）。</strong></p>
+<ul>
+<li>第一步，<strong>给一个明确的任务</strong>，而不是一个问题：不说“帮我看看航班”，而说“查11月5日北京到上海下午的航班，把最便宜的两个整理成表格发我”。任务越像“交办”，Agent越好使；</li>
+<li>第二步，<strong>看它每一步用了什么工具</strong>。好的Agent产品会展示中间过程，你重点盯两处：它有没有越权（比如没经你同意就发消息）、拆的步骤对不对；</li>
+<li>第三步，<strong>验收结果而不是验收过程</strong>。它中间绕了弯路不用管，交付物（那份表格、那封邮件）对不对才是标准。</li>
+</ul>
+
+<h2>边界也讲清楚：什么时候别用Agent</h2>
+<p>两件事不需要Agent：<strong>一问一答的知识题</strong>（用普通对话就行，Agent反而多绕路、多花钱）；<strong>步骤完全固定的重复操作</strong>（写死的小脚本更稳定、更便宜）。Agent的用武之地是“步骤事先说不全、需要边干边判断”的活。</p>
+<table>
+<tr><th>对比</th><th>普通AI（问答机）</th><th>Agent（办事员）</th></tr>
+<tr><td>你给什么</td><td>一个问题</td><td>一个任务＋完成标准</td></tr>
+<tr><td>它做什么</td><td>给出回答</td><td>拆步骤、调工具、干到底</td></tr>
+<tr><td>卡壳了</td><td>答不上就答不上</td><td>自己换路子重试</td></tr>
+<tr><td>适合场景</td><td>解释、写作、查资料</td><td>多步骤、要动手的操作</td></tr>
+</table>
+
+<h2>今天就能用</h2>
+<p>做一个最小验证：打开一个支持Agent模式的产品（如能执行操作的AI助手），交办一个<strong>无风险、纯只读</strong>的任务——“在这份文件里找出所有提到‘验收’的段落，整理成带页码的清单”。然后盯两件事：①它拆了几步、每步干了什么；②最终交付物是否达标。跑通一次，你就亲手看清了“问答机”和“办事员”的差别。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>工信部首批AI安全类行业标准11月1日起实施</strong>。2026年7月工信部第18号公告批准《人工智能 安全治理 系统风险管理能力要求》（YD/T 7173-2026）等8项行业标准，2026年11月1日正式实施，其中明确要求AI研发应用主体建立“组织建设、流程管理、风险防护”三大能力。（来源：工信部人工智能标准化技术委员会/中国信通院，2026年7月发布，<a href="https://miittc1.caict.ac.cn/newsDetail/?id=118&amp;type=2">链接</a>）对普通人意味着：你用的AI产品背后，企业风控开始有国标可依。</li>
+<li><strong>腾讯称其智能体平台累计完成90亿次任务请求</strong>。10月29日腾讯全球数字生态大会上披露，其智能体平台上线以来累计完成90亿次任务请求，企业版覆盖50多个行业、中国企业500强中的50%。（来源：虎嗅APP 2026年11月2日报道，<a href="https://www.163.com/dy/article/LAP0ADBI051188EA.html">链接</a>）意味着Agent已从演示品进入日常办公量级。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M5-2 工具调用：Agent的“手”是怎么接上你的软件的</strong>——它凭什么能查日历、发邮件？10/32 见。</p>
+
+<div class="rel">相关延伸：上一模块的《M4-2 RAG 全流程》讲的是“答题前先查资料”，那是Agent“查”的动作来源；下期M5-2讲“做”的动作怎么实现。两者拼起来，就是Agent的完整手脚。</div>
+<div class="note">来源说明：①行业标准信息来自工信部人工智能标准化技术委员会（中国信通院官网）2026年7月发布，2026-11-01实施；②腾讯数据来自虎嗅APP 2026-11-02报道（转自腾讯全球数字生态大会披露），单一来源，未经第二来源交叉验证，数字请以官方披露为准。本期无其他新增可靠动态。</div>
+</body>
+</html>
