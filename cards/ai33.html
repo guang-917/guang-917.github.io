@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-2 工具调用：给会说话的AI发一套“工具箱”，让它真的能动手｜10/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月4日 · AI 知识</div>
+<h1>AI知识｜M5-2 工具调用：给会说话的AI发一套“工具箱”，让它真的能动手｜10/32</h1>
+<div class="lead">昨天说了Agent是“办事员”，但办事员空有脑子和嘴不行，还得有手——工具调用就是AI的“手”。今天讲它怎么工作、为什么算不准的AI配了计算器就准了，以及你今天就能试的一个动作。</div>
+
+<h2>一句话结论</h2>
+<p>大模型天生只会写字：不能上网、不能算数、不能查你的数据库。工具调用（Function Calling）解决的就是这个问题——让AI自己判断该用哪个工具、把参数填好、拿到结果再继续回答。没有它，Agent永远只是嘴上办事。</p>
+
+<h2>它到底是怎么运转的</h2>
+<p>过程只有四步，但每步的分工要说清楚：</p>
+<ol>
+<li><strong>交工具清单</strong>：开发者把一批“工具说明书”——每个函数叫什么、干什么用、需要填哪些参数——随用户问题一起发给模型。</li>
+<li><strong>模型挑工具</strong>：模型读到问题后判断“这事我自己答不了，得用工具”，于是输出一段结构化请求：“请调用<code>get_weather</code>，参数：城市=北京，日期=下周三”。注意，它自己不去查，只是开单子。</li>
+<li><strong>程序执行</strong>：模型外面的一层程序（不是模型本身）拿着这张单子真的去调接口、算结果。</li>
+<li><strong>结果回喂</strong>：执行结果（“下周三北京晴，3~12℃”）再塞回模型的上下文，模型据此写出最终回答。</li>
+</ol>
+
+<h2>一个生活比方</h2>
+<p>模型像个聪明的管家，知识渊博、能说会道，但<strong>你家门不开，他什么都干不了</strong>。工具调用＝把一串钥匙交给管家：查天气的钥匙、开计算器的钥匙、翻档案柜的钥匙。你说“下周去北京穿什么”，管家自己判断先用天气钥匙查气温，再给你建议——他不是替你查，是他知道去哪拿钥匙、怎么开锁。</p>
+
+<h2>为什么这一步是 Agent 的地基</h2>
+<ul>
+<li><strong>补短板</strong>：模型靠“背”做题，算 38471×2917 这种乘法经常出错；接上计算器工具就稳定正确。原因在模块2讲过——它预测下一个词，不是真运算。</li>
+<li><strong>接活数据</strong>：训练截止之后的新闻、你公司内部库存表、今天的股价，模型脑子里没有，只能靠工具实时取——这和 M2-8“知识截止与联网”、M4 系列的 RAG 是一条线。</li>
+<li><strong>让规划落地</strong>：M5-1 说 Agent 会拆步骤，但拆出来的每一步“查资料、写文件、发邮件”，落地全靠工具调用。没有工具的 Agent = 光列清单不动手的员工。</li>
+</ul>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li><strong>验证</strong>：在支持工具的产品里问一个需要外部信息的问题（如“现在北京几点？”），观察它是真查了，还是凭训练记忆猜——很多产品会显示“正在搜索/调用工具”。</li>
+<li><strong>列清单</strong>：自己写提示词时，把可用工具的名称、用途、参数格式写成清单放进上下文，模型才知道钥匙柜里有哪些钥匙。</li>
+<li><strong>先报单再执行</strong>：要求AI先说“我打算调用X，参数是Y”，你确认后再跑。出问题好排查，也防止它乱开单子。</li>
+</ol>
+
+<blockquote>记住一句话：<strong>模型负责“决定用哪个钥匙”，程序负责“真的去开门”。</strong>看到AI说“我查到了”，其实是它外面那层程序替它查的。</blockquote>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>香港证监会发布首份 AI 应用调查，代理型AI已进金融机构</strong>：2026年11月2日，香港证监会发布《大型机构人工智能应用及准备情况调查》，覆盖20家大型金融机构及其78家关联持牌机构。结果显示30%的受访机构已在业务中应用代理型AI（Agent），另有25%在试点；95%的机构预计未来12个月加快部署。对普通人的含义：金融业务里AI自主办事已成趋势，监管明确要求“自主性提高时，人类主导位置不能动摇”——AI开的“工具单子”，最终要有人签字。来源：上海证券报·中国证券网，2026-11-02。</li>
+<li><strong>国家发改委：将建设AI“监管沙盒”</strong>：2026年11月3日，国家发展改革委在“奋进‘十五五’”发布会上表示，将支持建设面向不同领域的人工智能“监管沙盒”，健全申请、测试、使用、退出管理机制；并推动模型训练师、数据标注员等新职业纳入国家职业分类体系。含义：Agent这类新技术应用有望先在沙盒里试错，从业者可关注沙盒申请渠道。来源：中宏网/证券时报，2026-11-03。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M5-3 规划与反思：Agent 怎么把一件大事拆成小步骤，干错了自己发现、自己改。</strong></p>
+
+<div class="rel">相关延伸：上一期 M5-1《Agent 是什么：从“问答机”到“办事员”》讲了Agent的整体画像，本期拆的是它最核心的一个零件——工具调用；下一期拆它的大脑——规划与反思。</div>
+
+<div class="note">来源说明：①香港证监会《大型机构人工智能应用及准备情况调查》数据引自上海证券报·中国证券网2026-11-02报道（cnstock.com）；②“监管沙盒”及新职业表述引自中宏网、证券时报网2026-11-03对国家发展改革委新闻发布会的报道。工具调用机制部分为一般性技术介绍，未附单一来源。文中乘法算例仅示意，具体错误率无可靠统计，不作引用。</div>
+</body>
+</html>
