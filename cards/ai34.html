@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-3 规划与反思：AI动手前先列清单，做完再回头检查｜11/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月5日 · AI 知识</div>
+<h1>AI知识｜M5-3 规划与反思：AI动手前先列清单，做完再回头检查｜11/32</h1>
+<div class="lead">昨天讲了AI有了工具箱会动手了，但你可能遇到过：让它订票查资料，它第一步就用错工具，后面全跟着错。今天讲Agent的两块“方向盘＋后视镜”：动手前先规划，出错后能反思。</div>
+
+<h2>一句话结论</h2>
+<p>工具调用解决了“AI能不能动手”，但一步干砸全盘皆输；<b>规划</b>让AI动手前先拆任务列清单，<b>反思</b>让AI出错后自己回头改——相当于干活前先画图纸，出问题先复盘再返工。</p>
+
+<h2>讲透这一个点</h2>
+<p><b>是什么：</b>上期说过，工具调用让Agent能动手；但只会闷头一步一步干，错一步就全错。规划（Planning）就是动手前把大任务拆成小步骤清单，执行中按实际情况调整；反思（Reflection）就是每步干完（尤其报错时）回头看一眼：刚才哪里出了问题，下一步怎么改。两者合起来，Agent才从“埋头猛干”变成“边干边核对”。</p>
+<p><b>生活比方：</b>你让实习生去“办一场发布会”，不交代的实习生抄起电话就订场地，订完才发现日期和嘉宾冲突。会干活的实习生先列清单（定日期→订场地→发邀请→备物料），每完成一项打个勾，出岔子就停下来复盘再改。规划就是那张清单，反思就是打勾和复盘的动作。</p>
+<p><b>为什么重要：</b>学术研究早已验证这套方法有效——</p>
+<table>
+<tr><th>方法</th><th>出处</th><th>效果（论文原数据）</th></tr>
+<tr><td>ReAct：想一步→做一步→看结果再想</td><td>Yao 等，ICLR 2023</td><td>网页/环境操作基准 ALFWorld、WebShop 上，成功率比模仿学习/强化学习方法分别高 34% 和 10%</td></tr>
+<tr><td>Reflexion：失败后写“错在哪”的自我反馈再重试</td><td>Shinn 等，NeurIPS 2023</td><td>HumanEval 代码基准 pass@1 达 91%，超过此前最好的 GPT-4 的 80%</td></tr>
+</table>
+<p>一句话：会规划、会复盘的Agent，比蛮干型Agent靠谱得多。</p>
+<p><b>怎么用（3步以内）：</b></p>
+<ol>
+<li>给Agent交代任务时，先要求它“列出执行计划给我确认”，看过再放行——这一步能拦掉大半跑偏；</li>
+<li>开启分步执行，让它每步完成后汇报结果，而不是一口气跑完；</li>
+<li>出错时明确说“刚才报错了，先分析原因再给修正方案”，别直接重试——不加反思的重试只会把同样的错再犯一遍。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>打开任意支持Agent模式的AI助手（带联网或代码执行功能），输入：</p>
+<blockquote>帮我调研3款主流记账App的免费额度差异。先列执行计划，等我确认后再开始，每完成一步汇报一次。</blockquote>
+<p>你会看到它先输出计划清单，确认后逐步执行——对比一句“帮我调研记账App”的直接回答，准确度差距一目了然。</p>
+
+<h2>政策/行业动态（仅收录上期 11月4日 之后新增）</h2>
+<ul>
+<li><b>《智能体发展自律公约》发布：</b>11月4日，2026世界互联网大会乌镇峰会上，中国信通院、华为、阿里、腾讯、小米、百度、火山引擎等20家单位联合发布《智能体发展自律公约》，共八条自律措施，包括健全智能体身份标识、可信互联、授权管理，以及保障用户知情权、选择权和最终控制权等。对普通人意味着：你用的AI助手正被推动“可识别、可追责”，出问题时更容易分清是谁的责任。来源：中国经济网，2026-11-04（http://scitech.ce.cn/sy/zx/202611/t20261104_3283569.shtml）；中证网同日报道。</li>
+<li><b>网信办提出《智能互联网创新发展合作倡议》：</b>同日同一论坛，国家网信办会同有关方面提出该倡议，覆盖智能体协作、安全防线、数字素养等八个方面；网信办副主任王京涛表示将健全智能体身份标识、可信互联、授权管理等基础制度。对从业者意味着：智能体的“互信互联互操作”正成为标准化方向，做Agent产品要提前对齐这些制度要求。来源：中证网，2026-11-04（https://jnzstatic.cs.com.cn/zzb/htmlInfo/137359.html）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>M5-4 多智能体：一个Agent不够用时，怎么让一群AI分工合作？</p>
+
+<div class="rel">相关延伸：上一期《M5-2 工具调用》讲了Agent的“手”，本期是它的“方向盘＋后视镜”；再往前《M5-1 Agent 是什么》讲了“办事员”的基本设定。三期连读就是一个完整Agent的骨架。</div>
+<div class="note">来源说明：① ReAct: Synergizing Reasoning and Acting in Language Models，Yao 等，ICLR 2023（arXiv:2210.03629）；② Reflexion: Language Agents with Verbal Reinforcement Learning，Shinn 等，NeurIPS 2023（arXiv:2303.11366）；③ 中国经济网 2026-11-04《智能体发展自律公约》发布；④ 中证网 2026-11-04《智能互联网创新发展合作倡议》。学术数据引自论文摘要原文；两条动态均经两个独立来源交叉一致。</div>
+</body>
+</html>
