@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜为什么AI列了计划，执行到一半还是会跑偏？</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:22px 18px 60px}
+h1{font-size:19px;line-height:1.5}
+.tag{color:#4f8cff;font-size:13px;margin-bottom:6px}
+p{font-size:15px;margin:12px 0}
+ul{padding-left:22px}
+li{margin:8px 0;font-size:15px}
+.tip{background:#171a21;border:1px solid #262b34;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0;padding:12px 14px;margin:16px 0;font-size:15px}
+.note{color:#9aa3b2;font-size:13px;margin-top:24px;border-top:1px solid #262b34;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="tag">AI 知识 · 下钻问题 · 来自 11/32</div>
+<h1>为什么AI列了计划，执行到一半还是会跑偏？</h1>
+<p>先说结论：规划不是"列完清单"就结束了，真正的难点在<b>执行中的再规划</b>。AI列计划时看到的是任务的"地图"，但每一步执行后环境会变——网页打不开、搜到的资料和预期不符、工具返回报错。如果Agent只会照着最初的清单机械往下走，一步失真，后面步步失真，这就是"跑偏"的根源。</p>
+<p>学术上的对应做法是<b>动态重规划</b>：ReAct 那篇论文（Yao 等，ICLR 2023）的核心不是"先想好再做"，而是"想一步→做一步→看结果→再想"，每一步都根据真实反馈调整下一步，而不是预先把所有步骤定死。计划在Agent里更像导航软件：出发前给个路线，但堵车了得会绕路。</p>
+<p>作为使用者，你有三个抓手可以大幅减少跑偏：</p>
+<ul>
+<li><b>卡点确认</b>：在计划里主动插入检查点，比如"完成第2步后停下来，把结果给我看，我确认后再继续"。把长任务切成几段，每段人工把关，跑偏最多损失一段。</li>
+<li><b>限定改动范围</b>：明确告诉它"如果某步失败，不要自行换方案，先停下来告诉我原因和备选项"。很多跑偏不是AI笨，而是它自作主张换了路径而你不知情。</li>
+<li><b>要求出错即反思</b>：报错后让它先输出三行——发生了什么、可能原因、下一步两种方案——你选一个再放行。这比"再试一次"有效得多，因为不加反思的重试通常会把同一个错再犯一遍。</li>
+</ul>
+<div class="tip">一句话记忆：计划是给AI的导航，不是给它的剧本。会看路况（再规划）＋会复盘（反思）的Agent才不跑偏，而这两个习惯，你也可以用提示词强制它养成。</div>
+<p class="note">延伸阅读：ReAct（arXiv:2210.03629，ICLR 2023）、Reflexion（arXiv:2303.11366，NeurIPS 2023）。本期主卡：cards/ai34.html</p>
+</body>
+</html>
