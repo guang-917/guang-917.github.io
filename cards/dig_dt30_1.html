@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>下钻：Zachman 为什么是「本体」不是「方法」</title>
+<style>body{background:#111418;color:#d7dae0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px 60px;}main{max-width:680px;margin:0 auto;}h1{font-size:19px;color:#f0f2f5;}h2{font-size:15px;color:#7fb3e8;}.warn{color:#e8b45a;}</style>
+</head>
+<body><main>
+<p>2026-11-06 · 下钻自《CDGA｜第4章 数据架构｜3/共5》</p>
+<h1>Zachman 框架为什么叫「本体」而不是「方法」？</h1>
+<p>书上原话是：Zachman 框架「实际上是一种本体（Ontology），提供 6×6 的矩阵描述企业及其关系所需的完整模型集；它不定义如何创建模型，只是简要揭示应该存在什么模型」（p70）。</p>
+<h2>用搬家来分清「清单派」和「施工派」</h2>
+<p>「本体」是一张<strong>存在清单</strong>：搬家前你列一张单子——沙发、床、冰箱、锅碗瓢盆，列出「家里该有哪些东西」。至于每样东西怎么打包、先搬谁后搬谁、找哪家搬家公司，单子一概不管。</p>
+<p>「方法」是一套<strong>施工流程</strong>：第一步给碗垫报纸、第二步箱子编号、第三步重的放车尾。它教你「怎么做」。</p>
+<p>Zachman 属于前者。它只保证你检查时不漏项——6 列是六个提问角度（是什么/怎样做/在哪里/谁做/何时/为什么），6 行是六种人的视角（管理层→操作员），行列交叉出的 36 格就是「企业完整建模时应该存在的模型集」。哪个格子空着，就说明这块视角没人画过图。</p>
+<h2><span class="warn">考场会怎么把这个点问歪</span></h2>
+<p><strong>问法一（直接偷换）</strong>：「Zachman 框架定义了创建模型的具体步骤/方法。」——错。看到「定义如何创建模型」直接排除，正确说法永远是「简要揭示应该存在什么模型」。</p>
+<p><strong>问法二（行列对调）</strong>：「列代表具象化转换（不同角色），行代表问询式沟通。」——反了。列＝问询式沟通（What/How/Where/Who/When/Why），行＝具象化转换（六层角色）。</p>
+<p><strong>问法三（角色错位）</strong>：「工程师视角对应逻辑模型。」——错。架构师行对应逻辑模型，工程师行对应物理模型，技术员对应工具组件/配置，操作员对应操作实例。</p>
+<p><strong>问法四（张冠李戴）</strong>：「Zachman 是数据建模的常用工具。」——建模工具那一节列的是数据建模工具、数据资产管理软件、图形化设计软件；Zachman 是企业架构框架，别混进工具清单。</p>
+<h2>一句记住</h2>
+<p>「扎克曼是点菜菜单，不是菜谱」——菜单告诉你该有哪些菜（存在什么模型），菜谱才教你怎么做（如何建模）。</p>
+</main></body>
+</html>
