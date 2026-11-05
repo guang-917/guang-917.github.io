@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>下钻：数据专员和数据库管理员差在哪</title>
+<style>body{background:#111418;color:#d7dae0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px 60px;}main{max-width:680px;margin:0 auto;}h1{font-size:19px;color:#f0f2f5;}h2{font-size:15px;color:#7fb3e8;}.warn{color:#e8b45a;}</style>
+</head>
+<body><main>
+<p>2026-11-06 · 下钻自《CDGA 每日一练｜第 5 期 · 第3章 数据治理》</p>
+<h1>数据专员（Steward）和数据库管理员（DBA）差在哪？</h1>
+<p>考试最爱把这一对放进选项里互换。一句话分清：<strong>数据专员是业务角色，数据库管理员是技术角色</strong>。</p>
+<h2>用小区物业来分</h2>
+<p>数据库管理员像小区的<strong>水电工</strong>：管的是房子本身的运转——数据库装得稳不稳、备份有没有做、性能好不好、权限有没有配对。他关心「系统别出事」。</p>
+<p>数据专员像小区的<strong>楼栋管家</strong>：管的是「这个楼栋里住户的数据到底什么意思、谁该维护它、出了错谁去改」。书上（c3-017）的定位是：作为业务角色被指派负责数据质量和使用组织的数据资产。他关心「数据本身对不对、好不好用」。</p>
+<h2><span class="warn">考场怎么设坑</span></h2>
+<p><strong>坑一（职责以偏概全）</strong>：选项给「识别数据问题」「分析数据质量」这种半截职责，看着对，其实只是数据专员工作的一部分，完整定位是那句「作为业务角色被指派负责数据质量和使用组织的数据资产」。单选题里，完整定位永远优先于半截描述。</p>
+<p><strong>坑二（角色错位成技术岗）</strong>：把数据专员说成「数据分析师」「一组参考数据的主题专家（SME）」——主题专家可以是任何人，但数据专员的核心身份是业务侧被指派的负责人，不是分析师岗。</p>
+<p><strong>坑三（和 CDO 混）</strong>：首席数据官（CDO）在治理组织里是高管层（偏战略和拍板），数据专员是执行层的业务岗（偏落实），指导委员会是决策机构，数据治理办公室是常设办事机构——四个层级别混（对应题库 c3-052 那类题）。</p>
+<h2>一句记住</h2>
+<p>「水电工管系统跑不跑，管家管数据对不对；专员是业务岗，被指派、管质量、管使用。」</p>
+</main></body>
+</html>
