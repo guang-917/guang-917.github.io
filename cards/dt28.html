@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第4章 数据架构｜1/共5 · 定义与三个组成部分</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+h3{font-size:15px;margin:18px 0 6px;color:var(--accent2)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.hit{background:#2a1d1f;border:1px solid #4a2a2e;border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.hit b{color:var(--accent)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月5日 · 数据知识 · 第4章 1/共5</div>
+<h1>定义与三个组成部分：架构不只是画图</h1>
+<div class="lead">第 4 章值 10 分，是六个重点章之一。这一张只解决三件事：架构到底是什么、数据架构由哪三块组成、以及那个每年都有人栽进去的陷阱——物理数据模型到底算不算数据架构的产物。<br><b>本张对应教材 p66–p67</b></div>
+
+<h2>一、架构：两句话定义，都要认得出</h2>
+
+<h3>1｜通俗定义（教材原句）</h3>
+<p>架构最初指<b>建造房屋（尤其是可居住建筑）的艺术和科学</b>，以及在此过程中形成的成果——建筑物本身。今天泛指<b>系统组件元素的有组织排列</b>，目的在于<b>优化整个结构或系统的功能、性能、可行性、成本和美观度</b>。</p>
+<div class="hit"><b>陷阱：</b>题目常把「美观度」换成「安全性」。原句里没有安全性，那是别的地方讲的。</div>
+
+<h3>2｜国际标准定义（ISO/IEC 42010:2007）</h3>
+<blockquote>系统的基本结构，具体体现在相关的组件、组件之间的相互关系和<b>环境</b>中，以及设计和演变的原则。</blockquote>
+<p>考点在关键词：<b>基本结构 / 组件 / 相互关系 / 环境 / 设计和演变的原则</b>。少一个词、多一个词都是干扰项，尤其「环境」最容易被省掉。</p>
+
+<h2>二、数据架构由三块组成（本章必背）</h2>
+<table>
+<tr><th>组成部分</th><th>是什么</th><th>一句话记</th></tr>
+<tr><td><b>成果</b></td><td>各层级的模型、定义和数据流，也被称为架构<b>工件</b></td><td>画出来的东西</td></tr>
+<tr><td><b>活动</b></td><td>设计、部署并实现数据架构目标的活动</td><td>做出来的动作</td></tr>
+<tr><td><b>行为</b></td><td>参与架构工作不同角色的协作、思维和技能</td><td>参与的人和方式</td></tr>
+</table>
+<div class="hit"><b>考法：</b>「以下哪项不属于数据架构的组成部分」——常见干扰项是「架构治理」「数据标准」「数据质量」。三块只有成果、活动、行为。</div>
+
+<h2>三、数据架构在数据管理里的位置</h2>
+<p>数据架构是<b>数据管理的基础</b>。它的工件用来做四件事：<b>描述现状、定义数据需求、指导数据集成、控制数据资产</b>。这些规范通常写在<b>数据战略</b>里。</p>
+<div class="hit"><b>陷阱：</b>把「数据战略」写成「数据治理」。战略定方向，治理定「谁说了算」，别混。</div>
+<p>企业架构分四类：<b>业务架构、数据架构、应用架构、技术架构</b>。数据架构自己的目标是——<b>有效地管理数据，以及存储和使用这些数据的系统</b>。</p>
+
+<h2>四、那个年年考的陷阱：物理数据模型</h2>
+<p>数据架构最详细的设计文档是<b>企业数据模型</b>，里面包含：数据名称、全面的数据和元数据定义、概念性和逻辑性实体及其关系、业务规则。</p>
+<p>物理数据模型<b>也算</b>数据架构文件，但它<b>是数据建模和设计的产物，而不是数据架构的一部分</b>。</p>
+<div class="hit"><b>一句话记住：</b>架构管「该有什么、怎么组织」，建模管「怎么落地成表」。所以物理模型归建模，不归架构。</div>
+
+<h2>五、为什么企业非做不可：5 条业务驱动</h2>
+<ol>
+<li>为组织把握新技术带来的潜在商机，为快速升级产品、服务和数据做好<b>战略准备</b>。</li>
+<li>把<b>业务需求转换成数据和系统需求</b>，确保业务流程持续拿到所需数据。</li>
+<li><b>管理整个企业的复杂数据和信息交付</b>。</li>
+<li><b>促进业务和 IT 对齐</b>。</li>
+<li>成为<b>变革、转型和敏捷响应的推动者</b>。</li>
+</ol>
+<p>企业架构的目标是<b>搭建业务战略和技术实现之间的桥梁</b>——所以数据架构既不能只谈业务，也不能只谈技术。</p>
+<div class="hit"><b>陷阱：</b>条数题就 5 条。看到「降低 IT 成本」「提升开发速度」这类听着挺对的选项，先数条数，再对原句。</div>
+
+<h2>六、外部推力：数字化的三波浪潮</h2>
+<ul>
+<li><b>第一波</b>：银行与金融交易。</li>
+<li><b>第二波</b>：数字服务交互。</li>
+<li><b>第三波</b>：<b>物联网与远程信息处理</b>——汽车、医疗设备、传统工具制造等行业都在被数字化。</li>
+</ul>
+<p>这三波要求数据架构能支撑 <b>7×24 服务</b>和「<b>按使用付费</b>」这类商业模式。</p>
+
+<h2>七、考试怎么考（本张覆盖的）</h2>
+<table>
+<tr><th>题型</th><th>怎么问</th><th>怎么答</th></tr>
+<tr><td>定义题</td><td>「架构是……」选出正确表述</td><td>认「系统组件元素的有组织排列」「功能、性能、可行性、成本和美观度」</td></tr>
+<tr><td>条数题</td><td>业务驱动有几条</td><td>5 条，别数成 4 或 6</td></tr>
+<tr><td>归属题</td><td>物理数据模型属于哪一类</td><td>建模和设计的产物</td></tr>
+<tr><td>反向题</td><td>以下哪项<b>不属于</b>数据架构的组成部分</td><td>三块之外的全排除</td></tr>
+</table>
+
+<h2>八、自测一题</h2>
+<div class="q">
+<p><b>下列关于数据架构的说法，<u>错误</u>的是：</b></p>
+<p>A. 数据架构的成果表现为各层级的模型、定义和数据流<br>
+B. 数据架构是整个数据管理的基础<br>
+C. 物理数据模型属于数据架构的核心产物<br>
+D. 数据架构的活动包括设计、部署并实现其目标</p>
+<p><b>答案：C。</b>教材原句是「物理数据模型也属于数据架构文件，但它是数据建模和设计的产物，而不是数据架构的产物」——文件是，产物不是，这两个字眼就是全部的分。<br>
+<b>其余选项为什么对：</b>A 是「成果」的原句；B 是教材对数据架构地位的定性；D 是「活动」的原句，只差「设计、部署、实现」三个动词。</p>
+</div>
+
+<div class="rel">相关延伸：CDGA｜第3章 数据治理｜1/共5 · 定义与8项职能：治理管的是“谁说了算”</div>
+<div class="note">来源说明：本卡内容转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 4 章（教材 p66–p67），定义、业务驱动 5 条、三组成、物理模型归属均为原页目视照抄。</div>
+</body>
+</html>
