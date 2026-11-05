@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-4 多智能体：一个AI不够用，就派一个“团队”｜12/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月6日 · AI 知识</div>
+<h1>AI知识｜M5-4 多智能体：一个AI不够用，就派一个“团队”｜12/32</h1>
+<div class="lead">一个AI干复杂活容易“顾头不顾尾”——既要拆任务、又要查资料、还要写报告，注意力一散就出错。多智能体的思路很简单：别让一个人包圆，拉个小团队分工干。</div>
+
+<h2>一句话结论</h2>
+<p>多智能体（Multi-Agent）解决的问题是：一个AI同时当“策划、执行、质检”三种角色时，上下文越塞越满、错误层层累积——把任务拆给几个各管一段的AI，反而更稳、更准。</p>
+
+<h2>是什么</h2>
+<p>多智能体，就是让<strong>两个以上的AI各自扮演一个角色</strong>，按约定的流程互相传递结果、共同完成一件事。典型分工比如：</p>
+<table>
+<tr><th>角色</th><th>干什么</th><th>比方</th></tr>
+<tr><td>计划者</td><td>把大任务拆成步骤清单，分配下去</td><td>项目经理</td></tr>
+<tr><td>执行者</td><td>只负责自己那段，比如查资料、写代码</td><td>干活专员</td></tr>
+<tr><td>检查者</td><td>专挑毛病：事实对不对、有没有漏项</td><td>质检员</td></tr>
+</table>
+<p>它们之间传递的不是闲聊，而是<strong>结构化的交接单</strong>：这一步要做什么、上一步结果是什么、交付标准是什么。这个“怎么交接”的规矩，学名叫智能体互联协议——它就是上期说的“工具调用”升级到“AI跟AI对接”的版本。</p>
+
+<h2>为什么重要</h2>
+<ul>
+<li><strong>上下文是稀缺资源。</strong>一个AI把所有步骤都装在脑子里，窗口很快塞满，早看过的信息就“糊”了。分工后每个智能体只装自己那段的上下文，各自保持“清醒”。</li>
+<li><strong>错误能被拦住。</strong>单AI自己写自己查，等于学生给自己批卷子；多智能体里检查者和执行者是分开的，卷子由别人批，错的概率明显降低。</li>
+<li><strong>这已经是国家层面的方向。</strong>2026年5月22日，工信部指导中国电子技术标准化研究院组织70余家单位研制的《人工智能 智能体互联》系列国家标准（GB/Z 185—2026）正式发布，共七个部分，覆盖智能体的身份码、身份管理、能力描述、发现、交互（含点对点和群组模式）与工具调用——正是为“AI团队怎么组队、怎么对接”定规矩（来源：中国工信新闻网 2026-07-03；中国日报网 2026-09-04）。</li>
+</ul>
+
+<h2>生活比方</h2>
+<blockquote>装修房子：你不是自己一人既画图、又买料、又砌墙、又验收，而是找设计师出图、工人照图施工、监理负责挑毛病。三拨人各干各的，靠“图纸+验收单”交接——多智能体就是给AI复制了这套分工。</blockquote>
+
+<h2>怎么用（3步以内）</h2>
+<ol>
+<li><strong>先拆角色，再谈智能体。</strong>把任务里“动脑”“动手”“挑错”三种活列出来，确认它们确实互相牵制（比如写和审不能同一人），才值得拆。</li>
+<li><strong>定好交接单。</strong>明确每个角色输入什么、输出什么格式，比如“检查者只输出：通过/不通过+具体问题清单”。格式越死板，协作越不乱。</li>
+<li><strong>从2个角色起步。</strong>先跑“执行者+检查者”双人组，验证有效再加计划者。角色越多，沟通开销和出错点越多，先小后大。</li>
+</ol>
+
+<h2>「今天就能用」</h2>
+<p>不用任何工具，用一句话就能在现有AI里模拟多智能体。打开你常用的AI助手，输入：</p>
+<blockquote>“这件事我们分两个角色做：你先以【执行者】身份完成【帮我写一份请客吃饭的邀请短信】，然后切换成【检查者】身份，只从‘是否清楚时间地点、是否礼貌、是否超过70字’三条标准打分并给出修改稿。两个角色分开输出。”</blockquote>
+<p>你会看到AI自己产出一版、再自我挑刺产出一版更好的——这就是最小的多智能体雏形。验证标准：第二版是否修正了第一版确实存在的问题（而不是装样子）。</p>
+
+<h2>「政策/行业动态」</h2>
+<ul>
+<li><strong>《智能体发展自律公约》乌镇发布。</strong>2026年11月4日，2026年世界互联网大会乌镇峰会上，中国信通院联合华为、腾讯、阿里、蚂蚁、抖音等20家单位共同发布该公约，提出健全信任体系、提升互操作水平、保护用户权益等八条自律措施，其中明确要求保障用户“对重要事项的最终控制权”。对普通人意味着：以后用智能体，知情权、选择权和最终拍板权被写进行业自律承诺，出事有依据可追（来源：新华网 2026-11-05 https://www.xinhuanet.com/local/20261105/2a6c1ad0ebc447aa9023e991b988e52c/c.html ；21世纪经济报道/证券时报 2026-11-04 https://m.21jingji.com/article/20261104/herald/d44c16052eec1a511adc7e96c1c93823.html ）。</li>
+<li><strong>智能体“身份证”开始规模化发放。</strong>依据GB/Z 185—2026标准，国家OID注册中心已面向长三角（30家单位，含联想、中兴、火山引擎等，2026-08-31）和大湾区（金山办公等，2026年深圳专题会）发放智能体身份码节点；11月4日乌镇论坛上“智能体身份注册与解析平台”正式发布。对从业者意味着：智能体接入时领“数字身份证”正成为行业标配，跨平台协作前先对身份。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M5-5 MCP 协议</strong>：AI连工具、连数据的一根“USB-C”接口，为什么大厂都开始抢着接？</p>
+
+<div class="rel">相关延伸：M5-1 Agent 是什么（单个智能体的基本盘）→ M5-2 工具调用（AI怎么动手）→ M5-3 规划与反思（单智能体怎么不跑偏）→ 本期 M5-4 把单兵扩成小队 → 下一期 M5-5 讲团队之间怎么“插线”。</div>
+<div class="note">来源说明：①《智能体发展自律公约》发布信息来自新华网（2026-11-05）、21世纪经济报道转引证券时报（2026-11-04）、新浪财经（2026-11-04），多源一致；②GB/Z 185—2026系列国家标准发布时间与内容来自中国工信新闻网（2026-07-03）标准解读及中国日报网（2026-09-04）报道，多源一致；③智能体身份码节点发放来自中国日报网（2026-09-04）、经济日报（大湾区专题会报道）。本期无新增可靠动态之外的政策信息均未收录。</div>
+</body>
+</html>
