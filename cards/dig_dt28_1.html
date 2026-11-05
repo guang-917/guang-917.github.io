@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>物理模型：算架构的成果，还是建模的产物？</title>
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1d212a;
+  --line:#2a2f3a; --txt:#e8ebf0; --dim:#9aa3b2;
+  --acc:#ffb84d; --ok:#4dd6a8; --bad:#ff7a7a;
+}
+*{box-sizing:border-box;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font:16px/1.9 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  padding:22px 16px 64px}
+.wrap{max-width:680px;margin:0 auto}
+.meta{font-size:13px;color:var(--dim);margin-bottom:10px}
+.meta i{font-style:normal;color:var(--acc)}
+h1{font-size:21px;line-height:1.55;margin:6px 0 16px;font-weight:700}
+h2{font-size:16.5px;margin:26px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line);font-weight:700}
+p{margin:10px 0;font-size:15px;color:#d7dce5}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:14.8px}
+.box.hi{border-left:3px solid var(--acc)}
+.box b{color:var(--acc)}
+.key{background:linear-gradient(180deg,#1d212a,#191d25);border:1px solid #3a3222;
+  border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.9;color:#ffe6b8;margin:18px 0}
+.src{margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:#7f8797;line-height:1.9}
+.tag{display:inline-block;font-size:12px;color:var(--dim);border:1px solid var(--line);
+  border-radius:20px;padding:1px 9px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="meta">2026-11-03 · 第 4 期下钻 · 第4章 数据架构</div>
+<h1>物理数据模型：算架构的成果，还是建模的产物？</h1>
+
+<p>c4-039 这道题让很多人翻车，原因不在知识点难，而在<b>「属于」和「产出」是两件事</b>，题目把它们摆在一个选项列表里考。</p>
+
+<h2>一、两个词先分开</h2>
+<div class="box hi">
+<p><b>归类</b>：这东西算哪一类。问的是「它是谁家的」。</p>
+<p><b>产物归属</b>：这东西是谁做出来的。问的是「谁交的活」。</p>
+</div>
+<p>物理数据模型<b>可以是</b>架构模型的一种参照（归类上说它属于模型这一类），但它是「数据建模和设计」这道工序交出来的活，不是「数据架构」这道工序的交付成果。两句能同时成立，所以 A 和 C 都不算错。</p>
+
+<h2>二、打个比方</h2>
+<p>数据架构＝<b>总体规划图</b>：这块地盖什么、水管从哪进、总电箱放哪。</p>
+<p>物理数据模型＝<b>施工详图</b>：每根管子多粗、每个阀门什么型号。</p>
+<p>总体规划当然要把详图当参照看（否则定不了总电箱位置），但总规的交付清单上是「存储需求、处理需求、结构与规划」这几样；详图是后面施工队按图做出来的东西。<b>把详图列进总规的交付成果，就是把施工队的活算成设计院的活。</b></p>
+
+<h2>三、题干里自带的证据</h2>
+<p>这题的选项本身就在互相印证：A 说「属于架构模型」（归类层），C 说「是建模和设计的产物，不是架构的产物」（归属层），D 说「最详细的数据架构设计文件是正式的企业数据模型」——三句各说一层，都能并存。只有 B 把物理模型和逻辑模型一起塞进「数据架构的交付成果」，与 C 正面对撞，所以它是那句「错误的是」。</p>
+
+<h2>四、下次怎么快判</h2>
+<div class="key">
+看到「交付成果」「产物」→ 先问一句：<b>这是谁做出来的活？</b>建模的活归建模，架构的活归架构。<br>
+看到「属于……模型」→ 那是<b>归类</b>，只问它像不像这一类，别扯到谁交的活。
+</div>
+
+<div class="src">
+<div><span class="tag">依据</span>题库 c4-039 答案 B，exp 标 P70-71【引言】【语境关系图】</div>
+<div><span class="tag">说明</span>第 4 章底稿尚未转录（cdga_notes.md 只到第 3 章），本篇按题库所给页码与选项互证讲解，未引教材原文；结论以题库答案为准</div>
+</div>
+
+</div>
+</body>
+</html>
