@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜多智能体和单AI一步步干，到底差在哪？</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:22px 18px 60px}
+h1{font-size:19px;line-height:1.5}
+p{margin:10px 0;font-size:15px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #4f8cff;border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:#9aa3b2;font-size:13px}
+</style>
+</head>
+<body>
+<h1>多智能体和让一个AI连续干完所有步骤，到底差在哪？</h1>
+<p><strong>本质差别只有一个：上下文和“立场”分不分家。</strong></p>
+<p>单AI连续干活，所有中间结果都堆在同一个上下文窗口里。它自己写、自己查、自己审，等于<strong>既是运动员又是裁判</strong>——它对自己刚写的东西有天然的“确认偏误”，挑不出自己的毛病；而且步骤一多，早期信息被稀释，越往后越容易“忘事”和累积错误。</p>
+<p>多智能体把三样东西拆开了：</p>
+<ul>
+<li><strong>上下文拆开</strong>：执行者只看自己那段资料，窗口不爆；</li>
+<li><strong>立场拆开</strong>：检查者拿到的只有成品和验收标准，没有“这是我写的”心理包袱；</li>
+<li><strong>失败隔离</strong>：一段出错，只重跑那一段，不用整个任务从头来。</li>
+</ul>
+<p><strong>什么时候才真需要多智能体？</strong>满足任意两条再上：</p>
+<ul>
+<li>任务里存在“写的人不能自己审”的环节（文章、代码、合同）；</li>
+<li>不同子任务需要的上下文加起来超过一个窗口；</li>
+<li>需要并行（比如同时查5个渠道，互不干扰）。</li>
+</ul>
+<p>反过来，任务只是“查个资料再总结”，单AI加一个清晰的执行清单就够了。多智能体是<strong>用沟通成本换可靠性</strong>：角色每多一个，交接出错点就多一批。经验做法是先用“执行者+检查者”两人组跑通，确实不够再加重构和计划角色——先小后大，别一上来就组五人天团。</p>
+<blockquote>一个判断口诀：单AI出错靠“让它自己回头检查”（上期讲的反思），多智能体是把这个检查交给另一个AI——当你发现“它自己检查总是查不出自己的错”时，就是该拆团队的时候。</blockquote>
+<div class="note">本页对应 12/32 期 M5-4 多智能体。下期预告：M5-5 MCP 协议。</div>
+</body>
+</html>
