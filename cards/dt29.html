@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDGA｜第4章 数据架构｜2/共5 · 目标·交付物·语境关系图</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+h3{font-size:15px;margin:18px 0 6px;color:var(--accent2)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.hit{background:#2a1d1f;border:1px solid #4a2a2e;border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.hit b{color:var(--accent)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月5日 · 数据知识 · 第4章 2/共5</div>
+<h1>目标·交付物·语境关系图：一张图看全本章</h1>
+<div class="lead">上一张讲「是什么」，这一张讲「要做到什么、交出什么」。图 4-1 是本章骨架，八格能背下来，这一章就赢一半。<br><b>本张对应教材 p67–p68</b></div>
+
+<h2>一、三个目标（图 4-1 原句）</h2>
+<ol>
+<li><b>确定数据存储和处理需求。</b></li>
+<li><b>战略性地为组织做好准备</b>，以便快速发展其产品、服务和数据，利用新兴技术固有的商业机会。</li>
+<li><b>设计结构和规划</b>，以满足企业当前和长期的数据需求。</li>
+</ol>
+<div class="hit"><b>陷阱：</b>第二条最容易被改写。原句重心是「<b>战略准备 + 抓住新兴技术机会</b>」；把它换成「降低存储成本」「提升查询速度」就错——那是技术优化，不是这个目标。</div>
+
+<h2>二、两个主要交付物</h2>
+<ul>
+<li>满足<b>数据存储和处理</b>的需求。</li>
+<li>满足企业<b>当前和长期数据需求</b>的结构和规划。</li>
+</ul>
+<div class="hit"><b>陷阱：</b>交付物就这两条。别把「企业数据模型」「数据流」当成交付物——它们在关系图里归「<b>成果/工件</b>」那一栏，层级不同。题目若问「主要交付物」，只有两条。</div>
+
+<h2>三、六条规范：数据架构师要定义与维护的东西</h2>
+<ol>
+<li><b>明确组织的数据现状</b>。</li>
+<li>提供数据和组件的<b>标准业务用语</b>。</li>
+<li>确保数据架构与<b>企业战略及业务架构</b>保持一致。</li>
+<li><b>描述组织的数据战略需求</b>。</li>
+<li>概述满足这些需求的<b>高阶集成设计</b>。</li>
+<li>与<b>企业整体架构路线图</b>相整合。</li>
+</ol>
+<p>记法：<b>看现状 → 定语言 → 对齐战略 → 说清需求 → 出高阶设计 → 并进大盘子</b>。这六条是「归属题」的常客。</p>
+
+<h2>四、三条总体实践</h2>
+<ol>
+<li><b>用蓝图</b>：使用数据架构工件（主蓝图）定义数据需求、指导数据集成、管控数据资产，并让新投入的数据项目与业务战略保持一致。</li>
+<li><b>拉同盟</b>：与改进业务或 IT 系统开发的利益相关方合作，既学习他们，又影响他们。</li>
+<li><b>统语言</b>：通过数据架构建立企业级语义，并用通用业务词汇表展现出来。</li>
+</ol>
+<blockquote>这三条是「<b>怎么干</b>」，跟前面的「交付物（交出什么）」「规范（维护什么）」不是一层。做分类题时先问自己：题目问的是「东西」「内容」还是「做法」。</blockquote>
+
+<h2>五、图 4-1 语境关系图：一格一格过</h2>
+
+<h3>1｜输入（4 项）</h3>
+<p>企业架构 · 业务架构 · IT 标准和目标 · 数据策略</p>
+<div class="hit"><b>陷阱：</b>把「数据流」塞进输入。数据流是<b>成果</b>，不是输入。</div>
+
+<h3>2｜活动（3 组）</h3>
+<table>
+<tr><th>阶段</th><th>活动</th><th>本章后面会展开</th></tr>
+<tr><td>P 规划</td><td><b>建立企业数据架构</b></td><td>评估现有规范、制定路线图</td></tr>
+<tr><td>D 开发</td><td><b>管理项目内的企业数据需求</b></td><td>定义范围→理解需求→设计→实施</td></tr>
+<tr><td>O 运营</td><td><b>与企业架构集成</b></td><td>与项目组合管理整合</td></tr>
+</table>
+<p>记法：<b>先立规矩、再管项目、最后并入大盘子</b>。</p>
+
+<h3>3｜成果 / 交付物（5 项）</h3>
+<p>数据架构设计 · 数据流 · 数据价值链 · 企业数据模型 · 实施路线图</p>
+
+<h3>4｜角色（8 个，分三组）</h3>
+<table>
+<tr><th>分组</th><th>角色</th><th>特点</th></tr>
+<tr><td>供给者（4）</td><td>企业架构师、数据管理员、主题领域专家、数据分析师</td><td>往里<b>给东西</b></td></tr>
+<tr><td>参与者（2）</td><td>企业数据架构师、数据建模师</td><td><b>亲手做</b></td></tr>
+<tr><td>消费者（4）</td><td>员工、高管、监管机构、客户</td><td><b>用成果</b>，但仍是关系图里的角色</td></tr>
+</table>
+
+<h3>5｜方法 / 工具 / 度量</h3>
+<table>
+<tr><th>栏</th><th>内容</th></tr>
+<tr><td>方法</td><td>生命周期预测 · 使用清晰图表</td></tr>
+<tr><td>工具</td><td>数据建模工具 · 数据资产管理软件 · 图形化设计软件</td></tr>
+<tr><td>度量指标</td><td>架构标准合规率 · 实施趋势 · 业务价值指标</td></tr>
+</table>
+<p>度量三兄弟的记法：<b>合不合规、走没走顺、值不值钱</b>。</p>
+
+<h2>六、三组数字别串：2-6-3</h2>
+<table>
+<tr><th>叫法</th><th>条数</th><th>说的是</th></tr>
+<tr><td>交付物</td><td><b>2</b></td><td>满足需求的那个<b>东西</b></td></tr>
+<tr><td>规范</td><td><b>6</b></td><td>架构师要<b>定义和维护</b>的内容</td></tr>
+<tr><td>实践</td><td><b>3</b></td><td><b>怎么干</b>的做法</td></tr>
+</table>
+<div class="hit"><b>一句话记住：</b>交付物是「东西」，规范是「内容」，实践是「做法」。问东西别答做法。</div>
+
+<h2>七、自测一题</h2>
+<div class="q">
+<p><b>下列哪一项<b>不属于</b>数据架构的主要交付物？</b></p>
+<p>A. 满足数据存储和处理的需求<br>
+B. 满足企业当前和长期数据需求的结构和规划<br>
+C. 企业数据模型<br>
+D. 以上都属于</p>
+<p><b>答案：C。</b>教材给的「主要交付物」只有 A 和 B 两条。企业数据模型属于关系图里的「成果/工件」，不是「主要交付物」。<br>
+<b>陷阱在哪：</b>A、B 是教材原句，看着朴素但正确；C 听起来最像「架构产物」，恰恰是最容易误选的；D 是典型的「以上都正确」诱饵。</p>
+</div>
+
+<div class="rel">相关延伸：CDGA｜第4章 数据架构｜1/共5 · 定义与三个组成部分：架构不只是画图</div>
+<div class="note">来源说明：本卡内容转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 4 章（教材 p67–p68），三个目标、交付物、六条规范、三条实践、图 4-1 各栏均为原页目视照抄。</div>
+</body>
+</html>
