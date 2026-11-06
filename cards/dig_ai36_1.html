@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：MCP 和“工具调用”是一回事吗？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 18px 60px}
+h1{font-size:20px}
+.tag{color:#9aa3b2;font-size:13px;margin-bottom:16px}
+p{font-size:15px;margin:12px 0}
+b{color:#ff8a8f}
+.box{background:#171a21;border:1px solid #262b34;border-left:4px solid #4f8cff;border-radius:0 10px 10px 0;padding:12px 14px;margin:14px 0;font-size:14px}
+</style>
+</head>
+<body>
+<h1>深挖：MCP 和上次讲的“工具调用”是一回事吗？</h1>
+<div class="tag">来自 13/32 · M5-5 MCP 协议</div>
+<p><b>不是一回事，但是一对搭档。</b>“工具调用”是一种<b>能力</b>：AI 不只输出文字，还能发指令去干活——查资料、发消息、算个数。MCP 是一种<b>协议（标准）</b>：规定这套“发指令、回结果”的过程按什么格式来。</p>
+<p>打个比方：工具调用相当于“电器能通电”，MCP 相当于“全国统一插座标准”。没有统一标准时，AI 每接一个软件都要专门写一套对接代码——钉钉一套、飞书一套、网盘又一套，十个工具写十套。有了 MCP，软件方只要做一个 MCP 服务器（插座），把自家能力按标准格式摆出来，任何支持协议的 AI（插头）都能直接用。</p>
+<div class="box">一句话记忆：<b>工具调用回答“AI 会不会用工具”，MCP 回答“大家怎么按同一套规范来接工具”。</b>协议本身不干活，干活的是两头的 AI 和软件；协议只保证它们“接得上、听得懂”。</div>
+<p>那为什么有了工具调用还需要 MCP？关键在<b>规模</b>。工具调用能力是模型自带的，但每个工具的接口细节得有人写。接口不统一时，生态是碎片化的：A 家 AI 的工具，B 家用不了。MCP 由 Anthropic 于 2024 年 11 月发布并开源，之后 OpenAI、Google 先后宣布支持——相当于各家厂商认了同一个插座标准，工具生态从“各配各的”变成“一次开发、多方可用”。这正是它被叫作“AI 界 USB-C”的原因：价值不在技术多深，而在<b>通用</b>。</p>
+<p>另一个区别在<b>权限和位置</b>。传统工具调用里，工具往往内置在某个 AI 产品内部；MCP 把工具拆成独立服务器，可以自己搭、也可以接第三方的。好处是灵活，代价是你要像管理家门钥匙一样管理授权——接第三方 MCP 前看清它申请了哪些权限，只给最小授权。</p>
+<p>想动手感受：在支持 MCP 的客户端（如 Claude Desktop、Cursor）里添加一个官方 MCP 服务器，比如文件系统服务，只授权某个指定文件夹，然后让 AI“看看这个文件夹里有哪些文件、按日期排个清单”——你就在亲手用协议了。</p>
+</body>
+</html>
