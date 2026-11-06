@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>下钻｜Zachman 六行视角速记</title>
+<style>body{background:#111418;color:#d8dee5;font-family:-apple-system,"PingFang SC",sans-serif;line-height:1.8;max-width:680px;margin:0 auto;padding:24px 16px;}h1{font-size:19px;color:#7cb8f0;}p{font-size:15px;}.hl{color:#f0c674;}.src{color:#6b7684;font-size:12px;border-top:1px solid #232b35;padding-top:10px;margin-top:20px;}</style>
+</head><body>
+<h1>下钻｜Zachman 六行「具象化转换」速记</h1>
+<p>盖房子打比方：同一栋房子，<span class="hl">业主</span>只关心「我要几室几厅、什么地段」，<span class="hl">设计师</span>画的是概念与逻辑草图，<span class="hl">施工队</span>拿到的是可以照着砌墙的施工图，<span class="hl">工人</span>手里是具体的工具和配置，最后<span class="hl">物业</span>接管的是真实运行的房子。Zachman 的六行就是这条「越往下越具体」的链条。</p>
+<p>从上到下：<span class="hl">管理层（业务上下文）→ 业务管理（业务概念）→ 架构师（逻辑模型）→ 工程师（物理模型）→ 技术员（工具组件/配置）→ 操作员（操作实例）</span>。每往下一行，模型就更具体一层；每个角色看待过程的视角不同，要解决的问题也不同。</p>
+<p>考场两条钩子：① 选项里「架构师＋技术逻辑」是错的——架构师管逻辑模型，技术员才碰工具组件；② 「工程师＋物理模型」是对的。再配六列（是什么/怎样做/在哪里/由谁来做/什么时间/为什么），6×6 就齐了。还要记得：Zachman 是一种本体，它不定义如何创建模型，只简要揭示应该存在什么模型。</p>
+<div class="src">来源：第4章底稿 4.8 基本概念（Zachman 框架，p70）；对应题库 c4-050。</div>
+</body></html>
