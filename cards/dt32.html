@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第4章 数据架构｜5/共5 · 工具／实施／治理与度量（本章收官）</title>
+<style>
+  body{background:#111418;color:#d8dee5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;margin:0;padding:24px 16px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#7f8c99;font-size:13px;margin-bottom:8px;}
+  h1{font-size:22px;color:#f5f7fa;line-height:1.4;margin:0 0 6px;}
+  .lead{color:#a8b6c4;font-size:15px;margin-bottom:18px;border-left:3px solid #4a90d9;padding-left:12px;}
+  h2{font-size:17px;color:#7cb8f0;margin:26px 0 8px;}
+  p{margin:10px 0;font-size:15px;}
+  .pt{background:#181d24;border:1px solid #232b35;border-radius:10px;padding:14px 16px;margin:12px 0;}
+  .pt b.t{color:#f0c674;}
+  .quote{background:#14202b;border-left:3px solid #4a90d9;padding:8px 12px;border-radius:6px;color:#bcd4ea;font-size:14px;margin:8px 0;}
+  .trap{color:#ef8f8f;font-size:14px;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+  th,td{border:1px solid #2a3340;padding:7px 9px;text-align:left;}
+  th{background:#1b2430;color:#9ec9f0;}
+  .selftest{background:#1a2418;border:1px solid #2e4a2e;border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+  .motto{background:#241d2c;border:1px solid #3d3150;border-radius:10px;padding:12px 16px;margin:14px 0;color:#d8b8f0;}
+  .check{color:#8fa8bd;font-size:14px;}
+  .rel a{color:#6fb1e8;text-decoration:none;}
+  .src{color:#6b7684;font-size:12px;margin-top:22px;border-top:1px solid #232b35;padding-top:10px;}
+  code{color:#f0c674;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">2026年11月7日（星期六）· 第4章 数据架构 · 5/共5 · 距考试 32 天</div>
+<h1>CDGA｜第4章 数据架构｜5/共5 · 工具／实施／治理与度量（本章收官）</h1>
+<div class="lead">盖房子最后一天：认器械（工具）、备开工清单（实施指南）、请监理（治理活动）、定验收标准（度量指标）。学完这张，第4章通关。</div>
+
+<div class="pt">【开篇比喻】第4章我们一直用「盖房子」打比方：前四张讲了图纸是什么（定义与三组成）、图纸画什么（四类型+Zachman+企业数据模型）、施工顺序怎么排（活动与数据流）。今天是收尾篇。这一张要解决：数据架构「怎么落地、怎么验收」。</div>
+
+<h2>考点1｜工具与方法</h2>
+<div class="pt"><b class="t">人话</b>——画模型、管资产、画图，三类软件各管一摊，就像工地上的塔吊、料场管理和 CAD。<br>
+<b class="t">原话</b>（图4-1，p68）：<span class="quote">工具＝数据建模工具｜数据资产管理软件｜图形化设计软件；方法＝生命周期预测｜使用清晰图表</span><br>
+<span class="trap">坑：干扰项爱塞「数据检测工具」这种听起来合理的词（c4-018 答案 D 就是它）。</span></div>
+
+<h2>考点2｜图表使用规范 7 条（讲义表述）</h2>
+<div class="pt"><b class="t">人话</b>——图纸要让所有工种都看得懂：①清晰一致的说明 ②对象与说明匹配 ③线条方向一致 ④交叉线画法一致 ⑤对象属性一致 ⑥线性对称 ⑦标注状态（当前的/部署周期的/策略周期的/退役的/优先的/限制的/新兴的/审核的）。<br>
+<span class="trap">这里最容易翻车：交叉点不是连接点，无法避免交叉时允许线交叉，但线与线不能直接连接（c4-011 考的就是这句）。</span></div>
+
+<h2>考点3｜度量指标 3 组</h2>
+<div class="pt"><b class="t">人话</b>——验收房子看三件事：图纸执行得严不严、翻新时旧料利用率高不高、住进来的人满不满意。<br>
+<b class="t">原话</b>（图4-1+讲义表述）：①<b>架构标准接受率</b>——测量项目与已建立的数据架构的紧密程度及项目与企业架构参与流程的遵循度；②<b>实施趋势</b>——①使用重用代替废弃：新架构构件与重用、代替或废弃构件的比例 ②项目执行效率；③<b>业务价值</b>——业务敏捷性改进、业务质量、业务操作质量（准确性改进、时间减少、纠错费用）、业务环境改进（客户保留率、监管报告负面评论减少）。<br>
+<span class="trap">你以为考怎么算数，其实只考三组名字别串。</span></div>
+
+<h2>考点4｜实施指南的工作内容 4 条（讲义表述）</h2>
+<div class="pt">①建立企业数据架构团队和举办问题讨论会 ②生成数据架构构件的<b>初始版本</b>（如企业范围数据流和路线图）③在开发项目中形成并建立数据架构工作方式 ④提高组织对数据架构工作价值的认知。<br>
+<span class="trap">坑：把「初始版本」偷换成「最终版本」——书上只说初始版本（c4-013 答案 B）。</span></div>
+
+<h2>考点5｜最明显的风险 7 条（讲义表述）</h2>
+<div class="pt">①缺少管理层支持 ②成功与否缺乏证据 ③缺乏管理者的信任 ④管理层不正确的决策 ⑤文化冲击 ⑥缺乏有经验的项目经理 ⑦单一维度视角。<br>
+<span class="trap">坑：干扰项塞「触犯合规性」——它不在这 7 条里（c4-043 答案 A）。</span></div>
+
+<h2>考点6｜组织接受能力的 6 个方面（讲义表述）</h2>
+<div class="pt">对架构方法的接受度、确认数据属于组织的业务资产、放弃局部数据视角接受企业级视角、把架构交付成果整合进项目实施、对数据治理的接受程度、立足企业全局。人话——小区业主认不认你的装修方案，六个角度逐个看。</div>
+
+<h2>考点7｜数据架构治理活动 4 条（讲义表述）</h2>
+<div class="pt">①项目监督 ②管理架构设计、生命周期和工具 ③定义标准 ④创建数据相关构件。人话——监理不光盯着工地，还要管图纸档案、定施工规范、补图纸。</div>
+
+<div class="pt">【你以为…其实…】你以为数据架构这章考的是画图技术，其实考的全是「对号入座」：三类工具、七条图表规范、三组度量、四步实施、七条风险、四个治理活动——每个数字清单都是一道「以下哪项不属于」。</div>
+
+<h2>易混对比：三组度量</h2>
+<table>
+<tr><th>度量组</th><th>看什么</th><th>一句话记住</th></tr>
+<tr><td>架构标准接受率</td><td>项目与架构贴得紧不紧</td><td>守不守图纸</td></tr>
+<tr><td>实施趋势</td><td>重用代替废弃的比例、项目执行效率</td><td>旧料利用与交付快慢</td></tr>
+<tr><td>业务价值</td><td>敏捷/质量/纠错/客户与监管环境</td><td>真拿到好处没有</td></tr>
+</table>
+
+<h2>考试怎么考</h2>
+<div class="pt">单选为主。正确项关键词：「架构标准接受率/实施趋势/业务价值」「初始版本」「交叉点并非连接点」「缺少管理层支持」。干扰项长这样：把清单外的词塞进来（数据合规、触犯合规性、最终版本、数据检测工具），或者把三组度量互相调包。</div>
+
+<h2>本卡真题自测</h2>
+<div class="selftest">
+<p><b>第 1 题（题号 c4-023）</b>：企业数据架构的度量指标不包含？<br>A. 架构接受度　B. 实施趋势　C. 业务价值　D. 数据合规<br><b>答案：D</b>　解析：DMBOK 2 第四章数据架构 4.6.2。度量指标就是三组——架构标准接受率（接受度）、实施趋势、业务价值，没有「数据合规」这一组。</p>
+<p><b>第 2 题（题号 c4-043）</b>：架构类项目可能相比其他项目，特别是在组织中第一次尝试时容易暴露出更多的风险，最明显的风险不包括：<br>A. 触犯合规性　B. 缺少管理层支持　C. 缺乏管理者的信任　D. 文化冲击<br><b>答案：A</b>　解析：P85 页.就绪评估和风险评估。最明显风险 7 条里没有「触犯合规性」。</p>
+</div>
+
+<div class="motto">【口诀】工具建模资管画图忙，度量「接受趋势价值」三跟上；实施只出初版本，风险七条记心房。</div>
+
+<p class="check">【覆盖自检】本张覆盖考点：工具与方法 · 图表规范 7 条 · 度量 3 组 · 实施内容 4 条 · 风险 7 条 · 接受能力 6 方面 · 治理活动 4 条（共 7 个）。<br>
+本章剩余考点：无——第4章 5/共5 至此收官。整章串讲：定义三组成（p66）→ 目标交付物与语境图（p67–68）→ 四类型+Zachman+企业数据模型（p69–70）→ 活动与数据流（讲义）→ 工具与度量。</p>
+
+<h2>本章没讲到的点</h2>
+<div class="pt" style="font-size:14px;">① p71–p91 全部为讲义表述、未核原句（活动、企业数据模型、数据流、工具、实施指南、治理与度量六块），二轮补讲前必须回原书核对；② 修订版是否设有独立的「数据架构原则」小节（约 p69–p71）本轮未核到编号条目，遇原则题以题库答案为准；③ Zachman 图 4-2 的完整 36 格（p70）本轮只讲了行列含义，未逐格转录。</div>
+
+<h2>相关延伸</h2>
+<p class="rel"><a href="cards/dig_dt32_1.html">下钻：实施趋势看哪两个比例？与业务价值怎么区分？</a></p>
+
+<div class="src">来源说明：概念与原句均转录自《DAMA 数据管理知识体系指南（原书第2版 修订版）》第4章底稿（p66–p70 原句，p71–p91 为讲义表述并已在文中标注）；真题取自 CDGA 题库 cdga_pool.json（c4-023、c4-043），题干选项答案未改动。</div>
+</div></body>
+</html>
