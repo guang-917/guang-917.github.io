@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-5 MCP 协议：给AI和工具定一个“通用插座”标准｜13/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月7日 · AI 知识</div>
+<h1>AI知识｜M5-5 MCP 协议：给AI和工具定一个“通用插座”标准｜13/32</h1>
+<div class="lead">上次说了AI会用工具，但每接一个软件都单独开发，太累。今天讲2024年 Anthropic 定的一个公开标准，把“每个AI配每把钥匙”变成“一把万能钥匙”。</div>
+
+<h2>一句话结论</h2>
+<p>MCP（Model Context Protocol，模型上下文协议）解决的问题是：<b>AI 要调用外部工具和数据时，不用为每个软件单独定制接口，按同一套标准接上就能用。</b></p>
+
+<h2>讲透：MCP 是什么</h2>
+<p>把“AI 调用工具”这件事拆成三块：</p>
+<table>
+<tr><th>角色</th><th>干什么</th><th>比方</th></tr>
+<tr><td>AI（模型）</td><td>决定要干什么、发指令</td><td>想用电器的人</td></tr>
+<tr><td>MCP 客户端</td><td>长在AI这一侧的“插头”，按协议发请求</td><td>电器的插头</td></tr>
+<tr><td>MCP 服务器</td><td>软件那侧的“插座”，把查文件、发消息、读数据库等能力按标准格式摆出来</td><td>墙上的统一插座</td></tr>
+</table>
+<p>协议由 Anthropic 于 <b>2024 年 11 月</b>发布并开源；<b>2025 年 3 月 OpenAI 宣布其 Agent 工具支持 MCP，同年 4 月 Google 宣布 Gemini 支持</b>——各家主流AI认了同一个标准。</p>
+<blockquote>生活比方：以前每个电器配一种插头，出国还得买转换头；后来有了统一插座，什么电器插上就通电。MCP 就是AI工具界的统一插座——以前AI接钉钉要开发一次、接飞书再开发一次；现在软件方做一个 MCP 服务器，所有支持协议的AI都能直接用。</blockquote>
+
+<h2>为什么重要</h2>
+<ul>
+<li><b>对开发者</b>：接 10 个工具，从写 10 套对接代码变成接 10 个现成“插座”，工作量大幅下降。</li>
+<li><b>对普通用户</b>：主流AI软件和智能体共享同一批工具生态，你用的AI能“插上”的能力越来越多。</li>
+<li><b>对软件公司</b>：做一个标准接口，就等于对所有支持协议的AI开放了自家产品。</li>
+</ul>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li>确认你用的客户端支持 MCP（如 Claude Desktop、Cursor 等）。</li>
+<li>在设置里添加 MCP 服务器：官方或软件方会提供现成配置，多数是一段地址加授权信息，复制粘贴即可。</li>
+<li>授权后直接说人话，比如“帮我看看指定文件夹里上周的报销单”，AI 自己去调工具、回结果。</li>
+</ol>
+<blockquote>注意：插座通了不代表能乱插。MCP 服务器会拿到你授权的权限，装不认识的第三方 MCP 前先看清它要哪些权限，坚持最小授权，用完可撤——下期 M5-7 正好细讲。</blockquote>
+
+<h2>今天就能用</h2>
+<p>在支持 MCP 的客户端（如 Claude Desktop、Cursor）里，添加官方的“文件系统”MCP 服务器，<b>只授权一个指定文件夹</b>；然后对AI说：“看看这个文件夹里有哪些文件，按修改日期列个清单。”如果它能准确列出，说明协议通路已打通——这就是你亲手完成的一次 MCP 调用，全程不到 10 分钟。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><b>工信部发布智能体终端进网管理新规</b>：11 月 6 日，工信部办公厅印发《关于加强智能体终端设备进网管理的通知》，要求预置智能体的手机、平板、可穿戴设备在进网检测中做适配验证和风险评估，并推动 App 开发者声明“是否同意被智能体调用”，未经声明同意的，智能体不得强制调用。对普通人意味着：以后你手机里的智能体再能干，也不能绕过应用和你的授权乱动 App。（来源：新华网 2026-11-06，https://news.yunnan.cn/system/2026/11/06/034190685.shtml）</li>
+<li><b>《智能体发展自律公约》发布</b>：2026 世界互联网大会乌镇峰会智能体主题论坛上，中国信通院联合腾讯、蚂蚁、阿里、抖音等 20 家单位共同起草发布该公约，共 8 条自律措施，包括健全智能体信任体系、提升互操作水平等。对从业者意味着：智能体互联、互操作正在从“技术话题”变成“行业标准动作”，做 MCP 类工具对接正是互操作的一部分。（来源：南方都市报 2026-11-06，https://www.163.com/dy/article/LB39MNMU05129QAF.html）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><b>M5-6 工作流编排：把零散的AI步骤串成一条自动流水线</b>（14/32）。</p>
+
+<div class="rel">相关延伸：上期 M5-2 讲了“工具调用”这个能力本身，本期 MCP 是把它标准化；两者关系可到“深挖”页看对比。下一期 M5-7 将讲权限与安全边界——正好接上“最小授权”这个话题。</div>
+
+<div class="note">来源说明：① MCP 发布时间与开源属性来源：Anthropic 官方公告（Introducing the Model Context Protocol，2024-11，www.anthropic.com/news/model-context-protocol）；② OpenAI 支持 MCP 来源：OpenAI Agents SDK 文档及 2025 年 3 月官方公告（openai.github.io/openai-agents-python/mcp/）；③ Google Gemini 支持 MCP 来源：Google Developers Blog，2025-04（developers.googleblog.com）；④ 政策动态两条分别见新华网（2026-11-06）与南方都市报（2026-11-06），已附链接。MCP 的具体技术细节以官方规范（modelcontextprotocol.io）为准。</div>
+</body>
+</html>
