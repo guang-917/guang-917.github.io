@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：工作流 vs 自主Agent，怎么选？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 16px 60px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin:22px 0 8px}
+p,li{font-size:15px}.meta{color:#9aa3b2;font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">下钻 · 来自 14/32 M5-6 工作流编排</div>
+<h1>工作流还是自主Agent？一句话选型</h1>
+<p><strong>先问一个问题：这件事出错的代价大不大、步骤是不是大致固定？</strong>答案是“大、固定”→ 工作流；答案是“小、每次都不一样”→ 自主Agent。</p>
+
+<h2>选工作流的三个信号</h2>
+<ul>
+<li><strong>步骤每天基本一样</strong>：比如每天把邮件变成待办、把发票归档——流程能画成图，就别让AI即兴。</li>
+<li><strong>错了要担责</strong>：涉及转账、发货、对外发送消息。工作流每步有日志，出错能定位到具体一块“积木”。</li>
+<li><strong>要控制成本</strong>：固定规则能干的（取日期、改格式）不用大模型，只有理解、总结这类活才让AI上。</li>
+</ul>
+
+<h2>选自主Agent的三个信号</h2>
+<ul>
+<li><strong>目标明确、路径未知</strong>：比如“调研这三个竞品的定价策略”，事先没法画流程图。</li>
+<li><strong>一次性任务</strong>：只干一回的事，不值得先花一小时画流程。</li>
+<li><strong>需要中途改变计划</strong>：做着做着发现要换方向，自主Agent能自己调整，工作流只会照图跑。</li>
+</ul>
+
+<h2>实践里最常见的答案：混着用</h2>
+<p>成熟的做法是<strong>工作流做骨架，Agent 做其中一格</strong>：整条链路用工作流钉死保证稳定，在真正需要判断的那一格（比如“理解客户投诉属于哪类问题”）塞一个 AI 步骤或小 Agent。这就像连锁餐厅——店面流程标准化（工作流），唯独“新品研发”交给厨师长自由发挥（Agent）。</p>
+<blockquote>选型口诀：流程能画出来→工作流；流程画不出来→Agent；画得出来但有一格特别难→工作流＋那一格上Agent。</blockquote>
+</body>
+</html>
