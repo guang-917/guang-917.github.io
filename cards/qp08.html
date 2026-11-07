@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDGA 每日一练｜第 4 期｜第4章 数据架构（整章综合）</title>
+<style>
+body{background:#121417;color:#d7dce2;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;padding:24px 16px 60px;}
+.wrap{max-width:680px;margin:0 auto;}
+.meta{color:#8a939e;font-size:13px;margin-bottom:8px;}
+h1{font-size:21px;line-height:1.5;color:#f2f5f8;margin:6px 0 10px;}
+.lead{background:#1b1f24;border-left:3px solid #4c8dff;padding:10px 14px;border-radius:6px;font-size:15px;line-height:1.7;margin:14px 0;}
+.q{background:#171a1e;border:1px solid #262b31;border-radius:8px;padding:14px 16px;margin:14px 0;line-height:1.8;font-size:15px;}
+.q .no{color:#4c8dff;font-weight:600;}
+.ans{background:#15201a;border:1px solid #274434;border-radius:8px;padding:14px 16px;margin:14px 0;line-height:1.8;font-size:15px;}
+.ans h2,.sec h2{font-size:17px;color:#7fd49a;margin:0 0 8px;}
+.sec{background:#171a1e;border:1px solid #262b31;border-radius:8px;padding:14px 16px;margin:14px 0;line-height:1.8;}
+.src{color:#7b848e;font-size:12.5px;line-height:1.7;margin-top:24px;border-top:1px solid #262b31;padding-top:12px;}
+.rel a{color:#4c8dff;text-decoration:none;}
+.tag{display:inline-block;background:#1f2733;color:#9db8d8;border-radius:4px;padding:1px 8px;font-size:12px;margin-right:6px;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">2026-11-08 · 11月8日 · 周日 · 距 2026-12-09 考试还有 31 天</div>
+<h1>CDGA 每日一练｜第 4 期｜第4章 数据架构（整章综合）</h1>
+<div><span class="tag">CDGA</span><span class="tag">每日一练</span><span class="tag">数据架构</span><span class="tag">第4章</span></div>
+<div class="lead">昨天第4章刚讲完 5/5，今天整章混着练一遍。规则老样子：先只看题干和选项，把答案写在纸上，全部做完再翻到底部对答案。5 道题覆盖：构件、企业架构四类型、实施与文化、度量指标、架构类型。</div>
+
+<div class="q"><span class="no">第 1 题（c4-010）</span>以下哪项不是数据架构的构件：<br>A. 数据管控策略中要求的数据资产管理策略<br>B. 数据需求的定义<br>C. 业务系统和软件包的运行<br>D. 数据整合的指引</div>
+<div class="q"><span class="no">第 2 题（c4-037）</span>企业架构包括业务架构、数据架构、应用架构和技术架构。其中创建企业数据架构主要依赖于以下哪项选项？<br>A. 制定其他架构的需求<br>B. 管理业务架构创建和需要的数据<br>C. 依据业务需求来处理指定的数据<br>D. 承载并执行应用架构</div>
+<div class="q"><span class="no">第 3 题（c4-046）</span>一个组织接受并实施数据架构不依赖于（）<br>A. 对架构方法的接受度<br>B. 确认数据是 IT 任务<br>C. 放弃局部数据视角，接受企业级数据视角的能力<br>D. 规范数据治理的接受程度</div>
+<div class="q"><span class="no">第 4 题（c4-023）</span>企业数据架构的度量指标不包含？<br>A. 架构接受度<br>B. 实施趋势<br>C. 业务价值<br>D. 数据合规</div>
+<div class="q"><span class="no">第 5 题（c4-035）</span>关于数据架构类型说法错误的是<br>A. 对于需要大范围、广泛使用的数据来说集中式数据库是最理想的<br>B. 分布式数据库通过扫描大量节点来快速获取数据<br>C. 数据联邦提供的数据不需要对数据源进行额外复制或持久化<br>D. 联邦数据库对应类似企业信息集成、数据可视化、模式匹配和主数据管理这一异构和分布式的集成项目非常合适</div>
+
+<div class="ans"><h2>## 答案与解析</h2>
+<p><b>第 1 题（c4-010）答案：C</b><br>为什么：按讲义表述，数据架构的构建包括四项——① 当前状态的描述 ② 数据需求的定义 ③ 数据整合的指引 ④ 数据管控策略中要求的数据资产管理规范。A、B、D 正是第④②③条，都是数据架构自己的东西。<br>其余选项错在哪：C「业务系统和软件包的运行」是应用架构的构件——应用架构的元素就是业务系统、软件包、数据库。这道题本质在考"数据架构和应用架构别串门"。</p>
+<p><b>第 2 题（c4-037）答案：B</b><br>为什么：表 4-1 里数据架构的依赖项一栏写的就是"管理由业务架构创建和需要的数据"——业务架构先识别企业怎么创造价值，数据架构接着管这些业务要用的数据。<br>其余选项错在哪：A 是业务架构的活（确立对其他架构的要求）；C 是应用架构（按业务要求处理特定数据）；D 是技术架构（承载并执行应用架构）。四类型的"目的—元素—依赖项—角色"四栏是本章高频串门区，建议把表 4-1 当填空题背。</p>
+<p><b>第 3 题（c4-046）答案：B</b><br>为什么：组织接受数据架构的 6 个方面里，恰恰要求"确认数据属于组织的业务资产"。把数据当成纯 IT 任务，正是推行企业级架构失败的常见心态——数据架构要业务和技术角色共同承担。<br>其余选项错在哪：A（对架构方法的接受度）、C（放弃局部视角接受企业级视角）、D（对数据治理的接受程度）全都列在 6 个方面里，所以题目问"不依赖于"，只有 B 是反着说的那个。</p>
+<p><b>第 4 题（c4-023）答案：D</b><br>为什么：第4章度量指标就 3 组——架构标准接受率（接受度）、实施趋势、业务价值度量指标。题库 exp 同样指向 4.6.2。"数据合规"不在这一章的度量清单里。<br>其余选项错在哪：A、B、C 都在 3 组之内，属于送分排除题。注意第二陷阱：三组之间也常被互换考（比如拿"业务敏捷性改进"问是哪组，答"业务价值"组）。</p>
+<p><b>第 5 题（c4-035）答案：A</b><br>为什么：A 说法太绝对。教材 P132 对集中式、分布式、联邦各有适用场景，集中式数据库并非"大范围、广泛使用数据"的最理想选择（集中式要把所有访问集中到一处，广泛高频使用时反而是瓶颈）。<br>其余选项错在哪：B、C、D 都与教材一致——分布式靠扫描大量节点快速取数；数据联邦不用对数据源额外复制或持久化；联邦数据库适合企业信息集成、数据可视化、模式匹配、主数据管理这类异构分布式集成项目。</p></div>
+
+<div class="sec"><h2>## 今天记住这一句</h2>
+<p>构件四条是"现状、需求、整合指引、资产管理规范"；数据架构依赖业务架构；度量只有"接受率、趋势、价值"三组——凡冒出"合规""IT 任务""最理想"的，多半是干扰项。</p></div>
+
+<div class="sec"><h2>## 明天练什么</h2>
+<p>第5章「数据建模和设计」底稿还在转录中（状态 ⏳），教材卡暂停推进；若明天仍未就绪，练题卡将回炉已讲完的章（第3章数据治理为主，第4章部分题已用过约 10%，未到回炉线）。建议今天顺手把第4章的表 4-1 和度量 3 组再默一遍。</p></div>
+
+<div class="sec rel"><h2>相关延伸</h2>
+<p><a href="cards/dt30.html">CDGA｜第4章 数据架构｜3/共5 · 四类型+Zachman+企业数据模型</a><br>
+<a href="cards/dt30.html">CDGA｜第4章 数据架构｜1/共5 · 定义与三个组成部分：架构不只是画图</a><br>
+延伸：物理数据模型到底是数据架构的产物，还是数据建模和设计的产物？两者的边界怎么划？——<a href="cards/dig_qp07_1.html">看这篇下钻</a></p></div>
+
+<div class="src">来源说明：题目与答案、解析依据均来自用户题库 cdga_pool.json（题号 c4-010 / c4-037 / c4-046 / c4-023 / c4-035，题目原文照录未改动）；知识点口径以教材底稿 cdga_notes.md 第4章为准（p66–p70 原句，p71–p91 为讲义表述）。题库 exp 原文：c4-010「DMBOK 2 第四章数据架构 4.1.3，业务系统和软件包的运行是属于应用架构的构件」；c4-037「DMBOK 2 第四章数据架构 4.1.3，表 4-1」；c4-023「DMBOK 2 第四章数据架构 4.6.2」；c4-035「P132」；c4-046「P86【4.5.2 组织与文化】」。</div>
+</div></body></html>
