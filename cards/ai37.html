@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-6 工作流编排：把“AI办事”变成一条固定流水线｜14/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月8日 · AI 知识</div>
+<h1>AI知识｜M5-6 工作流编排：把“AI办事”变成一条固定流水线｜14/32</h1>
+<div class="lead">M5-3 讲过让AI自己列计划，但“自由发挥”的AI结果时好时坏。今天讲反过来的思路：重要的事别让它即兴，把流程钉死成一条流水线。</div>
+
+<h2>一句话结论</h2>
+<p>工作流编排解决的问题是：把AI要干的事拆成固定步骤，每步谁做、做完交给谁、出岔子走哪条备用路，都提前画在图上，AI照着跑——换来的是“结果稳定、随时能查哪一步出了问题”。</p>
+
+<h2>是什么：两条路线的分岔口</h2>
+<p>让AI干活有两条路线。一条是“自主型 Agent”（M5-1 讲过）：你给个目标，它自己想办法、自己调工具，像请了个临时工，口头交代任务就撒手——灵活，但结果时好时坏。</p>
+<p>另一条就是今天的<strong>工作流编排</strong>：你先画好一张流程图，比如——</p>
+<blockquote>收到邮件 → AI提取关键信息 → 判断：金额超1万？→ 是：转人工审批 ／ 否：自动回复 → 全程记日志</blockquote>
+<p>主流工具（如 Dify、Coze/扣子、n8n）都把工作流做成“画布上拖积木”：一块是“读邮件”，一块是“AI总结”，一块是“条件判断”，连上线就是一条流程。跑的时候AI不即兴发挥，只按图纸办事。</p>
+
+<h2>生活比方</h2>
+<p>自主型 Agent 像点了个“看厨师心情”的菜，今天咸明天淡；工作流像连锁快餐店——炸多久、酱挤几圈、超时丢弃，全写在操作手册上，谁来干都一个味。<strong>流程越要稳定可靠，越要工作流。</strong></p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li>把任务拆成“能判断对错”的最小步骤，先写在纸上，别急着开软件；</li>
+<li>区分哪些步骤必须AI、哪些用固定规则就够——比如“从文本里取日期”，正则又快又准，根本不用大模型；</li>
+<li>在画布工具里拖块连线，先跑通一条最短链路，再逐步加分支和日志。</li>
+</ol>
+<p>口诀：<strong>能用固定规则的不用AI，必须用AI的才上AI。</strong></p>
+
+<h2>为什么重要</h2>
+<ul>
+<li><strong>稳定</strong>：同样的输入出同样的输出，方便验收和交接；</li>
+<li><strong>可定位</strong>：出错了能精确到某一块积木，而不是笼统地说“AI这次发挥不好”；</li>
+<li><strong>省钱省时</strong>：规则步骤不走大模型，又快又便宜，AI只花在刀刃上。</li>
+</ul>
+
+<h2>今天就能用</h2>
+<p>在 Coze（扣子）或 Dify 上建一条“邮件摘要流水线”，5 分钟可完成：</p>
+<ol>
+<li>新建工作流，第一块选“触发器”或“邮件读取”；</li>
+<li>第二块放一个 LLM 节点，提示词写：“把下面的邮件提炼为不超过3条的待办事项，每条一句话：{{输入}}”；</li>
+<li>加一个“条件判断”块：内容含“发票”→ 发到记账分组，否则发到普通分组；</li>
+<li>手动触发一次，核对输出格式是否每次一致——一致即说明流水线跑通了。</li>
+</ol>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>工信部为“预装智能体的手机、平板”立新规</strong>：11月6日，工业和信息化部办公厅印发《关于加强智能体终端设备进网管理的通知》，要求预置智能体的终端在进网检测中做适配验证、涉诈风险评估，智能体须配备唯一身份码实现行为可溯源，应用分发平台须让开发者以电子签名声明“是否同意被智能体调用”。对普通人意味着：以后你手机里的AI助手要打“实名”上岗，未经App作者授权不能强行替你操作其他应用。（来源：央广网 2026-11-07，<a href="https://www.cnr.cn/jingji/ycbd/20261107/t20261107_527865633.shtml">链接</a>；扬子晚报网 2026-11-07，<a href="https://www.yangtse.com/news/ch/202611/t20261107_410244.html">链接</a>）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>M5-7 权限与安全边界：给会动手的AI拴上“牵引绳”（15/32）。</p>
+
+<div class="rel">相关延伸：M5-3《规划与反思》讲了“让AI自己列计划”的路线；M5-5《MCP 协议》讲了工具如何按统一标准接上——工作流编排是把这两者串成固定产线的“总装图”。</div>
+<div class="note">来源说明：政策动态来自央广网（2026-11-07）与扬子晚报网（2026-11-07）对工信部《关于加强智能体终端设备进网管理的通知》（2026-11-06印发）的报道，两处报道内容一致；Dify、Coze/扣子、n8n 为公开可用的画布式工作流工具，仅作举例，无利益关联。</div>
+</body>
+</html>
