@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M5-7 权限与安全边界：给“办事员”发工牌，也给他画好围栏｜15/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月9日 · AI 知识</div>
+<h1>AI知识｜M5-7 权限与安全边界：给“办事员”发工牌，也给他画好围栏｜15/32</h1>
+<div class="lead">前面几期你已经会让 AI 调工具、跑流水线了——但权限一给大，它删错文件、发错消息、乱花钱谁来兜底？这一期讲怎么当个靠谱的“发包方”。</div>
+
+<h2>一句话结论</h2>
+<p>M5-7 解决的问题是：<strong>当 AI 从“说话”变成“动手”，怎么让它只做你授权的事、出了岔子能止损</strong>。这是把 Agent 从玩具变成可用工具的最后一块拼图。</p>
+
+<h2>是什么：权限不是开关，是“工牌+围栏”</h2>
+<p>普通聊天机器人答错了，顶多你重新问一遍；Agent 不一样——它能删你的文件、发你的邮件、花你的钱。所以给它权限，本质和公司给新员工入职一样：<strong>发工牌（能进哪些门）+ 画围栏（不能出哪些界）+ 装监控（干了啥有台账）</strong>。</p>
+<p>常见的权限分三级：</p>
+<table>
+<tr><th>级别</th><th>典型动作</th><th>给不给</th></tr>
+<tr><td>只读</td><td>搜网页、读文件、查日历</td><td>直接给，错了也无损失</td></tr>
+<tr><td>写入</td><td>存文件、发草稿、建备忘录</td><td>限定范围后给</td></tr>
+<tr><td>不可逆</td><td>删除、对外发送、支付下单</td><td>默认不给，必须人工逐次确认</td></tr>
+</table>
+
+<h2>为什么重要：三个真实的坑</h2>
+<p>第一坑：<strong>连根授权</strong>。把整个网盘或整个邮箱直接连给 AI，等于把公司总门卡交给实习生——它“好心整理”时一个批量删除或群发，损失全在你头上。</p>
+<p>第二坑：<strong>无人值守长任务</strong>。让 Agent 自己跑一晚上“优化电脑”，没人盯着时它每一步都无法叫停，跑偏了越走越远。</p>
+<p>第三坑：<strong>把密码原文发给 AI</strong>。对话记录可能被存储、同步，密码进了聊天记录等于写在了便签上贴门上。</p>
+<blockquote>记住一条铁律：<strong>AI 能力越强，你的确认按钮越值钱。</strong>不可逆的动作，永远最后由人来按。</blockquote>
+
+<h2>怎么用：三步给 Agent 画好围栏</h2>
+<ol>
+<li><strong>工具分级</strong>：连接工具时逐个过一遍，只读的直接放行，写入类限定范围，删除/发送/支付类一律设为“每一步问我”。多数 Agent 工具（如各类客户端的连接器设置）都有“确认后再执行”开关，逐项打开。</li>
+<li><strong>范围锁死</strong>：别给整个目录，就给一个专门的工作文件夹（如"D:\ai_work"）；邮箱只授权某个标签下的草稿箱；有消费的工具设上限（比如每月不超过 20 元）。范围越小，事故上限越低。</li>
+<li><strong>全程留痕</strong>：开启操作日志或让 AI 每完成一步汇报一句“我刚才做了什么”；跑删除类任务前，先把目标文件夹复制一份备份。出了问题能回放、能恢复。</li>
+</ol>
+
+<h2>生活比方</h2>
+<p>把 Agent 想成你请的<strong>钟点工</strong>：你不会把全部抽屉钥匙和银行卡密码都交出去，只会说“打扫厨房，抹布在那，别动书房”；贵重物品先收进柜子（备份）；做完了你检查一遍（日志回看）。给 AI 的信任结构，和给钟点工的完全一样——<strong>信任靠制度，不靠感觉</strong>。</p>
+
+<h2>今天就能用</h2>
+<p>现在花 10 分钟做一次“权限盘点”：打开你的 AI 客户端里已连接的工具列表，逐个问自己三个问题——① 它有写入权限吗？② 它能发消息或花钱吗？③ 我知道它上次动了什么吗？凡是答不上第 3 个的，先把写入权限关掉，只留只读；删除和发送类一律改成“确认后执行”。改完截图保存，以后每月盘点一次。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>工信部出台智能体终端进网新规，权限管理首次进“国标级”监管</strong>：11 月 6 日，工业和信息化部印发《关于加强智能体终端设备进网管理的通知》，要求应用开发者以电子签名形式明确授权智能体调用权限，未经授权严禁智能体强制调取第三方应用；终端智能体需配备唯一身份标识码，实现行为可溯源、可追责。<strong>意味着</strong>：以后你手机里的 AI 助手动你的 App 之前，“要不要授权、授权了什么”将有明确规则可依，普通人有了制度层面的选择权（来源：经济日报政策解读，2026-11-06，https://rss.jingjiribao.cn/static/detail.jsp?id=695708；另见上海证券报 2026-11-07 报道，https://www.163.com/dy/article/LB4OC8H20552C2FY.html）。</li>
+<li><strong>国办发文部署“就业友好型”AI 发展</strong>：国务院办公厅印发《关于适应人工智能技术发展 助力构建就业友好型发展方式的意见》（国办发〔2026〕29 号），围绕 6 个方面部署 18 项任务，包括将模型训练师、数据标注员等新职业纳入国家职业分类体系。<strong>意味着</strong>：与 AI 打交道正在成为正式的职业赛道，学 AI 用 AI 的普通人会获得更多政策支持（来源：国务院办公厅文件，据中国税务报 2026-11-04 报道，https://shandong.chinatax.gov.cn/art/2026/11/4/art_23_1520632.html）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>M5-8 典型场景与失败案例：别人用 Agent 赚到了什么、又翻车在哪，16/32。</p>
+
+<div class="rel">相关延伸：上一期 M5-6 讲了“工作流编排”——流程提前定死的流水线本身就是一种安全手段：AI 自由度越低，越不容易跑偏。权限管理（本期）+ 流程约束（上期），是 Agent 安全的两条腿。</div>
+<div class="note">来源说明：① 工信部《关于加强智能体终端设备进网管理的通知》发布信息，据经济日报政策解读（2026-11-06）与上海证券报（2026-11-07）两个独立来源交叉确认；② 国办发〔2026〕29 号文件内容，据中国政府系统网站转载原文及《中国税务报》2026-11-04 版报道。技术内容为一般性介绍，具体产品的权限设置入口以各工具官方文档为准。</div>
+</body>
+</html>
