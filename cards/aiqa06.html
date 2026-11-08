@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识问答｜第5期｜覆盖 M4-1~M5-6</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月9日 · AI 知识问答</div>
+<h1>AI知识问答｜第5期｜覆盖 M4-1~M5-6</h1>
+<div class="lead">上周咱们从"给文字发语义身份证"一路学到"把AI办事变成固定流水线"——M4 的知识库八讲和 M5 的 Agent 六讲都推完了。这期 3 道题帮你把最近两周的东西钉牢，答完发我，我来批改。</div>
+<h2>第1题 · 选择题（考 M5-5 MCP 协议）</h2>
+<p>以前一个 AI 助手要接钉钉得单独开发一次接口，接飞书又得再开发一次。MCP 协议主要解决的是哪个问题？</p>
+<ul>
+<li>A. 让大模型回答问题的速度变得更快</li>
+<li>B. 给 AI 调用外部工具定一套统一标准，软件方做一个标准接口，所有支持协议的 AI 都能用</li>
+<li>C. 把大模型的参数规模压缩变小，省显存</li>
+<li>D. 让 AI 不再编造事实，保证回答 100% 准确</li>
+</ul>
+<blockquote><b>答案：B。</b>MCP 就是"AI 工具界的统一插座"：AI 这边是插头（客户端），软件那边是插座（服务器），按同一套标准接上就能用。干扰项陷阱：A、C 是"性能/模型本身"的事，MCP 管的是接口标准，不管算力速度；D 最容易选错——MCP 让 AI 能调真工具、拿真数据，能减少一部分瞎编，但绝不承诺"100% 准确"，凡是说绝对准的都要警惕。</blockquote>
+<h2>第2题 · 简答题（考 M5-1、M5-6）</h2>
+<p>用自己的话说说：自主型 Agent 和工作流编排有什么区别？如果任务是"每天自动把收件箱里的报销邮件提取关键信息、金额超过 1 万元转人工审批"，你更倾向用哪种方式？为什么？</p>
+<blockquote><b>参考答案要点（3 条以内）：</b>① 自主型像请临时工，口头交代就撒手让 AI 自由发挥；工作流像连锁快餐的操作手册，步骤、分支、日志提前画好，谁来跑都一个样（M5-1 vs M5-6）。② 报销邮件这种任务步骤固定、要求稳定可靠、出了错要能定位到具体环节，更适合工作流。③ "提取邮件信息"这一步可以上 AI，"判断金额、转审批"用固定规则就行——口诀：能用固定规则的不用 AI，必须用 AI 的才上 AI。</blockquote>
+<h2>第3题 · 场景实战题（考 M5-1、M5-2、M5-3）</h2>
+<p>真实小任务：打开任意支持 Agent 模式的 AI 助手（带联网或代码执行功能），让它帮你调研"3 款主流记账 App 的免费额度差异"，并用学过的方法管住它。</p>
+<p><b>达标标准（3 条）：</b></p>
+<ul>
+<li>① 先要求它"列出执行计划给我确认"，你看过再放行，而不是一句话丢出去就开跑（M5-3 规划）。</li>
+<li>② 它查数据用的是真工具（联网搜索/代码执行），而不是凭训练记忆直接报数字；可以让它先报"我打算调用什么工具、参数是什么"再执行（M5-2 工具调用）。</li>
+<li>③ 交代的是单一明确任务，有交付物（一份 3 款 App 的额度对比）和完成标准，不是"帮我研究一下记账"这种模糊指令（M5-1）。</li>
+</ul>
+<h2>下期预告</h2>
+<p>第 6 期仍只考最近 14 天实际推送的知识点，预计会进入 Agent 进阶内容，覆盖范围照实写、不硬凑。想被加练哪一块，批改时直接告诉我。</p>
+<div class="rel">相关延伸：《AI知识｜M5-5 MCP 协议：给AI和工具定一个"通用插座"标准｜13/32》《AI知识｜M5-6 工作流编排：把"AI办事"变成一条固定流水线｜14/32》《AI知识｜M5-3 规划与反思：AI动手前先列清单，做完再回头检查｜11/32》——都是最近两周推过的，答错哪题就回去翻哪篇。</div>
+<div class="note">题目与参考答案均基于本号 2026-10-26 至 2026-11-08 推送的 M4-1~M5-6 卡片编写。MCP 由 Anthropic 于 2024 年 11 月发布并开源，2025 年 OpenAI、Google 先后宣布支持（见原 M5-5 卡；接入名单持续更新，建议进一步核实最新名单）。答题无时间限制，把答案发到对话里即开始批改。</div>
+</body>
+</html>
