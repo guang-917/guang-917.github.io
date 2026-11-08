@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：Agent 连了我的邮箱和网盘，先关哪个权限？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 16px 60px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin:22px 0 8px}
+p,li{font-size:15px}.meta{color:#9aa3b2;font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">来自 15/32 · M5-7 权限与安全边界</div>
+<h1>Agent 连上了我的邮箱和网盘，我该先关掉哪个权限？</h1>
+<p>先给答案：<strong>先关"对外发送/删除"类，再关"整库读写"，最后才轮到只读</strong>。判断标准只有一条：这个动作一旦做错，能不能撤销？不能撤销的最先管住。</p>
+
+<h2>按风险排序的收紧清单</h2>
+<ol>
+<li><strong>邮箱的"发送"权限</strong>：发出去的邮件收不回来，还可能群发给错误名单。改成"只写草稿、发送前必须我确认"。这是全网盘事故里损失最大的一类。</li>
+<li><strong>网盘/文档的"删除"权限</strong>：批量误删、覆盖文件都不可逆。改成只读，或至少限定到某个专用文件夹。</li>
+<li><strong>支付与下单类连接</strong>：设消费上限，或干脆断开，用时再连。</li>
+<li><strong>"整个库"级别的读写</strong>：换成指定目录、指定标签，范围越小事故上限越低。</li>
+<li><strong>只读权限</strong>：留着没关系，出不了大事——但注意别让它读到的私密内容被带进后续对话。</li>
+</ol>
+
+<h2>一个检验标准</h2>
+<blockquote>关掉某项权限前问自己：AI 用这个权限最多能造成多大损失？损失超过"我愿意重做一遍"的，就必须加人工确认。</blockquote>
+<p>每月做一次 10 分钟盘点（打开连接工具列表逐个过），比事后补救便宜一百倍。</p>
+</body>
+</html>
