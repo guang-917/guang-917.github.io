@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜MCP 插座通了，权限该怎么管？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月9日 · AI 知识问答第5期 · 下钻</div>
+<h1>MCP 插座通了，权限该怎么管？</h1>
+<div class="lead">第5期选择题考了 MCP 的"统一插座"。有同学会追问：插座一通，AI 是不是就能随便动我的文件、发我的消息？这篇把权限问题讲透。</div>
+<h2>插座通了 ≠ 能乱插</h2>
+<p>M5-5 里说过，MCP 让 AI 按同一套标准接入各种工具。但协议解决的是"怎么接上"，不解决"接上之后能干什么"——能干什么是你在<b>授权</b>那一刻决定的。你给一个 MCP 服务器授权读写文件夹，它就真的能读写你的文件夹；AI 只是调用方，权限落在服务器身上。</p>
+<h2>三个实操原则</h2>
+<ul>
+<li><b>最小授权：</b>装一个 MCP 服务器前，先看清它要哪些权限。只想让它"读笔记"，就别给它"删文件"的权限；官方或软件方自带的优先，来路不明的第三方慎装。</li>
+<li><b>能撤的授权才算数：</b>装完记得知道在哪撤销。授权不是一次终身，不用了就撤，和给 App 关权限一个道理。</li>
+<li><b>敏感目录绕着走：</b>涉及身份证照片、合同、账本这类文件的目录，先别接给任何 MCP 工具——这和 M4-8 说的"本地优先、入库先脱敏"是同一条思路：风险跟着数据走，数据不给出去就漏不出去。</li>
+</ul>
+<h2>一句话总结</h2>
+<blockquote>MCP 给你的是"标准插座"，安全责任仍在你自己手里：装前看清权限、装后能随时撤、敏感数据不接进去。技术越标准，人越要把好门。</blockquote>
+<div class="rel">相关延伸：《AI知识｜M5-5 MCP 协议：给AI和工具定一个"通用插座"标准｜13/32》《AI知识｜M4-8 权限与隐私：给你的知识库上把"门锁"，别让AI变成泄密口｜8/32》</div>
+<div class="note">本文基于本号 M5-5、M4-8 两期卡片内容整理。MCP 授权与安全机制仍在演进中（如官方陆续补充的授权规范），具体产品的权限项以你所用客户端实际界面为准，建议进一步核实。</div>
+</body>
+</html>
