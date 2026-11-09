@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>下钻 · 键为什么不是第五个组件</title>
+<style>body{background:#12161f;color:#d8dee9;font-family:-apple-system,'PingFang SC',sans-serif;line-height:1.85;margin:0;padding:24px 12px}main{max-width:680px;margin:0 auto}h1{font-size:19px;color:#7db8ff}.quote{background:#1a2230;border-radius:6px;padding:10px 14px;color:#b7c9dd;font-size:14.5px;margin:10px 0}strong{color:#f0f4f9}</style></head><body><main>
+<h1>下钻：键为什么不是第五个组件？</h1>
+<p>不少同学在 p87 看到"每种模型都包含一组组件，如实体、关系、事实、键和属性"，就开始犯嘀咕：这不是 5 个吗？怎么 p90 又说基础组件是实体、关系、属性、域 4 个？</p>
+<p>诀窍在两个词的分量：<strong>"如"是举例，"包含"是定义</strong>。p87 那句话里的"事实""键"，是不同建模方案里常见的成员——维度模型里天天说"事实"，键更是每张表都离不开——所以教材举例时把它们点了出来。但 p90 的正式定义清清楚楚只有 4 个：实体、关系、属性、域。</p>
+<p>键（标识符）住哪一层？它住在<strong>属性这一层</strong>：教材把标识符定义为"唯一标识实体实例的一个或多个属性的集合"——也就是说，键本身就是属性（一个或一组）被赋予了"唯一标识"这个职责之后的名字。就像装修清单里，"门牌号"确实写在清单上，但它不是和"房间"并列的结构，而是房间里某个条目被专门点名而已。</p>
+<div class="quote">考试落点：问"数据模型的（基础）组件不包含"，按 4 个找答案；问"标识符是什么"，答"唯一标识实体实例的一个或多个属性的集合"，落点在属性。这两问一起出现时，最容易被同一个陷阱绊倒。</div>
+</main></body></html>
