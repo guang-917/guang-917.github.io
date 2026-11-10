@@ -1,0 +1,6 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>dig_dt38_1</title>
+<style>body{background:#111418;color:#d8dde5;font-family:sans-serif;padding:24px}.wrap{max-width:680px;margin:0 auto}p{line-height:1.9}</style></head><body><div class="wrap">
+<h2>SCD 三种变化类型（ORC）分别在什么场景用？</h2>
+<p>拿“客户收货地址变更”打比方：地址从 A 改成 B。覆盖（O，类型 1）＝直接把 A 涂掉写 B——历史不保留，适合“填错了改对”的场景。新的行（R，类型 2）＝A 那行标记为“非当前”，新开一行写 B——完整保留历史，适合财务、审计这类“当时是多少就是多少”的场景。新的列（C，类型 3）＝同一行开“上一地址/当前地址”两列，新值写第一列，旧值依次后移，最后一个被丢弃——只留有限的几段历史。</p>
+<p>考试口诀：要历史选“新行”，要省事选“覆盖”，要“前后对照”选“新列”。问“保留全部历史”答新的行（类型 2）。</p>
+<p><a href="cards/dt38.html" style="color:#6aa3f7">← 返回本卡</a></p></div></body></html>
