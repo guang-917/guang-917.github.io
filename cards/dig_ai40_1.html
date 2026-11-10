@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻｜扩散模型 vs GAN：为什么2022年后文生图突然爆发</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 4px}
+.meta{color:#9aa3b2;font-size:13px;margin-bottom:18px}
+h2{font-size:17px;margin:24px 0 10px;padding-left:10px;border-left:4px solid #4f8cff}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+.note{margin-top:20px;color:#9aa3b2;font-size:13px;border-top:1px solid #262b34;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="meta">下钻问答 · 来自 17/32 M6-1 扩散模型</div>
+<h1>扩散模型和 GAN 比，到底强在哪？</h1>
+
+<h2>GAN 是什么</h2>
+<p>GAN（生成对抗网络，2014年提出）是扩散模型之前的主流画图方法：两个网络互相博弈——一个"造假者"负责生成图片，一个"鉴定师"负责挑假货，互相较劲，造假者越练越真。它速度快（一步出图），但有个老大难问题：<strong>训练不稳定</strong>。造假者和鉴定师一旦失衡，就会出现"模式崩塌"——模型只会画那几类图，多样性塌掉。</p>
+
+<h2>扩散模型赢在三点</h2>
+<ul>
+<li><strong>训练稳。</strong>去噪这个任务的目标非常明确（每一步该减掉哪些噪点是确定的），不像GAN要靠两个网络互相"斗"来维持平衡，所以大规模训练不容易崩。</li>
+<li><strong>图文对齐好接。</strong>文字条件可以注入到去噪的每一步，文字对画面的控制力强，这是文生图爆发的关键前提。</li>
+<li><strong>多样性高。</strong>从纯噪点出发、逐步细化，能生成训练集中从没出现过的丰富组合，不容易"只会画那几样"。</li>
+</ul>
+
+<h2>代价是什么</h2>
+<p>扩散模型要一步步去噪，原版要几十上百步，出图慢。2022年的潜在扩散模型（Stable Diffusion 的底层技术）把去噪搬到压缩后的"潜空间"里做，把计算量降了一个量级，消费级显卡也能跑——这才是2022年8月 Stable Diffusion 开源后文生图工具集体爆发的直接原因。</p>
+
+<h2>一句话总结</h2>
+<p>GAN 像一个靠师傅带着徒弟斗嘴来进步的画室，时好时坏；扩散模型像一个踏踏实实学"擦玻璃"的学生，每一步都有标准答案，稳、准、多样。2022年之后的新工具，几乎都换了这位学生。</p>
+
+<div class="note">背景资料：Ho et al.《Denoising Diffusion Probabilistic Models》(2020)；Rombach et al.《High-Resolution Image Synthesis with Latent Diffusion Models》(2022)。本页为一般性技术介绍，不涉及具体产品数据。</div>
+</body>
+</html>
