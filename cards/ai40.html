@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-1 扩散模型：从一堆雪花噪点里，一步步“擦”出一张画｜17/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月11日 · AI 知识</div>
+<h1>AI知识｜M6-1 扩散模型：从一堆雪花噪点里，一步步“擦”出一张画｜17/32</h1>
+<div class="lead">文生图工具为什么能“凭空”画出一张图？答案藏在它的底层引擎——扩散模型：一台“先学弄脏、再学擦干净”的机器。</div>
+
+<h2>一句话结论</h2>
+<p>扩散模型解决的问题是：<strong>怎么把一句文字，变成一张从零生成的、清晰真实的图像</strong>。它是今天几乎所有文生图工具的底层引擎。</p>
+
+<h2>它是什么：先学弄脏，再学擦干净</h2>
+<p>扩散模型分两步学：</p>
+<ul>
+<li><strong>第一步“弄脏”</strong>：往一张真实图片里反复加雪花噪点，加一次脏一点，加几十次后整张图变成纯噪点。</li>
+<li><strong>第二步“擦干净”</strong>：训练 AI 把每一步的噪点去掉。它见过“从清晰到脏”的全过程，自然学会了反着走。</li>
+</ul>
+<p>生成的时候，AI 从一张纯噪点图出发，按你输入的文字提示，一步一步去噪，几十步之后就“擦”出一张新图。这条技术路线有明确的学术起点：2020 年 Ho 等人的论文《Denoising Diffusion Probabilistic Models》（DDPM）让去噪生成的质量首次追上老方法，成为今天文生图的技术底座。</p>
+<blockquote>生活比方：像修复一张被大雪盖住的老照片。先教一个人“雪是怎么一层层盖上去的”，他自然就学会了反过来“一层层把雪扫掉”。你给他一句“这是座有钟楼的教堂”，他就朝着这个方向扫，扫到最后照片就出来了。</blockquote>
+
+<h2>为什么重要</h2>
+<p>你现在能叫得上名字的主流画图工具——Stable Diffusion（2022 年 8 月由 Stability AI 开源，底层是 Rombach 等人的潜在扩散模型论文）、DALL·E 系列、Midjourney、国产文生图模型——核心都是扩散模型。理解它，你就顺带明白了三件日常现象：</p>
+<ul>
+<li><strong>为什么生成要等几秒到几十秒？</strong>因为它在一步步去噪，不是一次成型。</li>
+<li><strong>为什么步数影响画质？</strong>步数太少，噪点擦不干净。</li>
+<li><strong>为什么改提示词能改变画面？</strong>文字在每一步去噪时都在“指挥”擦的方向。</li>
+</ul>
+
+<h2>怎么用（3 步以内）</h2>
+<ol>
+<li><strong>提示词说清楚主体、场景、风格</strong>——因为文字每一步都在引导去噪方向，写得越具体，指挥越准。</li>
+<li><strong>想要更精细，适当提高生成步数</strong>（比如从 20 步调到 40 步），代价是等待时间变长。</li>
+<li><strong>不满意就换措辞重跑</strong>，不要反复用同一个提示词“抽卡”——每一步去噪都有随机性，同样的词结果也会变。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>打开任意一个免费文生图工具（如 Bing Image Creator 或通义万相网页版），同一主题生成两次做对比：</p>
+<ul>
+<li>第一次只写：“一只猫”</li>
+<li>第二次写：“一只橘猫，坐在窗台上，窗外下雨，水彩画风格”</li>
+</ul>
+<p>对比两张图：第二张的每个元素（橘色、窗台、雨、水彩质感）都能对上提示词——这就是文字“指挥”去噪方向的直观证据，也顺便验证了“提示词写细节比写情绪有用”。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>工信部为“手机里的AI助手”立规矩。</strong>工信部近日印发《关于加强智能体终端设备进网管理的通知》（工信厅信管〔2026〕42号），要求预装智能体的手机、平板、可穿戴设备在进网检测中开展适配验证和风险评估；应用开发者需主动声明是否同意被智能体调用，未经声明同意的不得强制调用。对普通人意味着：以后AI助手调用你手机里的其他App要“先问后拿”，知情权和选择权有了明文抓手。（来源：工信部通知原文，经中国工业新闻网 2026-11-09 报道，https://www.cinn.cn/bw/2026/11-09/Nk067Zlr.html）</li>
+<li><strong>浙江23部门发文推动“人工智能+消费”。</strong>11月10日，浙江省商务厅等23部门联合印发《关于加快“人工智能+消费”发展的若干措施》，提出到2030年消费领域规模以上人工智能核心产业营业收入超6000亿元，覆盖智能餐饮、养老服务、文旅体等16条举措。对普通人意味着：餐饮、养老、文旅场景的AI应用会更快落地。（来源：浙江发布，2026-11-10，https://www.163.com/dy/article/LBDB8LBG0514CMDQ.html）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M6-2 文生图与图生图：怎么把一句话和一张图，喂给AI当“画笔”</strong>（18/32）。</p>
+
+<div class="rel">相关延伸：想深挖“扩散模型为什么取代了 GAN”，见本期下钻问答——训练更稳、图文对齐更好、多样性更高，加上 2022 年潜在扩散模型把计算量降了一个量级，才有了文生图工具的集体爆发。下一期 M6-2 讲怎么真正上手用。</div>
+
+<div class="note">来源说明：① Ho et al.《Denoising Diffusion Probabilistic Models》（NeurIPS 2020，arXiv:2006.11239）；② Rombach et al.《High-Resolution Image Synthesis with Latent Diffusion Models》（CVPR 2022，arXiv:2112.10752）；③ Stable Diffusion 开源时间：Stability AI 官方公告，2022年8月。政策动态来源见正文标注。技术部分为公开论文可核实的一般性介绍。</div>
+</body>
+</html>
