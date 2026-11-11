@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>dig_dt40_1</title>
+<style>body{background:#111418;color:#d8dde5;font-family:sans-serif;padding:24px}.wrap{max-width:680px;margin:0 auto}p{line-height:1.9}</style></head><body><div class="wrap">
+<h2>ACID、BASE 怎么选？场景题的判断思路</h2>
+<p>先把两派人设立住：ACID 是「银行柜员」，一笔业务要么完整办完、要么当作没来过，任何时候问你，答案都是准确且最新的；BASE 是「团购群群主」，单子先接着、货慢慢补，中间一段时间账对不上，但最后一定能对上。教材原话（p129）：这两个词在英文里正好是「酸」和「碱」，代表数据库处理两个截然不同的方向。</p>
+<p>做题时看题干给的场景就行：出现转账、下单扣库存、金融交易这类「错一分钱都不行」的——选 ACID；出现社交媒体、大型互联网、日志流这类「数据量巨大、晚几秒没关系」的——选 BASE。反着给的选项（社交媒体用 ACID）就是干扰项。</p>
+<p>CAP 的「三选二」在教材里落到 Lambda 架构（p130）：用户更看重「可用性＋分区容错性」时，走效率优先的快速流处理路径；更看重「一致性＋可用性」时，走批处理路径。记住这个对应，Lambda 相关题就有了抓手。</p>
+<p>一句话总结：要「每时每刻都对」找 ACID，要「死不了但可能晚」找 BASE；CAP 不是让你放弃哪个，是告诉你最多保两个。</p>
+<p><a href="cards/dt40.html" style="color:#6aa3f7">← 返回本卡</a></p></div></body></html>
