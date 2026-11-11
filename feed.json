@@ -69,7 +69,16 @@
         "CDGA｜第5章 数据建模和设计｜4/共5 · 六种建模方案：一张菜单六道菜，别点错名字",
         "CDGA｜第4章 数据架构｜3/共5 · 四类型+Zachman+企业数据模型"
       ],
-      "link": "cards/dt40.html"
+      "link": "cards/dt40.html",
+      "dig": [
+        {
+          "ch": "data",
+          "q": "ACID 和 BASE 各适合什么业务场景？CAP 的「三选二」在 Lambda 架构里怎么落地？",
+          "why": "酸碱两派的选择题年年有，把场景题的判断思路理一遍，见招拆招。",
+          "from": "dt40",
+          "link": "cards/dig_dt40_1.html"
+        }
+      ]
     },
     {
       "id": "dt39",
