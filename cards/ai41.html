@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-2 文生图与图生图：AI画画不是“回忆”，是“照着描述重新造”｜18/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月12日 · AI 知识</div>
+<h1>AI知识｜M6-2 文生图与图生图：AI画画不是“回忆”，是“照着描述重新造”｜18/32</h1>
+<div class="lead">上一期讲了AI怎么从噪点里“擦”出一张画，这一期讲你真正每天会碰到的入口：怎么把一句话变成图、怎么把一张旧图改成新图。读完你会知道，为什么同一句话有人出好图、有人出废图。</div>
+
+<h2>一句话结论</h2>
+<p>文生图和图生图解决的问题是：<strong>让不会画画的人，用一句话或一张现成的图，得到想要的新画面。</strong></p>
+
+<h2>是什么</h2>
+<ul>
+<li><strong>文生图（text-to-image）</strong>：输入一段文字，AI生成一张全新图。</li>
+<li><strong>图生图（image-to-image）</strong>：给一张图当“底子”，再加一句要求，AI在这张图基础上改——换风格、换季节、改服装、把草图变精修。</li>
+</ul>
+<p>它俩不是两种独立技术，而是同一台画图机器的两种“给题方式”：一个只给文字题，一个给图加批注。上一期讲的扩散模型是发动机，文生图和图生图是你踩油门的两个姿势。</p>
+
+<h2>为什么重要</h2>
+<p>过去做一张配图，要么学几年PS，要么花钱请设计师；现在描述写清楚，几十秒出图。图生图才是设计师的日常：不是从零画，而是在现有图上改——客户说“把背景换成黄昏”，图生图一分钟能出三个版本。所以它不是玩具，是AI画画进入真实工作流程的入口。</p>
+<blockquote>门槛下降有多快？MiniMax 于 2026年11月10日晚开源的 H3-Image 模型，同时支持文生图、图像参考和图像编辑三种模式，宣称10秒内可生成 4096×4096 像素（约16MP）图像，采用331亿参数的扩散Transformer架构，最多支持16张参考图（来源：中国证券报·中证网 2026-11-11；中国经营网 2026-11-11）。</blockquote>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li><strong>文生图写“镜头脚本”</strong>：主体→风格→环境光线→构图角度。例：“一只橘猫，水彩风格，坐在洒满阳光的窗台上，特写镜头”。别写“画得好看点”这种空话。</li>
+<li><strong>图生图先调“重绘幅度”</strong>：调低＝只在原图上微调，调高＝AI自由发挥。改不动图，先动这个旋钮，而不是换工具。</li>
+<li><strong>不满意先改描述再重跑</strong>：把模糊词换成具体词，“好看”改成“低饱和、柔和光线”，一次只改一个变量，才知道是哪个改动起了作用。</li>
+</ol>
+
+<h2>生活比方</h2>
+<p>文生图像你打电话给装修公司：“北欧风、白墙、原木、采光好的客厅”，对方按口述装出来；图生图像你把自家客厅照片发给设计师：“照这个户型，改成那种风格”——底子是你的，改法是设计师的。描述越具体，装出来的房子越接近你脑子里的那张图。</p>
+
+<h2>今天就能用</h2>
+<p>打开任意免费文生图工具（如通义万相网页版或文心一格），做两个实验：</p>
+<ul>
+<li><strong>实验一（文生图）</strong>：先只输入“一只猫”出图，再输入“一只橘猫，水彩风格，坐在洒满阳光的窗台上，特写镜头”出图，对比哪张更接近你想要的——你会看到每个具体词都变成了画面上的一个元素。</li>
+<li><strong>实验二（图生图）</strong>：上传自己一张照片，只加一句“改成水彩画风格”，把重绘幅度从 0.3 调到 0.8 各跑一次，你会直观看到“底子保留多少”这个旋钮的效果。</li>
+</ul>
+<blockquote>提醒：发布的AI图要按平台要求勾选“AI生成”声明。2025年9月1日起《人工智能生成合成内容标识办法》施行，AI生成图片需带显式或隐式标识（来源：国家网信办官网，2025-03-14 发布）。</blockquote>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>MiniMax 开源旗舰图像模型 H3-Image</strong>：11月10日晚发布并同步开放权重，宣称10秒内生成 4096×4096 像素图像，标准模式速度约为市面主流的1.5–2倍、高速模式3–4倍，定价约为同档位主流工具的50%–70%，开源首日与华为昇腾、英伟达等多家芯片厂商推进接入。对普通人的意味：开源意味着本地和第三方工具很快能用上高分辨率图生图，不依赖单一商业产品。</li>
+</ul>
+<p><strong>下期预告</strong>：AI知识｜M6-3 局部重绘与风格控制：只改画面上那一个“不满意的地方”｜19/32。</p>
+
+<div class="rel">相关延伸：上一期（M6-1）讲了扩散模型这个底层引擎——先学“弄脏”再学“擦干净”；本期讲的文生图与图生图，就是这台引擎的两种使用入口。想深挖“为什么同一句话每天抽出的图不一样”，可以看本期下钻页。</div>
+<div class="note">来源说明：① 《人工智能生成合成内容标识办法》：国家网信办、工信部、公安部、国家广播电视总局联合发布，2025-03-14 公布、2025-09-01 施行，https://www.cac.gov.cn/2025-03/14/c_1743654685899683.htm。② MiniMax H3-Image：中国证券报·中证网 2026-11-11，https://www.cs.com.cn/ssgs/01/2026/11/11/detail_2026111110051515.html；中国经营网 2026-11-11，http://www.cb.com.cn/index/show/gs1/cv/cv12550013133。速度、定价等性能数据为厂商宣称，以官方实测为准。</div>
+</body>
+</html>
