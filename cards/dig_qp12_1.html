@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><title>dig_qp12_1</title>
+<style>body{background:#111418;color:#d8dde5;font-family:sans-serif;padding:24px}.wrap{max-width:680px;margin:0 auto}p{line-height:1.9}table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem}td,th{border:1px solid #444;padding:6px 8px;text-align:left}</style></head><body><div class="wrap">
+<h2>键的三套分法，一张表理清</h2>
+<p>把键想成公司里的「工号体系」，三套分法是三个不同的视角：</p>
+<table><tr><th>分法</th><th>成员</th><th>人话</th></tr>
+<tr><td>按结构（p97–98）</td><td>简单键（含代理键）／复合键／组合键</td><td>看这把钥匙由几个零件造的：1 个属性是简单键；多个属性共同标识是复合键；每个属性本身都是外键的复合键，叫组合键</td></tr>
+<tr><td>按功能（p94）</td><td>超级键／候选键／主键／备用键</td><td>看这把钥匙在选拔里的位置：能开门的全是超级键；最精简的候选者是候选键；被选中的那一个叫主键；落选的候选键当备用键</td></tr>
+<tr><td>按来源</td><td>业务键 vs 代理键</td><td>业务键来自现实（身份证号、工号）；代理键是系统自编的无意义编号。两者互不包含；通常主键用代理键，备用键是业务键</td></tr></table>
+<p>三个易错点：①结构里只有这三种，没有「两个组合键组成复合键」这种套娃关系；②代理键属于简单键，不是独立于结构分类的第三种；③「组合键」和「复合键」中文只差一个字，判断标准看「每个属性是不是外键」。</p>
+<p><a href="cards/qp12.html" style="color:#6aa3f7">← 返回本卡</a></p></div></body></html>
