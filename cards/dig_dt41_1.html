@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>延伸 · 行式还是列式？性能为什么是0？</title>
+<style>body{background:#11151c;color:#dbe2ee;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px;}h1{font-size:19px;color:#7fb2ff;}p{margin:10px 0;}.quote{background:#161c26;border-left:3px solid #3fa76f;padding:8px 12px;color:#cfe8d8;margin:10px 0;}.src{color:#7d8aa0;font-size:13px;border-top:1px solid #2a3446;padding-top:10px;margin-top:20px;}</style></head><body style="max-width:680px;margin:0 auto;">
+<h1>延伸问：行式数据库和列式数据库分别适合什么场景？为什么数据库不可用性能就是0？</h1>
+<p>接着仓库的比喻：行式像“整箱出货”——你办一笔交易，要同时动这一行的很多列，一次磁盘寻道把整行取出来最省事，所以<b>联机事务处理（OLTP）用行式</b>；列式像“按货架清点”——你只想知道所有商品的总库存，只翻“数量”这一列就行，其他列一概不碰，所以<b>联机分析处理（OLAP，如数据仓库）用列式</b>。</p>
+<div class="quote">教材原句（p135）：“面向行的数据库非常适用于联机事务处理（OLTP）工作”；“面向列的数据库适用于联机分析处理（OLAP）工作（如数据仓库）”。</div>
+<p>再想想性能题。“性能”由<b>可用性和速度</b>两个相互依存的方面决定：仓库都关门了（不可用），谈“出货多快”毫无意义，所以书上说“一个不可用的数据库的性能指标为 0”。这也是为什么业务连续性规划要覆盖服务器失效、磁盘失效、数据库失效、备份文件丢失等6类场景，且备份文件必须与数据库分开存放。</p>
+<p>做题口诀：题干出现“办一笔交易/插入新行/取一整行”→行式；出现“汇总统计/所有行更新某一列/大量重复数据压缩”→列式；出现“系统不可用”→性能为0，而不是“性能下降”。</p>
+<div class="src">依据：《DAMA 数据管理知识体系指南（原书第2版 修订版）》第6章底稿 p134–p135、p146–p147（2026-11-10 已回核）。</div>
+</body></html>
