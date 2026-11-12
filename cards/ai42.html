@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-3 局部重绘与风格控制：只改画面一块地方，画风全由你说了算｜19/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月13日 · AI 知识</div>
+<h1>AI知识｜M6-3 局部重绘与风格控制：只改画面一块地方，画风全由你说了算｜19/32</h1>
+<div class="lead">上一期讲了文生图和图生图，但真实使用中最大的痛点是：整张图都不错，就一处不对——人手多了一根手指、背景乱入一个路人。本期讲的局部重绘和风格控制，就是解决“只改一处”和“画风统一”这两件事的，也是AI修图从玩具变成生产工具的分水岭。</div>
+
+<h2>一句话结论</h2>
+<p>局部重绘解决“整图挺好但一处不对，重抽一次全变”的浪费；风格控制解决“每次生成的画风都不一样，没法批量统一”的失控。</p>
+
+<h2>局部重绘（inpainting）：给AI圈一块“施工区”</h2>
+<p>给图上圈一块区域，AI只重画框里的内容，框外一个像素不动。它底层还是扩散模型：把框里的像素重新变成噪点，再照着你的描述一步步“擦”出新画面。三件事都靠它：</p>
+<ul>
+<li><b>扩边</b>：竖图改横图、补全画布外的内容；</li>
+<li><b>删物</b>：圈中路人和杂物，AI自动补背景；</li>
+<li><b>换物</b>：圈中头发改成短发、把长椅换成石凳。</li>
+</ul>
+<p>标志性事件：Adobe 于 2023 年 5 月 24 日把基于 Firefly 的“生成式填充（Generative Fill）”集成进 Photoshop 测试版，圈选区域即可增、删、扩内容，且结果放在独立生成图层上、原图无损。Adobe 当时还公布，Firefly 上线约六周，测试用户已生成超过 1 亿个素材。这两个数字说明：局部重绘不是新奇的“抽卡”，而是直接进入专业修图工作流的生产工具。</p>
+
+<h2>风格控制：给装修队发一本“你家专属样板册”</h2>
+<p>让AI按你定的画风画图，三条常用路子：</p>
+<ol>
+<li><b>挂风格小模型（LoRA）</b>：在训练好的大模型外挂一个几十MB的小模块，专门注入某种画风，不用重训整个大模型（LoRA 方法出自微软研究者 2021 年发表的 Low-Rank Adaptation 论文）；</li>
+<li><b>提示词写死风格词</b>：把“水彩、扁平插画”等放在提示词靠前的位置；</li>
+<li><b>参考图垫底（图生图）</b>：丢一张符合目标画风的图，把重绘幅度调低，让AI“照着感觉画”。</li>
+</ol>
+<p>对要做系列封面、统一品牌插画的人，这是刚需——画风不统一，客户一眼就看出“这是AI凑的”。</p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li><b>圈选时多带一圈“衔接带”</b>：选区比目标物多带约10%宽的周围背景，AI才能把新旧内容自然融合，否则容易出接缝。</li>
+<li><b>提示词只描述框内</b>：局部重绘的描述写“这里应该是什么”，别把全图描述塞进去。</li>
+<li><b>控制力度</b>：小修用低重绘幅度（约0.3–0.5），彻底换物体用高幅度（0.75以上）；风格不统一优先上LoRA或参考图，而不是堆形容词。</li>
+</ol>
+
+<blockquote>生活比方：文生图像请装修公司整屋重装；局部重图像只翻新一面墙——家具、地板全不动，墙漆颜色你说了算；风格控制是给装修队一本“专属样板册”，以后每个房间都照这本册子的调性装，整套房才风格统一。</blockquote>
+
+<h2>今天就能用</h2>
+<p>用 Canva（可画）或美图秀秀的“消除笔/AI消除”功能（都有免费额度）做一次真·局部重绘：找一张有杂乱背景的照片，涂抹路人或杂物，看AI自动补全背景——全程不用写提示词。进阶一步：在支持 LoRA 的平台（如 LiblibAI）搜一个“水彩风格”LoRA 挂上，用同一句提示词对比挂与不挂的出图差别，亲眼验证“风格开关”。注意：发布的AI图需按平台要求标注“AI生成”，依据 2025 年 9 月 1 日施行的《人工智能生成合成内容标识办法》。</p>
+
+<h2>下期预告</h2>
+<p>M6-4 ASR 与 TTS：让AI听懂人话、开口说人话——语音识别与语音合成是怎么回事。</p>
+
+<div class="rel">相关延伸：M6-1 扩散模型（局部重绘的底层引擎）；M6-2 文生图与图生图（风格控制的入口之一是图生图）；后续 M6-8 版权与标识（AI图的署名与商用边界）。</div>
+<div class="note">来源说明：① Adobe 官方新闻稿《Adobe 以生成式 AI Adobe Firefly 作为 Photoshop 创意副手》，2023-05-24（Firefly 集成 Photoshop 及生成式填充细节，香港发布版 PDF，见 Adobe 官网新闻室）；② Adobe 官方博客 "Adobe supercharges Photoshop with Firefly Generative AI"，2023-05-23，https://adobe.ly/3BPvlh9（Firefly 六周生成超 1 亿素材）；③ LoRA 出处为微软研究者 2021 年论文《LoRA: Low-Rank Adaptation of Large Language Models》；④ 《人工智能生成合成内容标识办法》，国家网信办等四部门 2025-03-14 发布、2025-09-01 施行。政策/行业动态：本期无上期之后的新增可靠动态。</div>
+</body>
+</html>
