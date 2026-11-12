@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>延伸 · ACID 四性自测与 BASE 场景</title>
+<style>body{background:#11151c;color:#dbe2ee;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px;}h1{font-size:19px;color:#7fb2ff;}p{margin:10px 0;}.quote{background:#161c26;border-left:3px solid #3fa76f;padding:8px 12px;color:#cfe8d8;margin:10px 0;}.src{color:#7d8aa0;font-size:13px;border-top:1px solid #2a3446;padding-top:10px;margin-top:20px;}</style></head><body style="max-width:680px;margin:0 auto;">
+<h1>延伸问：ACID 四性你能不看笔记默写出来吗？BASE 与 ACID 各适合什么业务场景？</h1>
+<p>今天只考了原子性一题，但 ACID 四性是第6章最重考点，四个性状要能一一对上“人话钩子”：原子性=“要么全做要么不做”；一致性=“始终符合系统定义的所有规则，未完成的事务必须回滚”；隔离性=“一个事务的执行不受其他事务的干扰”；持久性=“一旦运行，更改永久、不可撤销，即使系统发生故障也不会丢失”。</p>
+<div class="quote">教材原句（p129）：在关系数据库中，“ACID 技术是最具主导性的工具”，通常采用 SQL 作为接口；在大数据环境中，组织通常会使用 BASE 类型的数据库系统，“因为这些公司的业务场景不需要实时准确地拿到所有数据”。</div>
+<p>BASE 三性也别漏：基本可用（某些节点故障仍能保证一定程度可用）、软状态（响应时不能保证数据是最新，允许副本延时）、最终一致性（最终状态一致，但不是每时每刻一致）。场景题直觉：银行转账、下单扣款→ACID；社交动态、点赞数→BASE。</p>
+<div class="src">依据：《DAMA 数据管理知识体系指南（原书第2版 修订版）》第6章底稿 p129–p130（2026-11-10 已回核）。</div>
+</body></html>
