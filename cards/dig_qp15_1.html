@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>下钻 · 存储介质题的为什么</title>
+<style>body{background:#111418;color:#d8dee6;font-family:-apple-system,'PingFang SC',sans-serif;padding:24px 12px;} .wrap{max-width:680px;margin:0 auto;} h1{font-size:19px;color:#f2f5f9;} p{font-size:15px;line-height:1.85;} a{color:#5aa2ff;}</style></head><body><div class="wrap">
+<h1>下钻补充：存储介质题的「为什么」</h1>
+<p>第 1 题（c6-002）答案选 D「以上都是」：教材 p136 的存储介质清单里，磁带、磁盘、SAN、内存、闪存、网盘、列压缩方案都算——很多考生凭直觉觉得「列压缩是一种技术不是介质」，但教材口径就是把它列进存储介质里，做题时别拿生活直觉纠正教材。</p>
+<p>第 4 题（c6-007）选列压缩方案的原因：一张 256 列的宽表，如果按「行」存储，取一行里某一列的值得把整行 256 列全读出来，I/O 全浪费在不要的列上；按「列」存储后只读你那一列，带宽占用骤降。所以宽表、少取列的场景用列压缩最划算。</p>
+<p>内存（第 1 题的 B、第 4 题的干扰项）的强项是快——数据放内存里查询没有磁盘寻道延迟，适合要极速响应的场景，但它不能按列省带宽，所以第 4 题不选它。一句话记：<b>取整行要快找内存，取单列省带宽找列压缩</b>。这两题都是 p136「数据存储介质」考点，题库 exp 标注一致，第 6 章这 13 题里介质类占了两题，是本章考试的重头之一。</p>
+<p><a href="cards/qp15.html">返回本卡</a></p></div></body></html>
