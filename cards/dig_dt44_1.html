@@ -1,0 +1,6 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>下钻 · 脱敏与匿名化、键值脱敏</title>
+<style>body{background:#111418;color:#d8dee6;font-family:-apple-system,'PingFang SC',sans-serif;padding:24px 12px;} .wrap{max-width:680px;margin:0 auto;} h1{font-size:19px;color:#f2f5f9;} p{font-size:15px;line-height:1.85;} a{color:#5aa2ff;}</style></head><body><div class="wrap">
+<h1>下钻补充：脱敏、匿名化、键值脱敏</h1>
+<p>教材本章讲的「脱敏」和你关注的「数据匿名化」是近亲但有层次差别：脱敏是手段层面的说法——把敏感字段改掉样子；匿名化目标更进一步——让人拿着处理后的数据也认不出具体是哪个人。所以静态脱敏（永久、不可逆）是朝匿名化方向走的，而动态脱敏本质是「按人展示」，底层数据还是真的，不算是匿名化。考试只要按教材口径答：静态=永久不可逆、供开发测试；动态=不改基础数据、展示时变外观。</p>
+<p>9 种方法里有两个最容易混：<b>混排</b>是「在一个记录中交换相同类型的数据元素，或在不同行之间交换同一属性的数据元素」（题库 c7-015 的题干原话，答案就是「混排」）——比如把一列里的工资数字互相调换位置，总和不变但谁对不上谁；<b>键值脱敏</b>处理的是「连接键」——比如订单表和客户表靠客户 ID 连着，如果你只对客户表里的 ID 脱敏、订单表不动，两表就对不上了，所以键值脱敏要对同一键在所有表里做<b>一致的、可重复的</b>处理。教材正文此处未展开这套多表细节，记住「键要一致处理」这个直觉即可，考题目前集中在 9 种方法的认名上。</p>
+<p><a href="cards/dt44.html">返回本卡</a></p></div></body></html>
