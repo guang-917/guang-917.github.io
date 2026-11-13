@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-4 ASR与TTS：给AI装上“耳朵”和“嘴”｜20/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月14日 · AI 知识</div>
+<h1>AI知识｜M6-4 ASR与TTS：给AI装上“耳朵”和“嘴”｜20/32</h1>
+<div class="lead">你发的每一条微信语音“转文字”、每一份自动生成的会议纪要、每一本AI配音的有声书，背后都是同一对搭档：ASR管听，TTS管说。这期讲清这对“耳朵和嘴”到底是什么、怎么挑工具、长录音转写怎么不翻车。</div>
+
+<h2>一句话结论</h2>
+<p>ASR（自动语音识别）解决“人说话机器听不懂”，把语音变成文字；TTS（语音合成）解决“文字不会出声”，把文字变成语音。前者是AI的耳朵，后者是AI的嘴，两个合起来才叫“语音交互”。</p>
+
+<h2>是什么：一对分工明确的搭档</h2>
+<p><b>ASR：录音进、文字出。</b>常附带自动标点和时间戳。标志性节点是 OpenAI 在 2022 年 9 月 21 日开源 Whisper：它用 68 万小时带标注的音频训练（其中约 44 万小时英语、约 12 万小时覆盖 96 种其他语言），公开权重让人人都能在自己电脑上跑工业级转写。微软 2026 年 1 月 21 日开源的 VibeVoice-ASR 更进一步：单次直接吃下 60 分钟长音频，支持 50 种以上语言，同时输出“谁在说 + 何时说 + 说了什么”的结构化结果——转写、区分说话人、打时间戳一次做完。</p>
+<p><b>TTS：文字进、语音出。</b>现代模型能指定音色、情绪和语速，不再像导航软件那样一字一顿。微软 2025 年 8 月 25 日开源的 VibeVoice-TTS，单次可合成最长 90 分钟、最多 4 个说话人的播客级音频（被 ICLR 2026 接收为 Oral 报告）。它底层用了超低帧率（7.5 Hz）的语音分词器来压缩长音频序列，所以才能一口气“念”完 90 分钟不乱套。</p>
+<table>
+<tr><th></th><th>ASR（耳朵）</th><th>TTS（嘴）</th></tr>
+<tr><td>方向</td><td>语音 → 文字</td><td>文字 → 语音</td></tr>
+<tr><td>典型用途</td><td>语音输入、会议纪要、字幕</td><td>有声书、语音播报、AI配音</td></tr>
+<tr><td>代表开源</td><td>Whisper、VibeVoice-ASR</td><td>VibeVoice-TTS、CosyVoice等</td></tr>
+<tr><td>关键指标</td><td>错字率、专有名词准确度</td><td>自然度、音色一致性</td></tr>
+</table>
+
+<h2>为什么重要</h2>
+<p>对普通人，它们是效率杠杆：1小时录音自动转文字，等于省下四五个小时打字。对做AI应用的人，语音是门槛最低的交互入口——老人、司机、手不离活的人打不了字，只能说话。它还是个人知识库的前置工序：你讲过的课、开过的会，只有先被ASR变成文字，才能进此前讲过的RAG检索系统；没有这一步，“说过的话”永远搜不到。</p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li><b>按场景挑转写工具</b>：微信语音条长按“转文字”、手机输入法的麦克风，走云端识别，几句话够用；要本地免费、隐私可控，选Whisper系（faster-whisper是重写的推理引擎，同样的模型权重跑得更快）；长会议录音务必选带“说话人分离”的工具，否则十个人的发言混成一段糊涂账。</li>
+<li><b>喂给它上下文</b>：VibeVoice-ASR等模型支持“自定义热词”——转写前把公司名、人名、术语提前告诉它，专有名词错误率会明显下降。</li>
+<li><b>TTS守住合规边界</b>：克隆别人声音必须本人授权；合成语音对外发布时按平台要求标注AI生成。</li>
+</ol>
+
+<blockquote>生活比方：ASR是会议里的速记员——你说得再快、方言再重，他都给你敲成文稿；TTS是有声书主播——把干巴巴的稿子念出抑扬顿挫。以前这两个工种都要科班出身、按小时收费，现在AI把“耳朵”和“嘴”的成本打到近乎为零。</blockquote>
+
+<h2>今天就能用</h2>
+<p>打开通义听悟或飞书妙记（都有免费时长），上传一段你最近的真实会议或课堂录音，勾选“区分说话人”，几分钟后导出带时间戳的纪要并生成摘要。验证方法：翻回录音，核对纪要里的第一处专有名词——写错了，就把该词加进下次转写的“热词”列表再跑一遍，这是立刻能感受到的精度提升。</p>
+
+<h2>政策/行业动态</h2>
+<p>① 国务院办公厅印发《关于适应人工智能技术发展助力构建就业友好型发展方式的意见》（国办发〔2026〕29号，成文于2026年10月16日，近日经中国政府网公开发布），要求对可能造成较大就业冲击的AI应用场景项目在评审时同步开展就业风险评估，鼓励企业探索建立失业缓冲期制度、提前告知受影响劳动者（来源：中国政府网 gov.cn，《国务院公报》2026年第31号）——对普通从业者意味着：岗位受AI影响后的转岗支持与失业保障，第一次有了国办层面的成文依据。</p>
+<p>② 福建省人民政府办公厅印发《福建省推动“人工智能+”行动方案（2026—2028年）》（2026年11月7日印发），提出建设10个人工智能科研创新平台、立项10个重点攻关及产业化项目（来源：福建省经济信息中心网站 2026-11-12 公开）——地方配套落地后，AI相关项目申报与就业机会会先在省内释放。</p>
+
+<h2>下期预告</h2>
+<p>AI知识｜M6-5 视频生成：从一句话到一段能动的画面，AI拍片到底怎么运转｜21/32。</p>
+
+<div class="rel">相关延伸：M4-1起的RAG系列（ASR转写是语音入库的前置工序）；M6-1 扩散模型（VibeVoice-TTS的生成头同样基于扩散范式）；下期 M6-5 视频生成。</div>
+<div class="note">来源说明：① Whisper论文《Robust Speech Recognition via Large-Scale Weak Supervision》，arXiv:2209.03031，2022-09-21（68万小时训练数据构成）；② 微软VibeVoice官方GitHub仓库README（github.com/microsoft/VibeVoice）：VibeVoice-TTS 2025-08-25开源、单次最长90分钟/最多4说话人/ICLR 2026 Oral，VibeVoice-ASR 2026-01-21开源、单次60分钟/50+语言/7.5Hz语音分词器；③ SYSTRAN/faster-whisper官方GitHub README（推理加速）；④ 国办发〔2026〕29号文件，中国政府网 gov.cn《国务院公报》2026年第31号；⑤ 《福建省推动“人工智能+”行动方案（2026—2028年）》，福建省人民政府办公厅2026-11-07印发，福建省经济信息中心网站2026-11-12公开。</div>
+</body>
+</html>
