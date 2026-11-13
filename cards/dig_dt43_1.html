@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>下钻 · 风险分类就高不就低</title>
+<style>body{background:#111418;color:#d8dee6;font-family:-apple-system,'PingFang SC',sans-serif;padding:24px 12px;} .wrap{max-width:680px;margin:0 auto;} h1{font-size:19px;color:#f2f5f9;} p{font-size:15px;line-height:1.85;} a{color:#5aa2ff;}</style></head><body><div class="wrap">
+<h1>下钻补充：风险分类「就高不就低」怎么用？</h1>
+<p>上一张卡说了那句原话：「用户权限内所有数据中的最高安全分类决定了整体的安全分类」（p163）。放到脱敏场景里它是一条很实际的操作规矩：一批数据要送到开发测试环境做脱敏，你不能只看"大部分字段不敏感"就按中等风险处理——只要里面混着一条身份证号这种关键风险数据（CRD），整批就得按关键数据对待，脱敏等级、审批流程全部升级。</p>
+<p>打个比方：一箱子文件送出办公楼销毁，箱子里九十九张废纸加一份客户名单——销毁公司只会按"有客户名单"这一份的标准来接这单活，不会因为你说是废纸箱就随手扔。数据安全同理：分类跟着最高级别走，不搞平均分。</p>
+<p>再往前串一步：这也是为什么第一张卡的原则里说「减少暴露面……尤其在非生产环境」——非生产环境（开发测试）正是数据被成批搬运、最容易放松看管的地方。分类定级决定这批数据按什么规格保护，脱敏（下一张 3/共4）决定怎么把敏感内容改掉再送出去。三步连起来：先分级、就高不就低、再决定脱敏方式——考试里问「分类分级的步骤」或「为什么非生产环境重点治理」，都是在这条逻辑链上设问。</p>
+<p><a href="cards/dt43.html">返回本卡</a></p></div></body></html>
