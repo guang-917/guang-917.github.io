@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻 · 星型模型和数据保管库，别把『卫星』『链接』带错门</title>
+<style>body{background:#111418;color:#d8dee6;font-family:-apple-system,'PingFang SC',sans-serif;padding:24px 12px;max-width:680px;margin:0 auto;line-height:1.85;}
+h1{font-size:18px;color:#f2f5f8;} .a{color:#e8b64a;} .q{background:#171c23;border:1px solid #232a33;border-radius:10px;padding:14px 16px;margin:12px 0;}</style></head>
+<body>
+<h1>下钻｜为什么『星型＝事实表＋维度表』，而『卫星表、链接表』属于数据保管库？</h1>
+<div class="q">
+<p>这是第 5 章最容易串的两个模型，考题就爱把它们混在一张选项表里。</p>
+<p><strong>星型模型（Star Schema）</strong>：想象一张放着所有业务数字的大桌子——<strong>事实表</strong>（比如每一笔销售：金额、数量），桌子四周围坐着几位『解说员』——<strong>维度表</strong>（时间、客户、产品），每条事实都能顺着桌子边找到自己的解说员。从上往下看，像一颗星星：中心是事实表，光芒是维度表。所以星型＝事实表＋维度表，成员就这么两家，没有第三种。</p>
+<p><strong>数据保管库（Data Vault）</strong>是另一户人家，成员固定三个：<strong>中心（Hub）</strong>存业务键、<strong>链接（Link）</strong>存实体之间的关系、<strong>卫星（Satellite）</strong>存属性细节。就像仓库管理员：中心管『这批货是谁的』，链接管『这批货和那批货什么关系』，卫星管『这批货的详细说明』。</p>
+<p>两户人家最常用的『认门暗号』：选项里同时出现<strong>卫星、链接</strong>——保管库；只有<strong>事实、维度</strong>——星型。c5-038 的 B/C/D 三个干扰项，全是从保管库门口借来的词。</p>
+<p>考场提示：这一对还常和锚建模（锚/属性/连接/节点）凑成一桌『三户人家』，数清楚每户的名字，『不属于』题就丢不了分。</p>
+<p class="a">返回主卡 → 第 14 期练题卡「第 5 题解析」。</p>
+</div>
+</body></html>

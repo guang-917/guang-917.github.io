@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA 每日一练｜第 14 期｜第5章 数据建模和设计（整章综合 · 回炉）｜距考试 24 天</title>
+<style>
+  body{background:#111418;color:#d8dee5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.85;margin:0;padding:24px 16px 48px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#8a94a0;font-size:13px;margin-bottom:8px;}
+  h1{color:#f2f5f8;font-size:21px;line-height:1.5;margin:8px 0 4px;}
+  .lead{color:#a8b3bf;font-size:15px;margin:12px 0 20px;padding:12px 14px;background:#1a1f26;border-left:3px solid #d4a017;border-radius:6px;}
+  .sec{background:#171c23;border:1px solid #232a33;border-radius:10px;padding:16px 18px;margin:14px 0;}
+  .sec h2{font-size:16px;color:#e8b64a;margin:0 0 8px;}
+  .sec p{margin:8px 0;font-size:15px;}
+  .ans{background:#152218;border:1px solid #2c4220;border-radius:10px;padding:16px 18px;margin:14px 0;}
+  .ans h2{font-size:16px;color:#9fd37a;margin:0 0 8px;}
+  .ans p{margin:10px 0;font-size:15px;}
+  .koujue{background:#1d2416;border:1px solid #3c4a24;border-radius:10px;padding:14px 18px;margin:14px 0;color:#cfe3a8;}
+  .next{background:#12202b;border:1px solid #234152;border-radius:10px;padding:14px 18px;margin:14px 0;color:#a8d3e8;}
+  .rel,.src{font-size:13px;color:#8a94a0;margin-top:20px;padding-top:12px;border-top:1px dashed #2a323d;}
+  strong{color:#f0d38a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026-11-15 · CDGA 每日一练 第 14 期 · 距考试 24 天 · 出题范围：第 5 章数据建模和设计（p87–p121，10 分，题库 50 题）</div>
+  <h1>CDGA 每日一练｜第 14 期｜第5章 数据建模和设计（整章综合 · 回炉）｜距考试 24 天</h1>
+  <div class="lead">第 6 章题库已用 77%，按规矩回炉到第 5 章（10 分大章）。今天 5 道都是你没做过的，覆盖建模组件、规范化、PRISM 和维度建模。先做题，答案在最后。</div>
+
+  <div class="sec"><h2>做题区（先别看答案）</h2>
+  <p><strong>第 1 题（题号 c5-022）</strong>：关于域，下面哪种说法正确：<br>A. 域中所有的值都为有效值<br>B. 可以用附加的规则对域进行限制，这些限制规则被称为约束<br>C. 域可以用数据类型、数据格式、列表、范围以及规则进行定义<br>D. 以上选项都正确</p>
+  <p><strong>第 2 题（题号 c5-026）</strong>：关系的元数以下哪种说法正确？<br>A. 二元关系不止包含两个实体<br>B. 一元关系也称为递归关系<br>C. 一个实体最多拥有两个父实体<br>D. 子实体处于关系中“一”的一边</p>
+  <p><strong>第 3 题（题号 c5-034）</strong>：每个级别由一个独立的范式组成，下列说法正确的是？<br>A. 第一范式里能有多个值存在<br>B. 模型的规范化通常要求达到第三范式水平<br>C. BCNF 范式候选键是副键<br>D. 第五范式里所有联结依赖部分副键</p>
+  <p><strong>第 4 题（题号 c5-037）</strong>：在设计和构建数据库时，DBA 应牢记以下哪点 PRISM 设计原则？<br>A. 将数据对象耦合到单个应用程序中<br>B. 无需立即检测报告数据完整性约束的违规行为<br>C. 发现存在违规数据安全性约束的情况，先不着急报告违规行为<br>D. 确保尽可能快速响应业务流程和新业务需求的变化</p>
+  <p><strong>第 5 题（题号 c5-038）</strong>：维度模型通常称为星型模型，由哪些部分组成？<br>A. 事实表和维度表<br>B. 事实表和卫星表<br>C. 维度表和链接表<br>D. 事实表和链接表</p></div>
+
+  <div class="ans"><h2>## 答案与解析</h2>
+  <p><strong>第 1 题（c5-022）：D。</strong>为什么：域就是一组合法值的『清单』——A 清单里的值都有效、B 附加的限制规则叫约束、C 清单可以用类型/格式/列表/范围/规则来写，三句都符合教材对域的描述，所以选『都正确』。其余选项错在哪：A/B/C 单独拿出来都只是『对了一部分』，单选时别急着选 A 或 B，看到『以上都正确』要回头核一遍。</p>
+  <p><strong>第 2 题（c5-026）：B。</strong>为什么：一元关系只含一个实体、自己连自己，所以也叫递归关系（题库原话「P96.关系的元数」）。其余选项错在哪：A 错，二元关系就是恰好两个实体，『不止』是篡改；C 错，一个实体的父实体数量没有『最多两个』的上限；D 错，子实体处于关系中『多』的一边，不是『一』。</p>
+  <p><strong>第 3 题（c5-034）：B。</strong>为什么：模型的规范化通常要求达到第三范式水平（题库原话「P111 页.范式的层级」）。其余选项错在哪：A 错，第一范式要求属性原子性，恰恰不允许多个值；C 错，BCNF 处理的是<strong>重叠的复合候选键</strong>问题，『候选键是副键』把概念搅浑；D 错，第五范式管的是联结依赖的分解，跟『部分副键』无关。</p>
+  <p><strong>第 4 题（c5-037）：D。</strong>为什么：PRISM 五原则＝性能与易用性/可重用性/完整性/安全性/可维护性（题库原话「P119-120 页.数据库设计中的最佳实践」），『尽可能快速响应业务流程和新业务需求的变化』正是可维护性＋性能与易用性的要求。其余选项错在哪：A 错，方向反了——可重用性要求数据对象<strong>不</strong>耦合到单个应用；B、C 错，完整性/安全性都要求违规行为<strong>立即检测报告</strong>，『无需立即』『先不着急』是反着说的干扰项。</p>
+  <p><strong>第 5 题（c5-038）：A。</strong>为什么：星型模型＝中间一张事实表＋四周一圈维度表。其余选项错在哪：B 的卫星表、C/D 的链接表都是<strong>数据保管库（Data Vault）</strong>三实体（中心/链接/卫星）的概念，把保管库的家伙什搬到星型头上就串了。</p></div>
+
+  <div class="koujue"><strong>## 今天记住这一句</strong><br>域是合法值清单＋约束；一元关系就是递归关系；规范化通常做到 3NF；PRISM 五词背全（性能易用/可重用/完整/安全/可维护）；星型＝事实表＋维度表，卫星和链接是保管库的。</div>
+
+  <div class="next"><strong>## 明天练什么</strong><br>明天（11-16）教材卡出第 8 章 2/共2（本章收官）和第 9 章文档和内容管理 1/共2；练题卡按『最近讲完』规则轮到第 7 章数据安全（题库 57 题，还没在练题卡用过），想提前热身的可以把第 7 章三张教材卡末尾的 6 道自测题再刷一遍。</div>
+
+  <div class="rel"><strong>相关卡</strong>：<br>· CDGA｜第5章 数据建模和设计｜5/共5 · 建模活动四步+工具度量：从画图到验房一条龙（本章收官）</div>
+
+  <div class="src"><strong>来源说明</strong>：5 道题（c5-022、c5-026、c5-034、c5-037、c5-038）全部原样引用自 cdga_pool.json，题干、选项、答案未做任何改动；解析页码（P96、P111、P119-120）照抄题库 exp 字段；「第 5 章已于 11-11 讲完」「第 6 章题库已用 77%」为本系列 feed 记录。已扫过去年至今所有练题卡题号，今日 5 题均无重复。</div>
+</div>
+</body>
+</html>
