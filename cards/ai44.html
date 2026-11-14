@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-5 视频生成：一句话变一段片，AI在逐帧“擦”出画面｜21/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月15日 · AI 知识</div>
+<h1>AI知识｜M6-5 视频生成：一句话变一段片，AI在逐帧“擦”出画面｜21/32</h1>
+<div class="lead">以前做一条15秒短片要写脚本、找演员、拍摄、剪辑，至少半天；现在打一句话，几分钟出片。这期讲清“一句话变一段片”背后发生了什么、怎么用最省事、哪些坑要提前绕开。</div>
+
+<h2>一句话结论</h2>
+<p>视频生成解决的是“普通人做不了视频”的问题：你给一句描述，AI自己逐帧画出一段连贯会动、还能配声音的短片——相当于一位不要片酬的动画师，按你的口述逐格作画。</p>
+
+<h2>是什么：扩散模型从“一张图”拉长成“一串图”</h2>
+<p>M6-1 讲过，AI画图是“先铺噪点、再擦出画面”。视频生成把这件事拉长：AI先给整段视频铺满雪花噪点，再根据你的文字描述一步一步把噪点“擦”成画面。关键约束只有一条——<b>每一帧都要和前后帧接得上</b>，动作才不会跳。</p>
+<p>OpenAI 在 2025年9月30日 发布的 Sora 2 多做了一步：画面与同步音效（对话、环境声）在同一次生成里一起产出，支持最高 1080p、时长约 20 秒（来源：中信证券研究报告，2025-10-09；新浪财经 2025-10-14 转述，两个独立来源一致）。2024 年初代 Sora 公布时的技术文档把方法形容为“把视频切成带时间戳的小方块，像语言模型处理文字一样处理视频”——所以它和文字生成其实是同一套思路的延伸。</p>
+
+<h2>为什么重要：门槛从“会拍”降到“会说”</h2>
+<p>它把视频创作的门槛从“会拍摄剪辑”降到了“会把话说清楚”。冷水也要泼：主流工具一次只生成几秒到几十秒的片段（Sora 2 约 20 秒），长视频要靠分段生成再拼接；而且它是“逐格作画”，不是检索真实素材，涉及真实人物、真实事件的画面不可信，对外发布须遵守 AI 内容标识要求。</p>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li><b>选入口</b>：国内可直接用快手可灵（klingai.com）、字节即梦（jimeng.jianying.com）的网页版或 APP，都有免费额度。</li>
+<li><b>第一句话只写清四件事</b>：谁、在哪、做什么、镜头怎么动。例：“一只橘猫坐在窗台，镜头从左向右缓缓横移，傍晚暖光”。别贪心一次写三个场景。</li>
+<li><b>不满意先改字再重生成</b>：把动词和镜头语言换掉，比换整句话更有效——模型对动词最敏感。</li>
+</ol>
+
+<h2>生活比方：逐格画动画的画师</h2>
+<blockquote>它就像一位逐格画动画的画师：你说“一只猫从桌上跳下去”，他不会去找现成录像，而是一格一格画——第 1 格猫还蹲着，第 2 格前爪离桌，第 3 格身体腾空……任何一格画歪了，整段动作就露馅。这也是为什么 AI 视频里“手”和“快速动作”最容易翻车：这些动作格子最多、最难画。</blockquote>
+
+<h2>今天就能用</h2>
+<p>打开即梦或可灵的网页版（都有免费额度），输入这条提示词：“一只橘猫坐在窗台，窗外下雨，镜头缓慢推近，电影感，暖色调”，生成一段 8 秒视频；然后只把“下雨”改成“下雪”重新生成一次，对比两段里<b>猫的动作和窗台细节是否保持一致</b>——不一致的次数，就是这项技术目前的真实水平线。</p>
+
+<h2>政策/行业动态</h2>
+<p>本期无新增可靠动态：经检索，上期（2026-11-14）之后暂未取得可交叉验证的新增政策或行业事件，按要求留白，不复述备案、“人工智能+”等已讲背景。</p>
+
+<h2>下期预告</h2>
+<p>AI知识｜M6-6 OCR 与文档理解：让AI把图片里的字“读”出来并看懂结构｜22/32</p>
+
+<div class="rel">相关延伸：M6-1 扩散模型讲过“从噪点擦出一张画”的原理，本期的视频生成就是它的加长版；M6-3 局部重绘教你只改画面一块地方，同样适用于视频片段的局部修改。</div>
+<div class="note">来源说明：① Sora 2 发布日期、1080p/约20秒/同步音效等规格——中信证券《海外AI催化密集，看好商业化潜力》研究报告（2025-10-09），经新浪财经（2025-10-14）转述，两个独立来源一致；② 初代 Sora“时空小块”技术描述——OpenAI 技术文档表述经中信证券报告转述；③ 可灵、即梦入口为平台公开网址。其余无可靠来源数据一律未写。</div>
+</body>
+</html>
