@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻 · ELT 为什么在大数据环境加载到数据湖很常见？</title>
+<style>body{background:#111418;color:#d8dee6;font-family:-apple-system,'PingFang SC',sans-serif;padding:24px 12px;max-width:680px;margin:0 auto;line-height:1.85;}
+h1{font-size:18px;color:#f2f5f8;} .a{color:#e8b64a;} .q{background:#171c23;border:1px solid #232a33;border-radius:10px;padding:14px 16px;margin:12px 0;}</style></head>
+<body>
+<h1>下钻｜ELT 为什么在大数据环境加载到数据湖很常见？</h1>
+<div class="q">
+<p>教材原话（p201）：「当目标系统比源系统或中间系统转换能力更强时，可改为抽取→加载→转换；源数据以原始形式落在目标端，ELT 加载到数据湖在大数据环境很常见。」</p>
+<p>用快递的比喻接着想：ETL 是『先在发货仓打包好再运』，打包工作由发货仓的工人（源系统/中间系统）干。但大数据时代，发货仓（各种老业务系统）根本干不动这种活——数据量太大、格式太杂。而目的地的数据湖，就像一个<strong>自带全套自动化分拨设备的超级仓库</strong>：集群算力强大，转换工具齐全，还擅长『来什么收什么』。</p>
+<p>于是顺序倒过来：先把<strong>原始形态</strong>的数据整个运进数据湖（抽取→加载），转换的活留给数据湖自己干（转换）。这样做还有个隐藏好处——原始数据先落地，意味着将来想按新思路重新加工一遍时，源头数据还在手里，不用回老系统重新抽取。</p>
+<p>考场提示：题干出现『目标系统转换能力更强』『原始形式落地』『数据湖』三个关键词中的任何一个，基本就是在考 ELT；反过来，题干说『转换在加载之前完成』，那是 ETL。别选『ELT 比任何场景都先进』这种绝对化选项——教材的口径是『当目标系统更强时』，条件互换就得倒回去。</p>
+<p class="a">返回主卡继续学 → 第 8 章 1/共2「考点6 ELT」一节。</p>
+</div>
+</body></html>

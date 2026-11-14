@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第8章 数据集成和互操作｜1/共2 · 定义·驱动·目标5·原则3·ETL/ELT：数据的快递分拨中心</title>
+<style>
+  body{background:#111418;color:#d8dee5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.85;margin:0;padding:24px 16px 48px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#8a94a0;font-size:13px;margin-bottom:8px;}
+  h1{color:#f2f5f8;font-size:22px;line-height:1.5;margin:8px 0 4px;}
+  .lead{color:#a8b3bf;font-size:15px;margin:12px 0 20px;padding:12px 14px;background:#1a1f26;border-left:3px solid #d4a017;border-radius:6px;}
+  .sec{background:#171c23;border:1px solid #232a33;border-radius:10px;padding:16px 18px;margin:14px 0;}
+  .sec h2{font-size:16px;color:#e8b64a;margin:0 0 8px;}
+  .sec p{margin:8px 0;font-size:15px;}
+  .quote{background:#10141a;border-left:3px solid #4a9eff;padding:8px 12px;border-radius:6px;color:#cfe3ff;font-size:14px;margin:10px 0;}
+  .trap{color:#ff9d9d;font-size:14px;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+  th,td{border:1px solid #2a323d;padding:7px 9px;text-align:left;}
+  th{background:#1d242d;color:#e8b64a;}
+  .kaojue{background:#1b2129;border-left:3px solid #e05656;}
+  .koujue{background:#1d2416;border:1px solid #3c4a24;border-radius:10px;padding:14px 18px;margin:14px 0;color:#cfe3a8;}
+  .week{background:#12202b;border:1px solid #234152;border-radius:10px;padding:14px 18px;margin:14px 0;color:#a8d3e8;}
+  .rel,.src{font-size:13px;color:#8a94a0;margin-top:20px;padding-top:12px;border-top:1px dashed #2a323d;}
+  strong{color:#f0d38a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026-11-15 · CDGA 备考 · 第 8 章 数据集成和互操作（p196–p220 · 2 分）· 本张对应教材 p196–p201 · 距考试 24 天</div>
+  <h1>CDGA｜第8章 数据集成和互操作｜1/共2 · 定义·驱动·目标5·原则3·ETL/ELT：数据的快递分拨中心</h1>
+  <div class="lead">新章开张（2 分小章）：数据怎么从一家系统『快递』到另一家？把 ETL/ELT 这对最重的概念拿稳，本章一半分就到手。</div>
+
+  <div class="sec"><h2>开篇比喻｜这一张要解决什么</h2>
+  <p>把系统之间的数据流动想成<strong>快递网络</strong>：第 8 章讲的就是『快递怎么送』——各家仓库（系统）的货怎么统一打包、怎么分拨、怎么保证收件方拆得开。这一张要解决三件事：①『集成』和『互操作』差在哪；②为什么建分拨中心而不是每两家快递开专线；③最重的概念 ETL 和 ELT 的区别。</p></div>
+
+  <div class="sec"><h2>考点1 定义 · 集成 vs 互操作</h2>
+  <div class="quote">原话（p197 图 8-1）：「数据集成指数据存储、应用程序和组织内部及之间的数据流动和整合。数据互操作性指多个系统进行通信的能力。」（p196 引言）「数据集成将数据整合为一致的形式，可以是物理形式的一致，也可以是虚拟形式的一致。」</div>
+  <p><strong>人话</strong>：<strong>集成是把各家快递的货打包成统一规格</strong>（流动+整合），<strong>互操作是两家快递能直接通电话对单</strong>（通信能力）。</p>
+  <p class="trap">坑：题目爱把『集成＝多个系统通信』这种张冠李戴当正确项。</p></div>
+
+  <div class="sec"><h2>考点2 业务驱动 · 为什么建分拨中心</h2>
+  <div class="quote">原话（p198）：「有效管理数据流动的需求是数据集成和互操作性（DI）的主要驱动力。」</div>
+  <p><strong>人话</strong>：每两家快递都开专线（点对点接口），系统一多就<strong>产生成千上万个接口</strong>压垮 IT；建分拨中心（数据中心类方案）+ 中心辐射型集成（Hub-and-Spoke）+ 规范化消息模型，远比点对点省钱省事。</p>
+  <p class="trap">坑：问『建立数据集成架构的主要原因』，答『管理复杂性与相关成本』，不是『技术先进』。</p></div>
+
+  <div class="sec"><h2>考点3 目标 5 条 · 数是 5</h2>
+  <div class="quote">原话（p198，照抄）：1）及时向数据消费者（人和系统）提供其所需格式的数据。2）将数据以物理或虚拟的方式整合到数据中心。3）通过开发共享模型和接口降低管理数据集成和互操作解决方案的成本和复杂度。4）识别有意义的事件，如机会或威胁等，自动触发警报并采取相应行动。5）支持商务智能、数据分析、主数据管理及运营效率的提升。</div>
+  <p class="trap">坑：考『不属于目标』时，干扰项常拿<strong>其他章的目标</strong>混进来，如『识别数据存储和处理需求』——那是数据架构的范畴。</p></div>
+
+  <div class="sec"><h2>考点4 原则 3 条 · 业务专家要负责</h2>
+  <div class="quote">原话（p199）：①采用<strong>企业视角</strong>确保具备未来可扩展的设计，通过迭代和增量实现交付；②平衡<strong>当下与企业全局</strong>的数据需求、支撑与维护；③确保<strong>业务专家</strong>对数据集成和互操作性设计和活动<strong>负责</strong>（业务专家应参与数据转换规则的设计和修改）。</div>
+  <p class="trap">坑（本张的『你以为…其实…』）：<strong>你以为</strong>集成是纯 IT 的活，<strong>其实</strong>教材明确要业务专家对设计和活动负责——考题就爱设『由 IT 部门全权负责』的陷阱。</p></div>
+
+  <div class="sec"><h2>考点5 ETL · 一抽二转三装车</h2>
+  <div class="quote">原话（p199–p201）：无论物理还是虚拟、批处理还是实时，<strong>ETL 都是必要步骤</strong>。</div>
+  <p><strong>人话</strong>：抽取=去源仓库搬货；转换=按收件方要求重新打包；加载=装车入库。抽取可<strong>物理暂存</strong>：好处<strong>便于审计、可从中间点重启</strong>，代价占空间、读写耗时间；<strong>极低时延需求通常不做物理暂存</strong>。转换 5 例：格式变化（EBCDIC→ASCII）、结构变化（非规范化→规范化）、语义转换（性别代码 0,1,2,3→UNKNOWN/FEMALE/MALE/NOT PROVIDED）、去重、重新排序。</p>
+  <p class="trap">坑：考『转换的例子』时把『加密』混进去——5 例里没有它。</p></div>
+
+  <div class="sec"><h2>考点6 ELT · 目标仓更强就倒装</h2>
+  <div class="quote">原话（p201）：当<strong>目标系统比源系统或中间系统转换能力更强</strong>时，可改为抽取→加载→转换；源数据以原始形式落在目标端，<strong>ELT 加载到数据湖在大数据环境很常见</strong>。</div>
+  <p><strong>人话</strong>：本来『先打包再发货』（ETL），目的仓自己有全套加工设备，就<strong>先原样运过去再加工</strong>（ELT）。另：<strong>映射（Mapping）是转换的同义词</strong>，既是『建立源到目标查找矩阵的过程』，也是该过程的结果。</p>
+  <p class="trap">坑：问『本章核心』答 ETL；问 ELT 场景，关键词『目标系统转换能力更强』『数据湖』。</p></div>
+
+  <div class="sec"><h2>易混对比 · ETL vs ELT</h2>
+  <table>
+    <tr><th></th><th>ETL</th><th>ELT</th></tr>
+    <tr><td><strong>顺序</strong></td><td>抽→转→加载</td><td>抽→加载→转</td></tr>
+    <tr><td><strong>前提</strong></td><td>途中/中间系统转换</td><td><strong>目标系统转换能力更强</strong></td></tr>
+    <tr><td><strong>典型场景</strong></td><td>常规数仓入仓</td><td><strong>大数据环境加载到数据湖</strong></td></tr>
+    <tr><td><strong>目标端形态</strong></td><td>转换后的成品</td><td><strong>原始形式先落地</strong></td></tr>
+  </table></div>
+
+  <div class="sec kaojue"><h2>考试怎么考</h2>
+  <p>题型：定义辨析（集成 vs 互操作）、『不属于目标/原则』选择题、ETL/ELT 场景判断。正确项关键词：驱动力＝『有效管理数据流动』；原则＝『业务专家负责』；核心＝『ETL』；ELT＝『目标系统更强』。干扰项三板斧：①把数据架构的目标混进本章；②把『互操作』说成『整合』；③把 ELT 说成『任何场景都优于 ETL』。</p></div>
+
+  <div class="sec"><h2>本卡真题自测</h2>
+  <p><strong>第 1 题（题号 c8-013）</strong>：某企业组织从软件供应商处购买应用程序而不是开发定制应用程序，并在应用程序之间采用点对点的解决方案，产生出成千上万个接口，直接压垮了 IT 支撑组织，作为数据治理工程师，你该如何为该企业组织提供合理化建议：<br>A. 进行异步处理，暂停一些不必要的应用程序，以减轻 IT 资源负担　B. 组织 IT 部门分析各应用程序编程接口，定义统一的 API 访问方式，打通数据流　C. 建立企业级数据中心，整合应用程序所需的数据，并为这些应用程序提供一致的数据视图　D. 建立企业信息工厂，把应用程序产生的明细数据流转到数据仓库和操作型数据存储中，以提高效率</p>
+  <p>答案：<strong>C</strong>。解析：题库原话「P204.数据集成和互操作的业务驱动因素」——点对点的病根是接口爆炸，教材开的药方是<strong>数据中心类方案</strong>整合数据、提供一致视图，正对本卡考点 2；A 回避问题，B 只统一访问方式没整合数据，D 说的是数仓/ODS 体系，不是本考点开的方子。</p>
+  <p><strong>第 2 题（题号 c8-012）</strong>：无论是在物理状态下或虚拟状态下，批量的或实时的执行 ETL 都是在应用程序和组织之间数据流动的必要步骤，所以数据集成和互操作的核心是<br>A. 抽取、转化、和加载（ETL）　B. 时延　C. 复制　D. 归档</p>
+  <p>答案：<strong>A</strong>。解析：题库原话「第八章数据集成和互操作 8.1.3」——无论物理/虚拟、批量/实时，ETL 都是必要步骤，核心就是 ETL，正对本卡考点 5；B 时延只是速度属性，C 复制、D 归档都不是『数据流动的必要步骤』。</p></div>
+
+  <div class="koujue"><strong>口诀：集成合一，互操作通话；一抽二转三装车，目标仓强就倒装。</strong><br>
+  覆盖自检：本张覆盖考点——定义 · 业务驱动 · 目标 5 条 · 原则 3 条 · ETL · ELT 与映射（共 6 个）。本章剩余考点：时延与批处理 · CDC 三种技术 · 活动 4 项与交付物 · 度量 3 类 · 串讲（留给 2/共2）。</div>
+
+  <div class="week"><strong>本周串联 · 本周覆盖考试 20 分</strong><br>
+  ①本周（11-09～11-15）讲完 3 章：第 5 章 数据建模和设计 5/5（10 分）、第 6 章 数据存储和运营 2/2（2 分）、第 7 章 数据安全 4/4（8 分）。<br>
+  ②一轮累计：第 1～7 章全部讲完（46 分），今天开出第 8 章。<br>
+  ③剩第 8 章半章加第 9～17 章约 45 张，按每天 2 张约 12 月初走完，12-01～12-08 留给模拟卷——距考试 24 天，节奏稳住。</div>
+
+  <div class="rel"><strong>相关卡</strong>：<br>· CDGA｜第7章 数据安全｜4/共4 · 工具六件·度量五把尺·审计请外人：物业年度大检查（本章收官）<br>· CDGA｜第4章 数据架构｜5/共5 · 工具／实施／治理与度量（本章收官）</div>
+
+  <div class="src"><strong>来源说明</strong>：概念、原话与页码全部来自用户提供的 CDGA 教材底稿（cdga_notes.md 第 10 节，p196–p220 原句已于 2026-11-10 逐页核对）；自测题来自 cdga_pool.json（c8-013、c8-012，题干、选项与答案未改动）；底稿未覆盖的细节未做展开。</div>
+</div>
+</body>
+</html>
