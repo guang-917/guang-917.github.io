@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第7章 数据安全｜4/共4 · 工具六件·度量五把尺·审计请外人（本章收官）</title>
+<style>
+  body{background:#111418;color:#d8dee5;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.85;margin:0;padding:24px 16px 48px;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#8a94a0;font-size:13px;margin-bottom:8px;}
+  h1{color:#f2f5f8;font-size:22px;line-height:1.5;margin:8px 0 4px;}
+  .lead{color:#a8b3bf;font-size:15px;margin:12px 0 20px;padding:12px 14px;background:#1a1f26;border-left:3px solid #d4a017;border-radius:6px;}
+  .sec{background:#171c23;border:1px solid #232a33;border-radius:10px;padding:16px 18px;margin:14px 0;}
+  .sec h2{font-size:16px;color:#e8b64a;margin:0 0 8px;}
+  .sec p{margin:8px 0;font-size:15px;}
+  .quote{background:#10141a;border-left:3px solid #4a9eff;padding:8px 12px;border-radius:6px;color:#cfe3ff;font-size:14px;margin:10px 0;}
+  .trap{color:#ff9d9d;font-size:14px;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+  th,td{border:1px solid #2a323d;padding:7px 9px;text-align:left;}
+  th{background:#1d242d;color:#e8b64a;}
+  .kaojue{background:#1b2129;border-left:3px solid #e05656;}
+  .koujue{background:#1d2416;border:1px solid #3c4a24;border-radius:10px;padding:14px 18px;margin:14px 0;color:#cfe3a8;}
+  .rel,.src{font-size:13px;color:#8a94a0;margin-top:20px;padding-top:12px;border-top:1px dashed #2a323d;}
+  strong{color:#f0d38a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026-11-15 · CDGA 备考 · 第 7 章 数据安全（p158–p195 · 8 分）· 本张对应教材 p159–p195 · 距考试 24 天</div>
+  <h1>CDGA｜第7章 数据安全｜4/共4 · 工具六件·度量五把尺·审计请外人：物业年度大检查（本章收官）</h1>
+  <div class="lead">最后一站：安全工作做完，怎么证明自己没白干？把交付物、工具、度量、审计四张清单拿稳，8 分的第 7 章就整章拿下。</div>
+
+  <div class="sec"><h2>开篇比喻｜这一张要解决什么</h2>
+  <p>把数据安全想成<strong>一个小区的物业</strong>：前 3 张讲的是物业怎么定规矩（需求、目标、原则）、怎么干活（查风险、上锁、整容）。这一张讲的是<strong>物业怎么交差、怎么被考核</strong>——交房清单（交付物）、小区设备（工具）、操作手册（方法）、考核表（度量），外加一条铁规矩：查账得请外人来（审计）。</p></div>
+
+  <div class="sec"><h2>考点1 交付物 7 项 · 交房清单</h2>
+  <p><strong>人话</strong>：数据安全干完一轮，得拿出 7 样东西给组织。</p>
+  <div class="quote">原话（p159 图 7-2）：「数据安全架构、数据安全制度、数据隐私和保密标准、数据安全访问控制、记录的安全分类、身份验证和用户访问历史记录、数据安全审计报告。」</div>
+  <p class="trap">坑：考『不属于交付物』时，干扰项爱编一个『数据安全绩效考核表』——7 样里没这个。</p></div>
+
+  <div class="sec"><h2>考点2 工具 6 件 · 小区保安设备</h2>
+  <div class="quote">原话（p159 图 7-2）：「防病毒和安全软件、Web 安全、身份管理技术、入侵检测和入侵防御软件、防火墙、元数据跟踪。」</div>
+  <p><strong>人话</strong>：门口查证件的是身份管理，围墙是防火墙，巡逻探头是入侵检测/防御——注意连小区的台账（元数据跟踪）也算保安设备。</p>
+  <p class="trap">坑（也是本张的『你以为…其实…』）：<strong>你以为</strong>安全工具就是杀毒软件加防火墙这种『硬家伙』，<strong>其实</strong>清单里连『元数据跟踪』都算——知道机密数据放在哪、谁能碰，本身就是一道防线。另外 c7-003 那类题拿『元数据管理软件』碰瓷：清单里写的是『元数据跟踪』，别和第 12 章那套元数据管理平台划等号。</p></div>
+
+  <div class="sec"><h2>考点3 方法 · 物业的操作手册</h2>
+  <div class="quote">原话（p159 图 7-2）：「应用 CRUD 和矩阵、即时安全补丁、元数据中的数据安全属性、项目中的安全需求、加密数据的高效搜索、文件清理、数据脱敏/加密。」</div>
+  <p><strong>人话</strong>：工具是设备，方法是『什么活儿用哪台设备』的手册——新项目要带安全需求、补丁要及时打、废文件要清掉。</p>
+  <p class="trap">坑：CRUD 矩阵（谁能对哪个表增删改查的那张权限表）常被问成『工具』，记住它是用法，不是软件。</p></div>
+
+  <div class="sec"><h2>考点4 度量 5 类 · 物业考核表</h2>
+  <div class="quote">原话（p159 图 7-2）：「安全实施指标、安全意识指标、数据保护指标、安全事件指标、机密数据扩散率。」</div>
+  <p><strong>人话</strong>：安全做没做到位，5 把尺子量。最反直觉的是<strong>机密数据扩散率</strong>：它量的不是黑客攻击，而是自己人把机密数据复制得到处都是的『慢性泄漏』。</p>
+  <p class="trap">坑：c7-042 那类『不属于安全意识指标』的题——安全意识指标量的是『人有没有意识』（调查、访谈这类手段），标准文档本身不是意识指标。</p></div>
+
+  <div class="sec"><h2>考点5 审计 · 请外人来查账</h2>
+  <div class="quote">原话（p163–p164）：「审计必须由第三方主持才有效（第三方可在组织内，也可外聘）。」</div>
+  <p><strong>人话</strong>：自己查自己等于没查，就像物业自查考勤没人信；第三方可以是公司内部的独立部门，也可以外聘。</p>
+  <p class="trap">坑：题目爱把『第三方』偷换成『必须是外部机构』——教材原话说的是可在组织内，也可外聘，别被『必须』二字骗了。</p></div>
+
+  <div class="sec"><h2>易混对比 · 一表分清工具/方法/度量</h2>
+  <table>
+    <tr><th></th><th>是什么</th><th>小区比喻</th><th>例子</th></tr>
+    <tr><td><strong>工具</strong></td><td>装好的软件/设备</td><td>保安设备</td><td>防火墙、身份管理</td></tr>
+    <tr><td><strong>方法</strong></td><td>怎么用设备的做法</td><td>操作手册</td><td>CRUD 矩阵、打补丁</td></tr>
+    <tr><td><strong>度量</strong></td><td>干得好不好怎么量</td><td>考核表</td><td>安全事件指标、机密数据扩散率</td></tr>
+  </table>
+  <p>考试考『不属于』时，先问自己：它是<strong>设备</strong>、是<strong>做法</strong>、还是<strong>尺子</strong>？</p></div>
+
+  <div class="sec kaojue"><h2>考试怎么考</h2>
+  <p>题型：这一块几乎全是『不属于』选择题——不属于工具（c7-003）、不属于安全意识指标（c7-042）、不属于安全活动（c7-005）。正确项直接用教材原词；干扰项三板斧：①把别的章的词搬进来（如『元数据管理软件』冒充『元数据跟踪』）；②数字加减（6 件工具说成 5 件、5 类度量说成 4 类）；③偷换程度词（审计『必须外部机构』）。</p></div>
+
+  <div class="sec"><h2>本卡真题自测</h2>
+  <p><strong>第 1 题（题号 c7-003）</strong>：请从下列选项中选择不属于数据安全工具的选项：<br>A. 访问控制系统　B. 身份管理软件　C. 入侵检测或入侵防御软件　D. 元数据管理软件</p>
+  <p>答案：<strong>D</strong>。解析：题库未给解析，按本卡考点讲——B、C 都在工具清单原话里（身份管理技术、入侵检测和入侵防御软件）；D 的『元数据管理软件』是来碰瓷的，清单里写的是『元数据跟踪』（给数据打安全标签、追流向），不是第 12 章那套元数据管理平台。</p>
+  <p><strong>第 2 题（题号 c7-042）</strong>：以下不属于安全意识指标的是？<br>A. 记录在案的，可访问的的安全标准　B. 风险评估结果　C. 正式的反馈调查和访谈　D. 补丁有效性审计</p>
+  <p>答案：<strong>A</strong>。解析：题库原话「P200.安全意识指标」——安全意识指标量的是『人有没有安全意识』，C 的调查和访谈是典型手段，B、D 是检验意识与执行效果的手段；A 是制度文档本身，属于安全实施的产物，不是『意识』的尺子（细目教材此处底稿未展开，以 P200 原页为准）。</p></div>
+
+  <div class="koujue"><strong>口诀：七件交付六工具，五把尺子量安全；审计要请第三者，扩散率里防内鬼。</strong><br>
+  覆盖自检：本张覆盖考点——交付物 7 项 · 工具 6 件 · 方法 · 度量 5 类 · 审计第三方 · 本章串讲（共 6 个）。本章剩余考点：无（本章收官）。</div>
+
+  <div class="sec"><h2>本章串讲 + 本章没讲到的点</h2>
+  <p>一条线串全章：需求 5 来源 → 业务驱动 2 条（降风险＋促增长）→ 目标 3 条 → 原则 6 条 → 活动 5 项（2P/1C/1D/1O）→ 漏洞/威胁/风险＋分类 3 级 → 4A+1E → 加密与脱敏 → 交付物·工具·度量。</p>
+  <p>本章没讲到的点：①网络安全术语细目（后门、木马、社会工程等，p166–p195）；②各行业具体法规条文（GDPR、个人信息保护法，教材只做原则性提及）；③具体加密算法实现与密钥管理体系。另注：底稿原计划讲『数据安全组织（CISO/NIST 框架）』，该部分底稿未转录，教材此处未展开。</p></div>
+
+  <div class="rel"><strong>相关卡</strong>：<br>· CDGA｜第7章 数据安全｜3/共4 · 加密与脱敏：给你的数据上锁和整容<br>· CDGA｜第7章 数据安全｜2/共4 · 活动5项·风险三兄弟·风险分类·4A+1E<br>· CDGA｜第7章 数据安全｜1/共4 · 定义·需求5来源·驱动·目标3条·原则6条</div>
+
+  <div class="src"><strong>来源说明</strong>：概念、原话与页码全部来自用户提供的 CDGA 教材底稿（cdga_notes.md 第 7 节，p158–p195 原句已于 2026-11-10 逐页核对）；自测题来自 cdga_pool.json（c7-003、c7-042，题干与答案未改动）；底稿未覆盖的细目均已标注「教材此处未展开」或「底稿未转录」。</div>
+</div>
+</body>
+</html>
