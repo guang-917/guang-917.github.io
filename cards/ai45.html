@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-6 OCR与文档理解：从“抄字的打字员”到“看得懂文件的秘书”｜22/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月16日 · AI 知识</div>
+<h1>AI知识｜M6-6 OCR与文档理解：从“抄字的打字员”到“看得懂文件的秘书”｜22/32</h1>
+<div class="lead">你拍下的一张纸质合同、一份扫描的报表，为什么AI能直接问答、能变成可检索的资料？靠的是先“识字”再“看懂版面”两道工序。这期讲清这两步差在哪、现在的AI做到了什么水平、你手头怎么用。</div>
+
+<h2>一句话结论</h2>
+<p><strong>OCR解决“纸上的字进不了电脑”</strong>——把图片变成文字；<strong>文档理解解决“进了电脑也乱成一锅粥”</strong>——把文字按原版面还原成结构。前者像打字员，后者像秘书，差的就是“结构”这一步。</p>
+
+<h2>讲透：是什么</h2>
+<p>OCR（光学字符识别）干的事很单纯：图片进、文字出，把每个字认出来。但它只是<strong>逐行抄字</strong>——抄完一份报表，标题和正文混在一起，表格变成一串谁也看不懂的数字，没人知道哪个数对应哪一列、哪一行。</p>
+<p>新一代“文档理解”模型（本质是带视觉能力的语言模型）多做了一步：<strong>先看懂版面，再按原始结构输出</strong>。哪里是标题、哪里是三列表格、哪里是手写批注、哪里是公式，它都分得清，常见输出是 Markdown——表格直接还原成表格，公式直接还原成公式。识字和懂版面，是两道不同的工序。</p>
+
+<h2>为什么重要：两个硬数字</h2>
+<p>这个赛道现在的水平，可以用两个数字感受：</p>
+<ul>
+<li>小米 2026 年 9 月 28 日提交的技术报告：Xiaomi-OCR-0，一个仅 <strong>0.8B 参数</strong>（手机能跑的体量）的模型，用约 <strong>1.7 亿条样本</strong>的 OCR 语料训练，在文档解析公开基准 OmniDocBench v1.6 上拿到 <strong>96.83 分</strong>（来源：arXiv:2609.36136）。</li>
+<li>另一个同为 0.8B 的模型 OvisOCR3（2026 年 10 月 20 日提交报告）在同一基准得 <strong>96.74 分</strong>，并在 OCRBench v2 的英文/中文分榜均排第一（65.9 / 61.3）（来源：arXiv:2610.33066）。</li>
+</ul>
+<blockquote>翻译成大白话：把一份文件“看清楚并看懂”这件事，成本已经低到能塞进你口袋，不再是机房里几百万台卡才配拥有的能力。</blockquote>
+<p>它还是<strong>知识库的第一道工序</strong>：纸质合同、扫描件、报销单，只有先经文档理解变成结构化文字，才能被切块、被检索、被AI引用——没有这道工序，你的纸质资料永远进不了之前讲的 RAG 系统。</p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li><strong>拍照上传</strong>：纸质文件拍清楚一张，传进支持文档理解的大模型 App（豆包、通义千问等都免费）。</li>
+<li><strong>点名要格式</strong>：别只说“转文字”，明确说“把这张图转成 Markdown，表格保留表格结构”——点名格式，输出质量立刻上一个台阶。</li>
+<li><strong>核对数字</strong>：金额、日期、编号逐个对照原件。识字环节仍可能认错，尤其是手写和印章压字的地方。</li>
+</ol>
+
+<h2>生活比方</h2>
+<p>传统 OCR 是<strong>打字员</strong>：你给他一张报纸，他把字全敲出来，但哪是标题哪是广告、表格里哪个数对应哪一行，他不管；文档理解模型是<strong>秘书</strong>：拿到文件先扫一眼版面——“这是标题、这是三列表、这是手写批注”——交回来的稿子格式齐全，能直接归档。打字员按字收费，秘书按“看懂”收费，AI把秘书的钱也打到了近乎为零。</p>
+
+<h2>今天就能用</h2>
+<p>找一份你手头<strong>带表格</strong>的纸质单据（报销单、水电账单都行），拍照后在豆包或通义千问 App 里输入：“把图里的表格转成 Markdown 表格，保留所有数字和单位”。把输出粘到备忘录，逐格核对金额。错几格，就是你手头这套工具的真实水平——以后重要单据就知道该不该信它了。</p>
+
+<h2>政策/行业动态</h2>
+<p>本期无新增可靠动态：经检索，上期（2026-11-15）之后唯一检索到的候选事件——《苏州市人工智能产业发展和应用促进条例》将于 12 月 1 日施行——其信息于 11 月 11 日大会已披露并有媒体当日报道（早于上期推送），按“只写上期之后真正新增”的规则不作推送，也不复述已讲背景。</p>
+
+<h2>下期预告</h2>
+<p><strong>AI知识｜M6-7 多模态检索</strong>：只用一段文字，就能从图库、视频、文件堆里把“长得像、意思像”的东西一次翻出来——23/32。</p>
+
+<div class="rel">相关延伸：文档理解输出的结构化文字，下一步就是「AI知识｜M4-3 切块：把长文档切成AI好翻的“资料卡”」；要理解为什么切块后能按语义搜到，见「AI知识｜M4-1 Embedding：给每句话发张“语义身份证”」。</div>
+<div class="note">来源说明：① Xiaomi-OCR-0 技术报告，arXiv:2609.36136，2026-09-28 提交，https://arxiv.org/abs/2609.36136；② OvisOCR3 技术报告，arXiv:2610.33066，2026-10-20 提交，https://arxiv.org/abs/2610.33066；两份均为论文作者方提交的一手技术报告，基准得分以论文摘要原文为准；③ 《苏州市人工智能产业发展和应用促进条例》：新华日报 2026-11-16 报道（xh.xhby.net/pad/con/202611/16/content_1606351.html），因事件披露于上期之前，本期仅注不计入新增。本文未能取得独立复核 OmniDocBench 官方榜单原始页面的链接，基准分数均转引自上述论文摘要，特此说明。</div>
+</body>
+</html>
