@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻：为什么 AI 画画要先加噪点，再一步步擦掉？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月16日 · AI 知识问答第6期 · 下钻</div>
+<h1>为什么 AI 画画要先加噪点，再一步步擦掉？这不是多此一举吗？</h1>
+<div class="lead">第 1 题考了扩散模型，很多人第一反应是：既然 AI 要"照着描述重新造"，为什么不直接画，非要先撒一把雪花噪点？这一步恰恰是整条技术路线成立的关键。</div>
+
+<h2>直接画"一步到位"，为什么难？</h2>
+<p>"从文字直接跳到一张完整的画"，中间隔得太远：文字是几个词，画面是几十万个像素，一步映射过去，模型根本学不出稳定的路。就像让你从"写个周报"四个字直接跳到交一份完美周报，中间没有过程，谁都做不好。</p>
+
+<h2>加噪点，其实是把"造画"拆成一堆小步</h2>
+<p>训练时，模型拿真实图片一点点加噪点，把"逐渐变模糊"的每个中间状态都看熟了。于是它学会的只有一件事：<strong>把图稍微擦干净一点点</strong>。这一小步很简单、很稳定，模型学得会。</p>
+<p>到了生图时反过来用：从一张纯噪点开始，反复执行"擦掉一点点"，几十步之后雪花噪点就变成了符合描述的画面。这就是 M6-1 说的"从一堆雪花噪点里，一步步擦出一张画"。</p>
+
+<h2>这个过程还白送了两个好处</h2>
+<ul>
+<li><strong>可控</strong>：每一步都能插入条件引导（你的文字描述），所以"照着描述造"才成立，也才有 M6-3 那种只重绘一块、控制画风的玩法——本质都是"在某一步上做干预"。</li>
+<li><strong>多样性</strong>：起点是随机噪点，同一个提示词每次走的"去噪路径"不同，所以同一句话能生成风格相近但不重样的多张图。</li>
+</ul>
+<blockquote>一句话记住：加噪点不是浪费，是把"一步造出一张画"这个学不会的大难题，拆成了几千次"擦掉一点点"这个学得会的小任务。</blockquote>
+
+<div class="rel">相关延伸：AI知识｜M6-2 文生图与图生图；AI知识｜M6-3 局部重绘与风格控制；AI知识｜M6-5 视频生成（视频生成同样基于逐帧去噪思路）。</div>
+<div class="note">本文基于第 6 期推送的 M6-1 扩散模型知识卡展开，为课程内容的下钻解释，不涉及外部数据与政策。</div>
+</body>
+</html>
