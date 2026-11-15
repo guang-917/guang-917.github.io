@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜扫描件很糊、有手写批注、表格线是断的，AI还能认准吗？</title>
+<style>
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 18px 60px}
+h1{font-size:19px;line-height:1.5}
+p,li{font-size:15px}
+.tag{color:#9aa3b2;font-size:13px}
+h2{font-size:17px;margin:24px 0 8px;padding-left:10px;border-left:4px solid #ff5a5f}
+.box{background:#171a21;border:1px solid #262b34;border-radius:12px;padding:12px 14px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="tag">深挖 · 来自「M6-6 OCR与文档理解｜22/32」</div>
+<h1>扫描件很糊、有手写批注、表格线是断的，AI还能认准吗？</h1>
+<p><strong>先给答案：能认，但翻车率取决于“原件质量”，不是模型不够强。</strong>当前主流评测专门设了一个“真实困难场景”基准 Real5-OmniDocBench，覆盖扫描、纸张弯曲、屏幕翻拍、光照不均、拍摄倾斜五类最常见的情况——行业专门为这五类建基准，恰恰说明这是公认的翻车高发区。</p>
+
+<h2>哪里最容易错</h2>
+<ul>
+<li><strong>手写字和签名</strong>：印刷体已经接近满分水平，手写仍是最弱项，潦草签名更是碰运气。</li>
+<li><strong>印章压字</strong>：红章盖在数字上，识字容易把章底下的字认丢。</li>
+<li><strong>断线表格</strong>：表格线断了或拍歪，模型可能猜错“哪个格子属于哪一列”——字都认对了，位置对不上。</li>
+<li><strong>屏拍和阴影</strong>：屏幕翻拍会有摩尔纹，阴影会让半页发黑，识别率明显下滑。</li>
+</ul>
+
+<h2>4 个立刻能做的补救</h2>
+<div class="box">
+<ol>
+<li><strong>拍正、拍平、光足</strong>：正面垂直拍摄，别斜着拍；利用桌面反射确认没有阴影盖住文字。</li>
+<li><strong>一页一拍</strong>：别把对开的两页塞进一张照片，单页分辨率越高越好。</li>
+<li><strong>给上下文</strong>：上传时补一句“这是XX公司的对账单，金额都是人民币”，专有名词和数字格式会明显更准。</li>
+<li><strong>点名难点</strong>：明确说“表格有几列，其中第二列是日期”，帮模型对齐结构。</li>
+</ol>
+</div>
+
+<h2>怎么验证它没坑你</h2>
+<p>永远保留一手核对：金额、日期、证件号这三类逐个对照原件——这三样错了会直接造成损失。文字大意错了顶多重转，数字错了是真亏钱。宁可自己多花两分钟，也不要信“AI说它认对了”。</p>
+<p style="color:#9aa3b2;font-size:13px;margin-top:28px">参考：Xiaomi-OCR-0 技术报告（arXiv:2609.36136）、OvisOCR3 技术报告（arXiv:2610.33066），其中对扫描、弯曲、屏摄等困难场景的专项评测均有数据支持。</p>
+</body>
+</html>
