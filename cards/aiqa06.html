@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识问答｜第6期｜覆盖 M5-7~M6-5</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月16日 · AI 知识问答</div>
+<h1>AI知识问答｜第6期｜覆盖 M5-7~M6-5</h1>
+<div class="lead">周一早！这周咱们把 Agent 的"安全围栏"学完了，还进入了 AIGC 新地图——扩散模型、文生图、局部重绘、语音和视频生成。今天 3 道题帮你巩固，做完把答案发我，我来批改。</div>
+
+<h2>第 1 题 · 选择题（对应 M6-1、M6-2）</h2>
+<p>AI 文生图不是从"记忆里翻照片"，而是"照着描述重新造"。它造画的正确过程是哪一种？</p>
+<ul>
+<li>A. 从素材库里挑一张最接近的照片，再调调色交给你</li>
+<li>B. 从一张纯噪点图开始，按文字描述一步步把噪点"擦"成画面</li>
+<li>C. 先搜全网图片，把搜到的拼贴成一张新图</li>
+<li>D. 像人一样先在脑子里打好草稿，再一笔一笔描出来</li>
+</ul>
+<blockquote><strong>答案：B</strong>。扩散模型的思路就是"从一堆雪花噪点里，一步步擦出一张画"（M6-1）。陷阱提示：A 和 C 是很多人以为的"AI 其实是找图/拼图"——错，AI 不检索原图；D 听起来像人，但模型没有"打草稿"这个显式步骤，它是在噪声上迭代去噪。</blockquote>
+
+<h2>第 2 题 · 简答题（对应 M5-7、M5-8）</h2>
+<p>把 AI Agent 当成你团队的"AI 办事员"，你会给它发"工牌"还要画"围栏"。请说说：<strong>为什么要画围栏？围栏一般画哪些？哪些活适合派给它、哪些活容易翻车？</strong>（想到几点写几点）</p>
+<blockquote><strong>参考答案要点（答出 2~3 条即可）：</strong>① 围栏 = 权限与安全边界（M5-7）：限定它能访问哪些工具、哪些数据、能花钱到什么额度，防止它越权操作或泄密；② 适合派的活（M5-8）：规则清晰、可验证、重复性高的任务，比如批量整理资料、定时查数据、按模板写初稿；③ 容易翻车的活：需要承担责任的关键决策、事实核查要求极高却无资料可查的任务、一步错步步错的不可逆操作。</blockquote>
+
+<h2>第 3 题 · 场景实战题（对应 M6-3、M6-4、M6-2）</h2>
+<p><strong>任务：</strong>假设你要为公司年会做一个 30 秒的开场短片。请用最近学的 AI 能力，写出一个完整的制作思路：画面怎么生成、想改某一处怎么改、配音怎么做、语音文字怎么互转。</p>
+<p><strong>达标标准（3 条）：</strong></p>
+<ol>
+<li>画面：说明用文生图/图生图生成关键画面，必要时用局部重绘只改某一块（如只换背景中的横幅文字），不重画全图——对应 M6-2、M6-3。</li>
+<li>配音：说明用 TTS 把主持稿文字转成语音；如果拿到的是别人发来的录音，用 ASR 转成文字再校对——对应 M6-4。</li>
+<li>串成片：说明把生成的画面素材按脚本顺序交给视频生成工具逐段成片（对应 M6-5），并明确标注"AI 生成内容"。</li>
+</ol>
+
+<div class="rel">相关延伸：AI知识问答｜第5期｜覆盖 M4-1~M5-6（aiqa05）；AI知识｜M5-6 工作流编排（ai37）。</div>
+<div class="note">题目依据最近 14 天（2026-11-02 ~ 11-16）实际推送的 AI 知识卡 M5-7~M6-5 出题。参考答案均为课程卡内表述，不含外部数据与政策内容，无需额外核实来源。</div>
+</body>
+</html>
