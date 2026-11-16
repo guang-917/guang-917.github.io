@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M6-7 多模态检索：拍张照就能搜，AI靠“统一翻译”对上文字和图片｜23/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月17日 · AI 知识</div>
+<h1>AI知识｜M6-7 多模态检索：拍张照就能搜，AI靠“统一翻译”对上文字和图片｜23/32</h1>
+<div class="lead">你拍一张不认识的植物问“这是什么”，手机秒回答案；输入一句“夕阳下的海边”，图库里真搜出一堆照片。这背后不是关键词匹配，而是AI把图和字“翻译”进了同一本对照词典。这期讲清它怎么做到、为什么比打标签强、你怎么用。</div>
+
+<h2>一句话结论</h2>
+<p>多模态检索解决“图片没法像文字一样被搜索”的问题：它把文字和图片统一编码成向量，放在同一个空间里，谁和谁“意思像”就挨得近——于是可以用一句话搜图，也可以用一张图搜出处。</p>
+<p>回想 M4-1 讲的 Embedding：AI 给每句话发一张“语义身份证”。多模态检索干的事，就是<strong>给图片也发一张同款的身份证</strong>——图和字用同一套编码规则，才能互相“对暗号”。</p>
+
+<h2>它是怎么做到的</h2>
+<p>主流做法叫<strong>双塔模型</strong>：一座塔负责把文字编码成向量，另一座塔负责把图片编码成向量，两座塔的输出被训练到<strong>同一个向量空间</strong>。训练时喂海量“图 + 对应文字说明”的配对，让配对的图和文向量靠得近、不配对的离得远。练成之后，随便来一张新图、一句新话，都能各自算出向量，直接比距离。</p>
+<p>代表作是 OpenAI 的 CLIP：用约 4 亿对图文数据训练，2021 年 1 月发布。它证明了同一个思路——不用人工标注类别，靠“图和它的说明文字”天然就是配对——就能学出强大的图文对照能力。</p>
+<blockquote>生活比方：以前的图片检索像图书馆手工给每本书贴标签——标签没贴到，这书就永远搜不到，而且你想到的词必须和贴标签的人用词完全一样。多模态检索像把所有书都翻译成同一种语言上架，你用自己的话问，就能按“意思”找到书，不靠标签也不靠碰运气。</blockquote>
+
+<h2>为什么重要</h2>
+<ul>
+<li><strong>不用人工打标签。</strong>几万张照片不用一张张命名，一句“去年在海边拍的日落”就能直接搜出来，人只管拍，AI 管懂。</li>
+<li><strong>它是多模态知识库的地基。</strong>前面模块讲的 RAG 只管文字；加上多模态检索，截图、图表、扫描件才能“按意思”被找到，而不是只靠文件名。M6-6 的文档理解负责把图变成结构，多模态检索负责让它可被搜到——两道工序拼起来，图片资料才算真正进了你的知识库。</li>
+<li><strong>你其实早就在用。</strong>谷歌 2011 年 6 月上线“按图片搜索”功能；淘宝拍立淘让你拍下陌生商品直接找同款和比价——多模态检索不是未来科技，是日常工具。</li>
+</ul>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li><strong>选工具：</strong>个人相册搜图，用支持语义搜索的相册应用即可；想自己动手，可用 CLIP 或开源多模态模型给图片批量算向量。</li>
+<li><strong>建索引：</strong>把图片全部向量化，连同原文件一起存好（向量库的存法见 M4-4），相当于给每张照片办了“语义身份证”并登记入库。</li>
+<li><strong>搜：</strong>把你的文字描述算成同维度向量，去库里找最近的若干个。经验：描述越具体越准——“海边日落橘子色天空”远好过“风景照”。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>现在就测试一次“以文搜图”：打开你的手机相册的搜索框（iPhone 相册搜索、各厂商相册的“智能搜索”都支持），输入一个<strong>没有出现在任何照片标题里</strong>的描述，比如“有人在打羽毛球”“红色的小吃摊”，看能否直接命中对应照片。命中了，说明你的相册已经在用多模态检索；没命中，说明它还在用老式关键词匹配——这个对照测试 30 秒就能做完。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>工信部首次把“预置智能体的终端”纳入进网管理。</strong>工信部办公厅印发《关于加强智能体终端设备进网管理的通知》（工信厅信管〔2026〕42号），要求智能体开发者公示适配终端列表、进网时开展适配验证和风险评估、OTA 升级须制定方案经评估后推送、应用开发者声明是否同意智能体调用。<strong>对普通人意味着：</strong>以后带 AI 助手的手机、手表上市前要过统一安检，出问题可溯源；调用你 App 权限前必须先获得开发者授权同意。（来源：中国工信新闻网，2026-11-06，https://www.cnii.com.cn/dzxx/202611/t20261106_768210.html）</li>
+<li><strong>三项 AI 国家/行业标准 11 月 1 日起实施。</strong>其中 GB/T 47863—2026《生成式人工智能技术应用社会影响 服务提供者合规管理指南》由中国标准化研究院牵头、30 家单位起草，为生成式 AI 服务提供者建立“社会影响合规管理体系”给出指导（来源：全国标准信息公共服务平台，https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=E880E14431A653F5B2E96A40817400EB）。<strong>对从业者意味着：</strong>提供 AI 服务的企业合规有了可对照的标准文本，选供应商时也可以要求对方对照这套标准。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>AI知识｜M6-8 版权与标识：AI 画的图、写的文，版权归谁？为什么必须“亮明身份”？（24/32）</p>
+
+<div class="rel">相关延伸：本期是 M4-1 Embedding 的“跨模态升级版”——同一套“语义身份证”思路，从文字扩展到了图片。想复习向量怎么存、怎么比距离，回看 M4-4 向量库与相似度。</div>
+<div class="note">来源说明：① CLIP 训练数据约 4 亿图文对、发布时间 2021 年 1 月——OpenAI 论文《Learning Transferable Visual Models From Natural Language Supervision》（arXiv:2103.00020）；② 谷歌“按图片搜索”上线时间 2011 年 6 月——Google 官方博客（The Official Google Blog，2011-06）；③ 《关于加强智能体终端设备进网管理的通知》文号工信厅信管〔2026〕42号——中国工信新闻网 2026-11-06（https://www.cnii.com.cn/dzxx/202611/t20261106_768210.html）；④ GB/T 47863—2026 标准信息——全国标准信息公共服务平台（openstd.samr.gov.cn）。除上述来源外，本期未引用未经核实的其他数据。</div>
+</body>
+</html>
