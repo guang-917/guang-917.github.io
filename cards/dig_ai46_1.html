@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：给几千张手机照片做“一句话就能搜”的私人相册</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:21px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:17px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+a{color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="meta">深挖 · 来自 23/32 M6-7 多模态检索</div>
+<h1>给几千张手机照片做一个“用一句话就能搜”的私人相册，具体怎么搞？</h1>
+
+<h2>先看门槛：也许你已经有了</h2>
+<p>主流手机相册（iOS 照片、华为/小米/OPPO 等的相册“智能搜索”）已经内置多模态检索。先花 1 分钟验证：在相册搜索框输入“猫”“生日蛋糕”“海滩”，看是否直接命中。命中就不用折腾，原生方案省电又免费。</p>
+
+<h2>原生不够用？两条升级路线</h2>
+<ol>
+<li><strong>路线一：本地软件，数据不出设备（推荐）。</strong>用支持本地语义搜索的照片管理工具，代表是 <strong>Immich</strong>（开源、可自建在旧电脑或家用小主机上，支持“以文搜图”，机器学习模型在本地跑）。步骤：① 找一台闲置电脑装 Docker；② 按 Immich 官方文档起服务；③ 导入照片，等它后台批量算向量；④ 网页/手机 App 里用一句话搜。几千张照片首次建索引通常几十分钟内可完成。</li>
+<li><strong>路线二：自己写脚本，用 CLIP 打向量。</strong>适合想折腾的开发者：① Python 装开源 CLIP 模型（如 open_clip）；② 遍历照片文件夹逐张算向量，存进向量库（如 FAISS，单机即可）；③ 搜索时把中文描述也编码成向量，取距离最近的 Top10。缺点：原生 CLIP 对中文描述偏弱，最好换多语言/中文图文模型。</li>
+</ol>
+
+<h2>三个实用提醒</h2>
+<ul>
+<li><strong>搜索词要具体：</strong>“海边日落橘子色天空”远好于“风景照”——描述越细，向量区分度越高。</li>
+<li><strong>隐私优先：</strong>路线一全程本地，照片不进云端；别把私人照片传给来路不明的在线“AI 相册”服务。</li>
+<li><strong>向量不是万能：</strong>多模态检索按“意思像”找，可能把“看起来像”但实际不是的照片混进来，属于正常现象，多加限定词即可。</li>
+</ul>
+
+<blockquote>验证标准：建好后拿 3 个你确定有、但从没打过标签的场景去搜（如“孩子在游乐场”“雪天的街道”），能进 Top10 算合格。</blockquote>
+
+<div class="note">工具名（Immich、FAISS、open_clip）均为公开开源项目，安装细节以各自官方文档为准；本期不引用未经核实的性能数字。</div>
+</body>
+</html>
