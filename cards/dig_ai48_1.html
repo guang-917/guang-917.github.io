@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜中文为什么更容易被切碎？怎么实测 token 省下 API 钱？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 16px 50px;font-size:15px}
+h1{font-size:19px;margin:6px 0 12px;color:#ff5a5f}
+.meta{color:#9aa3b2;font-size:13px;margin-bottom:16px}
+p{margin:10px 0}
+code{background:#171a21;border:1px solid #262b34;border-radius:6px;padding:2px 6px;font-size:13px}
+ul{padding-left:22px}
+li{margin:8px 0}
+.note{margin-top:22px;color:#9aa3b2;font-size:13px;border-top:1px solid #262b34;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="meta">25/32 · 配套深挖页 · M2-1 Token 与分词</div>
+<h1>中文为什么更容易被切碎？怎么实测 token 省下 API 钱？</h1>
+<p><b>先回答"为什么"。</b>主流模型的分词器（BPE，字节级成对编码）是拿海量训练语料"数搭配"数出来的：出现越频繁的字词组合，越可能整块成为一个 token。英文语料占比高，所以英文常见词大多整块；中文常用字虽也在字典里，但两个字的常见组合（比如"我们""可以"）能不能整块，取决于该模型的中文语料量。语料少的模型会把一个汉字进一步拆成字节碎片，一个字变成两三个 token，成本直接翻倍——这也是为什么换模型后同样一篇文档，账单可能差出一截。</p>
+<p><b>再回答"怎么实测"。</b>别估，数。三条路，任选其一：</p>
+<ul>
+<li><b>网页版（零门槛）</b>：打开 OpenAI 官方 Tokenizer 工具（platform.openai.com/tokenizer），粘贴文本，立刻看到切分结果和总数，适合临时抽查。</li>
+<li><b>本机脚本（可批量）</b>：<code>pip install tiktoken</code>，然后 <code>import tiktoken; enc = tiktoken.encoding_for_model("你的模型名"); print(len(enc.encode("要数的文本")))</code>，几行就算完。OpenAI 帮助中心明确推荐 tiktoken 作为其模型的 BPE 分词工具。</li>
+<li><b>看真实账单</b>：调 API 后返回的 usage 字段里，prompt_tokens / completion_tokens 就是真金白银的计数，拿它校准你的估算习惯。</li>
+</ul>
+<p><b>三个省钱动作。</b>①提示词瘦身：把示例和废话删到只留规则，规则重复但例子一个就够；②长文先摘要再投喂：先让模型把 1 万字的资料压成 800 字要点，后续多轮对话都基于摘要走，token 消耗断崖式下降；③重复内容走缓存：系统提示词、固定背景说明这类每轮都相同的前缀，多数 API 有缓存价（OpenAI 称 cached tokens 按较低费率计费），把稳定内容放最前面、可变内容放后面，命中率才高。</p>
+<p><b>一个反直觉提醒</b>：答案短 ≠ 花得少。推理类模型会在内部消耗不可见的"思考 token"，照样按输出计费。所以控制成本要看 usage 总数，不能只看回复长短。</p>
+<div class="note">来源说明：分词与缓存规则引自 OpenAI 帮助中心《What are tokens and how to count them?》（help.openai.com，文章 4936856）；中文实测数字引自第三方博客测试（tiktoken 0.14.0，2026-11-01，yaohehe.github.io，为个人实测，非官方口径，仅供参考）。本文为一般性知识介绍。</div>
+</body>
+</html>
