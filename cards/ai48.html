@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-1 Token 与分词：AI 眼里没有“字”，只有一块块“语义积木”｜25/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月19日 · AI 知识</div>
+<h1>AI知识｜M2-1 Token 与分词：AI 眼里没有“字”，只有一块块“语义积木”｜25/32</h1>
+<div class="lead">为什么同一段中文，API 扣的钱和自己估的差好几倍？为什么 AI 有时把一个生僻字“念碎”？这期从最底层讲起：模型读你的话之前，一切都被切成叫 token 的积木。</div>
+
+<h2>一句话结论</h2>
+<p>Token 与分词解决的是“AI 到底怎么‘读’你的话”——它不认字、不认词，只认一把把切好的积木；积木的数量直接决定你的 API 账单和上下文容量。</p>
+
+<h2>是什么：AI 的“标准件清单”</h2>
+<p>你发给模型的每句话，第一步不是“理解”，而是被一个叫<b>分词器</b>的程序切成小块，每块就是一个 <b>token</b>。切法不按字、也不按词典，而是按训练语料里的<b>高频搭配</b>切：常见组合整块保留，生僻内容拆成碎片。切完的每块对应字典里的一个编号，模型从头到尾只在这些编号上做运算。</p>
+<p>OpenAI 官方文档给过现成例子：英文 "tokenization" 会被切成 "token"+"ization" 两块；"hamburger" 切成 "ham"+"bur"+"ger" 三块；而 "the" 这种高频词只占一块。中文同理——常见字词可能整块，低频组合会被切碎，不同模型的切法还不一样。</p>
+
+<h2>为什么重要：token 数 = 钱 + 容量</h2>
+<ul>
+<li><b>计费按 token 算</b>：API 输入、输出分开计价，单价都是“每百万 token 多少钱”。估错了 token 数，预算就估错。</li>
+<li><b>上下文窗口按 token 封顶</b>：模型一次能“装下”的对话总长度以 token 计，超了就得裁剪历史或摘要压缩。</li>
+<li><b>英文经验值对中文不适用</b>：官方口径是“英文 1 token ≈ 4 个字符或 0.75 个单词，100 个 token ≈ 75 个单词”，但官方明确写着：这是英语估计，<b>其他语言里字符、词、token 的关系不一样</b>。OpenAI 帮助中心给的硬数字：一句话 "You miss 100% of the shots you don't take" 共 11 个 token；美国《独立宣言》全文约 1,695 个 token。</li>
+<li><b>中文到底多“费”</b>：一份 2026 年 11 月的第三方实测（tiktoken 0.14.0，跑遍 23 篇中文技术文）得出约 <b>0.84 token/字符</b>，也就是 1 个 token 平均覆盖约 1.19 个汉字；同一实测里英文是 1 token ≈ 4.13 字符。结论：给中文估成本，别套英文的“除以 4”，粗估按“1 个字 ≈ 1 个 token”，再用工具实测校准。</li>
+</ul>
+
+<blockquote>生活比方：分词器像乐高积木厂的切件机——不管你递给它的是一栋豪宅模型还是一句诗，它都按自家标准件图，把东西拆成一块块小积木再交给工人。工人（模型）从没见过“整栋房子”，只认积木件号；件号用得越多，工钱越贵、桌面（上下文）越快摆满。</blockquote>
+
+<h2>怎么用：三步把 token 用明白</h2>
+<ol>
+<li><b>先数再估</b>：任何要算成本、算容量的场景，用工具数 token，别用字符数换算。</li>
+<li><b>省 token 省出真金白银</b>：精简提示词（删废话、少堆例子）；长文档先让 AI 压成摘要，再基于摘要做多轮对话。</li>
+<li><b>重复内容走缓存</b>：系统提示词、固定背景说明这类每轮都相同的前缀，命中缓存后计费更低（OpenAI 帮助中心说明 cached tokens 常按较低费率计）。稳定内容放前面，可变内容放后面，缓存才命中。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>打开 OpenAI 官方 Tokenizer 工具（platform.openai.com/tokenizer），把你最常用的那段中文提示词粘进去，看两件事：① 它把哪些词切成了碎块？② 总共多少 token？想批量化，就在本机装 OpenAI 开源的 tiktoken 分词库（<b>pip install tiktoken</b>），用 <b>tiktoken.encoding_for_model(模型名)</b> 精确计数。验证方法：同一段 200 字内容，中文、英文各贴一次，亲眼看 token 数差多少——这个差距就是你的账单差距。</p>
+
+<h2>政策/行业动态</h2>
+<p><b>美国把出口管制延伸到“远程租算力”</b>：美国商务部工业与安全局（BIS）2026 年 11 月 15/16 日发布《应对先进半导体远程访问的临时最终规则》，定于 11 月 19 日在《联邦公报》刊登并当日生效。核心两条：全球任何数据中心，若向总部位于中国、中国澳门及其他 D:5 组地区的企业提供超过 1200 万 TPP（总处理性能）的算力，相关芯片出口须申请许可，已有安排给约 90 天过渡期（按 11 月 19 日生效算约至 2027 年 2 月 17 日）；印尼、马来西亚、新加坡、泰国、巴西新纳入先进芯片许可要求。规则同时正式废止此前的“AI 扩散规则”。11 月 17 日，中国外交部发言人郭嘉昆回应称此举是“典型的经济胁迫和长臂管辖”，中方将采取必要措施维护正当权益。<b>对普通人的意味</b>：个人日常用 AI 短期无直接影响；但用境外云算力做训练或推理的从业者，需立刻核查供应链与客户结构的合规性，境外算力租赁的价格和可得性可能出现波动。</p>
+
+<h2>下期预告</h2>
+<p>下一期：AI知识｜M2-2 预测下一个词：AI 写作的本质是一场“接龙”｜26/32。看完今天你知道模型吃的是积木；下期讲它怎么一块一块把积木拼回去——答案只有一个动作。</p>
+
+<div class="rel">相关延伸：M4-1 讲过 Embedding——那期说的是把句子变成“语义身份证”用于检索；今天讲的 Token 是更靠前的一步：先切积木、再发身份证，两件事别混。</div>
+<div class="note">来源说明：① OpenAI 帮助中心《What are tokens and how to count them?》（help.openai.com，文章编号 4936856）：1 token≈4 字符/0.75 词、100 token≈75 词、11 个 token 与《独立宣言》1,695 个 token、cached tokens 计费说明；② OpenAI 平台文档 Key concepts（platform.openai.com）：tokenization/hamburger 切分示例；③ 中文实测数字引自第三方博客测试（yaohehe.github.io，2026-11-01，tiktoken 0.14.0，23 篇中文技术文实测，个人实测非官方口径，仅供参考）；④ BIS 官方新闻稿《BIS Issues Rule Addressing Remote Access to American Super Intelligence Technology》（media.bis.gov，2026-11-15/16）；⑤ 复旦发展研究院《全球AI治理新闻 No.54》（2026.11.09–11.17 周期，fddi.fudan.edu.cn）：TPP 阈值 1200 万、联邦公报 11 月 19 日刊登生效、外交部 11 月 17 日回应；⑥ 锦天城律师事务所规则解读（allbrightlaw.com）。本文为一般性知识介绍，不构成投资或法律建议。</div>
+</body>
+</html>
