@@ -384,6 +384,7 @@ body{
 .kn-acts button:active{transform:scale(.96)}
 .kn-acts button.main{background:var(--data);border-color:var(--data);color:#fff;font-weight:600}
 .kn-acts button.off{color:var(--ink-3);background:var(--bg-2);border-color:transparent}
+.kn-secs-hd{font-size:10.5px;color:var(--ink-3);margin-top:11px;letter-spacing:.02em}
 .kn-sec{display:flex;align-items:center;gap:8px;padding:9px 0 5px;border-bottom:1px solid var(--line-2)}
 .kn-sec .sn{font-size:12.5px;font-weight:600;font-family:var(--serif)}
 .kn-sec .sm{flex:1;text-align:right;font-size:10.5px;color:var(--ink-3)}
@@ -441,17 +442,21 @@ body{
 .topic .mesh{font-size:12px;color:var(--ink-2);margin:6px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .topic .mesh .arrow{color:var(--ink-3)}
 .topic .mesh .mt{background:var(--ai-soft);color:var(--ai);border-radius:8px;padding:3px 9px}
-.topic .cardrow{position:relative;display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
-.topic .cardrow .dot{margin-top:7px;flex:none}
-.topic .cardrow .ct{flex:1;min-width:0}
-.topic .cardrow .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
-.topic .cardrow .crow{display:flex;align-items:flex-start;gap:8px}
-.topic .cardrow .crow b{flex:1;min-width:0}
-.topic .cardrow .crow .chip{margin-top:1px}
-.topic .cardrow .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
-.topic .cardrow .tags{margin-top:6px;gap:5px}
-.topic .cardrow .tags span{font-size:10.5px;padding:1px 7px}
-.topic .cardrow .meta{font-size:11px;color:var(--ink-3);margin-top:4px}
+.cardrow{position:relative;display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-top:1px solid var(--line-2);cursor:pointer}
+.cardrow .dot{margin-top:7px;flex:none}
+.cardrow .ct{flex:1;min-width:0}
+.cardrow .ct b{font-size:13.5px;font-weight:600;display:block;line-height:1.4}
+.cardrow .crow{display:flex;align-items:flex-start;gap:8px}
+.cardrow .crow b{flex:1;min-width:0}
+.cardrow .crow .chip{margin-top:1px}
+.cardrow .ct p{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:3px}
+.cardrow .tags{margin-top:6px;gap:5px}
+.cardrow .tags span{font-size:10.5px;padding:1px 7px}
+.cardrow .meta{font-size:11px;color:var(--ink-3);margin-top:4px}
+.cardrow .star{flex:none;margin-left:2px;color:var(--ink-3);display:flex;align-items:center;height:20px}
+.cardrow .star svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.cardrow .star.on{color:var(--gold)}
+.cardrow .star.on svg{fill:currentColor}
 /* 编辑抽屉的样式已随「编辑」功能一起移除（`.38`） */
 
 /* ---------- 待挖掘 ---------- */
@@ -536,11 +541,17 @@ body{
 .qzrow .l b{display:block;font-size:14px;font-weight:800}
 .qzrow .l span{font-size:11.5px;color:var(--ink-3)}
 .qzrow .r{font-size:11.5px;color:var(--ai);font-weight:800}
+/* `.69` 复述角度 */
+.scGuide{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px;align-items:center}
+.scGh{font-size:11.5px;color:var(--ink-3);width:100%;margin-bottom:2px}
+.scChip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:12.5px;color:var(--ink-2);font-family:inherit;font-weight:600}
+.scChip:active{background:var(--bg-2)}
 /* `.65` 知识卡自查 */
 .scTtl{font-size:16.5px;font-weight:800;line-height:1.55;margin:8px 0 6px}
 .scTip{font-size:12.5px;color:var(--ink-3);line-height:1.7;margin:0 0 12px}
 .scTa{width:100%;min-height:200px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 13px;font-size:15px;line-height:1.8;color:var(--ink);font-family:inherit;resize:vertical}
 .scTa::placeholder{color:var(--ink-3)}
+.scTa:focus{outline:none;border-color:var(--ai);box-shadow:0 0 0 3px rgba(91,91,214,.10)}
 .scCnt{font-size:11.5px;color:var(--ink-3);text-align:right;margin:6px 2px 0}
 .scBtn{width:100%;background:var(--ai);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;margin-top:12px;font-family:inherit;cursor:pointer}
 .scBtn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:14px}
@@ -1315,11 +1326,14 @@ function knToggle(n){knOpen[n]=!knOpen[n];var el=document.getElementById("kn-"+n
 /* ---- 渲染：数据频道总览 ---- */
 function renderKnTree(){
   var box=document.getElementById("treeList");if(!box)return;
+  /* `.67`：页头副标题跟着换——旧文案「你走过的路，长成的形状」跟考纲诊断没关系 */
+  TAB_META.tree[1]="17 章 · 100 分 · 哪薄补哪";
+  if(curView==="tree"&&hdrSub)hdrSub.textContent=TAB_META.tree[1];
   var data=buildCdgaTree(),cov=knCoverage(data),gaps=knGaps(data);
   var chapters=data.topics.filter(function(t){return t.hasCards;}).length;
   var h=[];
   h.push('<div class="kn-cov"><div class="tp"><div class="big">'+cov+'<i>/ 100 分</i></div>'
-    +'<div class="rt">已学过 <b>'+chapters+' 章</b><br>还有 <b>'+(CDGA_PTS-cov)+' 分</b>没碰</div></div>');
+    +'<div class="rt">已覆盖 <b>'+chapters+' 章</b><br>还有 <b>'+(CDGA_PTS-cov)+' 分</b>没碰</div></div>');
   h.push('<div class="kn-bar">'+data.topics.map(function(t){
     var cls=!t.hasCards?"":(t.m>=2?"on":"half");
     return '<i class="'+cls+'" style="flex:'+t.points+'"></i>';
@@ -1338,7 +1352,7 @@ function renderKnTree(){
         h.push('<div class="kn-gap"><span class="ix">'+(i+1)+'</span><div class="tx">'
           +'<b>第 '+t.n+' 章 '+esc(t.name)+'</b>'
           +'<span>'+t.points+' 分 · '+(t.hasCards?(t.study.length+' 张卡 · '+st.t):'<em>0 张卡 · 未碰</em>')+'</span></div>'
-          +'<button class="kn-btn solid" data-knmake="'+t.n+'">补卡</button></div>');
+          +knActionHTML(t)+'</div>');
       }else{
         var s=g.s;
         h.push('<div class="kn-gap"><span class="ix">'+(i+1)+'</span><div class="tx">'
@@ -1368,27 +1382,37 @@ function renderKnTree(){
   var hint=document.getElementById("treeHint");
   if(hint)hint.textContent="CDGA 17 章考纲 · 点一章看它薄在哪";
 }
+function knActionHTML(t){
+  /* 动作跟着状态走：没卡才「补卡」；有卡有题就「练」；有卡没题只能「讲一遍」。
+     给一张有 5 张卡的章塞「补卡」是错的——他不缺卡，缺的是把卡读进去/验证。 */
+  if(!t.hasCards) return '<button class="kn-btn solid" data-knmake="'+t.n+'">补卡</button>';
+  if(t.qTotal) return '<button class="kn-btn solid" data-knquiz="'+t.n+'">练 5 题</button>';
+  return '<button class="kn-btn solid" data-knsay="'+t.n+'">讲一遍</button>';
+}
 function knChapterHTML(t){
   var st=knState(t.m,t.hasCards);
-  var meta=[];
-  meta.push(t.points+" 分");
-  meta.push(t.hasCards?(t.study.length+" 张卡"):"0 张卡");
-  if(t.practice)meta.push("含 "+t.practice+" 张每日一练");
-  if(t.qTotal)meta.push(t.qTotal+" 题 · 已做 "+t.qDone+(t.qDone?" · 正确率 "+Math.round(t.qRight/t.qDone*100)+"%":""));
+  var meta=[t.points+" 分", (t.hasCards?t.study.length+" 张卡":"0 张卡")];
+  if(t.qTotal)meta.push(t.qTotal+" 题");
   var h='<div class="kn-ch'+(t.hasCards?"":" zero")+(knOpen[t.n]?" open":"")+'" id="kn-'+t.n+'">'
     +'<div class="kn-hd" data-knch="'+t.n+'"><div class="no">第<b>'+t.n+'</b>章</div>'
     +'<div class="nm">'+esc(t.name)+'<i>'+(t.hasCards?meta.join(" · "):(t.points+" 分 · <em>整章还没开始</em>"))+'</i></div>'
     +'<div class="mbar">'+knBars(t.m)+'</div>'
     +'<div class="st '+st.cls+'">'+st.t+'</div><span class="ar">›</span></div>';
   h+='<div class="kn-bd"><div class="kn-in">';
-  h+='<div class="kn-meta">'+(t.hasCards?('掌握度 <b>'+t.m+'/4</b> · 教材卡 '+t.study.length+' 张'):
-      ('这一章占 <b>'+t.points+' 分</b>，还没有任何卡'))+'</div>';
-  h+='<div class="kn-acts">'
-    +'<button class="main" data-knmake="'+t.n+'">补一张卡</button>'
-    +'<button data-knsay="'+t.n+'">讲一遍</button>'
-    +(t.qTotal?'<button data-knquiz="'+t.n+'">练这章</button>':'<button class="off" disabled>还没题</button>')
-    +'</div>';
+  var det=[];
+  det.push(t.hasCards?('掌握度 <b>'+t.m+'/4</b> · 教材卡 '+t.study.length+' 张'):('这一章占 <b>'+t.points+' 分</b>，还没有任何卡'));
+  if(t.practice)det.push('每日一练 '+t.practice+' 张（不计入掌握度）');
+  if(t.qTotal)det.push('题 '+t.qTotal+' 道 · 已做 '+t.qDone+(t.qDone?(' · 正确率 '+Math.round(t.qRight/t.qDone*100)+'%'):''));
+  h+='<div class="kn-meta">'+det.join(" · ")+'</div>';
+  var acts=[];
+  if(!t.hasCards){ acts.push({t:"补一张卡",a:'data-knmake="'+t.n+'"',m:1}); acts.push({t:"讲一遍",a:'data-knsay="'+t.n+'"'}); acts.push({t:"还没题",off:1}); }
+  else if(t.qTotal){ acts.push({t:"练这章",a:'data-knquiz="'+t.n+'"',m:1}); acts.push({t:"讲一遍",a:'data-knsay="'+t.n+'"'}); acts.push({t:"补一张卡",a:'data-knmake="'+t.n+'"'}); }
+  else { acts.push({t:"讲一遍",a:'data-knsay="'+t.n+'"',m:1}); acts.push({t:"补一张卡",a:'data-knmake="'+t.n+'"'}); acts.push({t:"还没题",off:1}); }
+  h+='<div class="kn-acts">'+acts.map(function(x){
+    return '<button class="'+(x.off?"off":(x.m?"main":""))+'" '+(x.off?'disabled':x.a)+'>'+x.t+'</button>';
+  }).join("")+'</div>';
   if(t.secs.length){
+    h+='<div class="kn-secs-hd">题组（题库按节归档，点名 → 抽题）</div>';
     t.secs.forEach(function(s){
       var bad=s.done>=2&&s.acc<0.6;
       h+='<div class="kn-sec"><span class="sn">'+esc(s.sec)+'</span>'
@@ -1735,9 +1759,15 @@ function scRenderInput(){
       return '<div class="scHrow"><span>'+(d.getMonth()+1)+'-'+d.getDate()+' '+p2(d.getHours())+':'+p2(d.getMinutes())+'</span><span class="r">'+x.cover+'% · 漏 '+(x.total-x.covered)+' 个</span></div>';
     }).join('')+'</div>';
   }
-  box.innerHTML='<div class="scTtl">'+esc(c.title)+'</div>'
+  box.innerHTML='<div class="scTtl">'+esc(scCardLine(c.title))+'</div>'
     +'<p class="scTip">合上卡，用自己的话说说这张卡讲了什么。<br>说漏的地方，AI 会替你指出来。</p>'
-    +'<textarea class="scTa" id="scInput" placeholder="比如：数据治理是……它管的是……跟数据管理的区别是……"></textarea>'
+    +'<div class="scGuide"><span class="scGh">从这四块讲，点一下插进框里：</span>'
+    +'<button type="button" class="scChip" data-ins="是什么：">① 是什么</button>'
+    +'<button type="button" class="scChip" data-ins="由哪几块组成：">② 分几块</button>'
+    +'<button type="button" class="scChip" data-ins="最容易和什么搞混：">③ 易混点</button>'
+    +'<button type="button" class="scChip" data-ins="怎么用（举个例子）：">④ 怎么用</button>'
+    +'</div>'
+    +'<textarea class="scTa" id="scInput" placeholder="按上面的四个角度，一块一块说；想到什么写什么，不用讲究顺序。"></textarea>'
     +'<div class="scCnt" id="scCnt">已写 0 字 · 建议 80 字以上</div>'
     +'<button class="scBtn" id="scGo">提交 · 看漏了什么</button>'
     +hh
@@ -1749,6 +1779,20 @@ function scRenderInput(){
   });
   document.getElementById("scGo").addEventListener("click",scSubmit);
   document.getElementById("scCancel").addEventListener("click",function(){ navBack(); });
+  /* `.69`：四个复述角度，点一下把引导语插到光标处，别让人对着空框发呆 */
+  var chips=box.querySelectorAll(".scChip");
+  for(var ci=0;ci<chips.length;ci++){
+    chips[ci].addEventListener("click",function(){
+      var t=this.getAttribute("data-ins")||"";
+      var st=inp.selectionStart||inp.value.length;
+      var v=inp.value||"";
+      var pre=v.slice(0,st), post=v.slice(st);
+      var need=(pre&&!/\n$/.test(pre))?"\n":"";
+      inp.value=pre+need+t+post;
+      try{ inp.focus(); var pos=(pre+need+t).length; inp.setSelectionRange(pos,pos); }catch(e){}
+      inp.dispatchEvent(new Event("input"));
+    });
+  }
   box.scrollTop=0;
   setTimeout(function(){ try{inp.focus();}catch(e){} },280);
 }
@@ -1771,6 +1815,10 @@ function scSubmit(){
      if(btn){btn.disabled=false;btn.textContent="提交 · 看漏了什么";}
      if(typeof toast==="function")toast("AI 没响应："+((e&&e.message)||"网络问题"));
    });
+}
+function scCardLine(t){
+  var a=String(t||"").split("｜");
+  return (a.length>=3)?a.slice(2).join("｜"):String(t||"");
 }
 function scSaid(point,said){
   if(!said)return "";
@@ -2104,15 +2152,21 @@ function initTreeCh(){
 function renderTreePills(){
   document.querySelectorAll("#treeChPills [data-ch]").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-ch")===treeCh);});
 }
+/* `.67`：在章里看卡，标题前面的「CDGA｜第 N 章 章名｜」是废话——章头已经写着，剥掉 */
+function knShortTitle(t){
+  return String(t||"").replace(/^CDGA\s*[｜|]\s*第\s*\d+\s*章[^｜|]*[｜|]\s*/,"");
+}
 function cardRowHTML(c){
   var cm=chMeta(c.ch);
   return '<div class="cardrow" data-id="'+esc(c.id)+'" data-type="card"><span class="dot'+(c.read?' read':'')+'"></span>'
-    +'<div class="ct"><div class="crow"><span class="chip '+cm.c+'">'+cm.n+'</span><b>'+esc(c.title)+'</b></div>'+tagsHTML(c)+'<div class="meta">'+(c.date2||'')+'</div></div>'
+    +'<div class="ct"><div class="crow"><span class="chip '+cm.c+'">'+cm.n+'</span><b>'+esc(knShortTitle(c.title))+'</b></div>'+tagsHTML(c)+'<div class="meta">'+(c.date2||'')+'</div></div>'
     +(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>';
 }
 function renderTree(){
   /* `.67`：数据频道 = CDGA 考纲诊断图，另一套渲染；AI / 日语仍走主题树 */
   if(normCh(treeCh)==="data"){ renderKnTree(); return; }
+  TAB_META.tree[1]="主题与卡片的结构";
+  if(curView==="tree"&&hdrSub)hdrSub.textContent=TAB_META.tree[1];
   var box=document.getElementById("treeList");
   var data=buildChannelTree(treeCh),h=[];
   if(!data.topics.length&&!data.unmatched.length){box.innerHTML='<div class="empty">这个频道还没有内容，去「今日」学一张卡吧。</div>';return;}
@@ -4898,7 +4952,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.68';
+var _APP_VER_ = '2026-11-19.69';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
