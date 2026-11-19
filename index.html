@@ -379,7 +379,7 @@ body{
 .dig.done .q{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
 
 /* ---------- `.59` 练习模式 ---------- */
-#mzPaneQuiz{padding:12px 14px 130px}
+#mzPaneQuiz{padding:12px 14px 170px}
 .qzhint{font-size:12.5px;color:var(--ink-3);line-height:1.7;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px}
 .qzch{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer}
 .qzch:active{background:var(--bg)}
@@ -418,6 +418,16 @@ body{
 .qzwi{font-size:13.5px;line-height:1.65;margin:6px 0;color:var(--ink-2)}
 .qzwi b{color:#e05a5f;margin-right:4px}
 .qzgood{color:#2f9e78;text-align:center;font-weight:700;margin:10px 0 14px;font-size:14.5px}
+/* `.63` 追问框 */
+.qzask{display:flex;gap:8px;margin:6px 0 12px}
+.qzaskin{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);font-family:inherit}
+.qzaskin::placeholder{color:var(--ink-3)}
+.qzaskbtn{flex:0 0 auto;background:var(--ink);color:var(--bg);border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.qzaskbtn:disabled{opacity:.5}
+.qzq{background:rgba(79,140,255,.10);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.7;margin:8px 0 6px;color:var(--ink)}
+.qzq::before{content:"我：";color:var(--ink-3);font-size:12.5px}
+.qzawait{color:var(--ink-3);font-size:13px;padding-left:2px}
+.qzan{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.8;margin:4px 0 10px}
 .dig .dt{position:absolute;right:13px;top:11px;font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
 /* ---------- 摘要页（第 2 层）：分类标签 + 日期 / 摘要块 / 关键词 ---------- */
 .reader .rmeta{display:flex;align-items:center;gap:8px;margin:2px 0 12px}
@@ -2520,9 +2530,12 @@ function quizAnswer(pick){
   if(!right){
     html+='<button class="qzdeep" id="qzDeep">深挖这道 · 让 AI 从三个角度拆 →</button><div id="qzDeepBox"></div>';
   }
+  /* `.63`：答完题（对错都能问）给一个「我还要问」输入框，直接追问这道题 */
+  html+='<div class="qzask"><input class="qzaskin" id="qzAskIn" type="text" placeholder="我还要问：比如「为什么不是 B」「这两条怎么分」"><button class="qzaskbtn" id="qzAskBtn">问</button></div><div id="qzAskLog"></div>';
   html+='<button class="qznext" id="qzNext">'+((QS.i+1<QS.ids.length)?'下一题':'看本组结果')+'</button>';
   after.innerHTML=html;
   if(!right) document.getElementById("qzDeep").addEventListener("click",function(){ quizDeep(q,pick); });
+  quizAskBind(q,pick);
   document.getElementById("qzNext").addEventListener("click",function(){
     if(QS.i+1<QS.ids.length){ QS.i++; quizRenderQ(); } else { quizFinish(); }
   });
@@ -2569,6 +2582,38 @@ function quizFinish(){
   document.getElementById("qzAgain").addEventListener("click",function(){ quizStart(QS.ch); });
   document.getElementById("qzHome").addEventListener("click",function(){ QS=null; quizRenderHome(); });
   window.scrollTo(0,0);
+}
+/* `.63`：答完题后的「我还要问」追问框（可多轮，带上下文） */
+function quizAskBind(q,pick){
+  var inp=document.getElementById("qzAskIn"), btn=document.getElementById("qzAskBtn");
+  if(!inp||!btn)return;
+  var hist=[];
+  var ctx="CDGA 单选题。\n题干："+q.stem+"\n选项："+q.options.map(function(o,i){return 'ABCD'[i]+'. '+o;}).join("；")
+    +"\n正确答案："+'ABCD'[q.ans]+"（"+q.options[q.ans]+"）\n我选的是："+'ABCD'[pick]+"（"+q.options[pick]+"）"
+    +"\n教材解析："+(q.exp||"");
+  function send(){
+    var txt=(inp.value||"").trim();
+    if(!txt||btn.disabled)return;
+    btn.disabled=true; inp.disabled=true;
+    var log=document.getElementById("qzAskLog");
+    if(!log)return;
+    log.insertAdjacentHTML("beforeend",'<div class="qzq">'+esc(txt)+'</div><div class="qzawait" id="qzWait">回答中…</div>');
+    inp.value="";
+    var past=hist.length?("\n之前的追问与回答：\n"+hist.map(function(h,i){return "问"+(i+1)+"："+h.q+"\n答"+(i+1)+"："+h.a;}).join("\n")):"";
+    var prompt=ctx+past+"\n\n我的问题："+txt+"\n\n请直接回答这个问题，150~300 字：先给结论，再给依据；涉及教材口径时点出关键词，不要复述题干。";
+    callAI(prompt,"你是 CDGA 备考教练，只答考生问的那一点，简洁具体，不客套。",true).then(function(ans){
+      var w=document.getElementById("qzWait"); if(w)w.remove();
+      log.insertAdjacentHTML("beforeend",'<div class="qzan">'+esc(ans).replace(/\n/g,'<br>')+'</div>');
+      hist.push({q:txt,a:ans});
+      btn.disabled=false; inp.disabled=false; inp.focus();
+    }).catch(function(e){
+      var w=document.getElementById("qzWait");
+      if(w){ w.className="qzerr"; w.textContent="没答上来："+((e&&e.message)||"网络问题")+"，可以再点一次"; }
+      btn.disabled=false; inp.disabled=false;
+    });
+  }
+  btn.addEventListener("click",send);
+  inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); send(); } });
 }
 function setMzSub(sub){
   mzSub=(sub==="qa"||sub==="quiz")?sub:"dig";
@@ -3843,7 +3888,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-17.62';
+var _APP_VER_ = '2026-11-19.63';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
