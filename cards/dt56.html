@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDGA｜第11章 数据仓库和商务智能｜4/共5</title>
+<style>
+body{background:#14161a;color:#e6e6e6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;margin:0;padding:24px 16px;}
+.wrap{max-width:680px;margin:0 auto;}
+.meta{color:#8a93a3;font-size:13px;margin-bottom:6px;}
+h1{font-size:22px;line-height:1.4;margin:4px 0 10px;color:#ffd479;}
+.lead{background:#1d2129;border-left:3px solid #ffd479;padding:10px 14px;border-radius:6px;color:#c9d1dc;font-size:14px;margin-bottom:18px;}
+h2{font-size:16px;color:#7fc4ff;margin:22px 0 8px;}
+p{font-size:15px;}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14px;}
+th,td{border:1px solid #333a45;padding:6px 9px;text-align:left;}
+th{background:#1d2129;color:#ffd479;}
+blockquote{border-left:3px solid #556;background:#1a1d23;margin:8px 0;padding:8px 12px;color:#c0c7d1;}
+.dig{background:#1d2129;border-radius:8px;padding:12px 16px;margin-top:26px;}
+.news{background:#1d2129;border-radius:8px;padding:12px 16px;margin-top:20px;font-size:14px;}
+.src{color:#8a93a3;font-size:13px;margin-top:26px;border-top:1px solid #2a2f38;padding-top:10px;}
+.quiz{background:#182028;border-left:3px solid #7fc4ff;padding:10px 14px;border-radius:6px;white-space:pre-wrap;}
+a{color:#7fc4ff;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">2026年11月20日 · CDGA 教材卡 · 第11章（数据仓库和商务智能 · 考试10分）· 4/共5 · 教材 p284 图 11-1 + p295–p305</div>
+<h1>CDGA｜第11章 数据仓库和商务智能｜4/共5 · 6个活动·3条开发主线·源到目标映射·乐观/悲观加载·BI工具3类·OLAP 5操作+3实现</h1>
+<div class="lead">继续「中央厨房」比喻：这张讲厨房开张后的日常——谁定菜谱、谁进货、上错菜怎么补，以及端菜用的 BI 工具和 OLAP 五个手势。</div>
+
+<h2>比喻开场</h2>
+<p>中央厨房开张了，日常要干六件事——先听客人想吃什么（理解需求）、定厨房图纸（定义和维护架构）、开灶炒菜（开发仓库和集市）、进货上架（加载）、买餐具（实施 BI 产品）、修灶保养（维护数据产品）。</p>
+
+<h2>考点1｜语境关系图 6 个活动，没有 C</h2>
+<p>① 人话：六个活动按 P/D/O 归类：理解需求（P）、定义和维护 DW/BI 架构（P）、开发数据仓库和数据集市（D）、加载数据仓库（D）、实施商务智能产品组合（D）、维护数据产品（O）。② 原话（p284 图 11-1）：语境关系图只出现 P/P/D/D/D/O——<strong>没有 C（控制）类活动</strong>。③ 坑：选项里塞「自助式商务智能」「数据剖析」冒充活动（题库 c11-005 考过：不属于活动的是自助式商务智能），记住六件事之外全是干扰。</p>
+
+<h2>考点2｜3 条并行开发主线</h2>
+<p>① 人话：厨房三条线同时开工：食材线（数据）、灶具线（技术）、餐具线（BI 工具），谁也不能等谁。② 原话（p296）：数据、技术、BI 工具三条主线并行开发。③ 坑：问「哪项不属于并存的构建轨迹」，干扰项有「性能需求」「ETL」（题库 c11-062、c11-068）——三条主线只有数据/技术/BI 工具。</p>
+
+<h2>考点3｜源到目标映射：最难的一步</h2>
+<p>① 人话：每道菜要标清原料从哪家供应商来——这就是映射，既定转换规则又记「血缘」。② 原话（p296）：<blockquote>「为了在各个实体和数据元素间建立从源系统到目标系统的转换规则，并记录商务智能环境中每个数据元素与其各自来源系统之间的血缘关系」</blockquote>最困难的是确定多系统数据元素之间的<strong>链接有效性或等效性</strong>，靠逻辑数据模型做分类法。③ 坑：题库 c11-036 原题——「所有映射工作最困难的部分是」答「确定多个系统中数据元素间的链接等效性」，别选成「费用」「名字相同」之类。</p>
+
+<h2>考点4｜乐观/悲观加载：你以为…其实…</h2>
+<p><strong>你以为</strong>「乐观」是不检查随便进，<strong>其实</strong>是缺了维度就先在维度表里补一条记录（p297：乐观加载策略——在维度表中增加一条记录，以顺利加载这些事实数据）；「悲观」是不肯将就，专门建一个<strong>数据回收区</strong>，存放无法与维度表关联的事实数据，需要告警、跟踪、后续重载。坑：题库 c11-052 把两者对调着考——「悲观加载策略与相应的维度键关联」是错的，乐观的才是补维度记录。</p>
+
+<h2>考点5｜数据修正：设过期，不删除</h2>
+<p>① 人话：上错菜不是把盘子砸了（删除会破坏关联表和代理键），而是贴个「已过期」标签，再上正确的菜。② 原话（p297）：<blockquote>「将该条数据的状态设置为“过期”，并将正确的新数据加载进来是更好的选择」</blockquote>③ 坑：问「为什么不直接删除」，答删除会破坏关联表和代理键。</p>
+
+<h2>考点6｜BI 工具三类：谁在用、看多久</h2>
+<p>① 人话：<strong>运营报表</strong>给中层看短期/长期趋势（月度、年度对比），用战术型 BI；<strong>业务绩效管理（BPM）</strong>给高管看战略目标达成，用战略型 BI；<strong>描述性的自助分析</strong>给一线员工，把 BI 和运营流程结合，准实时指导决策。② 原话（p302）：BPM 是「对组织目标一致性指标进行正式评估」，通常发生在高管层面。③ 坑：题库 c11-057 考「运营报表是业务用户直接从数据仓库生成报表」为错——运营报表分析的是趋势，别把它说成直接取数工具。</p>
+
+<h2>考点7｜OLAP 5 个操作：厨房的五个手势</h2>
+<p>① 人话：<strong>切片</strong>=一刀切出一个平面（某个维度取单个值）；<strong>切块</strong>=两个以上维度的切片；<strong>向下/向上钻取</strong>=逐层探索，从汇总到明细或反过来；<strong>上卷</strong>=按公式把所有数据关系算汇总；<strong>旋转</strong>=把报表的维度方向转个面。② 原话（p304–p305）：切块是「对两个以上维度的切片，或两个以上的连续切片」。③ 坑：题库 c11-031 考「常见的 OLAP 操作不包括」——答「剖析（Profiling）」，数据剖析是数据质量手法，不属于 OLAP 手势。</p>
+
+<h2>考点8｜3 种 OLAP 实现</h2>
+<p>① 人话：<strong>ROLAP</strong> 用普通二维关系数据库实现多维（星型模式常用设计）；<strong>MOLAP</strong> 用专门的多维数据库；<strong>HOLAP</strong> 两者混合，部分数据 MOLAP、部分 ROLAP。② 原话（p305）：名称与底层数据库类型有关。③ 坑：题库 c11-051 考「不属于三种经典实现」——答「线性型」，三种只有关系型/多维型/混合型。</p>
+
+<h2>易混对比表</h2>
+<table>
+<tr><th>对比</th><th>乐观加载</th><th>悲观加载</th></tr>
+<tr><td>做法</td><td>维度表里补一条记录</td><td>建数据回收区，存放无法关联的事实</td></tr>
+<tr><td>后续</td><td>事实顺利加载</td><td>告警、跟踪、后续重载</td></tr>
+</table>
+<p>再配一行：运营报表=战术型·中层；BPM=战略型·高管；自助分析=一线·准实时。</p>
+
+<h2>考试怎么考</h2>
+<p>这一块爱出「以下哪项不属于」的排除题。正确项关键词：六活动 P/P/D/D/D/O、链接等效性、状态设过期、补维度记录、剖析不属于 OLAP、线性型不存在。干扰项长这样：把自助式 BI 混进活动清单；把悲观说成关联维度键；把 ETL、性能需求塞进三条主线。</p>
+
+<h2>本卡真题自测</h2>
+<div class="quiz"><strong>第 1 题（题号 c11-036）</strong>：所有映射工作最困难的部分是？
+A. 确定多个系统中数据元素间的链接等效性　B. 一个订单管理不考虑合并到数据仓库里　C. 可能包含等效数据的表用的是相同的名字　D. 可能包含等效数据的字段用的是相同的结构
+答案：<strong>A</strong>　解析：P303.将源映射到目标——正是考点3的原话考点。
+
+<strong>第 2 题（题号 c11-052）</strong>：修正和转换数据中，下列说法正确的是？
+A. 悲观加载策略与相应的维度键关联　B. 乐观加载策略可以包括创建维度记录以容纳事实数据　C. 记录无需适当告警　D. 开端系统负责数据的修复工作
+答案：<strong>B</strong>　解析：P303.修正和转换数据——乐观补维度记录、悲观进回收区，考点4原样。</div>
+
+<div class="news"><strong>今日行业动态（2026-11-19/20）</strong>
+<p>1. 国家数据局启动第二批可信数据空间创新发展试点：突出数据与人工智能双向赋能，探索按词元调用、应用效果等计费和收益分配方式，试点周期 3 年。（央视网，2026-11-20，<a href="https://news.cctv.com/2026/11/20/ARTI96NAS4KPFgSzdq99lLZ2261120.shtml">链接</a>）</p>
+<p>2. 同一事项独立来源佐证：国家数据局综合司发布《关于组织开展第二批可信数据空间创新发展试点工作的通知》，深入推进企业、行业、城市三类可信数据空间试点，成效显著项目将获中央预算内投资等支持。（中证网，2026-11-19，<a href="https://jnzstatic.cs.com.cn/zzb/htmlInfo/138682.html">链接</a>）</p></div>
+
+<h2>口诀 + 覆盖自检</h2>
+<p><strong>口诀：六活动里没有C；乐观补一条，悲观进回收；切片一维起，切块多维起；实现只有关/多/混。</strong></p>
+<p>本张覆盖考点：6个活动·3条开发主线·源到目标映射·乐观/悲观加载·数据修正·BI工具3类·OLAP 5操作·3种实现，共 8 个。<br>本章剩余考点：原型驱动·自助式BI·数据审计·就绪评估4件事·5个关键成功因素·治理与度量3类（留给 5/共5 收官）。</p>
+
+<div class="dig"><strong>相关延伸</strong><p>乐观加载和悲观加载在实际项目里各适合什么场景？回收区里的数据后来怎么处理？——加载策略是本章易混对，钻下去能讲清「数据质量与加载效率的取舍」。</p></div>
+
+<div class="src">来源说明：内容依据《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 11 章底稿（p284–p313 已逐页回核）；自测题来自配套题库 cdga_pool.json 原题（c11-036、c11-052）；行业动态来自央视网（2026-11-20）与中证网（2026-11-19）两个独立来源的公开报道。</div>
+</div></body></html>
