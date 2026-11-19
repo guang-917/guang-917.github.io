@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>延伸 · 一致性维度与数据总线</title>
+<style>body{background:#14161a;color:#e6e6e6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px;}.wrap{max-width:680px;margin:0 auto;}h1{font-size:19px;color:#ffd479;}p{font-size:15px;}</style>
+</head>
+<body><div class="wrap">
+<h1>一致性维度：把各家档口捏成一家公司的「同一本配方」</h1>
+<p>接着中央厨房的比喻：单开一个档口不难，难的是销售档口、库存档口、订单档口对「什么叫一个产品」的说法完全一致。金博尔流派的高招就在这里——不让每个集市各造一套维度，而是先把公共维度（日期、产品等）统一定义好，放到「数据总线」上，各事实表像插排插头一样接上去。这些被统一过的公共维度，就是<strong>一致性维度</strong>。</p>
+<p>它为什么重要？因为多个数据集市本来是企业里各自为政的「小仓库」，只有当它们共用同一套一致性维度时，不同集市的数据才能拼在一起对比、汇总——教材原话是「通过接通到遵循一致性维度的数据总线，可以将多个数据集市在企业层面进行整合」（p290）。换句话说，一致性维度是集市走向企业级的那根「转接头」。</p>
+<p>实操工具就是<strong>总线矩阵</strong>：行是业务流程，列是主题域，哪里需要共用哪个维度就打钩。像教材例子里「日期」「产品」被三个流程都要用，它们就是一致性维度的天然候选——优先把它们做标准，收益最大。</p>
+<p>考场提示：凡是问「多个集市如何整合到企业层面」「多个事实表如何共享维度」，正确项一定带「一致性维度 / 数据总线」字样；把答案换成「建一个更大的中央仓库」「直接合并数据」都是干扰项。这正是 CDGA 喜欢考的「抓关键词」题，记牢这两个词就稳了。</p>
+</div></body></html>
