@@ -536,6 +536,34 @@ body{
 .qzrow .l b{display:block;font-size:14px;font-weight:800}
 .qzrow .l span{font-size:11.5px;color:var(--ink-3)}
 .qzrow .r{font-size:11.5px;color:var(--ai);font-weight:800}
+/* `.65` 知识卡自查 */
+.scTtl{font-size:16.5px;font-weight:800;line-height:1.55;margin:8px 0 6px}
+.scTip{font-size:12.5px;color:var(--ink-3);line-height:1.7;margin:0 0 12px}
+.scTa{width:100%;min-height:200px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 13px;font-size:15px;line-height:1.8;color:var(--ink);font-family:inherit;resize:vertical}
+.scTa::placeholder{color:var(--ink-3)}
+.scCnt{font-size:11.5px;color:var(--ink-3);text-align:right;margin:6px 2px 0}
+.scBtn{width:100%;background:var(--ai);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;margin-top:12px;font-family:inherit;cursor:pointer}
+.scBtn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:14px}
+.scScore{text-align:center;padding:10px 0 4px}
+.scNum{font-size:40px;font-weight:800;color:var(--ai);line-height:1.1}
+.scNum small{font-size:16px;color:var(--ink-3);font-weight:700}
+.scSd{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.scBar{height:8px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin:10px 20px 4px}
+.scBar i{display:block;height:100%;background:var(--ai)}
+.scSec{margin-top:14px}
+.scSh{font-size:12px;color:var(--ink-3);letter-spacing:.06em;margin-bottom:6px;font-weight:700}
+.scIt{display:flex;gap:8px;font-size:13.5px;line-height:1.7;padding:8px 11px;border-radius:10px;background:var(--card);border:1px solid var(--line);margin-bottom:6px}
+.scIt b{flex:0 0 auto;font-weight:800}
+.scIt.ok b{color:var(--data)}
+.scIt.warn b{color:#d98324}
+.scIt.no b{color:#e05a5f}
+.scIt em{display:block;color:var(--ink-2);font-size:12.5px;font-style:normal;margin-top:3px}
+.scHist{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-top:14px}
+.scHrow{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--line);color:var(--ink-2)}
+.scHrow:last-child{border-bottom:none}
+.scHrow .r{font-weight:800;color:var(--ai)}
+.scErr{color:#e05a5f;font-size:13px;margin:8px 0}
+.scRaw{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.75;color:var(--ink-2)}
 /* `.63` 追问框 */.qzask{display:flex;gap:8px;margin:6px 0 12px}
 .qzaskin{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);font-family:inherit}
 .qzaskin::placeholder{color:var(--ink-3)}
@@ -1563,7 +1591,7 @@ tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
   /* `.35`：面板/输入条/下钻现在也占历史条目，而切 tab 会 push 并截断历史 → 先同步摘掉它们的栈项 */
-  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose();
+  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose(); _dropNav("scFull"); if(scOn())scClose();
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
@@ -1611,7 +1639,7 @@ function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return;
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = qzOn() || navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || (curView==="tree"&&treeMode==="shuli"&&shuliDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on")) || (srSheet&&srSheet.classList.contains("on"));
+  var hasLayer = anyOn() || navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || (curView==="tree"&&treeMode==="shuli"&&shuliDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on")) || (srSheet&&srSheet.classList.contains("on"));
   if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
   var _t0=Date.now();          /* 本次 back 发起的时刻：兜底判据的基准线 */
   clearTimeout(_nbWatch);
@@ -1677,7 +1705,121 @@ function _clearGuardSoon(){ try{ _guardTimers.forEach(clearTimeout); }catch(e){}
      ② 只 splice 导航栈、不还条目 → 用户按返回时「多退一层」（栈被提前 pop）。
    ⚠ 真机上这正是继"返回后补 pushState 假成功"之后的第二个坑。（`.35` 审计发现） */
 var _silentBack=0;
+/* ===== `.65` 知识卡自查：长按卡片 → 复述 → AI 按考点覆盖率评判 ===== */
+var LS_SC="kb_selfcheck", SC=null;
+function scOn(){ var e=document.getElementById("scFull"); return !!(e&&e.classList.contains("on")); }
+function scRec(){ try{return JSON.parse(localStorage.getItem(LS_SC)||"{}")||{};}catch(e){return {};} }
+function scSave(o){ try{localStorage.setItem(LS_SC,JSON.stringify(o));}catch(e){} }
+function scClose(){ var e=document.getElementById("scFull"); if(e)e.classList.remove("on"); SC=null; }
+function openSelfCheck(id){
+  var c=getCard(id); if(!c){ if(typeof toast==="function")toast("找不到这张卡"); return; }
+  /* `.65`：自查需要卡片正文，正文缺失的（问答详解卡等）直接提示 */
+  if(!(c.body&&c.body.length)){ if(typeof toast==="function")toast("这张卡没有正文，暂不支持自查"); return; }
+  SC={id:id,c:c};
+  var t=document.getElementById("scTitle");
+  if(t){
+    var _cn=(String(c.title||"").match(/第\s*\d+\s*章[^｜|]*/)||[])[0];
+    t.textContent="自查 · "+(_cn||String(c.title||"").slice(0,14));
+  }
+  scRenderInput();
+  var e=document.getElementById("scFull"); if(e) e.classList.add("on");
+  pushNav("scFull"); _ensureGuard();
+}
+function scRenderInput(){
+  var box=document.getElementById("scBody"); if(!box||!SC)return;
+  var c=SC.c, rec=scRec(), hist=rec[SC.id]||[];
+  var hh='';
+  if(hist.length){
+    hh='<div class="scHist"><div class="scSh">这张卡的自查记录</div>'+hist.slice(-3).reverse().map(function(x){
+      var d=new Date(x.ts), p2=function(n){return (n<10?"0":"")+n;};
+      return '<div class="scHrow"><span>'+(d.getMonth()+1)+'-'+d.getDate()+' '+p2(d.getHours())+':'+p2(d.getMinutes())+'</span><span class="r">'+x.cover+'% · 漏 '+(x.total-x.covered)+' 个</span></div>';
+    }).join('')+'</div>';
+  }
+  box.innerHTML='<div class="scTtl">'+esc(c.title)+'</div>'
+    +'<p class="scTip">合上卡，用自己的话说说这张卡讲了什么。<br>说漏的地方，AI 会替你指出来。</p>'
+    +'<textarea class="scTa" id="scInput" placeholder="比如：数据治理是……它管的是……跟数据管理的区别是……"></textarea>'
+    +'<div class="scCnt" id="scCnt">已写 0 字 · 建议 80 字以上</div>'
+    +'<button class="scBtn" id="scGo">提交 · 看漏了什么</button>'
+    +hh
+    +'<button class="scBtn ghost" id="scCancel">先不查了</button>';
+  var inp=document.getElementById("scInput"), cnt=document.getElementById("scCnt");
+  inp.addEventListener("input",function(){
+    var n=(inp.value||"").replace(/\s/g,"").length;
+    cnt.textContent="已写 "+n+" 字 · "+(n>=80?"够了，可以提交":"建议 80 字以上");
+  });
+  document.getElementById("scGo").addEventListener("click",scSubmit);
+  document.getElementById("scCancel").addEventListener("click",function(){ navBack(); });
+  box.scrollTop=0;
+  setTimeout(function(){ try{inp.focus();}catch(e){} },280);
+}
+function scSubmit(){
+  if(!SC)return;
+  var inp=document.getElementById("scInput"); var txt=(inp&&inp.value||"").trim();
+  if(txt.replace(/\s/g,"").length<15){ if(typeof toast==="function")toast("再多说两句（至少 15 字）"); try{inp.focus();}catch(e){} return; }
+  var c=SC.c;
+  var full=[String(c.title||""),String(c.sum||""),String(c.lead||"")].concat(c.body||[]).join("。");
+  var btn=document.getElementById("scGo"); if(btn){btn.disabled=true;btn.textContent="AI 正在对照…";}
+  var prompt="下面是一张学习卡片的全部内容，以及学习者合上卡之后的复述。\n\n"
+   +"【卡片标题】"+String(c.title||"")+"\n【卡片内容】"+full.slice(0,2500)+"\n\n"
+   +"【学习者复述】\n"+txt+"\n\n"
+   +"请做两件事：\n1) 从卡片内容里提炼该卡真正要考的「关键考点」（6~10 个，每个一句话，别照抄长句）；\n2) 拿这些考点对照复述，分成三类。\n\n"
+   +"只输出 JSON，不要解释、不要代码块围栏，严格按此格式：\n"
+   +'{"total":考点总数,"covered":[{"point":"考点","said":"他对应说的那句（摘录，可短）"}],"unclear":[{"point":"考点","fix":"没说准的地方，一句纠正"}],"missing":[{"point":"完全没提的考点","brief":"一句教材口径"}]}';
+  callAI(prompt,"你是严格的阅卷人：只按卡片内容判，不脑补；复述里没出现的意思就算没覆盖。",true)
+   .then(function(t2){ scRenderResult(txt,t2); })
+   .catch(function(e){
+     if(btn){btn.disabled=false;btn.textContent="提交 · 看漏了什么";}
+     if(typeof toast==="function")toast("AI 没响应："+((e&&e.message)||"网络问题"));
+   });
+}
+function scSaid(point,said){
+  if(!said)return "";
+  var p=String(point),q=String(said);
+  if(q===p||p.indexOf(q)>=0||q.indexOf(p)>=0)return "";
+  return '<em>你的说法：'+esc(q)+'</em>';
+}
+function scRenderResult(userTxt, aiText){
+  var box=document.getElementById("scBody"); if(!box||!SC)return;
+  var d=parseShuliJSON(aiText);
+  if(!d||typeof d.total!=="number"){
+    box.innerHTML='<div class="scTtl">'+esc(SC.c.title)+'</div>'
+      +'<div class="scErr">AI 这次没按格式返回，下面是它的原话：</div>'
+      +'<div class="scRaw">'+esc(aiText||"").replace(/\n/g,"<br>")+'</div>'
+      +'<button class="scBtn" id="scAgain">再试一次</button><button class="scBtn ghost" id="scDone">关掉</button>';
+    document.getElementById("scAgain").addEventListener("click",function(){ scRenderInput(); });
+    document.getElementById("scDone").addEventListener("click",function(){ navBack(); });
+    box.scrollTop=0; return;
+  }
+  var cov=(d.covered||[]).length, unc=(d.unclear||[]).length, mis=(d.missing||[]).length;
+  var total=d.total||(cov+unc+mis)||1;
+  var pct=Math.round(cov/total*100);
+  var rec=scRec(), arr=rec[SC.id]||[];
+  arr.push({ts:Date.now(),cover:pct,total:total,covered:cov,missing:(d.missing||[]).map(function(x){return x.point;})});
+  rec[SC.id]=arr.slice(-20); scSave(rec);
+  if(pct<60){
+    try{
+      addLocalDig({ch:normCh(SC.c.ch), q:"深挖："+SC.c.title,
+        why:"自查只覆盖 "+pct+"%，没说到的："+(((d.missing||[])[0]||{}).point||""),
+        from:"来自："+SC.c.title, date:todayStr()});
+    }catch(e){}
+  }
+  try{ var cc=getCard(SC.id); if(cc&&!cc.read){ setRead(SC.id,true); if(typeof refreshRead==="function")refreshRead(); } }catch(e){}
+  var h='<div class="scScore"><div class="scNum">'+cov+'<small> / '+total+' 个考点</small></div>'
+    +'<div class="scSd">覆盖 '+pct+'% · 第 '+arr.length+' 次自查'+(pct<60?' · 已加入待挖掘':'')+'</div>'
+    +'<div class="scBar"><i style="width:'+pct+'%"></i></div></div>';
+  if(cov) h+='<div class="scSec"><div class="scSh">✅ 你说到的（'+cov+'）</div>'+d.covered.map(function(x,i){
+      return '<div class="scIt ok"><b>'+(i+1)+'</b><span>'+esc(x.point)+scSaid(x.point,x.said)+'</span></div>';}).join('')+'</div>';
+  if(unc) h+='<div class="scSec"><div class="scSh">⚠️ 说不准的（'+unc+'）</div>'+d.unclear.map(function(x){
+      return '<div class="scIt warn"><b>!</b><span>'+esc(x.point)+(x.fix?'<em>'+esc(x.fix)+'</em>':'')+'</span></div>';}).join('')+'</div>';
+  if(mis) h+='<div class="scSec"><div class="scSh">❌ 完全没提的（'+mis+'）</div>'+d.missing.map(function(x){
+      return '<div class="scIt no"><b>·</b><span>'+esc(x.point)+(x.brief?'<em>'+esc(x.brief)+'</em>':'')+'</span></div>';}).join('')+'</div>';
+  h+='<button class="scBtn" id="scAgain">再自查一次</button><button class="scBtn ghost" id="scDone">关掉</button>';
+  box.innerHTML=h; box.scrollTop=0;
+  document.getElementById("scAgain").addEventListener("click",function(){ scRenderInput(); });
+  document.getElementById("scDone").addEventListener("click",function(){ navBack(); });
+}
 function qzOn(){ var e=document.getElementById("qzFull"); return !!(e&&e.classList.contains("on")); }
+function anyOn(){ return qzOn()||scOn(); }
 function _dropNav(name){ var k=navStack.lastIndexOf(name); if(k>=0)navStack.splice(k,1); }
 function _closeLayerByCode(name, closeFn){
   var i=navStack.lastIndexOf(name);
@@ -1719,7 +1861,7 @@ window.addEventListener("popstate",function(){
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
               || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
               || (srSheet&&srSheet.classList.contains("on"))
-              || qzOn();
+              || qzOn() || scOn();
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _guardSoon();         // 补回守卫（多拍，防真机手势期间 pushState 被忽略），App 不退，还能继续逐级退
@@ -1745,6 +1887,7 @@ function navBackFromPop(){
      所以按「栈顶匹配」pop 掉自己那一层。
      （旧版它们不占条目 → 真机上"用返回收起它"会白吃上一层的历史，累积后提前掉出 App。） */
   if(top==="qzFull"){ navStack.pop(); qzClose(); return; }
+  if(top==="scFull"){ navStack.pop(); scClose(); return; }
   if(top==="lp"){ navStack.pop(); var _lp0=document.querySelector(".lp.show"); if(_lp0)closeLp(_lp0); return; }
   if(top==="askFab"){ navStack.pop(); closeAskFab(); return; }
   if(top==="chanDrill"){
@@ -3054,6 +3197,7 @@ function qzOpen(){ var e=document.getElementById("qzFull"); if(!e)return; e.clas
 function qzClose(){ var e=document.getElementById("qzFull"); if(e)e.classList.remove("on"); QS=null; }
 /* `.64`：✕ 走统一的 navBack（与系统返回手势同一条路径，避免两套逻辑） */
 document.getElementById("qzExit").addEventListener("click",function(){ navBack(); });
+document.getElementById("scExit").addEventListener("click",function(){ navBack(); });
 function quizStartChapter(ch,count){
   var qs=quizByCh(ch);
   if(!qs.length){ toast("这章还没有题"); return; }
@@ -4230,7 +4374,10 @@ function onSwStart(e){
   var _scId=card.getAttribute("data-id");
   var op=document.querySelector(".lp.show"); if(op)closeLp(op);
   lpId=_scId;lpStart={x:t.clientX,y:t.clientY};
-  lpTimer=setTimeout(function(){ openSelfCheck(_scId); },480);
+  lpTimer=setTimeout(function(){
+    lastSwipeAt=Date.now();      /* 吃掉松手后紧跟的那次 click，别顺手把卡片也打开 */
+    openSelfCheck(_scId);
+  },480);
 }
 function onSwMove(e){
   var t=e.touches[0];
@@ -4751,7 +4898,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.67';
+var _APP_VER_ = '2026-11-19.68';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
