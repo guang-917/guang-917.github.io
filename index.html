@@ -520,6 +520,7 @@ body{
 /* `.64` 全屏练习层 */
 .qzfull{position:fixed;inset:0;background:var(--bg);z-index:66;transform:translateX(100%);transition:transform .28s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;pointer-events:none}
 .qzfull.on{transform:none;pointer-events:auto}
+#wbFull{z-index:65}          /* `.70` 错题本在练习层之下：从这里点「重做」时，练习层要压在它上面 */
 .qzftop{display:flex;align-items:center;gap:10px;padding:14px 16px 8px;flex:0 0 auto}
 .qzx{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:14px;font-family:inherit;flex:0 0 auto}
 .qzti{flex:1;text-align:center;font-size:12.5px;color:var(--ink-3);font-weight:700}
@@ -541,6 +542,54 @@ body{
 .qzrow .l b{display:block;font-size:14px;font-weight:800}
 .qzrow .l span{font-size:11.5px;color:var(--ink-3)}
 .qzrow .r{font-size:11.5px;color:var(--ai);font-weight:800}
+/* `.70` 错题本 */
+.wbSum{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin:10px 0 10px}
+.wbTop{display:flex;justify-content:space-between;align-items:baseline}
+.wbTop b{font-size:15px;font-weight:800}
+.wbTop span{font-size:11.5px;color:var(--ink-3)}
+.wbKpis{display:flex;gap:16px;margin-top:9px}
+.wbK b{font-size:19px;font-weight:800;display:block;line-height:1.2}
+.wbK b.g{color:var(--data)} .wbK b.r{color:#e05a5f}
+.wbK span{font-size:11px;color:var(--ink-3)}
+.wbTabs{display:flex;gap:8px;margin:0 0 10px}
+.wbTabs button{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;font-size:13px;font-weight:700;color:var(--ink-2);font-family:inherit}
+.wbTabs button.on{background:var(--ai);border-color:var(--ai);color:#fff}
+.wbBatch{background:#f0eefc;border:1px dashed #b9b5ea;color:#4a47b8;border-radius:11px;padding:10px 12px;font-size:12px;line-height:1.6;margin-bottom:10px;font-weight:600}
+.wbGrp{font-size:12px;color:var(--ink-3);font-weight:700;margin:14px 2px 6px;letter-spacing:.04em}
+.wbCard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:8px}
+.wbQ{font-size:13.5px;line-height:1.6;margin:0 0 7px}
+.wbPick{font-size:11.5px;color:var(--ink-2);margin-bottom:7px}
+.wbPick b{color:#e05a5f;font-weight:800}
+.wbPick i{color:var(--data);font-style:normal;font-weight:800}
+.wbWhy{display:inline-block;font-size:10.5px;background:#fdf1e3;color:#a8631a;border-radius:6px;padding:2px 7px;font-weight:700;margin-bottom:8px}
+.wbWhy.pend{background:var(--bg-2);color:var(--ink-3)}
+.wbActs{display:flex;gap:6px}
+.wbActs button{border:none;border-radius:8px;padding:6px 10px;font-size:11.5px;font-weight:700;font-family:inherit}
+.wbActs .p{background:var(--ai);color:#fff}
+.wbActs .s{background:var(--bg-2);color:var(--ink-2)}
+.wbActs .t{background:var(--data-soft);color:#0b6b5d}
+.wbActs.big button{flex:1;padding:11px;font-size:13px}
+.wbEmpty{color:var(--ink-3);font-size:13px;text-align:center;padding:26px 0}
+.wbBack{background:none;border:none;color:var(--ai);font-size:13px;font-weight:700;font-family:inherit;padding:4px 0 10px}
+.wbDq{font-size:14.5px;font-weight:800;line-height:1.6;margin:0 0 10px}
+.wbOpt{display:flex;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-bottom:7px;font-size:13px;line-height:1.55}
+.wbOpt b{color:var(--ink-3);flex:0 0 auto}
+.wbOpt.no{border-color:#e05a5f;background:rgba(224,90,95,.09)}
+.wbOpt.no b{color:#e05a5f}
+.wbOpt.ok{border-color:#2f9e78;background:rgba(47,158,120,.10)}
+.wbOpt.ok b{color:#2f9e78}
+.wbBig{background:#f0eefc;border:1px solid #dcd8f8;border-radius:12px;padding:12px 13px;margin:10px 0}
+.wbBig .t{font-size:11.5px;color:#4a47b8;font-weight:700;margin-bottom:4px}
+.wbBig .v{font-size:15px;font-weight:800;line-height:1.5}
+.wbBig p{margin:6px 0 0;font-size:12.5px;line-height:1.7;color:#4a47b8}
+.wbBox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-bottom:10px}
+.wbBox .sh{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;margin-bottom:5px;font-weight:700}
+.wbBox p{margin:0;font-size:13.5px;line-height:1.75;color:var(--ink-2)}
+.wbTbl{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--line);font-size:11.5px}
+.wbTbl th,.wbTbl td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--line)}
+.wbTbl th{background:var(--card-2);color:var(--ink-3);font-weight:700}
+.wbTbl td b{font-weight:800}
+.wbNote{font-size:11.5px;color:var(--ink-3);line-height:1.7;margin:10px 0 0}
 /* `.69` 复述角度 */
 .scGuide{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px;align-items:center}
 .scGh{font-size:11.5px;color:var(--ink-3);width:100%;margin-bottom:2px}
@@ -1003,6 +1052,16 @@ body{
     <div class="qzx" style="visibility:hidden">✕</div>
   </div>
   <div class="qfb" id="scBody"></div>
+</div>
+
+<!-- `.70` 全屏错题本 -->
+<div class="qzfull" id="wbFull">
+  <div class="qzftop">
+    <button class="qzx" id="wbExit" aria-label="退出错题本">✕</button>
+    <div class="qzti" id="wbTitle">错题本</div>
+    <div class="qzx" style="visibility:hidden">✕</div>
+  </div>
+  <div class="qfb" id="wbBody"></div>
 </div>
 
 <!-- 底部导航 -->
@@ -1615,7 +1674,7 @@ tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
   /* `.35`：面板/输入条/下钻现在也占历史条目，而切 tab 会 push 并截断历史 → 先同步摘掉它们的栈项 */
-  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose(); _dropNav("scFull"); if(scOn())scClose();
+  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose(); _dropNav("scFull"); if(scOn())scClose(); _dropNav("wbFull"); if(wbOn())wbClose();
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
@@ -1866,8 +1925,215 @@ function scRenderResult(userTxt, aiText){
   document.getElementById("scAgain").addEventListener("click",function(){ scRenderInput(); });
   document.getElementById("scDone").addEventListener("click",function(){ navBack(); });
 }
+/* ===== `.70` 错题本：入库 → 错因分析 → 补救动作 → 掌握度统计 =====
+   存储：kb_wrong = { qid: {qid,ch,sec,stem,options,ans,pick,times,streak,ts,status,cause,why,fix} }
+   status: open（待复习）/ mastered（连续答对 2 次自动移出） */
+var LS_WRONG="kb_wrong", WB_TAB="list", WB_DETAIL=null;
+function wbAll(){ try{return JSON.parse(localStorage.getItem(LS_WRONG)||"{}")||{};}catch(e){return {};} }
+function wbSave(m){ try{localStorage.setItem(LS_WRONG,JSON.stringify(m));}catch(e){} }
+function wbAdd(q,pick){
+  var m=wbAll();
+  var e=m[q.id]||{qid:q.id,ch:q.ch,sec:q.sec||"",stem:q.stem,options:q.options,ans:q.ans};
+  e.pick=pick; e.times=(e.times||0)+1; e.streak=0; e.ts=Date.now(); e.status="open";
+  m[q.id]=e; wbSave(m);
+}
+function wbRight(q){
+  var m=wbAll(), e=m[q.id]; if(!e)return;
+  e.streak=(e.streak||0)+1; e.ts=Date.now();
+  if(e.streak>=2) e.status="mastered";
+  m[q.id]=e; wbSave(m);
+}
+function wbOpenList(){ var a=[]; var m=wbAll(); Object.keys(m).forEach(function(k){ if(m[k].status!=="mastered")a.push(m[k]); }); a.sort(function(x,y){return (x.ch-y.ch)||(y.ts-x.ts);}); return a; }
+function wbMastered(){ var m=wbAll(); return Object.keys(m).filter(function(k){return m[k].status==="mastered";}).length; }
+function wbOn(){ var e=document.getElementById("wbFull"); return !!(e&&e.classList.contains("on")); }
+function wbClose(){ var e=document.getElementById("wbFull"); if(e)e.classList.remove("on"); WB_DETAIL=null; }
+/* `.70`：答完题后把频道页那条「错题本 N 条待复习」就地刷新，不用整页重渲染 */
+function wbRefreshEntry(){
+  var el=document.querySelector("[data-wbopen] .l span");
+  if(!el)return;
+  var st=wbStats();
+  el.textContent=st.open+" 条待复习 · 已掌握 "+st.mastered+" 条 · 总正确率 "+st.acc+"%";
+}
+function wbOpen(tab){
+  WB_TAB=tab||"list"; WB_DETAIL=null;
+  wbRender();
+  var e=document.getElementById("wbFull"); if(e)e.classList.add("on");
+  pushNav("wbFull"); _ensureGuard();
+}
+function wbStats(){
+  var rec=quizRec(), ids=Object.keys(rec), ans=0, rightN=0;
+  ids.forEach(function(id){ if(rec[id].n){ ans++; if(rec[id].lastRight) rightN++; } });
+  var wl=wbOpenList();
+  var acc=ans?Math.round(rightN/ans*100):0;
+  var streakMax=0; ids.forEach(function(id){ var s=rec[id].streak||0; if(s>streakMax)streakMax=s; });
+  return {answered:ans,acc:acc,open:wl.length,mastered:wbMastered(),streak:streakMax,list:wl};
+}
+function wbRender(){
+  var box=document.getElementById("wbBody"); if(!box)return;
+  if(WB_DETAIL){ return wbRenderDetail(WB_DETAIL); }
+  if(WB_TAB==="stats") return wbRenderStats();
+  var st=wbStats(), m=wbAll(), pend=st.list.filter(function(e){return !e.cause;});
+  var t=document.getElementById("wbTitle"); if(t) t.textContent="错题本";
+  var h='<div class="wbSum"><div class="wbTop"><b>还欠 '+st.open+' 条</b><span>已掌握移出 '+st.mastered+' 条</span></div>'
+    +'<div class="wbKpis">'
+    +'<div class="wbK"><b>'+st.answered+'</b><span>做过题数</span></div>'
+    +'<div class="wbK"><b class="g">'+st.acc+'%</b><span>总正确率</span></div>'
+    +'<div class="wbK"><b class="r">'+st.open+'</b><span>待复习</span></div>'
+    +'<div class="wbK"><b>'+st.streak+'</b><span>最长连对</span></div>'
+    +'</div></div>';
+  h+='<div class="wbTabs"><button class="'+(WB_TAB==="list"?"on":"")+'" data-wbt="list">错题（'+st.open+'）</button><button class="'+(WB_TAB==="stats"?"on":"")+'" data-wbt="stats">掌握度</button></div>';
+  if(pend.length) h+='<div class="wbBatch" id="wbBatch">↓ 有 '+pend.length+' 条还没分析错因，点这里一次批量分析（10 题一批，已分析的不会重跑）</div>';
+  if(!st.list.length){
+    h+='<div class="wbEmpty">还没有错题。去频道练几题，错的会自动进这里。</div>';
+  }else{
+    var cur=null;
+    st.list.forEach(function(e){
+      if(e.ch!==cur){ cur=e.ch; h+='<div class="wbGrp">第 '+e.ch+' 章 '+esc((QUIZ.chapters[e.ch]||{}).name||"")+'</div>'; }
+      h+='<div class="wbCard"><p class="wbQ">'+esc(e.stem)+'</p>'
+        +'<div class="wbPick">你选 <b>'+'ABCD'[e.pick]+'</b> · 正确 <i>'+'ABCD'[e.ans]+'</i>'+(e.times>1?' · 错过 '+e.times+' 次':'')+'</div>'
+        +(e.cause?'<span class="wbWhy">'+esc(e.cause)+'</span>':'<span class="wbWhy pend">待分析</span>')
+        +'<div class="wbActs"><button class="p" data-wbd="'+esc(e.qid)+'">看分析</button>'
+        +'<button class="t" data-wbs="'+e.ch+'|'+esc(e.sec||'')+'">练这一节 5 题</button>'
+        +'<button class="s" data-wbr="'+esc(e.qid)+'">重做</button></div></div>';
+    });
+  }
+  box.innerHTML=h; box.scrollTop=0;
+  box.querySelectorAll("[data-wbt]").forEach(function(b){ b.addEventListener("click",function(){ WB_TAB=this.getAttribute("data-wbt"); wbRender(); }); });
+  var batch=document.getElementById("wbBatch"); if(batch)batch.addEventListener("click",wbAnalyze);
+  box.querySelectorAll("[data-wbd]").forEach(function(b){ b.addEventListener("click",function(){ WB_DETAIL=this.getAttribute("data-wbd"); wbRender(); }); });
+  box.querySelectorAll("[data-wbr]").forEach(function(b){ b.addEventListener("click",function(){ quizStartOne(this.getAttribute("data-wbr")); }); });
+  box.querySelectorAll("[data-wbs]").forEach(function(b){ b.addEventListener("click",function(){ var p=String(this.getAttribute("data-wbs")).split("|"); quizStartSec(+p[0],p[1]); }); });
+}
+function wbRenderDetail(qid){
+  var box=document.getElementById("wbBody"); if(!box)return;
+  var e=wbAll()[qid]; if(!e){ WB_DETAIL=null; return wbRender(); }
+  var t=document.getElementById("wbTitle"); if(t) t.textContent="错因分析 · 第 "+e.ch+" 章";
+  var h='<button class="wbBack" id="wbBack">‹ 回错题本</button>';
+  h+='<div class="wbDq">'+esc(e.stem)+'</div>';
+  (e.options||[]).forEach(function(o,i){
+    var cls=(i===e.ans)?"ok":((i===e.pick)?"no":"");
+    h+='<div class="wbOpt '+cls+'"><b>'+'ABCD'[i]+'</b><span>'+esc(o)+'</span></div>';
+  });
+  if(e.cause){
+    h+='<div class="wbBig"><div class="t">错因判定</div><div class="v">'+esc(e.cause)+'</div>'
+      +(e.why?'<p>'+esc(e.why)+'</p>':'')+'</div>';
+    if(e.fix) h+='<div class="wbBox"><div class="sh">下次怎么一眼排掉</div><p>'+esc(e.fix)+'</p></div>';
+  }else{
+    h+='<div class="wbBatch" id="wbBatchOne">这条还没分析错因，点这里单独分析</div>';
+  }
+  h+='<div class="wbActs big"><button class="p" data-wbr="'+esc(e.qid)+'">重做这题</button>'
+    +'<button class="t" data-wbs="'+e.ch+'|'+esc(e.sec||'')+'">练这一节 5 题</button>'
+    +'<button class="s" data-wbm="'+esc(e.qid)+'">标记已掌握</button></div>';
+  box.innerHTML=h; box.scrollTop=0;
+  document.getElementById("wbBack").addEventListener("click",function(){ WB_DETAIL=null; wbRender(); });
+  var one=document.getElementById("wbBatchOne"); if(one)one.addEventListener("click",function(){ wbAnalyze([qid]); });
+  box.querySelectorAll("[data-wbr]").forEach(function(b){ b.addEventListener("click",function(){ quizStartOne(this.getAttribute("data-wbr")); }); });
+  box.querySelectorAll("[data-wbs]").forEach(function(b){ b.addEventListener("click",function(){ var p=String(this.getAttribute("data-wbs")).split("|"); quizStartSec(+p[0],p[1]); }); });
+  box.querySelectorAll("[data-wbm]").forEach(function(b){ b.addEventListener("click",function(){
+    var m=wbAll(); var x=m[this.getAttribute("data-wbm")]; if(x){x.status="mastered";wbSave(m);} WB_DETAIL=null; wbRender(); toast("已标记掌握");
+  }); });
+}
+function wbRenderStats(){
+  var box=document.getElementById("wbBody"); if(!box)return;
+  var t=document.getElementById("wbTitle"); if(t) t.textContent="掌握度 · 数据频道";
+  var rec=quizRec(), m=wbAll();
+  var rows=[], totalW=0, got=0;
+  for(var ch=1;ch<=17;ch++){
+    var qs=quizByCh(ch); if(!qs.length) continue;
+    var pts=(QUIZ.chapters[ch]||{}).points||0;
+    var done=0,right=0,openW=0,recent=0;
+    qs.forEach(function(q){
+      var r=rec[q.id];
+      if(r&&r.n){ done++; if(r.lastRight)right++; if(Date.now()-(r.ts||0)<7*864e5)recent++; }
+      var w=m[q.id]; if(w&&w.status!=="mastered")openW++;
+    });
+    var acc=done?Math.round(right/done*100):0;
+    // 与知识树同口径：正确率<50% 0.3 / 50~79% 0.8 / ≥80% 1.5；7 天内碰过 +1；有连对 +0.5
+    var sc=done?((acc>=80?1.5:(acc>=50?0.8:0.3))+(recent?1:0)):0;
+    var hasStreak=false; qs.forEach(function(q){ if(((rec[q.id]||{}).streak||0)>=2)hasStreak=true; });
+    if(hasStreak) sc+=0.5;
+    totalW+=pts; got+=pts*(sc/3);
+    rows.push({ch:ch,pts:pts,done:done,total:qs.length,acc:acc,open:openW,sc:sc,
+      st:knState(sc,done>0), hasStreak:hasStreak});
+  }
+  var overall=totalW?Math.round(got/totalW*100):0;
+  var h='<div class="wbSum"><div class="wbTop"><b>整体 '+overall+' / 100 分</b><span>按分值加权</span></div>'
+    +'<div class="wbKpis"><div class="wbK"><b>'+wbStats().answered+'</b><span>做过题数</span></div>'
+    +'<div class="wbK"><b class="g">'+wbStats().acc+'%</b><span>总正确率</span></div>'
+    +'<div class="wbK"><b>'+rows.filter(function(r){return r.st.t==="稳";}).length+'</b><span>稳的章</span></div>'
+    +'<div class="wbK"><b class="r">'+rows.filter(function(r){return r.st.t==="未读"||r.st.t==="未碰";}).length+'</b><span>盲区章</span></div></div></div>';
+  h+='<div class="wbTabs"><button data-wbt="list">错题（'+wbStats().open+'）</button><button class="on" data-wbt="stats">掌握度</button></div>';
+  h+='<table class="wbTbl"><tr><th>章</th><th>分</th><th>做过</th><th>正确率</th><th>错题</th><th>档位</th></tr>';
+  rows.forEach(function(r){
+    h+='<tr><td>'+r.ch+' '+esc((QUIZ.chapters[r.ch]||{}).name||"").slice(0,5)+'</td><td>'+r.pts+'</td><td>'+r.done+'/'+r.total+'</td>'
+      +'<td><b>'+(r.done?r.acc+'%':'—')+'</b></td><td>'+r.open+'</td><td>'+r.st.t+'</td></tr>';
+  });
+  h+='</table>';
+  h+='<div class="wbNote">档位与知识树同一套（未读 / 见过 / 会做 / 稳），按「正确率 + 7 天内是否碰过 + 是否连对两次」算，分值与考纲一致。</div>';
+  box.innerHTML=h; box.scrollTop=0;
+  box.querySelectorAll("[data-wbt]").forEach(function(b){ b.addEventListener("click",function(){ WB_TAB=this.getAttribute("data-wbt"); wbRender(); }); });
+}
+/* `.70`：AI 批量返回的是**数组**，parseShuliJSON 只认对象（取第一个 { 到最后一个 }），
+   所以这里单独写一个取数组的解析，避免 [{...},{...}] 被切坏。 */
+function wbParseArr(t){
+  var s=String(t||"").replace(/```json/gi,"").replace(/```/g,"").trim();
+  var a=s.indexOf("["), b=s.lastIndexOf("]");
+  if(a>=0&&b>a){ try{ var r=JSON.parse(s.slice(a,b+1)); if(Array.isArray(r))return r; }catch(e){} }
+  var j=parseShuliJSON(s);
+  if(j) return Array.isArray(j)?j:[j];
+  return null;
+}
+/* 批量错因分析：一次最多 10 题，返回 JSON 数组 */
+var _wbBusy=false;
+function wbAnalyze(onlyIds){
+  if(_wbBusy)return;
+  var m=wbAll();
+  var targets=(onlyIds&&onlyIds.length)?onlyIds:Object.keys(m).filter(function(k){return m[k].status!=="mastered"&&!m[k].cause;});
+  if(!targets.length){ toast("没有待分析的错题"); return; }
+  targets=targets.slice(0,10);
+  var items=targets.map(function(id){
+    var e=m[id], q=quizQ(id)||{};
+    return {id:id,ch:e.ch,stem:e.stem,options:e.options,ans:e.ans,pick:e.pick,exp:(q.exp||"")};
+  });
+  _wbBusy=true;
+  var btns=document.querySelectorAll("#wbBatch,#wbBatchOne");
+  btns.forEach(function(b){ b.textContent="AI 正在分析 "+items.length+" 条…"; });
+  var prompt="下面是 CDGA 考生做错的选择题（含他的选择与正确答案）。请逐题分析错因，并给下次排掉的办法。\n\n"
+    +JSON.stringify(items,null,1)+"\n\n"
+    +"要求：① cause 只能取这五类之一：概念混淆 / 细节记混 / 角色或条数错配 / 反向陷阱 / 没背过；"
+    +"② why 说清他为什么会选那个错项（≤70 字，要具体到这两个选项的差别）；"
+    +"③ fix 给一句可操作的判别法（≤60 字，如「看主语：出现X就是A」）。\n"
+    +"只输出 JSON 数组，不要代码围栏、不要解释：\n"
+    +'[{"id":"题号","cause":"五类之一","why":"...","fix":"..."}]';
+  callAI(prompt,"你是 CDGA 阅卷老师，擅长指出考生错在哪一步，只说关键差别，不写套话。",true).then(function(txt){
+    var arr=wbParseArr(txt);
+    if(!Array.isArray(arr)||!arr.length) throw new Error("没解析出结果");
+    var mm=wbAll(), n=0;
+    arr.forEach(function(x){
+      var id=String(x.id||""); if(!mm[id])return;
+      mm[id].cause=String(x.cause||"").slice(0,10);
+      mm[id].why=String(x.why||"");
+      mm[id].fix=String(x.fix||"");
+      n++;
+    });
+    wbSave(mm); _wbBusy=false;
+    toast("已分析 "+n+" 条");
+    WB_DETAIL=null; wbRender();
+  }).catch(function(e){
+    _wbBusy=false;
+    toast("分析失败："+((e&&e.message)||"网络问题"));
+    wbRender();
+  });
+}
+/* 单题重做：只做这一道，做完回错题本 */
+function quizStartOne(qid){
+  var q=quizQ(qid); if(!q){ toast("这道题已不在题库里"); return; }
+  QS={mode:"one",ch:q.ch, ids:[qid], i:0, ans:[], t0:Date.now(), wrong:[]};
+  quizOpenTitle("重做 · 第 "+q.ch+" 章");
+  qzOpen(); quizRenderQ();
+}
 function qzOn(){ var e=document.getElementById("qzFull"); return !!(e&&e.classList.contains("on")); }
-function anyOn(){ return qzOn()||scOn(); }
+function anyOn(){ return qzOn()||scOn()||wbOn(); }
 function _dropNav(name){ var k=navStack.lastIndexOf(name); if(k>=0)navStack.splice(k,1); }
 function _closeLayerByCode(name, closeFn){
   var i=navStack.lastIndexOf(name);
@@ -1909,7 +2175,7 @@ window.addEventListener("popstate",function(){
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
               || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
               || (srSheet&&srSheet.classList.contains("on"))
-              || qzOn() || scOn();
+              || qzOn() || scOn() || wbOn();
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _guardSoon();         // 补回守卫（多拍，防真机手势期间 pushState 被忽略），App 不退，还能继续逐级退
@@ -1936,6 +2202,7 @@ function navBackFromPop(){
      （旧版它们不占条目 → 真机上"用返回收起它"会白吃上一层的历史，累积后提前掉出 App。） */
   if(top==="qzFull"){ navStack.pop(); qzClose(); return; }
   if(top==="scFull"){ navStack.pop(); scClose(); return; }
+  if(top==="wbFull"){ navStack.pop(); wbClose(); return; }
   if(top==="lp"){ navStack.pop(); var _lp0=document.querySelector(".lp.show"); if(_lp0)closeLp(_lp0); return; }
   if(top==="askFab"){ navStack.pop(); closeAskFab(); return; }
   if(top==="chanDrill"){
@@ -3227,6 +3494,10 @@ function quizEntryHTML(){
       +'<div class="qzeBar"><i style="width:'+Math.min(100,Math.round(doneAll/Math.max(1,tot)*100))+'%"></i></div>'
       +'<button class="qzbtn" data-qch="'+lastCh+'">'+(doneAll?'继续练 · 第 '+lastCh+' 章':'开始练 · 第 '+lastCh+' 章')+'</button></div>';
   }
+  if(typeof wbStats==="function"){
+    var _ws=wbStats();
+    html+='<div class="qzrow" data-wbopen="1"><div class="l"><b>错题本</b><span>'+_ws.open+' 条待复习 · 已掌握 '+_ws.mastered+' 条 · 总正确率 '+_ws.acc+'%</span></div><div class="r">进去看 ›</div></div>';
+  }
   html+=chs.map(function(c){
     var info=QUIZ.chapters[c],qs=quizByCh(c),done=0,right=0;
     qs.forEach(function(q){var r=rec[q.id];if(r&&r.n){done++;if(r.lastRight)right++;}});
@@ -3241,6 +3512,8 @@ function quizEntryHTML(){
 function bindQuizEntry(root){
   if(!root)return;
   root.addEventListener("click",function(e){
+    var wb=e.target.closest("[data-wbopen]");
+    if(wb){ e.stopPropagation(); wbOpen("list"); return; }
     var el=e.target.closest("[data-qch]"); if(!el)return;
     e.stopPropagation();
     quizStartChapter(el.getAttribute("data-qch"));
@@ -3252,6 +3525,7 @@ function qzClose(){ var e=document.getElementById("qzFull"); if(e)e.classList.re
 /* `.64`：✕ 走统一的 navBack（与系统返回手势同一条路径，避免两套逻辑） */
 document.getElementById("qzExit").addEventListener("click",function(){ navBack(); });
 document.getElementById("scExit").addEventListener("click",function(){ navBack(); });
+document.getElementById("wbExit").addEventListener("click",function(){ navBack(); });
 function quizStartChapter(ch,count){
   var qs=quizByCh(ch);
   if(!qs.length){ toast("这章还没有题"); return; }
@@ -3320,6 +3594,8 @@ function quizAnswer(pick){
   /* `.67`：连对计数 —— 知识树的掌握度靠它判断"是蒙对的还是会了" */
   r.streak=right?((r.streak||0)+1):0;
   r.ts=Date.now(); rec[q.id]=r; quizSaveRec(rec);
+  /* `.70`：错题本 —— 答错入库（重做时更新），答对累计连对，连对 2 次自动移出 */
+  try{ if(!right) wbAdd(q,pick); else wbRight(q); if(typeof wbRefreshEntry==="function") wbRefreshEntry(); }catch(e){}
 
   var box=document.getElementById("qzBody");
   var btns=box.querySelectorAll(".qzopt");
@@ -3385,13 +3661,14 @@ function quizFinish(){
   }else{
     html+='<div class="qzgood">全对，这章可以过了 ✓</div>';
   }
-  var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle, _sec=QS.sec;
-  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':('sec'===_m?'再练这一节':'再来一组'))+'</button>'
+  var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle, _sec=QS.sec, _qsIds=QS.ids.slice();
+  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':('sec'===_m?'再练这一节':('one'===_m?'再做一遍':'再来一组')))+'</button>'
        +'<button class="qzquit2" id="qzHome">'+('card'===_m?'关掉':'回频道')+'</button>';
   box.innerHTML=html;
   document.getElementById("qzAgain").addEventListener("click",function(){
     if('card'===_m) quizStartCard(_cid,_ct);
     else if('sec'===_m) quizStartSec(_ch,_sec);
+    else if('one'===_m) quizStartOne(_qsIds[0]);
     else quizStartChapter(_ch);
   });
   document.getElementById("qzHome").addEventListener("click",function(){ navBack(); });
@@ -4952,7 +5229,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.69';
+var _APP_VER_ = '2026-11-19.70';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
