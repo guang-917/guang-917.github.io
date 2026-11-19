@@ -323,6 +323,99 @@ body{
 .sr .backcard .go{font-size:11px;color:var(--data);font-weight:700}
 .sr .backcard:active{transform:scale(.985)}
 
+/* ============ `.67` 知识树：CDGA 备考诊断（数据频道专用） ============
+   版式：覆盖度卡 → 今天补这 3 个 → 17 章列表（点开是 节 + 卡 + 三个动作）
+   颜色只用 data 主色 + 墨阶；"缺口"用 --jp 提警示，不用第三套色。 */
+.kn-cov{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px 11px;box-shadow:var(--shadow-sm);margin-top:2px}
+.kn-cov .tp{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.kn-cov .big{font-family:var(--serif);font-size:29px;line-height:1;font-weight:600;letter-spacing:.01em}
+.kn-cov .big i{font-style:normal;font-size:12.5px;color:var(--ink-3);margin-left:5px;letter-spacing:0}
+.kn-cov .rt{text-align:right;font-size:11px;color:var(--ink-3);line-height:1.6}
+.kn-cov .rt b{color:var(--gold);font-size:12px;font-weight:700}
+.kn-bar{display:flex;gap:3px;margin:11px 0 7px}
+.kn-bar i{height:7px;border-radius:3px;background:color-mix(in srgb,var(--data) 20%,transparent);flex:none}
+.kn-bar i.on{background:var(--data)}
+.kn-bar i.half{background:color-mix(in srgb,var(--data) 46%,transparent)}
+.kn-cov .nt{font-size:11px;color:var(--ink-3);line-height:1.65}
+.kn-cov .nt b{color:var(--ink);font-weight:600}
+.kn-cov .ex{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line-2);font-size:10.5px;color:var(--ink-3);cursor:pointer}
+.kn-cov .ex b{color:var(--ink-2);font-weight:600}
+.kn-today{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-top:12px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.kn-today .hd{display:flex;align-items:center;justify-content:space-between;padding:11px 14px 8px;gap:8px}
+.kn-today .hd b{font-size:13px;letter-spacing:.02em}
+.kn-today .hd span{font-size:10.5px;color:var(--ink-3);text-align:right}
+.kn-gap{display:flex;align-items:center;gap:9px;padding:9px 14px;border-top:1px solid var(--line-2)}
+.kn-gap .ix{width:15px;font-size:11px;color:var(--ink-3);font-weight:600;flex:none}
+.kn-gap .tx{flex:1;min-width:0}
+.kn-gap .tx b{display:block;font-size:13px;font-weight:600;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kn-gap .tx span{display:block;font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.kn-gap .tx em{font-style:normal;color:var(--gold)}
+.kn-btn{flex:none;font-size:11.5px;padding:5px 11px;border-radius:99px;border:1px solid var(--data);color:var(--data);background:transparent;font-family:inherit;cursor:pointer;transition:transform .15s var(--spring)}
+.kn-btn.solid{background:var(--data);color:#fff}
+.kn-btn:active{transform:scale(.95)}
+.kn-lh{display:flex;align-items:center;justify-content:space-between;margin:14px 0 0}
+.kn-lh .t{font-size:12px;color:var(--ink-3);letter-spacing:.02em}
+.kn-lh .sw{display:flex;gap:6px}
+.kn-lh .sw button{padding:3px 9px;border-radius:8px;border:1px solid var(--line);color:var(--ink-3);background:var(--card);font-family:inherit;font-size:11px;cursor:pointer}
+.kn-lh .sw button.on{border-color:var(--ink-3);color:var(--ink);background:var(--card-2)}
+.kn-ch{border-bottom:1px solid var(--line-2)}
+.kn-hd{display:flex;align-items:center;gap:9px;padding:9px 0;cursor:pointer}
+.kn-hd .no{width:50px;flex:none;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.kn-hd .no b{font-size:14px;color:var(--ink);font-weight:600;margin:0 1px}
+.kn-hd .nm{flex:1;min-width:0;font-size:13.5px;line-height:1.35}
+.kn-hd .nm i{display:block;font-style:normal;font-size:10.5px;color:var(--ink-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kn-hd .nm i em{font-style:normal;color:var(--gold)}
+.kn-hd .st{width:34px;text-align:right;font-size:10.5px;color:var(--ink-3);flex:none}
+.kn-hd .st.mid{color:var(--ink-2)}
+.kn-hd .st.hi{color:var(--data);font-weight:600}
+.kn-ch.zero .no b{color:var(--ink-3)}
+.kn-hd .ar{color:var(--ink-3);font-size:14px;flex:none;transition:transform .25s var(--glide)}
+.kn-ch.open .kn-hd .ar{transform:rotate(90deg)}
+.mbar{display:flex;gap:2.5px;flex:none}
+.mbar i{width:5px;height:13px;border-radius:2px;background:var(--line)}
+.mbar i.on{background:var(--data)}
+.kn-bd{max-height:0;overflow:hidden;transition:max-height .42s var(--glide)}
+.kn-ch.open .kn-bd{max-height:4000px}
+.kn-in{padding:2px 0 13px}
+.kn-meta{font-size:11px;color:var(--ink-3);line-height:1.7;margin-bottom:9px}
+.kn-meta b{color:var(--data);font-weight:600}
+.kn-acts{display:flex;gap:7px;margin:0 0 10px}
+.kn-acts button{flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:12px;font-family:inherit;cursor:pointer;transition:transform .15s var(--spring)}
+.kn-acts button:active{transform:scale(.96)}
+.kn-acts button.main{background:var(--data);border-color:var(--data);color:#fff;font-weight:600}
+.kn-acts button.off{color:var(--ink-3);background:var(--bg-2);border-color:transparent}
+.kn-sec{display:flex;align-items:center;gap:8px;padding:9px 0 5px;border-bottom:1px solid var(--line-2)}
+.kn-sec .sn{font-size:12.5px;font-weight:600;font-family:var(--serif)}
+.kn-sec .sm{flex:1;text-align:right;font-size:10.5px;color:var(--ink-3)}
+.kn-sec .sm b{color:var(--ink-2);font-weight:600}
+.kn-sec .sm .warn{color:var(--jp)}
+.kn-sq{flex:none;font-size:10.5px;padding:3px 8px;border-radius:7px;border:1px solid var(--line);background:var(--card-2);color:var(--ink-2);font-family:inherit;cursor:pointer}
+.kn-mk{display:flex;align-items:flex-start;gap:8px;padding:9px 0 9px 12px;border-bottom:1px dashed var(--line-2);cursor:pointer}
+.kn-mk .ct{flex:1;min-width:0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.kn-mk .ph{flex:none;font-size:10px;padding:2px 7px;border-radius:6px;background:var(--data-soft);color:var(--data)}
+.kn-note{border:1px dashed var(--line);border-radius:11px;padding:11px 12px;background:var(--card-2);font-size:11.5px;color:var(--ink-3);line-height:1.7;margin-top:10px}
+.kn-note b{color:var(--ink-2);font-weight:600}
+/* 讲一遍（费曼）在深读弹层里的排版 */
+.kn-say .qq{font-family:var(--serif);font-size:15px;font-weight:600;line-height:1.6;color:var(--ink)}
+.kn-say .hint{font-size:11.5px;color:var(--ink-3);margin-top:5px;line-height:1.7}
+.kn-say textarea{width:100%;margin-top:10px;min-height:96px;border:1px solid var(--line);border-radius:11px;background:var(--card-2);padding:10px 12px;font-family:inherit;font-size:13.5px;line-height:1.7;color:var(--ink);resize:vertical}
+.kn-say .go{margin-top:9px;width:100%;padding:11px 0;border-radius:11px;border:none;background:var(--data);color:#fff;font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer}
+.kn-say .go:disabled{opacity:.55}
+.kn-ver{margin-top:11px;border:1px solid var(--line);border-radius:12px;padding:12px}
+.kn-ver .vh{display:flex;align-items:center;gap:8px}
+.kn-ver .vh b{font-size:13px}
+.kn-ver .vh span{font-size:10.5px;color:var(--ink-3)}
+.kn-ver .sc{margin-left:auto;font-family:var(--serif);font-size:15px;color:var(--gold)}
+.kn-ver .ln{font-size:11.5px;color:var(--ink-2);margin-top:8px;line-height:1.75}
+.kn-ver .ln .miss{color:var(--jp)}
+.kn-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.kn-tags span{font-size:10.5px;padding:3px 8px;border-radius:6px;background:var(--data-soft);color:var(--data)}
+.kn-tags span.m{background:color-mix(in srgb,var(--jp) 14%,transparent);color:var(--jp)}
+.kn-mkc h4{font-size:12px;color:var(--ink-3);margin:13px 0 5px;font-weight:600;letter-spacing:.02em}
+.kn-mkc p{font-size:13.5px;line-height:1.8;color:var(--ink-2);margin-bottom:7px}
+.kn-mkc .trap{background:var(--gold-soft);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink-2);line-height:1.7;margin-top:10px}
+.kn-mkc .trap b{color:var(--ink)}
+
 /* 知识树频道选择 */
 .chpills{max-width:520px;margin:6px auto 2px;padding:0 16px;display:flex;gap:8px}
 .chpills button{flex:1;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:13px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -485,6 +578,16 @@ body{
 .aitem.tap{cursor:pointer}
 .aitem.tap:active{transform:scale(.985)}
 .arch .aempty{text-align:center;color:var(--ink-3);font-size:13px;line-height:1.9;padding:52px 10px}
+/* ===== `.66` 归档按类型分开 ===== */
+.arch .afilters{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 95%,rgba(0,0,0,.35));mask-image:linear-gradient(90deg,#000 95%,rgba(0,0,0,.35))}
+.arch .afilters::-webkit-scrollbar{display:none}
+.arch .afilters button{flex:none;display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-family:inherit;font-weight:600;cursor:pointer}
+.arch .afilters button.on{background:var(--ai);color:#fff;border-color:var(--ai)}
+.arch .afilters button b{font-size:10.5px;font-weight:700;background:var(--line);color:var(--ink-3);border-radius:999px;padding:0 6px;min-width:16px;text-align:center}
+.arch .afilters button.on b{background:rgba(255,255,255,.28);color:#fff}
+.arch .asech{font-size:12.5px;font-weight:700;color:var(--ink);margin:16px 2px 9px;display:flex;align-items:center;gap:7px}
+.arch .asech b{font-size:10.5px;font-weight:700;background:var(--gold-soft);color:var(--gold);border-radius:999px;padding:1px 8px}
+.arch .asech .chp{font-size:11px;color:var(--ink-3);font-weight:400}
 
 /* ---------- 底部 Tabbar ---------- */
 .tabbar{
@@ -853,6 +956,16 @@ body{
   <div class="qfb" id="qzBody"></div>
 </div>
 
+<!-- `.65` 全屏自查层（长按知识卡触发） -->
+<div class="qzfull" id="scFull">
+  <div class="qzftop">
+    <button class="qzx" id="scExit" aria-label="退岀自查">✕</button>
+    <div class="qzti" id="scTitle">自查</div>
+    <div class="qzx" style="visibility:hidden">✕</div>
+  </div>
+  <div class="qfb" id="scBody"></div>
+</div>
+
 <!-- 底部导航 -->
 <nav class="tabbar" id="tabbar">
   <div class="tab on" data-tab="today"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17"/><path d="M8 2.5v4"/><path d="M16 2.5v4"/><circle cx="12" cy="14.5" r="1.4"/></svg></div><div class="lb">今日</div></div>
@@ -1025,8 +1138,11 @@ function pickTopicId(ch,card){
   });
   return best;
 }
-/* 构建某频道的主题结构（含命中卡片、凝练摘要、延伸连线、未分类卡片） */
+/* 构建某频道的主题结构（含命中卡片、凝练摘要、延伸连线、未分类卡片）
+   `.67`：数据频道不再走「种子主题 + 关键词」，改走 CDGA 17 章考纲（buildCdgaTree）。
+   AI / 日语频道没有考纲，仍用原主题模型。 */
 function buildChannelTree(ch){
+  if(normCh(ch)==="data") return buildCdgaTree();
   var topics=(TOPICS[ch]||[]).map(function(t){return Object.assign({},t);});
   var cardByTopic={};
   CARDS.forEach(function(c){if(normCh(c.ch)!==ch)return;var tid=pickTopicId(ch,c);   /* 只归一个主题 */
@@ -1042,6 +1158,360 @@ function buildChannelTree(ch){
   return {ch:ch,topics:topics,unmatched:unmatched,edges:edges};
 }
 function topicById(data,id){for(var i=0;i<data.topics.length;i++)if(data.topics[i].id===id)return data.topics[i];return null;}
+
+/* ====================== `.67` 数据频道改绑 CDGA 17 章考纲 ======================
+   为什么换：旧骨架是 4 个手写种子词（治理/安全/交易/质量），跟实际在学的 17 章对不上——
+   实测 68 张数据卡里 38 张掉进「未分类」、20 张挤在「数据治理」，而第 12/13 章各 10 分
+   一张卡都没有、树上连"这一章存在"都看不出来。树不长在考纲上，就永远只是一堆卡。
+   新模型三层：章（分值）→ 节（题库 sec）→ 考点（卡）。
+   掌握度 0~4 = 读卡 1 + 正确率≥80% 1.5（50%+ 0.8 / 以下 0.3）+ 同题连对两次 0.5 + 7 天内碰过 1。 */
+var CDGA_CH=[
+  {n:1,name:"数据管理",points:4},
+  {n:2,name:"数据处理伦理",points:2},
+  {n:3,name:"数据治理",points:10},
+  {n:4,name:"数据架构",points:10},
+  {n:5,name:"数据建模和设计",points:10},
+  {n:6,name:"数据存储和运营",points:2},
+  {n:7,name:"数据安全",points:8},
+  {n:8,name:"数据集成和互操作",points:2},
+  {n:9,name:"文档和内容管理",points:2},
+  {n:10,name:"参考数据和主数据",points:4},
+  {n:11,name:"数据仓库和商务智能",points:10},
+  {n:12,name:"元数据管理",points:10},
+  {n:13,name:"数据质量管理",points:10},
+  {n:14,name:"大数据和数据科学",points:4},
+  {n:15,name:"数据管理成熟度评估",points:6},
+  {n:16,name:"数据管理组织和角色期望",points:4},
+  {n:17,name:"数据管理和组织变革管理",points:2}
+];
+var CDGA_PTS=100;
+var knSort="gap", knOpen={};          /* knOpen={章号:true} 展开状态，切频道/重渲染都保留 */
+var LS_MK="kb_makeup";                /* 本机「补的卡」：{ "13":[card,...] }，只活在知识树里 */
+function knLoadMk(){try{var o=JSON.parse(localStorage.getItem(LS_MK)||"{}");return (o&&typeof o==="object")?o:{};}catch(e){return {};}}
+function knSaveMk(o){try{localStorage.setItem(LS_MK,JSON.stringify(o));}catch(e){}}
+function knMkOf(n){var o=knLoadMk(),a=o[n];return Array.isArray(a)?a:[];}
+/* 卡归哪一章：先看标题「第 N 章」，再看标签。认不出 → 0（课外）。 */
+function cdgaNo(c){
+  var m=String((c&&c.title)||"").match(/第\s*(\d{1,2})\s*章/);
+  if(m){var n=+m[1];if(n>=1&&n<=17)return n;}
+  m=(((c&&c.tags)||[]).join(" ")).match(/第\s*(\d{1,2})\s*章/);
+  if(m){var k=+m[1];if(k>=1&&k<=17)return k;}
+  return 0;
+}
+/* 「每日一练」是每天自动出的练习题，不是教材考点 → 不参与掌握度，单独标出来 */
+function knIsPractice(c){return /^CDGA\s*每日一练/.test(String((c&&c.title)||""));}
+function knState(m,hasCards){
+  if(!hasCards) return {t:"未碰",cls:""};
+  if(m>=3.5) return {t:"稳",cls:"hi"};
+  if(m>=2) return {t:"会做",cls:"hi"};
+  if(m>0) return {t:"见过",cls:"mid"};
+  return {t:"未读",cls:""};
+}
+function knBars(m){var h="";for(var i=1;i<=4;i++)h+='<i class="'+(m>=i?"on":"")+'"></i>';return h;}
+/* 单张卡的掌握度。ts = 最后一次接触（已读戳 / 题目作答时间），用来算「隔了多久」 */
+function knCardScore(c,rec,ra){
+  var s=c.read?1:0, qids=quizCardIds(c.id), n=0,right=0,st=0,ts=ra||0;
+  qids.forEach(function(qid){
+    var r=rec[qid];
+    if(r&&r.n){n++;if(r.lastRight)right++;if((r.streak||0)>st)st=r.streak||0;if((r.ts||0)>ts)ts=r.ts||0;}
+  });
+  if(n>0){var acc=right/n;s+=(acc>=0.8?1.5:(acc>=0.5?0.8:0.3));}
+  if(st>=2)s+=0.5;
+  if(ts&&(Date.now()-ts)<=7*86400000)s+=1;
+  return {s:Math.min(4,Math.round(s*10)/10),ts:ts,n:n,right:right};
+}
+function buildCdgaTree(){
+  var ra=loadReadAt(),rec=quizRec(),byCh={},extra=[];
+  CARDS.forEach(function(c){
+    if(normCh(c.ch)!=="data")return;
+    var n=cdgaNo(c);
+    if(!n){extra.push(c);return;}
+    (byCh[n]=byCh[n]||[]).push(c);
+  });
+  var topics=CDGA_CH.map(function(k){
+    var all=byCh[k.n]||[], study=all.filter(function(c){return !knIsPractice(c);}), mks=knMkOf(k.n);
+    var sum=0,cnt=0,last=0,qTotal=0,qDone=0,qRight=0,secMap={};
+    study.forEach(function(c){var r=knCardScore(c,rec,ra[c.id]||0);sum+=r.s;cnt++;if(r.ts>last)last=r.ts;});
+    mks.forEach(function(mk){cnt++;if(mk.read)sum+=1;if((mk.ts||0)>last)last=mk.ts;});
+    var qs=quizByCh(k.n);
+    qs.forEach(function(q){
+      qTotal++;
+      var r=rec[q.id];
+      if(r&&r.n){qDone++;if(r.lastRight)qRight++;if((r.ts||0)>last)last=r.ts;}
+      var sd=String(q.sec||"");
+      if(!sd)return;
+      var o=secMap[sd]||(secMap[sd]={sec:sd,total:0,done:0,right:0,ts:0});
+      o.total++;
+      if(r&&r.n){o.done++;if(r.lastRight)o.right++;if((r.ts||0)>o.ts)o.ts=r.ts;}
+    });
+    var secs=Object.keys(secMap).map(function(s){return secMap[s];})
+      .sort(function(a,b){return a.sec.localeCompare(b.sec,undefined,{numeric:true});});
+    secs.forEach(function(o){o.acc=o.done?o.right/o.done:0;});
+    var tagSet={};all.forEach(function(c){(c.tags||[]).forEach(function(g){tagSet[g]=1;});});
+    return {id:"c"+k.n,n:k.n,name:k.name,points:k.points,
+      cards:all,study:study,makeup:mks,secs:secs,
+      m:cnt?Math.round(sum/cnt*10)/10:0, hasCards:cnt>0, last:last,
+      qTotal:qTotal,qDone:qDone,qRight:qRight,
+      practice:all.length-study.length,
+      summary:all.map(function(c){return c.sum;}).filter(Boolean).join("　").slice(0,160),
+      tags:Object.keys(tagSet)};
+  });
+  return {ch:"data",topics:topics,unmatched:extra,edges:[]};
+}
+function knCoverage(data){var p=0;data.topics.forEach(function(t){if(t.hasCards)p+=t.points;});return p;}
+/* 缺口排序：分值 × 掌握度缺口 × 隔了多久（越久没碰权重越高）；整章空白再 ×1.3。
+   节级缺口只在「做过 ≥2 题且正确率 <60%」时才参与，避免把没做过的节算成"薄弱"。 */
+function knGaps(data){
+  var out=[],now=Date.now();
+  data.topics.forEach(function(t){
+    var days=t.last?(now-t.last)/86400000:60;
+    var stale=1+Math.min(days,60)/60*0.45;
+    var score=t.points*(1-t.m/4)*stale*(t.hasCards?1:1.3);
+    if(score>0.4)out.push({kind:"ch",t:t,score:score});
+    if(t.secs.length){
+      var per=t.points/t.secs.length;
+      t.secs.forEach(function(s){
+        if(s.done<2||s.acc>=0.6)return;
+        var sd=s.ts?(now-s.ts)/86400000:60;
+        out.push({kind:"sec",t:t,s:s,score:per*(1-s.acc)*1.6*(1+Math.min(sd,60)/60*0.45)});
+      });
+    }
+  });
+  out.sort(function(a,b){var d=b.score-a.score;return Math.abs(d)>0.01?d:(a.t.n-b.t.n);});
+  return out;
+}
+function knTopic(n){for(var i=0;i<CDGA_CH.length;i++)if(CDGA_CH[i].n===n)return CDGA_CH[i];return null;}
+function knToggle(n){knOpen[n]=!knOpen[n];var el=document.getElementById("kn-"+n);if(el)el.classList.toggle("open",!!knOpen[n]);
+  var btn=document.querySelector('[data-knch="'+n+'"]');if(btn&&typeof fitTagLines==="function")fitTagLines(btn.parentNode);}
+
+/* ---- 渲染：数据频道总览 ---- */
+function renderKnTree(){
+  var box=document.getElementById("treeList");if(!box)return;
+  var data=buildCdgaTree(),cov=knCoverage(data),gaps=knGaps(data);
+  var chapters=data.topics.filter(function(t){return t.hasCards;}).length;
+  var h=[];
+  h.push('<div class="kn-cov"><div class="tp"><div class="big">'+cov+'<i>/ 100 分</i></div>'
+    +'<div class="rt">已学过 <b>'+chapters+' 章</b><br>还有 <b>'+(CDGA_PTS-cov)+' 分</b>没碰</div></div>');
+  h.push('<div class="kn-bar">'+data.topics.map(function(t){
+    var cls=!t.hasCards?"":(t.m>=2?"on":"half");
+    return '<i class="'+cls+'" style="flex:'+t.points+'"></i>';
+  }).join("")+'</div>');
+  h.push('<div class="nt">每一格 = 一章，按分值宽窄。<b>灰格＝一张卡都没有</b>。</div>');
+  if(data.unmatched.length){
+    h.push('<div class="ex" data-knextra="1">另有 <b>'+data.unmatched.length+' 张</b>行业情报 / 概念卡不属于任何一章 → 收进「课外」，不计分值 ›</div>');
+  }
+  h.push('</div>');
+
+  if(gaps.length){
+    h.push('<div class="kn-today"><div class="hd"><b>今天补这 3 个</b><span>按 分值 × 缺口 × 隔了多久</span></div>');
+    gaps.slice(0,3).forEach(function(g,i){
+      if(g.kind==="ch"){
+        var t=g.t,st=knState(t.m,t.hasCards);
+        h.push('<div class="kn-gap"><span class="ix">'+(i+1)+'</span><div class="tx">'
+          +'<b>第 '+t.n+' 章 '+esc(t.name)+'</b>'
+          +'<span>'+t.points+' 分 · '+(t.hasCards?(t.study.length+' 张卡 · '+st.t):'<em>0 张卡 · 未碰</em>')+'</span></div>'
+          +'<button class="kn-btn solid" data-knmake="'+t.n+'">补卡</button></div>');
+      }else{
+        var s=g.s;
+        h.push('<div class="kn-gap"><span class="ix">'+(i+1)+'</span><div class="tx">'
+          +'<b>'+esc(s.sec)+' '+esc(t.name)+'</b>'
+          +'<span>第 '+t.n+' 章 · '+s.done+'/'+s.total+' 题 · 正确率 '+Math.round(s.acc*100)+'%</span></div>'
+          +'<button class="kn-btn" data-knsec="'+t.n+'|'+esc(s.sec)+'">练 5 题</button></div>');
+      }
+    });
+    h.push('</div>');
+  }
+
+  h.push('<div class="kn-lh"><span class="t">17 章 · '+(knSort==="gap"?"按缺口排":"按章序")+'</span>'
+    +'<span class="sw"><button data-knsort="gap" class="'+(knSort==="gap"?"on":"")+'">缺口优先</button>'
+    +'<button data-knsort="no" class="'+(knSort==="no"?"on":"")+'">章序</button></span></div>');
+
+  var list=data.topics.slice();
+  if(knSort==="gap"){
+    var rank={};gaps.forEach(function(g,i){if(g.kind==="ch"&&rank[g.t.n]===undefined)rank[g.t.n]=i;});
+    list.sort(function(a,b){
+      var ra=rank[a.n]===undefined?999:rank[a.n], rb=rank[b.n]===undefined?999:rank[b.n];
+      if(ra!==rb)return ra-rb;
+      return (b.points-a.points)||(a.n-b.n);
+    });
+  }
+  list.forEach(function(t){h.push(knChapterHTML(t));});
+  box.innerHTML=h.join("");
+  var hint=document.getElementById("treeHint");
+  if(hint)hint.textContent="CDGA 17 章考纲 · 点一章看它薄在哪";
+}
+function knChapterHTML(t){
+  var st=knState(t.m,t.hasCards);
+  var meta=[];
+  meta.push(t.points+" 分");
+  meta.push(t.hasCards?(t.study.length+" 张卡"):"0 张卡");
+  if(t.practice)meta.push("含 "+t.practice+" 张每日一练");
+  if(t.qTotal)meta.push(t.qTotal+" 题 · 已做 "+t.qDone+(t.qDone?" · 正确率 "+Math.round(t.qRight/t.qDone*100)+"%":""));
+  var h='<div class="kn-ch'+(t.hasCards?"":" zero")+(knOpen[t.n]?" open":"")+'" id="kn-'+t.n+'">'
+    +'<div class="kn-hd" data-knch="'+t.n+'"><div class="no">第<b>'+t.n+'</b>章</div>'
+    +'<div class="nm">'+esc(t.name)+'<i>'+(t.hasCards?meta.join(" · "):(t.points+" 分 · <em>整章还没开始</em>"))+'</i></div>'
+    +'<div class="mbar">'+knBars(t.m)+'</div>'
+    +'<div class="st '+st.cls+'">'+st.t+'</div><span class="ar">›</span></div>';
+  h+='<div class="kn-bd"><div class="kn-in">';
+  h+='<div class="kn-meta">'+(t.hasCards?('掌握度 <b>'+t.m+'/4</b> · 教材卡 '+t.study.length+' 张'):
+      ('这一章占 <b>'+t.points+' 分</b>，还没有任何卡'))+'</div>';
+  h+='<div class="kn-acts">'
+    +'<button class="main" data-knmake="'+t.n+'">补一张卡</button>'
+    +'<button data-knsay="'+t.n+'">讲一遍</button>'
+    +(t.qTotal?'<button data-knquiz="'+t.n+'">练这章</button>':'<button class="off" disabled>还没题</button>')
+    +'</div>';
+  if(t.secs.length){
+    t.secs.forEach(function(s){
+      var bad=s.done>=2&&s.acc<0.6;
+      h+='<div class="kn-sec"><span class="sn">'+esc(s.sec)+'</span>'
+        +'<span class="sm"><b>'+s.total+' 题</b> · '+(s.done?('对 '+s.right+' · '+(bad?'<span class="warn">':'')+Math.round(s.acc*100)+'%'+(bad?'</span>':'')):'还没做')+'</span>'
+        +(s.total?'<button class="kn-sq" data-knsec="'+t.n+'|'+esc(s.sec)+'">练 5 题</button>':'')+'</div>';
+    });
+  }
+  t.study.forEach(function(c){h+=cardRowHTML(c);});
+  t.makeup.forEach(function(mk){
+    h+='<div class="kn-mk" data-knmk="'+esc(mk.id)+'"><div class="ct">'+esc(mk.title)+'</div><span class="ph">补</span></div>';
+  });
+  if(!t.hasCards){
+    h+='<div class="kn-note"><b>这 '+t.points+' 分现在完全在盲区。</b>先补一张卡把骨架立起来，再点「讲一遍」看自己讲不讲得出。</div>';
+  }else if(!t.qTotal){
+    h+='<div class="kn-note">这章还没配题 → <b>「讲一遍」是唯一能验掌握度的动作</b>；只读卡永远停在「见过」。</div>';
+  }
+  h+='</div></div></div>';
+  return h;
+}
+/* ---- 补卡：生成 → 存本机 → 回看 ---- */
+var _knMkBusy={};
+function knMakeCard(n){
+  var t=knTopic(n);if(!t)return;
+  if(_knMkBusy[n]){toast("这一章正在生成…");return;}
+  _knMkBusy[n]=1;
+  pushNav("srSheet"); _ensureGuard();
+  var body='<div class="sh">第 '+n+' 章 · '+esc(t.name)+'</div><div class="shtag">补一张卡 · 只为这一章写</div>'
+    +'<div class="kn-say"><div class="hint">正在按 DAMA 教材口径写这张卡，约 10~20 秒…</div></div>';
+  document.getElementById("srBody").innerHTML=body;
+  srMask.classList.add("on");srSheet.classList.add("on");
+  var prompt="你是 CDGA（DAMA 数据管理知识体系）备考教练。考生「第"+n+"章 "+t.name+"」这一章一张卡都没有，"
+    +"而这一章在考试里占 "+t.points+" 分。请为他写一张「能直接背、能直接做题」的知识卡。\n\n"
+    +"只输出 JSON，不要 markdown 围栏、不要解释：\n"
+    +'{"title":"第'+n+'章 '+t.name+'｜这张卡讲哪几个考点","sum":"一句话摘要，40~60字，说清这章最该记住的是什么","points":["考点名：一句话解释（每条≤60字）","…"],"trap":"最容易错的一处，30字内","tags":["第'+n+'章","'+t.name+'","考点"]}\n\n'
+    +"【硬性要求】① 只写 DAMA-DMBOK 第 2 版（修订版）口径，不编造、不掺别的章节；"
+    +"② points 4~6 条，每条以考点名开头、冒号后一句话讲透它是什么/干什么；"
+    +"③ sum 必须点出这章的骨架（由哪几块组成），不要写「本章很重要」这种空话；④ 只输出 JSON。";
+  callAI(prompt,SHULI_SYS,true).then(function(txt){
+    var j=parseShuliJSON(txt);
+    if(!j||!j.sum)throw new Error("没生成出卡片");
+    var card={id:"mk"+n+"_"+Date.now().toString(36),n:n,title:String(j.title||("第"+n+"章 "+t.name)).slice(0,60),
+      sum:String(j.sum).slice(0,160),
+      points:(Array.isArray(j.points)?j.points:[]).slice(0,6).map(function(x){return String(x).slice(0,80);}),
+      trap:String(j.trap||"").slice(0,60),
+      tags:(Array.isArray(j.tags)?j.tags:[]).slice(0,4).map(String),
+      read:false,ts:Date.now()};
+    var m=knLoadMk();(m[n]=m[n]||[]).unshift(card);knSaveMk(m);
+    delete _knMkBusy[n];
+    knRenderMk(card,true);
+    renderKnTree();
+    toast("已补一张卡，记在本机");
+  }).catch(function(e){
+    delete _knMkBusy[n];
+    document.getElementById("srBody").innerHTML='<div class="sh">第 '+n+' 章 · '+esc(t.name)+'</div>'
+      +'<div class="shtag">补卡失败</div><p>'+esc((e&&e.message)||"网络问题")+'，稍后再点一次就行。</p>';
+  });
+}
+function knRenderMk(card,fresh){
+  var h='<div class="sh">'+esc(card.title)+'</div><div class="shtag">第 '+card.n+' 章 · 补的卡（只存本机）</div>';
+  h+='<div class="kn-mkc"><p>'+esc(card.sum)+'</p>';
+  if(card.points&&card.points.length){
+    h+='<h4>这张卡要背的考点</h4>';
+    card.points.forEach(function(p){h+='<p>'+esc(p)+'</p>';});
+  }
+  if(card.trap)h+='<div class="trap"><b>最容易错：</b>'+esc(card.trap)+'</div>';
+  h+='</div>';
+  h+='<div class="kn-tags">'+(card.tags||[]).map(function(g){return '<span>'+esc(g)+'</span>';}).join("")+'</div>';
+  if(fresh)h+='<div class="kn-note">已记到本章。<b>点开算读过（掌握度 +1）</b>，但只读不加分——想让它变「会做」，去点「讲一遍」或做题。</div>';
+  document.getElementById("srBody").innerHTML=h;
+  srMask.classList.add("on");srSheet.classList.add("on");
+}
+function knOpenMk(id){
+  var m=knLoadMk(),card=null;
+  Object.keys(m).forEach(function(k){(m[k]||[]).forEach(function(x){if(x.id===id)card=x;});});
+  if(!card)return;
+  if(!card.read){card.read=true;card.ts=Date.now();m[card.n]=m[card.n].map(function(x){return x.id===id?card:x;});knSaveMk(m);}
+  pushNav("srSheet"); _ensureGuard();
+  knRenderMk(card,false); renderKnTree();
+}
+/* ---- 讲一遍（费曼）：自己说 → AI 只判「漏了什么」 ---- */
+var _knSayBusy=false;
+function knSayOpen(n){
+  var t=knTopic(n);if(!t)return;
+  var topic=null,data=buildCdgaTree();
+  data.topics.forEach(function(x){if(x.n===n)topic=x;});
+  if(!topic)return;
+  var q="用 3 句话说清：「"+t.name+"」是什么、由哪几块组成、最容易和什么搞混。";
+  pushNav("srSheet"); _ensureGuard();
+  var h='<div class="sh">讲一遍 · 第 '+n+' 章</div><div class="shtag">费曼检测 · 讲不出来才是真的没学会</div>'
+    +'<div class="kn-say"><div class="qq">'+esc(q)+'</div>'
+    +'<div class="hint">别看书、别翻卡，直接说。AI 只做一件事：指出你漏了哪几点。</div>'
+    +'<textarea id="knSayIn" placeholder="我理解是……"></textarea>'
+    +'<button class="go" id="knSayGo">判一判我会不会</button><div id="knSayOut"></div></div>';
+  document.getElementById("srBody").innerHTML=h;
+  srMask.classList.add("on");srSheet.classList.add("on");
+  document.getElementById("knSayGo").addEventListener("click",function(){
+    var ta=document.getElementById("knSayIn"),ans=(ta&&ta.value||"").trim();
+    if(ans.length<10){toast("至少写一两句，才判得出来");return;}
+    if(_knSayBusy)return; _knSayBusy=true;
+    var btn=this; btn.disabled=true; btn.textContent="正在判…";
+    var ref=topic.study.slice(0,8).map(function(c){return "《"+c.title+"》"+(c.sum||"");}).join("\n");
+    var prompt="你是 CDGA（DAMA 数据管理知识体系）阅卷人。考生在做「讲一遍」自测。\n\n"
+      +"【题目】"+q+"\n\n"
+      +"【参考材料】"+(ref?("考生学过的这几张卡：\n"+ref):"（本章考生还没有卡片，按 DAMA-DMBOK 第 2 版修订版通行内容判定）")+"\n\n"
+      +"【考生的回答】\n"+ans+"\n\n"
+      +"只输出 JSON，不要 markdown 围栏、不要解释：\n"
+      +'{"level":"会|半懂|没懂","right":["他讲对的要点，最多4条，每条≤12字"],"missing":["他漏掉的关键要点，最多4条，每条≤12字"],"note":"一句话点评，指出最该补的那一点，≤50字"}\n\n'
+      +"要求：① 只按 DAMA 口径判，不编造、不夸；② 讲对了大半但漏了关键项 → 半懂；③ right/missing 用教材术语；④ 只输出 JSON。";
+    callAI(prompt,SHULI_SYS,true).then(function(txt){
+      var j=parseShuliJSON(txt);
+      if(!j||!j.level)throw new Error("没判出来，再试一次");
+      var right=(Array.isArray(j.right)?j.right:[]).slice(0,4).map(String);
+      var miss=(Array.isArray(j.missing)?j.missing:[]).slice(0,4).map(String);
+      var lv=String(j.level).slice(0,4);
+      var cls=(lv==="会")?"":(lv==="没懂"?"miss":"");
+      var out='<div class="kn-ver"><div class="vh"><b>'+esc(lv)+'</b>'
+        +'<span>'+(lv==="会"?"讲清了":"再补一遍就稳了")+'</span>'
+        +'<span class="sc">'+(right.length?right.length+"/"+(right.length+miss.length):"")+'</span></div>'
+        +(j.note?'<div class="ln">'+esc(j.note)+'</div>':'')
+        +((right.length||miss.length)?'<div class="kn-tags">'+right.map(function(x){return '<span>'+esc(x)+'</span>';}).join("")
+          +miss.map(function(x){return '<span class="m">'+esc(x)+' 漏</span>';}).join("")+'</div>':'')
+        +'</div>';
+      document.getElementById("knSayOut").innerHTML=out
+        +'<div class="kn-acts" style="margin-top:12px"><button class="main" data-knmake="'+n+'">补一张卡</button>'
+        +'<button id="knSayAgain">再讲一遍</button></div>';
+      btn.disabled=false;btn.textContent="判一判我会不会";
+      _knSayBusy=false;
+      var ag=document.getElementById("knSayAgain");
+      if(ag)ag.addEventListener("click",function(){navBack();});
+      var mk=document.querySelector('#knSayOut [data-knmake]');
+      if(mk)mk.addEventListener("click",function(){navBack();setTimeout(function(){knMakeCard(n);},260);});
+      /* 判过 = 这次真的碰过这个知识点，记一笔接触时间 */
+      var ra=loadReadAt();ra["kn:"+n]=Date.now();saveReadAt(ra);
+    }).catch(function(e){
+      _knSayBusy=false;btn.disabled=false;btn.textContent="再试一次";
+      document.getElementById("knSayOut").innerHTML='<div class="kn-ver"><div class="ln">AI 暂时不可用：'+esc((e&&e.message)||"网络问题")+'</div></div>';
+    });
+  });
+}
+/* 课外卡：一次列全，点开还是走原来的阅读器 */
+function knOpenExtra(){
+  var data=buildCdgaTree();
+  pushNav("srSheet"); _ensureGuard();
+  var h='<div class="sh">课外 · '+data.unmatched.length+' 张</div><div class="shtag">行业情报 / 概念卡 · 不属于任何一章，不计分值</div>';
+  data.unmatched.forEach(function(c){
+    h+='<div class="backcard" data-srcard="'+esc(c.id)+'"><span>'+(c.date2||"")+'</span><b>'+esc(c.title)+'</b><span class="go">打开 ›</span></div>';
+  });
+  document.getElementById("srBody").innerHTML=h;
+  srMask.classList.add("on");srSheet.classList.add("on");
+}
+
 
 /* ====================== 工具 ====================== */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -1498,6 +1968,8 @@ function cardRowHTML(c){
     +(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>';
 }
 function renderTree(){
+  /* `.67`：数据频道 = CDGA 考纲诊断图，另一套渲染；AI / 日语仍走主题树 */
+  if(normCh(treeCh)==="data"){ renderKnTree(); return; }
   var box=document.getElementById("treeList");
   var data=buildChannelTree(treeCh),h=[];
   if(!data.topics.length&&!data.unmatched.length){box.innerHTML='<div class="empty">这个频道还没有内容，去「今日」学一张卡吧。</div>';return;}
@@ -1860,7 +2332,7 @@ document.getElementById("treeMap").addEventListener("click",function(e){
 });
 document.getElementById("segList").addEventListener("click",function(){
   treeMode="list";this.classList.add("on");document.getElementById("segMap").classList.remove("on");
-  document.getElementById("treeHint").textContent="按主题梳理知识结构";
+  document.getElementById("treeHint").textContent=(normCh(treeCh)==="data"?"CDGA 17 章考纲 · 点一章看它薄在哪":"按主题梳理知识结构");
   document.getElementById("treeList").style.display="";document.getElementById("treeMap").style.display="none";
 });
 document.getElementById("segMap").addEventListener("click",function(){
@@ -1871,6 +2343,9 @@ document.getElementById("segMap").addEventListener("click",function(){
 document.getElementById("treeChPills").addEventListener("click",function(e){
   var b=e.target.closest("[data-ch]");if(!b)return;treeCh=b.getAttribute("data-ch");shuliDrill=null;
   renderTreePills();renderTree();if(treeMode==="shuli")renderShuli();
+  /* `.67`：两个频道的提示语不一样，切频道要跟着换 */
+  var hint=document.getElementById("treeHint");
+  if(hint)hint.textContent=(normCh(treeCh)==="data"?"CDGA 17 章考纲 · 点一章看它薄在哪":"按主题梳理知识结构");
 });
 
 /* 知识树点击：主题展开 / 卡片打开 / 标星 */
@@ -1882,6 +2357,25 @@ document.getElementById("treeList").addEventListener("click",function(e){
   if(cr){var c=getCard(cr.getAttribute("data-id"));
     if(c){var rect=cr.getBoundingClientRect();lastRect={left:rect.left,top:rect.top,width:rect.width,height:rect.height};
       openReader(c,lastRect);}return;}
+});
+/* `.67` 数据频道（考纲诊断图）的点击：全部走事件委托，一个元素只挂一条监听 */
+document.getElementById("treeList").addEventListener("click",function(e){
+  var mk=e.target.closest("[data-knmake]");
+  if(mk){e.stopPropagation();knMakeCard(+mk.getAttribute("data-knmake"));return;}
+  var sy=e.target.closest("[data-knsay]");
+  if(sy){e.stopPropagation();knSayOpen(+sy.getAttribute("data-knsay"));return;}
+  var sq=e.target.closest("[data-knsec]");
+  if(sq){e.stopPropagation();var p=String(sq.getAttribute("data-knsec")).split("|");quizStartSec(+p[0],p[1]);return;}
+  var qz=e.target.closest("[data-knquiz]");
+  if(qz){e.stopPropagation();quizStartChapter(+qz.getAttribute("data-knquiz"));return;}
+  var mr=e.target.closest("[data-knmk]");
+  if(mr){e.stopPropagation();knOpenMk(mr.getAttribute("data-knmk"));return;}
+  var sd=e.target.closest("[data-knsort]");
+  if(sd){e.stopPropagation();knSort=sd.getAttribute("data-knsort");renderKnTree();return;}
+  var ex=e.target.closest("[data-knextra]");
+  if(ex){e.stopPropagation();knOpenExtra();return;}
+  var hd=e.target.closest("[data-knch]");
+  if(hd){knToggle(+hd.getAttribute("data-knch"));return;}
 });
 
 /* ====================== 知识树「编辑」已移除 ======================
@@ -2560,7 +3054,7 @@ function qzOpen(){ var e=document.getElementById("qzFull"); if(!e)return; e.clas
 function qzClose(){ var e=document.getElementById("qzFull"); if(e)e.classList.remove("on"); QS=null; }
 /* `.64`：✕ 走统一的 navBack（与系统返回手势同一条路径，避免两套逻辑） */
 document.getElementById("qzExit").addEventListener("click",function(){ navBack(); });
-function quizStartChapter(ch){
+function quizStartChapter(ch,count){
   var qs=quizByCh(ch);
   if(!qs.length){ toast("这章还没有题"); return; }
   var rec=quizRec();
@@ -2569,9 +3063,24 @@ function quizStartChapter(ch){
     if(ra!==rb) return ra-rb;                 /* 先出没做过的 */
     return Math.random()-0.5;
   });
-  var pick=qs.slice(0,Math.min(10,qs.length));
+  var pick=qs.slice(0,Math.min(count||10,qs.length));
   QS={mode:"ch",ch:ch, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
   quizOpenTitle("第 "+ch+" 章 · "+((QUIZ.chapters[ch]||{}).name||""));
+  qzOpen(); quizRenderQ();
+}
+/* `.67`：按节抽 5 题——知识树里「3.3 组织与角色 正确率 33%」点一下就练这一节 */
+function quizStartSec(ch,sec){
+  var qs=quizByCh(ch).filter(function(q){ return String(q.sec)===String(sec); });
+  if(!qs.length){ toast("这一节还没有题"); return; }
+  var rec=quizRec();
+  qs=qs.slice().sort(function(a,b){
+    var ra=(rec[a.id]||{}).n||0, rb=(rec[b.id]||{}).n||0;
+    if(ra!==rb) return ra-rb;
+    return Math.random()-0.5;
+  });
+  var pick=qs.slice(0,Math.min(5,qs.length));
+  QS={mode:"sec",ch:ch,sec:sec, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
+  quizOpenTitle("第 "+ch+" 章 · "+sec+" · "+pick.length+" 题");
   qzOpen(); quizRenderQ();
 }
 function quizCardIds(cardId){
@@ -2589,7 +3098,7 @@ function quizStartCard(cardId,cardTitle){
 function quizRenderQ(){
   var box=document.getElementById("qzBody"); if(!box||!QS)return;
   var q=quizQ(QS.ids[QS.i]); if(!q){ quizFinish(); return; }
-  quizOpenTitle("第 "+(QS.i+1)+" / "+QS.ids.length+" 题"+(QS.mode==="card"?" · 这张卡":" · 第 "+QS.ch+" 章"));
+  quizOpenTitle("第 "+(QS.i+1)+" / "+QS.ids.length+" 题"+(QS.mode==="card"?" · 这张卡":(QS.mode==="sec"?" · "+QS.sec:" · 第 "+QS.ch+" 章")));
   var html='';
   html+='<div class="qzstem">'+esc(q.stem)+'</div><div class="qzopts">';
   q.options.forEach(function(o,i){
@@ -2610,6 +3119,8 @@ function quizAnswer(pick){
   QS.ans[QS.i]=pick;
   var rec=quizRec(), r=rec[q.id]||{n:0,wrong:0,lastRight:false};
   r.n++; if(!right){ r.wrong=(r.wrong||0)+1; QS.wrong.push(q.id); } r.lastRight=right;
+  /* `.67`：连对计数 —— 知识树的掌握度靠它判断"是蒙对的还是会了" */
+  r.streak=right?((r.streak||0)+1):0;
   r.ts=Date.now(); rec[q.id]=r; quizSaveRec(rec);
 
   var box=document.getElementById("qzBody");
@@ -2676,12 +3187,14 @@ function quizFinish(){
   }else{
     html+='<div class="qzgood">全对，这章可以过了 ✓</div>';
   }
-  var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle;
-  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':'再来一组')+'</button>'
+  var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle, _sec=QS.sec;
+  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':('sec'===_m?'再练这一节':'再来一组'))+'</button>'
        +'<button class="qzquit2" id="qzHome">'+('card'===_m?'关掉':'回频道')+'</button>';
   box.innerHTML=html;
   document.getElementById("qzAgain").addEventListener("click",function(){
-    if('card'===_m) quizStartCard(_cid,_ct); else quizStartChapter(_ch);
+    if('card'===_m) quizStartCard(_cid,_ct);
+    else if('sec'===_m) quizStartSec(_ch,_sec);
+    else quizStartChapter(_ch);
   });
   document.getElementById("qzHome").addEventListener("click",function(){ navBack(); });
   box.scrollTop=0;
@@ -2961,9 +3474,11 @@ function stampDigFirst(list){
 }
 /* 归档条数（kind: "dig" | "qa"）。`.54`：已读要满 12h 才算归档 */
 function archCount(kind){
-  if(kind==="qa"){return loadQA().filter(function(x){var s=qaState(x);return s==="ignored"||(s==="read"&&archDue(x.id));}).length;}
+  /* `.66`：归档入口只有一个，按钮上的数字 = 待挖掘归档 + 问答归档 */
   var read=loadDigRead(),del=loadDigDel();
-  return DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0&&archDue("dig:"+d.q);}).length;
+  var n=DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0&&archDue("dig:"+d.q);}).length;
+  n+=loadQA().filter(function(x){var s=qaState(x);return s==="ignored"||(s==="read"&&archDue(x.id));}).length;
+  return n;
 }
 function _archBtn(id,n){
   var b=document.getElementById(id);if(!b)return;
@@ -3032,32 +3547,9 @@ function renderDigList(){
   }
   var pool=items.filter(function(d){ return kinds.length>1 ? digKindOf(d)===MZ_KIND : true; });
   if(!pool.length){ box.innerHTML='<div class="qempty">这一类暂时没有待挖的线索。已挖过的都在「归档」里。</div>'; return; }
-  var groups=[],idx={};
-  function put(key,order,label,sub){
-    if(!idx[key]){ idx[key]={order:order,label:label,sub:sub,items:[]}; groups.push(idx[key]); }
-    return idx[key];
-  }
-  var SC={情景对话:1,五十音:2,职场日语:3,其他场景:9};
-  pool.forEach(function(d){
-    if(ch==="data"){
-      var c=digChOf(d);
-      if(c) put("c"+c.n,c.n,"第 "+c.n+" 章",c.name).items.push(d);
-      else put("c0",999,"早期卡片","").items.push(d);
-    }else if(ch==="ai"){
-      var _sid=digSrcId(d),mo=digModOf(d);
-      if(/^aiqa/i.test(_sid)) put("mqa",90,"问答回顾","");
-      else if(mo==="其他") put("mzz",99,"早期卡片","");
-      else put("m"+mo,(+mo.slice(1)),"模块 "+mo,"");
-      groups[groups.length-1].items.push(d);
-    }else{
-      var sc=digSceneOf(d);
-      put("s"+sc,(SC[sc]||9),sc,"").items.push(d);
-    }
-  });
-  groups.sort(function(a,b){return a.order-b.order;});
+  var groups=digGroupsOf(pool,ch);
   var h=[];
   groups.forEach(function(g){
-    g.items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
     h.push('<div class="dgrp"><div class="gh"><span class="chn">'+esc(g.label)+'</span>'
       +(g.sub?'<span class="chp">'+esc(g.sub)+'</span>':'')
       +'<span class="badge">'+g.items.length+'</span></div>');
@@ -3070,6 +3562,39 @@ function renderDigList(){
     h.push('</div>');
   });
   box.innerHTML=h.join("");
+}
+/* 把一批线索按「章 / 模块 / 场景」分好组，组内按日期从新到旧。
+   待挖掘列表与归档层共用这一套规则，免得两边分法不一致。 */
+function digGroupsOf(items,ch){
+  var groups=[],idx={};
+  function put(key,order,label,sub){
+    if(!idx[key]){ idx[key]={order:order,label:label,sub:sub,items:[]}; groups.push(idx[key]); }
+    return idx[key];
+  }
+  var SC={情景对话:1,五十音:2,职场日语:3,其他场景:9};
+  (items||[]).forEach(function(d){
+    if(ch==="data"){
+      var c=digChOf(d);
+      if(c) put("c"+c.n,c.n,"第 "+c.n+" 章",c.name).items.push(d);
+      else put("c0",999,"早期卡片","").items.push(d);
+    }else if(ch==="ai"){
+      /* 注意：必须用 put() 的返回值，不能用 groups[groups.length-1]
+         —— 命中已有组时数组长度不变，会把线索塞进别的模块里 */
+      var _sid=digSrcId(d),mo=digModOf(d),g;
+      if(/^aiqa/i.test(_sid)) g=put("mqa",90,"问答回顾","");
+      else if(mo==="其他") g=put("mzz",99,"早期卡片","");
+      else g=put("m"+mo,(+mo.slice(1)),"模块 "+mo,"");
+      g.items.push(d);
+    }else{
+      var sc=digSceneOf(d);
+      put("s"+sc,(SC[sc]||9),sc,"").items.push(d);
+    }
+  });
+  groups.sort(function(a,b){return a.order-b.order;});
+  groups.forEach(function(g){
+    g.items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
+  });
+  return groups;
 }
 /* 待挖掘「已看」记录（本地），角标按未看数显示 */
 var LS_DIGREAD="kb_digread";
@@ -3087,46 +3612,109 @@ function markDigRead(q){
 
 /* ====================== 归档（待挖掘 / 问答 共用全屏层） ====================== */
 var archEl=document.getElementById("arch"),archBodyEl=document.getElementById("archBody");
-var ARCH_KIND="dig";
+/* `.66`：归档不再是一条大杂烩时间线 —— 待挖掘与问答收在同一个层里，
+   但按类型分开摆：顶部一排类型筛选，选中某类再按章 / 模块 / 场景分组。 */
+var ARCH_FILTER="all";   /* all | exam | quiz | ai | jp | qa */
+var ARCH_DEF=[{k:"exam",n:"教材考点"},{k:"quiz",n:"每日一练"},{k:"ai",n:"AI 知识"},{k:"jp",n:"日语学习"},{k:"qa",n:"我的问答"}];
+
+/* 全量归档：待挖掘（已读满 12h、没粉碎）+ 问答（已忽略 / 已读满 12h） */
+function archAll(){
+  var out=[],read=loadDigRead(),del=loadDigDel();
+  DIG.forEach(function(d){
+    if(read.indexOf(d.q)<0)return;
+    if(del.indexOf(d.q)>=0)return;
+    if(!archDue("dig:"+d.q))return;
+    var ds=digSourceDate(d);
+    out.push({t:"dig",k:digKindOf(d),d:d,ts:ds?(Date.parse(ds)||0):0});
+  });
+  loadQA().forEach(function(x){
+    var s=qaState(x);
+    if(s==="ignored"||(s==="read"&&archDue(x.id))) out.push({t:"qa",k:"qa",it:x,ts:x.ts||0});
+  });
+  return out;
+}
 function openArch(kind){
-  ARCH_KIND=(kind==="qa")?"qa":"dig";
+  ARCH_FILTER=(kind==="qa")?"qa":"all";
   renderArch();
   pushNav("arch");_ensureGuard();
   archEl.classList.add("on");
   var sc=archEl.querySelector(".asc");if(sc)sc.scrollTop=0;
 }
 function closeArch(){ archEl.classList.remove("on"); }
+function archDigHTML(d,brief){
+  var dt=digSourceDate(d),flab=digFromLabel(d);
+  /* 按章 / 模块 / 场景筛过之后，组头已经说明来源范围，条目里就不再重复一遍卡标题 */
+  var meta=esc(digDateLabel(dt)||"更早")+((!brief&&flab)?(' · '+esc(flab)):'');
+  return '<div class="aitem tap" data-ak="dig" data-aq="'+esc(d.q)+'" data-dig="'+esc(JSON.stringify({q:d.q,why:d.why,from:d.from,link:d.link}))+'">'
+    +'<div class="aq">'+esc(d.q)+'</div>'
+    +'<div class="am">'+meta+'</div>'
+    +'<button class="arestore" data-ak="dig" data-restore="'+esc(d.q)+'">放回</button></div>';
+}
+function archQaHTML(it){
+  var s=qaState(it);
+  return '<div class="aitem tap" data-ak="qa" data-qa="'+esc(it.id)+'">'
+    +'<div class="aq">'+esc(it.q)+'</div>'
+    +'<div class="am">'+esc(_fmtMD(it.ts)||"更早")+' · '+esc(it.kp||"未分类")+' · '+(s==="ignored"?"已忽略":"已读")+'</div>'
+    +'<button class="arestore" data-ak="qa" data-restore="'+esc(it.id)+'">放回</button></div>';
+}
 function renderArch(){
   if(!archBodyEl)return;
   var title=document.getElementById("archTitle");
-  if(ARCH_KIND==="dig"){
-    if(title)title.textContent="归档 · 待挖掘";
-    var read=loadDigRead(),del=loadDigDel();
-    var items=DIG.filter(function(d){return read.indexOf(d.q)>=0&&del.indexOf(d.q)<0;});
-    items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
-    if(!items.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>在「待挖掘」里点开看过一条线索，它就会自动收到这里。</div>';return;}
-    archBodyEl.innerHTML='<div class="ahint">你已看过、收起来的 '+items.length+' 条线索，一条时间线从新到旧。点一条可重看它的推荐理由与来源；点「放回」可以让它回到「待挖掘」重新排队；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
-      +items.map(function(d){
-        var dt=digSourceDate(d),flab=digFromLabel(d);
-        return '<div class="aitem tap" data-aq="'+esc(d.q)+'" data-dig="'+esc(JSON.stringify({q:d.q,why:d.why,from:d.from,link:d.link}))+'">'
-          +'<div class="aq">'+esc(d.q)+'</div>'
-          +'<div class="am">'+esc(digDateLabel(dt)||"更早")+(flab?' · '+esc(flab):'')+'</div>'
-          +'<button class="arestore" data-restore="'+esc(d.q)+'">放回</button></div>';
-      }).join("");
+  if(title)title.textContent="归档";
+  var all=archAll();
+  if(!all.length){
+    archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>看过、收起来的线索和问答会自动收到这里，并按类型分开摆放。</div>';
     return;
   }
-  if(title)title.textContent="归档 · 问答";
-  var qs=loadQA().filter(function(x){var s=qaState(x);return s==="ignored"||(s==="read"&&archDue(x.id));});
-  qs.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
-  if(!qs.length){archBodyEl.innerHTML='<div class="aempty">归档还是空的。<br>问答里标记为「已读」或「已忽略」的，会自动收到这里。</div>';return;}
-  archBodyEl.innerHTML='<div class="ahint">已读 / 已忽略、收起来的 '+qs.length+' 个问题，一条时间线从新到旧。点一条，就能重看你<b>当初看到的那版详解</b>；点「放回」可以让它回到问答案板；<b>不想要的，按住往右滑可直接粉碎</b>。</div>'
-    +qs.map(function(it){
-      var s=qaState(it);
-      return '<div class="aitem tap" data-qa="'+esc(it.id)+'">'
-        +'<div class="aq">'+esc(it.q)+'</div>'
-        +'<div class="am">'+esc(_fmtMD(it.ts)||"更早")+' · '+esc(it.kp||"未分类")+' · '+(s==="ignored"?"已忽略":"已读")+'</div>'
-        +'<button class="arestore" data-restore="'+esc(it.id)+'">放回</button></div>';
-    }).join("");
+  var cnt={};
+  ARCH_DEF.forEach(function(x){cnt[x.k]=0;});
+  all.forEach(function(x){ if(cnt[x.k]!==undefined)cnt[x.k]++; });
+  var h='<div class="afilters"><button data-af="all" class="'+(ARCH_FILTER==="all"?"on":"")+'">全部<b>'+all.length+'</b></button>';
+  ARCH_DEF.forEach(function(x){
+    if(!cnt[x.k])return;
+    h+='<button data-af="'+x.k+'" class="'+(ARCH_FILTER===x.k?"on":"")+'">'+x.n+'<b>'+cnt[x.k]+'</b></button>';
+  });
+  h+='</div>';
+  var pool=all.filter(function(x){return ARCH_FILTER==="all"?true:x.k===ARCH_FILTER;});
+  if(!pool.length){ archBodyEl.innerHTML=h+'<div class="aempty">这一类暂时没有归档。<br>点上面的「全部」看其他类型。</div>'; return; }
+  h+='<div class="ahint">共 '+all.length+' 条 · 按类型分开摆。点一条可重读；「放回」回到待挖掘 / 问答；<b>按住往右滑可粉碎</b>。</div>';
+  if(ARCH_FILTER==="all"){
+    ARCH_DEF.forEach(function(x){
+      var sub=pool.filter(function(p){return p.k===x.k;});
+      if(!sub.length)return;
+      sub.sort(function(a,b){return b.ts-a.ts;});
+      h+='<div class="asech">'+x.n+'<b>'+sub.length+'</b></div>';
+      sub.forEach(function(p){ h+=(p.t==="dig")?archDigHTML(p.d):archQaHTML(p.it); });
+    });
+  }else if(ARCH_FILTER==="qa"){
+    var gs={},order=[];
+    pool.forEach(function(p){
+      var k=String(p.it.kp||"未分类");
+      if(!gs[k]){ gs[k]=[]; order.push(k); }
+      gs[k].push(p);
+    });
+    order.sort(function(a,b){
+      var ma=0,mb=0;
+      gs[a].forEach(function(x){if(x.ts>ma)ma=x.ts;});
+      gs[b].forEach(function(x){if(x.ts>mb)mb=x.ts;});
+      return mb-ma;
+    });
+    order.forEach(function(k){
+      h+='<div class="asech">'+esc(k)+'<b>'+gs[k].length+'</b></div>';
+      gs[k].sort(function(a,b){return b.ts-a.ts;}).forEach(function(p){ h+=archQaHTML(p.it); });
+    });
+  }else{
+    var ch=(ARCH_FILTER==="ai")?"ai":((ARCH_FILTER==="jp")?"jp":"data");
+    var digs=pool.map(function(p){return p.d;});
+    digGroupsOf(digs,ch).forEach(function(g){
+      h+='<div class="asech">'+esc(g.label)+(g.sub?' <span class="chp">'+esc(g.sub)+'</span>':'')+'<b>'+g.items.length+'</b></div>';
+      g.items.forEach(function(d){ h+=archDigHTML(d,true); });
+    });
+  }
+  archBodyEl.innerHTML=h;
+  /* 选中项自动滚进视野：类型多了一排放不下，筛到后面的类型时不能让自己看不见 */
+  var _onb=archBodyEl.querySelector(".afilters button.on");
+  if(_onb&&_onb.scrollIntoView){ try{ _onb.scrollIntoView({block:"nearest",inline:"center"}); }catch(e){} }
 }
 /* 「放回」：从归档里拿出来，回到主列表 */
 function restoreDig(q){
@@ -3141,11 +3729,14 @@ function restoreQA(id){
 archBodyEl.addEventListener("click",function(e){
   /* 刚做完「向右拖拽」：吃掉紧随而来的这次点击，别顺手把条目打开 */
   if(Date.now()-lastSwipeAt<450)return;
+  /* 类型筛选（全部 / 教材考点 / 每日一练 / AI / 日语 / 我的问答） */
+  var af=e.target.closest("[data-af]");
+  if(af){ ARCH_FILTER=af.getAttribute("data-af"); renderArch(); var sc=archEl.querySelector(".asc"); if(sc)sc.scrollTop=0; return; }
   var rs=e.target.closest("[data-restore]");
   if(rs){e.stopPropagation();var v=rs.getAttribute("data-restore");
-    if(ARCH_KIND==="dig")restoreDig(v);else restoreQA(v);return;}
+    if(rs.getAttribute("data-ak")==="qa")restoreQA(v);else restoreDig(v);return;}
   var it=e.target.closest(".aitem");if(!it)return;
-  if(ARCH_KIND==="dig"){
+  if(it.getAttribute("data-ak")!=="qa"){
     var q=it.getAttribute("data-aq"),d=null;
     /* `.36`：优先用**渲染时钉在 DOM 上**的数据（data-dig）。
        旧版是"点击时再去 DIG 里按文本 q 查一遍"，一旦 DIG 与渲染那一刻不一致
@@ -3635,10 +4226,11 @@ function onSwStart(e){
   else {swEl=null;swArmed=false;}
   var card=e.target.closest(".card[data-id]");
   if(!card){if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}return;}
-  var lp=card.querySelector(".lp");if(!lp)return;
-  var op=document.querySelector(".lp.show"); if(op&&op!==lp)closeLp(op);   /* 长按另一张卡：先把旧面板收掉 */
-  lpId=lp.getAttribute("data-lp");lpStart={x:t.clientX,y:t.clientY};
-  lpTimer=setTimeout(function(){showLp(lp,t);},480);
+  /* `.65`：长按不再弹「打标签 / 移入待挖掘」面板，改成直接进「自查」 */
+  var _scId=card.getAttribute("data-id");
+  var op=document.querySelector(".lp.show"); if(op)closeLp(op);
+  lpId=_scId;lpStart={x:t.clientX,y:t.clientY};
+  lpTimer=setTimeout(function(){ openSelfCheck(_scId); },480);
 }
 function onSwMove(e){
   var t=e.touches[0];
@@ -4060,6 +4652,9 @@ function toast(msg){var el=document.getElementById("toast");el.textContent=msg;e
 
 /* ====================== 初始 ====================== */
 initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));checkAndGenDetails();
+/* `.67`：知识树的掌握度要读题库记录（每题做几次/错几次/连对），所以启动就把题库拉进来，
+   拉完重渲染一次——否则第一次进「知识树」全是「未读」，看着像没生效。 */
+quizLoad(function(){ renderTree(); if(curView==="channels"&&chanDrill&&curChan==="data")renderChanList("data"); });
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 /* 建立历史基线：replaceState 占住当前条目（首页），再压一条「守卫」。
@@ -4156,7 +4751,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.65';
+var _APP_VER_ = '2026-11-19.67';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
