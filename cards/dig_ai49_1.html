@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下钻解答：只靠猜词，AI凭什么能干正经事？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 6px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:17px;margin:22px 0 8px;padding-left:10px;border-left:4px solid var(--accent2)}
+p{margin:10px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;font-size:14px;color:var(--ink2)}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">来自本期 26/32 · 下钻解答</div>
+<h1>只靠"猜下一个词"，AI 凭什么能做翻译、写代码、做总结？</h1>
+
+<p>关键在于：<strong>这些正经事，本身都可以改写成"猜下一个词"。</strong></p>
+
+<p>翻译一句"我爱吃苹果"成英文，最顺的接法大概率接出"I love eating apples"——因为互联网上有几千万对中英对照句，模型在猜词时早就把两种语言的对应关系"接"进去了。总结一段长文，接上"TL;DR:（太长不看版：）"之后最顺口往下接的，就是浓缩版。写代码更明显：给你一堆注明"注释+代码"的例子当上文，接出来的自然就是那段代码。</p>
+
+<p>2019 年 OpenAI 的 GPT-2 论文把这层窗户纸捅破了：一个 15 亿参数、训练目标只有"猜下一个词"的模型，没人专门教它任何任务，却在 8 个语言测试集的 7 个上拿到当时最好成绩，还能答题、翻译、总结。论文标题就叫"语言模型是无监督的多任务学习者"——猜词猜到足够大规模，各种任务就从数据里自己"冒"出来了。</p>
+
+<h2>这对你的实际意义</h2>
+<p>既然任务是"接"出来的，那<strong>提示词就是开关</strong>：你在问题前加"把下面的话翻译成英文"，就是在给接龙定轨道；加"用小学生能懂的话解释"，就是在换接龙的方向。同一个模型，上文不同，它就"变"成翻译机、讲解员或代码助手。</p>
+
+<p>这也顺带解释了为什么有时它答得差：不是模型"笨"，很可能是你的上文没把轨道铺对。先给例子、再给任务，往往比直接下命令管用。</p>
+
+<blockquote>下次用 AI 前，先想想：我要给这段接龙铺一条什么样的轨道？</blockquote>
+
+<div class="note">依据：OpenAI《Language Models are Unsupervised Multitask Learners》（Radford 等，2019）。正文见本期完整卡片 cards/ai49.html。</div>
+</body>
+</html>
