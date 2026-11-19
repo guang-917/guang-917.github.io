@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>延伸 · 乐观加载与悲观加载怎么选</title>
+<style>body{background:#14161a;color:#e6e6e6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;margin:0;padding:24px 16px;}.wrap{max-width:680px;margin:0 auto;}h1{font-size:19px;color:#ffd479;}p{font-size:15px;}</style>
+</head>
+<body><div class="wrap">
+<h1>乐观加载与悲观加载：补一条记录，还是开一个回收区</h1>
+<p>还用中央厨房的话说：进货时发现包装上的标签和你的食材台账对不上号——是先给台账临时记一笔硬着头皮用（乐观），还是把货单独码进「待处理区」等人来核实（悲观）？教材给的答案是两条路都可以，p297：乐观加载策略是「在维度表中增加一条记录，以顺利加载这些事实数据」；悲观加载策略是「创建一个数据回收区，存放无法与维度表关联的事实数据」，并且要告警、跟踪、后续重载。</p>
+<p>什么时候选哪条？数据速度优先、业务能容忍「先记上、后核实」的场景用乐观——比如流水数据急着进仓库供第二天分析；数据准确优先、宁可少进不错进的场景用悲观——比如财务对账类数据。回收区里的数据不是扔了就完：要持续跟踪，等问题查清（比如维度数据补齐）后重新加载进仓库。</p>
+<p>配套的关键动作是<strong>数据修正</strong>：发现已入库的数据错了，不要删除——教材原话说删除会破坏关联表和代理键，「将该条数据的状态设置为“过期”，并将正确的新数据加载进来是更好的选择」（p297）。这条在考试里常和乐观/悲观加载凑成一组选项，记住「补记录 / 进回收区 / 设过期」三个动词，就够拆掉这组题的全部干扰项。</p>
+</div></body></html>
