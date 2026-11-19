@@ -377,6 +377,47 @@ body{
 .dig.done .go{color:var(--ink-3)}
 /* `.54`：待挖掘划线，视觉对齐今日卡（去掉下划线下沉感，用中划线+变淡） */
 .dig.done .q{text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+
+/* ---------- `.59` 练习模式 ---------- */
+#mzPaneQuiz{padding:12px 14px 130px}
+.qzhint{font-size:12.5px;color:var(--ink-3);line-height:1.7;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.qzch{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer}
+.qzch:active{background:var(--bg)}
+.qzch.lock{opacity:.5;cursor:default}
+.qzt{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.qzt b{font-size:14.5px;font-weight:700}
+.qzp{font-size:12px;font-weight:700;color:var(--ai);flex:0 0 auto}
+.qzm{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.qzbar{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-3);margin-bottom:10px}
+.qzquit{background:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--ink-3);font-family:inherit;cursor:pointer}
+.qzstem{font-size:16px;font-weight:700;line-height:1.68;margin-bottom:12px}
+.qzopt{display:flex;gap:10px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;font-size:14.5px;line-height:1.6;color:var(--ink);cursor:pointer;font-family:inherit}
+.qzopt b{color:var(--ink-3);flex:0 0 auto}
+.qzopt:disabled{cursor:default}
+.qzopt.ok{border-color:#2f9e78;background:rgba(47,158,120,.12)}
+.qzopt.ok b{color:#2f9e78}
+.qzopt.no{border-color:#e05a5f;background:rgba(224,90,95,.10)}
+.qzopt.no b{color:#e05a5f}
+.qzres{margin-top:10px;font-weight:800;font-size:14.5px}
+.qzres.r{color:#2f9e78}
+.qzres.w{color:#e05a5f}
+.qzexp{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin:8px 0;font-size:14px;line-height:1.78}
+.qzexp p{margin:0}
+.qzsh{font-size:12px;color:var(--ink-3);letter-spacing:.08em;margin-bottom:4px}
+.qztrap{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);color:#d98324;font-size:13.5px}
+.qzdeep{width:100%;background:none;border:1px dashed var(--ai);color:var(--ai);border-radius:10px;padding:10px;font-size:13.5px;font-weight:600;margin:4px 0 10px;cursor:pointer;font-family:inherit}
+.qzdeep:disabled{opacity:.6}
+.qzai{background:rgba(79,140,255,.08);border-left:3px solid var(--ai);border-radius:0 10px 10px 0;padding:11px 13px;font-size:14px;line-height:1.82;margin:8px 0}
+.qzerr{color:#e05a5f;font-size:13px;margin:6px 0;line-height:1.6}
+.qznext{width:100%;background:var(--ai);color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+.qzquit2{width:100%;background:none;border:1px solid var(--line);color:var(--ink-3);border-radius:10px;padding:10px;font-size:13.5px;margin-top:8px;cursor:pointer;font-family:inherit}
+.qzsum{text-align:center;padding:16px 0 8px}
+.qzn{font-size:34px;font-weight:800;color:var(--ai);line-height:1.2}
+.qza{color:var(--ink-3);font-size:13.5px;margin-top:4px}
+.qzwrong{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin:10px 0}
+.qzwi{font-size:13.5px;line-height:1.65;margin:6px 0;color:var(--ink-2)}
+.qzwi b{color:#e05a5f;margin-right:4px}
+.qzgood{color:#2f9e78;text-align:center;font-weight:700;margin:10px 0 14px;font-size:14.5px}
 .dig .dt{position:absolute;right:13px;top:11px;font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
 /* ---------- 摘要页（第 2 层）：分类标签 + 日期 / 摘要块 / 关键词 ---------- */
 .reader .rmeta{display:flex;align-items:center;gap:8px;margin:2px 0 12px}
@@ -661,7 +702,7 @@ body{
 .ptr.go .ptr-ic{transform:rotate(180deg)}
 .ptr .ptr-ic.spin{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
-#refreshBtn:active{transform:scale(.86)}
+/* `.62`：右上角「刷新」按钮已删（有下拉刷新，按钮多余）。CSS 一并清掉。 */
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-apple.png">
@@ -672,7 +713,6 @@ body{
     <button class="bk" id="backBtn"><span class="ic"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></span></button>
     <div class="tt"><b id="hdrTitle">知识工作台</b><span id="hdrSub">今天 · 10月3日 周六</span></div>
     <button class="tbtn" id="themeBtn" title="切换深色"><span class="ic" id="themeIc"></span></button>
-    <button class="tbtn" id="refreshBtn" title="刷新推送"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></span></button>
   </div>
 </div>
 
@@ -727,11 +767,16 @@ body{
     <div class="mzseg" id="mzSeg">
       <button class="on" data-mz="dig">待挖掘<b id="mzDigN">0</b></button>
       <button data-mz="qa">问答<b id="mzQaN">0</b></button>
+      <button data-mz="quiz">练习</button>
       <button class="archbtn" id="mzArchBtn">归档 <b>0</b> ›</button>
     </div>
     <!-- 子页 A：待挖掘 -->
     <div id="mzPaneDig">
       <div id="digList"></div>
+    </div>
+    <!-- 子页 C：练习（`.59` 新增） -->
+    <div id="mzPaneQuiz" style="display:none">
+      <div id="quizWrap"></div>
     </div>
     <!-- 子页 B：问答 -->
     <div id="mzPaneQa" style="display:none">
@@ -959,8 +1004,8 @@ var backBtn=document.getElementById("backBtn"),tabbar=document.getElementById("t
 var TAB_META={today:["知识工作台","今天 · 10月3日 周六"],channels:["学习频道","三个方向，各有节奏"],tree:["知识树","你走过的路，长成的形状"],mz:["琢磨","有待想透的，也有待问清的"]};
 /* `.44`：原 dig / qa 两个 tab 合并为 mz（琢磨），内置两个子页；旧 key 保留映射，防止旧调用点取不到值 */
 TAB_META.dig=TAB_META.mz; TAB_META.qa=TAB_META.mz;
-var MZ_SUB={dig:["待挖掘","系统攒下的可钻线索"],qa:["问答","针对任意卡片提问，按知识点归组"]};
-var mzSub=(function(){ try{return localStorage.getItem("kb_mzsub")==="qa"?"qa":"dig";}catch(e){return "dig";} })();
+var MZ_SUB={dig:["待挖掘","系统攒下的可钻线索"],qa:["问答","针对任意卡片提问，按知识点归组"],quiz:["练习","选题练手，答完即判，错题可深挖"]};
+var mzSub=(function(){ try{var v=localStorage.getItem("kb_mzsub");return (v==="qa"||v==="quiz")?v:"dig";}catch(e){return "dig";} })();
 var curView="today",chanDrill=false;
 function switchTab(v){
   curView=v;
@@ -2375,17 +2420,171 @@ document.getElementById("qaFilters").addEventListener("click",function(e){
   renderQA();
 });
 /* ===== `.44`：琢磨页 —— 分段切换 / 角标 / 顶部提问条 ===== */
+/* ===== `.59` 练习模式 =====
+   选答案 → 立即判对错 → 出预写解析（离线可看）→ 答错可点「深挖这道」调 AI 做三角度分析。
+   题库：quiz_bank.json（仓库根）；记录：localStorage kb_quiz（每题做过几次 / 错几次 / 上次对错）。 */
+var QUIZ=null, QS=null;
+var LS_QUIZ="kb_quiz";
+function quizRec(){try{return JSON.parse(localStorage.getItem(LS_QUIZ)||"{}")||{};}catch(e){return {};}}
+function quizSaveRec(m){try{localStorage.setItem(LS_QUIZ,JSON.stringify(m));}catch(e){}}
+function quizLoad(cb){
+  if(QUIZ){cb&&cb();return;}
+  fetch("quiz_bank.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+    QUIZ=d||{chapters:{},questions:[]};
+    if(!QUIZ.questions)QUIZ.questions=[];
+    if(!QUIZ.chapters)QUIZ.chapters={};
+    cb&&cb();
+  }).catch(function(){ QUIZ={chapters:{},questions:[]}; if(typeof toast==="function")toast("题库加载失败，检查网络"); cb&&cb(); });
+}
+function quizByCh(ch){ return (QUIZ&&QUIZ.questions?QUIZ.questions:[]).filter(function(q){return String(q.ch)===String(ch);}); }
+function quizQ(id){ var a=(QUIZ&&QUIZ.questions)||[]; for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i]; return null; }
+function quizRender(){
+  if(!QUIZ){ quizLoad(function(){ quizRender(); }); return; }
+  if(QS) quizRenderQ(); else quizRenderHome();
+}
+function quizRenderHome(){
+  var box=document.getElementById("quizWrap"); if(!box)return;
+  var rec=quizRec();
+  var chs=Object.keys(QUIZ.chapters).sort(function(a,b){return (+a)-(+b);});
+  var html='<div class="qzhint">选一章开练：每组 <b>10 题</b>，选完立即判对错，答错可点「深挖这道」让 AI 从三个角度拆给你看。</div>';
+  if(!chs.length){ box.innerHTML=html+'<div class="qzerr">题库还没就绪。</div>'; return; }
+  html+=chs.map(function(ch){
+    var info=QUIZ.chapters[ch], qs=quizByCh(ch), done=0, right=0;
+    qs.forEach(function(q){ var r=rec[q.id]; if(r&&r.n){ done++; if(r.lastRight) right++; } });
+    var ready=!!info.ready&&qs.length>0;
+    var acc=done?Math.round(right/done*100):0;
+    return '<div class="qzch'+(ready?'':' lock')+'" data-ch="'+ch+'">'
+      +'<div class="qzt"><b>第 '+ch+' 章 '+esc(info.name)+'</b><span class="qzp">'+info.points+' 分</span></div>'
+      +'<div class="qzm">'+(ready?('共 '+qs.length+' 题 · 已做 '+done+' · 上次正确率 '+acc+'%'):'即将上线')+'</div>'
+      +'</div>';
+  }).join("");
+  box.innerHTML=html;
+  var cards=box.querySelectorAll(".qzch");
+  for(var i=0;i<cards.length;i++){
+    if(cards[i].classList.contains("lock"))continue;
+    cards[i].addEventListener("click",function(){ quizStart(this.getAttribute("data-ch")); });
+  }
+}
+function quizStart(ch){
+  var qs=quizByCh(ch);
+  if(!qs.length){ toast("这章还没有题"); return; }
+  var rec=quizRec();
+  qs=qs.slice().sort(function(a,b){
+    var ra=rec[a.id]?rec[a.id].n:0, rb=rec[b.id]?rec[b.id].n:0;
+    if(ra!==rb) return ra-rb;                 /* 先出没做过的 */
+    return Math.random()-0.5;
+  });
+  var pick=qs.slice(0,Math.min(10,qs.length));
+  QS={ch:ch, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
+  quizRenderQ();
+}
+function quizRenderQ(){
+  var box=document.getElementById("quizWrap"); if(!box||!QS)return;
+  var q=quizQ(QS.ids[QS.i]); if(!q){ quizFinish(); return; }
+  var html='<div class="qzbar"><span>第 <b>'+(QS.i+1)+'</b> / '+QS.ids.length+' 题</span><button class="qzquit" id="qzQuit">退出</button></div>';
+  html+='<div class="qzstem">'+esc(q.stem)+'</div><div class="qzopts">';
+  q.options.forEach(function(o,i){
+    html+='<button class="qzopt" data-i="'+i+'"><b>'+'ABCD'[i]+'</b><span>'+esc(o)+'</span></button>';
+  });
+  html+='</div><div id="qzAfter"></div>';
+  box.innerHTML=html;
+  document.getElementById("qzQuit").addEventListener("click",function(){ QS=null; quizRenderHome(); });
+  var btns=box.querySelectorAll(".qzopt");
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener("click",function(){ quizAnswer(+this.getAttribute("data-i")); });
+  }
+  window.scrollTo(0,0);
+}
+function quizAnswer(pick){
+  if(!QS||QS.ans[QS.i]!==undefined)return;
+  var q=quizQ(QS.ids[QS.i]);
+  var right=(pick===q.ans);
+  QS.ans[QS.i]=pick;
+  var rec=quizRec(), r=rec[q.id]||{n:0,wrong:0,lastRight:false};
+  r.n++; if(!right){ r.wrong=(r.wrong||0)+1; QS.wrong.push(q.id); } r.lastRight=right;
+  r.ts=Date.now(); rec[q.id]=r; quizSaveRec(rec);
+
+  var box=document.getElementById("quizWrap");
+  var btns=box.querySelectorAll(".qzopt");
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    var k=+btns[i].getAttribute("data-i");
+    if(k===q.ans) btns[i].classList.add("ok");
+    if(k===pick&&!right) btns[i].classList.add("no");
+  }
+  var after=document.getElementById("qzAfter");
+  var html='<div class="qzres '+(right?'r':'w')+'">'+(right?'✓ 答对了':'✗ 答错了 · 正确答案是 '+'ABCD'[q.ans])+'</div>';
+  html+='<div class="qzexp"><div class="qzsh">解析</div><p>'+esc(q.exp||'（这题暂无预写解析）')+'</p>';
+  if(q.trap) html+='<div class="qztrap"><b>陷阱：</b>'+esc(q.trap)+'</div>';
+  html+='</div>';
+  if(!right){
+    html+='<button class="qzdeep" id="qzDeep">深挖这道 · 让 AI 从三个角度拆 →</button><div id="qzDeepBox"></div>';
+  }
+  html+='<button class="qznext" id="qzNext">'+((QS.i+1<QS.ids.length)?'下一题':'看本组结果')+'</button>';
+  after.innerHTML=html;
+  if(!right) document.getElementById("qzDeep").addEventListener("click",function(){ quizDeep(q,pick); });
+  document.getElementById("qzNext").addEventListener("click",function(){
+    if(QS.i+1<QS.ids.length){ QS.i++; quizRenderQ(); } else { quizFinish(); }
+  });
+  after.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function quizDeep(q,pick){
+  var btn=document.getElementById("qzDeep"), box=document.getElementById("qzDeepBox");
+  if(!btn||!box)return;
+  btn.disabled=true; btn.textContent="AI 正在分析…";
+  var prompt="这是一道 DAMA CDGA「数据治理」认证的单选题。\n"
+    +"题干："+q.stem+"\n"
+    +"选项："+q.options.map(function(o,i){return 'ABCD'[i]+'. '+o;}).join("；")+"\n"
+    +"正确答案："+'ABCD'[q.ans]+"（"+q.options[q.ans]+"）\n"
+    +"我选错的是："+'ABCD'[pick]+"（"+q.options[pick]+"）\n"
+    +"教材口径："+(q.exp||"")+"\n\n"
+    +"请针对「我为什么会选错」做多角度分析，严格按三段输出，每段 3~5 句，不要复述题干、不要客套：\n"
+    +"一、我选的这个选项错在哪（只说这个选项本身的问题）\n"
+    +"二、正确选项为什么对（点出教材依据的关键词）\n"
+    +"三、这类题的通用陷阱与区分口诀（下次怎么一眼排掉）";
+  callAI(prompt,"你是 CDGA 备考教练，只讲考生会错的地方，简洁、具体、不废话。",true).then(function(txt){
+    box.innerHTML='<div class="qzai">'+esc(txt).replace(/\n/g,'<br>')+'</div>';
+    btn.textContent="已生成分析";
+  }).catch(function(e){
+    box.innerHTML='<div class="qzerr">AI 暂时不可用：'+esc((e&&e.message)||'网络问题')+'。先看上面的预写解析。</div>';
+    btn.disabled=false; btn.textContent="重试";
+  });
+}
+function quizFinish(){
+  var box=document.getElementById("quizWrap"); if(!box||!QS)return;
+  var n=QS.ids.length, right=0;
+  QS.ans.forEach(function(a,i){ var q=quizQ(QS.ids[i]); if(q&&a===q.ans) right++; });
+  var secs=Math.max(1,Math.round((Date.now()-QS.t0)/1000));
+  var html='<div class="qzsum"><div class="qzn">'+right+' / '+n+'</div>'
+    +'<div class="qza">正确率 '+Math.round(right/n*100)+'% · 用时 '+Math.floor(secs/60)+' 分 '+(secs%60)+' 秒</div></div>';
+  if(QS.wrong.length){
+    html+='<div class="qzwrong"><div class="qzsh">本组错题 '+QS.wrong.length+' 道（已记录）</div>';
+    QS.wrong.forEach(function(id){ var q=quizQ(id); if(q) html+='<div class="qzwi"><b>'+esc('ABCD'[q.ans])+'</b> '+esc(q.stem)+'</div>'; });
+    html+='</div>';
+  }else{
+    html+='<div class="qzgood">全对，这章可以过了 ✓</div>';
+  }
+  html+='<button class="qznext" id="qzAgain">再来一组</button><button class="qzquit2" id="qzHome">回章节列表</button>';
+  box.innerHTML=html;
+  document.getElementById("qzAgain").addEventListener("click",function(){ quizStart(QS.ch); });
+  document.getElementById("qzHome").addEventListener("click",function(){ QS=null; quizRenderHome(); });
+  window.scrollTo(0,0);
+}
 function setMzSub(sub){
-  mzSub=(sub==="qa")?"qa":"dig";
+  mzSub=(sub==="qa"||sub==="quiz")?sub:"dig";
   try{ localStorage.setItem("kb_mzsub",mzSub); }catch(e){}
-  var pd=document.getElementById("mzPaneDig"), pq=document.getElementById("mzPaneQa");
+  var pd=document.getElementById("mzPaneDig"), pq=document.getElementById("mzPaneQa"), pz=document.getElementById("mzPaneQuiz");
   if(pd) pd.style.display=(mzSub==="dig")?"":"none";
   if(pq) pq.style.display=(mzSub==="qa")?"":"none";
+  if(pz) pz.style.display=(mzSub==="quiz")?"":"none";
   var bs=document.querySelectorAll("#mzSeg button");
   for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on",bs[i].getAttribute("data-mz")===mzSub);
   var st=document.getElementById("mzSubText");
   if(st) st.innerHTML=MZ_SUB[mzSub][1];
-  var t=document.getElementById("hdrSub"); if(t) t.textContent=MZ_SUB[mzSub][1];  if(mzSub==="dig") renderDig(); else { checkAndGenDetails(); renderQA(); }
+  var t=document.getElementById("hdrSub"); if(t) t.textContent=MZ_SUB[mzSub][1];
+  if(mzSub==="dig") renderDig();
+  else if(mzSub==="quiz") quizRender();
+  else { checkAndGenDetails(); renderQA(); }
   window.scrollTo(0,0);
 }
 function updateMzBdg(){
@@ -3596,7 +3795,7 @@ function loadFeed(onDone){
 }
 loadFeed();
 
-/* ====================== 下拉刷新 / 手动刷新 ====================== */
+/* ====================== 下拉刷新 ====================== */
 (function(){
   var ptr=document.getElementById('ptr');
   var ptrTx=ptr.querySelector('.ptr-tx');
@@ -3611,7 +3810,7 @@ loadFeed();
     ptrTx.textContent='刷新中…'; ptrIc.classList.add('spin');
     loadFeed(function(){ busy=false; reset(); if(typeof toast==='function')toast('已拉取最新推送'); });
   }
-  var rb=document.getElementById('refreshBtn'); if(rb) rb.addEventListener('click', doRefresh);
+  /* `.62`：右上角刷新按钮已删，只保留下拉刷新这一条入口 */
   document.addEventListener('touchstart', function(e){
     if(busy||!todayActive()||window.scrollY>0) return;
     if(e.target&&e.target.closest&&e.target.closest('.card,.reader,.sheet,.tab,button')) return;
@@ -3644,7 +3843,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-10-25.60';
+var _APP_VER_ = '2026-11-17.62';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
