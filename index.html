@@ -418,8 +418,31 @@ body{
 .qzwi{font-size:13.5px;line-height:1.65;margin:6px 0;color:var(--ink-2)}
 .qzwi b{color:#e05a5f;margin-right:4px}
 .qzgood{color:#2f9e78;text-align:center;font-weight:700;margin:10px 0 14px;font-size:14.5px}
-/* `.63` 追问框 */
-.qzask{display:flex;gap:8px;margin:6px 0 12px}
+/* `.64` 全屏练习层 */
+.qzfull{position:fixed;inset:0;background:var(--bg);z-index:66;transform:translateX(100%);transition:transform .28s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;pointer-events:none}
+.qzfull.on{transform:none;pointer-events:auto}
+.qzftop{display:flex;align-items:center;gap:10px;padding:14px 16px 8px;flex:0 0 auto}
+.qzx{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font-size:14px;font-family:inherit;flex:0 0 auto}
+.qzti{flex:1;text-align:center;font-size:12.5px;color:var(--ink-3);font-weight:700}
+.qfb{flex:1;overflow-y:auto;padding:6px 16px 130px}
+/* `.64` 频道页的练习入口块 */
+.qzentry{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:11px}
+.qzeT{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.qzeTag{font-size:10.5px;padding:2px 7px;border-radius:6px;background:var(--data-soft);color:var(--data);font-weight:800}
+.qzeS{font-size:10.5px;color:var(--ink-3)}
+.qzeH{font-size:15.5px;font-weight:800;margin:0 0 5px}
+.qzeP{font-size:12.5px;color:var(--ink-2);margin:0;line-height:1.6}
+.qzeBar{height:7px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin:9px 0 6px}
+.qzeBar i{display:block;height:100%;background:var(--data)}
+.qzbtn{background:var(--ai);color:#fff;border:none;border-radius:11px;padding:10px 14px;font-size:14px;font-weight:800;width:100%;margin-top:10px;font-family:inherit;cursor:pointer}
+.qzbtn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:8px}
+.qzrow{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.qzrow:active{background:var(--bg-2)}
+.qzrow.lock{opacity:.5;cursor:default}
+.qzrow .l b{display:block;font-size:14px;font-weight:800}
+.qzrow .l span{font-size:11.5px;color:var(--ink-3)}
+.qzrow .r{font-size:11.5px;color:var(--ai);font-weight:800}
+/* `.63` 追问框 */.qzask{display:flex;gap:8px;margin:6px 0 12px}
 .qzaskin{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);font-family:inherit}
 .qzaskin::placeholder{color:var(--ink-3)}
 .qzaskbtn{flex:0 0 auto;background:var(--ink);color:var(--bg);border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
@@ -777,17 +800,13 @@ body{
     <div class="mzseg" id="mzSeg">
       <button class="on" data-mz="dig">待挖掘<b id="mzDigN">0</b></button>
       <button data-mz="qa">问答<b id="mzQaN">0</b></button>
-      <button data-mz="quiz">练习</button>
       <button class="archbtn" id="mzArchBtn">归档 <b>0</b> ›</button>
     </div>
     <!-- 子页 A：待挖掘 -->
     <div id="mzPaneDig">
       <div id="digList"></div>
     </div>
-    <!-- 子页 C：练习（`.59` 新增） -->
-    <div id="mzPaneQuiz" style="display:none">
-      <div id="quizWrap"></div>
-    </div>
+    <!-- `.64`：练习已搬到频道页，琢磨页不再有练习分段 -->
     <!-- 子页 B：问答 -->
     <div id="mzPaneQa" style="display:none">
       <div class="qaWrap">
@@ -806,6 +825,16 @@ body{
       </div>
     </div>
   </section>
+</div>
+
+<!-- `.64` 全屏练习层（频道入口 / 卡片二次左滑 都进这里） -->
+<div class="qzfull" id="qzFull">
+  <div class="qzftop">
+    <button class="qzx" id="qzExit" aria-label="退出练习">✕</button>
+    <div class="qzti" id="qzTitle">练习</div>
+    <div class="qzx" style="visibility:hidden">✕</div>
+  </div>
+  <div class="qfb" id="qzBody"></div>
 </div>
 
 <!-- 底部导航 -->
@@ -1014,8 +1043,8 @@ var backBtn=document.getElementById("backBtn"),tabbar=document.getElementById("t
 var TAB_META={today:["知识工作台","今天 · 10月3日 周六"],channels:["学习频道","三个方向，各有节奏"],tree:["知识树","你走过的路，长成的形状"],mz:["琢磨","有待想透的，也有待问清的"]};
 /* `.44`：原 dig / qa 两个 tab 合并为 mz（琢磨），内置两个子页；旧 key 保留映射，防止旧调用点取不到值 */
 TAB_META.dig=TAB_META.mz; TAB_META.qa=TAB_META.mz;
-var MZ_SUB={dig:["待挖掘","系统攒下的可钻线索"],qa:["问答","针对任意卡片提问，按知识点归组"],quiz:["练习","选题练手，答完即判，错题可深挖"]};
-var mzSub=(function(){ try{var v=localStorage.getItem("kb_mzsub");return (v==="qa"||v==="quiz")?v:"dig";}catch(e){return "dig";} })();
+var MZ_SUB={dig:["待挖掘","系统攒下的可钻线索"],qa:["问答","针对任意卡片提问，按知识点归组"]};
+var mzSub=(function(){ try{return localStorage.getItem("kb_mzsub")==="qa"?"qa":"dig";}catch(e){return "dig";} })();
 var curView="today",chanDrill=false;
 function switchTab(v){
   curView=v;
@@ -1047,7 +1076,7 @@ tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
   /* `.35`：面板/输入条/下钻现在也占历史条目，而切 tab 会 push 并截断历史 → 先同步摘掉它们的栈项 */
-  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill");
+  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose();
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
@@ -1095,7 +1124,7 @@ function pushNav(e){ if(navStack.length&&navStack[navStack.length-1]===e)return;
    策略：统一触发浏览器 back()，让 popstate 成为唯一决策入口——
    这样按钮点击与系统侧滑走同一条路径，行为完全一致、不会两套逻辑打架。 */
 function navBack(){
-  var hasLayer = navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || (curView==="tree"&&treeMode==="shuli"&&shuliDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on")) || (srSheet&&srSheet.classList.contains("on"));
+  var hasLayer = qzOn() || navStack.length>1 || !!document.querySelector(".lp.show") || (curView==="channels"&&chanDrill) || (curView==="tree"&&treeMode==="shuli"&&shuliDrill) || reader.classList.contains("on") || sheet.classList.contains("on") || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on")) || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on")) || (srSheet&&srSheet.classList.contains("on"));
   if(!hasLayer) return;   // 首页：交给历史哨兵/popstate 处理（会弹提示），这里不直接退桌
   var _t0=Date.now();          /* 本次 back 发起的时刻：兜底判据的基准线 */
   clearTimeout(_nbWatch);
@@ -1161,6 +1190,7 @@ function _clearGuardSoon(){ try{ _guardTimers.forEach(clearTimeout); }catch(e){}
      ② 只 splice 导航栈、不还条目 → 用户按返回时「多退一层」（栈被提前 pop）。
    ⚠ 真机上这正是继"返回后补 pushState 假成功"之后的第二个坑。（`.35` 审计发现） */
 var _silentBack=0;
+function qzOn(){ var e=document.getElementById("qzFull"); return !!(e&&e.classList.contains("on")); }
 function _dropNav(name){ var k=navStack.lastIndexOf(name); if(k>=0)navStack.splice(k,1); }
 function _closeLayerByCode(name, closeFn){
   var i=navStack.lastIndexOf(name);
@@ -1201,7 +1231,8 @@ window.addEventListener("popstate",function(){
               || reader.classList.contains("on") || sheet.classList.contains("on")
               || (archEl&&archEl.classList.contains("on")) || (cdlg&&cdlg.classList.contains("on"))
               || (jpRead&&jpRead.classList.contains("on")) || (askFab&&askFab.classList.contains("on"))
-              || (srSheet&&srSheet.classList.contains("on"));
+              || (srSheet&&srSheet.classList.contains("on"))
+              || qzOn();
   if(hasLayer){
     navBackFromPop();     // 做一次界面回退
     _guardSoon();         // 补回守卫（多拍，防真机手势期间 pushState 被忽略），App 不退，还能继续逐级退
@@ -1226,6 +1257,7 @@ function navBackFromPop(){
   /* `.35`：长按面板 / 提问输入条 / 频道下钻 / 梳理下钻 —— 这四类界面现在也各占一条**真实历史条目**，
      所以按「栈顶匹配」pop 掉自己那一层。
      （旧版它们不占条目 → 真机上"用返回收起它"会白吃上一层的历史，累积后提前掉出 App。） */
+  if(top==="qzFull"){ navStack.pop(); qzClose(); return; }
   if(top==="lp"){ navStack.pop(); var _lp0=document.querySelector(".lp.show"); if(_lp0)closeLp(_lp0); return; }
   if(top==="askFab"){ navStack.pop(); closeAskFab(); return; }
   if(top==="chanDrill"){
@@ -1381,7 +1413,15 @@ function renderChanList(ch){
       +'<div class="meta"><span>'+esc(c.date2)+'</span>'+(c.star?'<span class="star on">'+ICON.star+'</span>':'<span class="star">'+ICON.star+'</span>')+'</div>'+lpHTML(c.id)+'</div>');
   }
   if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
-  body.innerHTML=h.join("");
+  /* `.64`：数据频道顶部插入「练习」入口（途径二 · 按章刷题） */
+  var _qz="";
+  if(ch==="data"){
+    _qz=quizEntryHTML();
+    body.innerHTML=_qz+h.join("");
+    bindQuizEntry(body);
+  }else{
+    body.innerHTML=h.join("");
+  }
   fitTagLines(body);
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
@@ -2433,13 +2473,16 @@ document.getElementById("qaFilters").addEventListener("click",function(e){
 /* ===== `.59` 练习模式 =====
    选答案 → 立即判对错 → 出预写解析（离线可看）→ 答错可点「深挖这道」调 AI 做三角度分析。
    题库：quiz_bank.json（仓库根）；记录：localStorage kb_quiz（每题做过几次 / 错几次 / 上次对错）。 */
-var QUIZ=null, QS=null;
+var QUIZ=null, QUIZCARDS=null, QS=null;
 var LS_QUIZ="kb_quiz";
 function quizRec(){try{return JSON.parse(localStorage.getItem(LS_QUIZ)||"{}")||{};}catch(e){return {};}}
 function quizSaveRec(m){try{localStorage.setItem(LS_QUIZ,JSON.stringify(m));}catch(e){}}
 function quizLoad(cb){
   if(QUIZ){cb&&cb();return;}
-  fetch("quiz_bank.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+  fetch("quiz_cards.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(m){
+    QUIZCARDS=m||{};
+  }).catch(function(){ QUIZCARDS={}; }).then(function(){
+  return fetch("quiz_bank.json?v="+Date.now(),{cache:"no-store"});}).then(function(r){return r&&r.ok?r.json():null;}).then(function(d){
     QUIZ=d||{chapters:{},questions:[]};
     if(!QUIZ.questions)QUIZ.questions=[];
     if(!QUIZ.chapters)QUIZ.chapters={};
@@ -2448,34 +2491,55 @@ function quizLoad(cb){
 }
 function quizByCh(ch){ return (QUIZ&&QUIZ.questions?QUIZ.questions:[]).filter(function(q){return String(q.ch)===String(ch);}); }
 function quizQ(id){ var a=(QUIZ&&QUIZ.questions)||[]; for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i]; return null; }
-function quizRender(){
-  if(!QUIZ){ quizLoad(function(){ quizRender(); }); return; }
-  if(QS) quizRenderQ(); else quizRenderHome();
-}
-function quizRenderHome(){
-  var box=document.getElementById("quizWrap"); if(!box)return;
-  var rec=quizRec();
-  var chs=Object.keys(QUIZ.chapters).sort(function(a,b){return (+a)-(+b);});
-  var html='<div class="qzhint">选一章开练：每组 <b>10 题</b>，选完立即判对错，答错可点「深挖这道」让 AI 从三个角度拆给你看。</div>';
-  if(!chs.length){ box.innerHTML=html+'<div class="qzerr">题库还没就绪。</div>'; return; }
-  html+=chs.map(function(ch){
-    var info=QUIZ.chapters[ch], qs=quizByCh(ch), done=0, right=0;
-    qs.forEach(function(q){ var r=rec[q.id]; if(r&&r.n){ done++; if(r.lastRight) right++; } });
-    var ready=!!info.ready&&qs.length>0;
+/* `.64`：练习不再有独立「首页」——章节列表搬到频道页，这里只负责进全屏练习层 */
+function quizOpenTitle(t){ var e=document.getElementById("qzTitle"); if(e) e.textContent=t; }
+/* `.64`：频道页里的练习入口（数据频道专用） */
+function quizEntryHTML(){
+  if(!QUIZ) return '<div class="qzentry"><div class="qzeT"><span class="qzeTag">练习</span><span class="qzeS">途径二 · 按章刷题</span></div><p class="qzeP">题库加载中…</p></div>';
+  var rec=quizRec(), chs=Object.keys(QUIZ.chapters).sort(function(a,b){return (+a)-(+b);});
+  var ready=chs.filter(function(c){return QUIZ.chapters[c].ready&&quizByCh(c).length>0;});
+  var lastCh=null,lastTs=0;
+  Object.keys(rec).forEach(function(qid){var q=quizQ(qid);var t=(rec[qid]||{}).ts||0;if(q&&t>lastTs){lastTs=t;lastCh=String(q.ch);}});
+  if(!lastCh||ready.indexOf(lastCh)<0) lastCh=ready.length?ready[0]:null;
+  var html='';
+  if(lastCh){
+    var qs=quizByCh(lastCh),done=0,right=0;
+    qs.forEach(function(q){var r=rec[q.id];if(r&&r.n){done++;if(r.lastRight)right++;}});
     var acc=done?Math.round(right/done*100):0;
-    return '<div class="qzch'+(ready?'':' lock')+'" data-ch="'+ch+'">'
-      +'<div class="qzt"><b>第 '+ch+' 章 '+esc(info.name)+'</b><span class="qzp">'+info.points+' 分</span></div>'
-      +'<div class="qzm">'+(ready?('共 '+qs.length+' 题 · 已做 '+done+' · 上次正确率 '+acc+'%'):'即将上线')+'</div>'
-      +'</div>';
-  }).join("");
-  box.innerHTML=html;
-  var cards=box.querySelectorAll(".qzch");
-  for(var i=0;i<cards.length;i++){
-    if(cards[i].classList.contains("lock"))continue;
-    cards[i].addEventListener("click",function(){ quizStart(this.getAttribute("data-ch")); });
+    var tot=0,doneAll=0,rightAll=0;
+    ready.forEach(function(c){var q2=quizByCh(c);tot+=q2.length;q2.forEach(function(q){var r2=rec[q.id];if(r2&&r2.n){doneAll++;if(r2.lastRight)rightAll++;}});});
+    var accAll=doneAll?Math.round(rightAll/doneAll*100):0;
+    html+='<div class="qzentry"><div class="qzeT"><span class="qzeTag">练习</span><span class="qzeS">途径二 · 按章刷题</span></div>'
+      +'<div class="qzeH">已开放 '+ready.length+' 章 · 共 '+tot+' 题</div>'
+      +'<p class="qzeP">已做 '+doneAll+' 题 · 正确率 '+accAll+'%</p>'
+      +'<div class="qzeBar"><i style="width:'+Math.min(100,Math.round(doneAll/Math.max(1,tot)*100))+'%"></i></div>'
+      +'<button class="qzbtn" data-qch="'+lastCh+'">'+(doneAll?'继续练 · 第 '+lastCh+' 章':'开始练 · 第 '+lastCh+' 章')+'</button></div>';
   }
+  html+=chs.map(function(c){
+    var info=QUIZ.chapters[c],qs=quizByCh(c),done=0,right=0;
+    qs.forEach(function(q){var r=rec[q.id];if(r&&r.n){done++;if(r.lastRight)right++;}});
+    var rdy=!!info.ready&&qs.length>0;
+    var acc=done?Math.round(right/done*100):0;
+    return '<div class="qzrow'+(rdy?'':' lock')+'"'+(rdy?' data-qch="'+c+'"':'')+'>'
+      +'<div class="l"><b>第 '+c+' 章 '+esc(info.name)+'</b><span>'+(rdy?('共 '+qs.length+' 题 · 已做 '+done+' · 正确率 '+acc+'%'):'即将上线')+'</span></div>'
+      +'<div class="r">'+(rdy?'开始 ›':'')+'</div></div>';
+  }).join("");
+  return html;
 }
-function quizStart(ch){
+function bindQuizEntry(root){
+  if(!root)return;
+  root.addEventListener("click",function(e){
+    var el=e.target.closest("[data-qch]"); if(!el)return;
+    e.stopPropagation();
+    quizStartChapter(el.getAttribute("data-qch"));
+  });
+  if(!QUIZ){ quizLoad(function(){ if(curView==="channels"&&chanDrill&&curChan==="data") renderChanList("data"); }); }
+}
+function qzOpen(){ var e=document.getElementById("qzFull"); if(!e)return; e.classList.add("on"); pushNav("qzFull"); _ensureGuard(); }
+function qzClose(){ var e=document.getElementById("qzFull"); if(e)e.classList.remove("on"); QS=null; }
+/* `.64`：✕ 走统一的 navBack（与系统返回手势同一条路径，避免两套逻辑） */
+document.getElementById("qzExit").addEventListener("click",function(){ navBack(); });
+function quizStartChapter(ch){
   var qs=quizByCh(ch);
   if(!qs.length){ toast("这章还没有题"); return; }
   var rec=quizRec();
@@ -2485,25 +2549,38 @@ function quizStart(ch){
     return Math.random()-0.5;
   });
   var pick=qs.slice(0,Math.min(10,qs.length));
-  QS={ch:ch, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
-  quizRenderQ();
+  QS={mode:"ch",ch:ch, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
+  quizOpenTitle("第 "+ch+" 章 · "+((QUIZ.chapters[ch]||{}).name||""));
+  qzOpen(); quizRenderQ();
+}
+function quizCardIds(cardId){
+  var m=(QUIZCARDS&&QUIZCARDS[cardId])||[];
+  return m.filter(function(id){ return !!quizQ(id); });
+}
+function quizHasCard(cardId){ return quizCardIds(cardId).length>0; }
+function quizStartCard(cardId,cardTitle){
+  var ids=quizCardIds(cardId);
+  if(!ids.length){ toast("这张卡还没配题"); return; }
+  QS={mode:"card",ch:(quizQ(ids[0])||{}).ch,cardId:cardId,cardTitle:cardTitle, ids:ids, i:0, ans:[], t0:Date.now(), wrong:[]};
+  quizOpenTitle("这张卡 · "+String(cardTitle||"").replace(/^CDGA[^｜]*｜\s*/,"").slice(0,18));
+  qzOpen(); quizRenderQ();
 }
 function quizRenderQ(){
-  var box=document.getElementById("quizWrap"); if(!box||!QS)return;
+  var box=document.getElementById("qzBody"); if(!box||!QS)return;
   var q=quizQ(QS.ids[QS.i]); if(!q){ quizFinish(); return; }
-  var html='<div class="qzbar"><span>第 <b>'+(QS.i+1)+'</b> / '+QS.ids.length+' 题</span><button class="qzquit" id="qzQuit">退出</button></div>';
+  quizOpenTitle("第 "+(QS.i+1)+" / "+QS.ids.length+" 题"+(QS.mode==="card"?" · 这张卡":" · 第 "+QS.ch+" 章"));
+  var html='';
   html+='<div class="qzstem">'+esc(q.stem)+'</div><div class="qzopts">';
   q.options.forEach(function(o,i){
     html+='<button class="qzopt" data-i="'+i+'"><b>'+'ABCD'[i]+'</b><span>'+esc(o)+'</span></button>';
   });
   html+='</div><div id="qzAfter"></div>';
   box.innerHTML=html;
-  document.getElementById("qzQuit").addEventListener("click",function(){ QS=null; quizRenderHome(); });
   var btns=box.querySelectorAll(".qzopt");
   for(var i=0;i<btns.length;i++){
     btns[i].addEventListener("click",function(){ quizAnswer(+this.getAttribute("data-i")); });
   }
-  window.scrollTo(0,0);
+  box.scrollTop=0;
 }
 function quizAnswer(pick){
   if(!QS||QS.ans[QS.i]!==undefined)return;
@@ -2514,7 +2591,7 @@ function quizAnswer(pick){
   r.n++; if(!right){ r.wrong=(r.wrong||0)+1; QS.wrong.push(q.id); } r.lastRight=right;
   r.ts=Date.now(); rec[q.id]=r; quizSaveRec(rec);
 
-  var box=document.getElementById("quizWrap");
+  var box=document.getElementById("qzBody");
   var btns=box.querySelectorAll(".qzopt");
   for(var i=0;i<btns.length;i++){
     btns[i].disabled=true;
@@ -2564,7 +2641,8 @@ function quizDeep(q,pick){
   });
 }
 function quizFinish(){
-  var box=document.getElementById("quizWrap"); if(!box||!QS)return;
+  var box=document.getElementById("qzBody"); if(!box||!QS)return;
+  quizOpenTitle("本组结果");
   var n=QS.ids.length, right=0;
   QS.ans.forEach(function(a,i){ var q=quizQ(QS.ids[i]); if(q&&a===q.ans) right++; });
   var secs=Math.max(1,Math.round((Date.now()-QS.t0)/1000));
@@ -2577,11 +2655,15 @@ function quizFinish(){
   }else{
     html+='<div class="qzgood">全对，这章可以过了 ✓</div>';
   }
-  html+='<button class="qznext" id="qzAgain">再来一组</button><button class="qzquit2" id="qzHome">回章节列表</button>';
+  var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle;
+  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':'再来一组')+'</button>'
+       +'<button class="qzquit2" id="qzHome">'+('card'===_m?'关掉':'回频道')+'</button>';
   box.innerHTML=html;
-  document.getElementById("qzAgain").addEventListener("click",function(){ quizStart(QS.ch); });
-  document.getElementById("qzHome").addEventListener("click",function(){ QS=null; quizRenderHome(); });
-  window.scrollTo(0,0);
+  document.getElementById("qzAgain").addEventListener("click",function(){
+    if('card'===_m) quizStartCard(_cid,_ct); else quizStartChapter(_ch);
+  });
+  document.getElementById("qzHome").addEventListener("click",function(){ navBack(); });
+  box.scrollTop=0;
 }
 /* `.63`：答完题后的「我还要问」追问框（可多轮，带上下文） */
 function quizAskBind(q,pick){
@@ -2616,19 +2698,17 @@ function quizAskBind(q,pick){
   inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); send(); } });
 }
 function setMzSub(sub){
-  mzSub=(sub==="qa"||sub==="quiz")?sub:"dig";
+  mzSub=(sub==="qa")?"qa":"dig";
   try{ localStorage.setItem("kb_mzsub",mzSub); }catch(e){}
-  var pd=document.getElementById("mzPaneDig"), pq=document.getElementById("mzPaneQa"), pz=document.getElementById("mzPaneQuiz");
+  var pd=document.getElementById("mzPaneDig"), pq=document.getElementById("mzPaneQa");
   if(pd) pd.style.display=(mzSub==="dig")?"":"none";
   if(pq) pq.style.display=(mzSub==="qa")?"":"none";
-  if(pz) pz.style.display=(mzSub==="quiz")?"":"none";
   var bs=document.querySelectorAll("#mzSeg button");
   for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on",bs[i].getAttribute("data-mz")===mzSub);
   var st=document.getElementById("mzSubText");
   if(st) st.innerHTML=MZ_SUB[mzSub][1];
   var t=document.getElementById("hdrSub"); if(t) t.textContent=MZ_SUB[mzSub][1];
   if(mzSub==="dig") renderDig();
-  else if(mzSub==="quiz") quizRender();
   else { checkAndGenDetails(); renderQA(); }
   window.scrollTo(0,0);
 }
@@ -3431,7 +3511,13 @@ function endSwipe(fire){
   swArmed=false;swOn=false;swReady=false;swLeft=false;swEl=null;
   lastSwipeAt=Date.now();                 /* 记一笔：紧接着的那次 click 要吃掉，别顺手把卡片打开 */
   if(left){                               /* 左滑：够门槛 → 翻面盖「已读」章；不够 → 弹回 */
-    if(ready&&fire)flipRead(el); else springBackFlip(el);
+    if(ready&&fire){
+      /* `.64`：已经读过 + 这张卡配了题 → 再滑一次直接进这张卡的练习 */
+      var _cid=el.getAttribute("data-id");
+      var _c=_cid?getCard(_cid):null;
+      if(_c&&_c.read&&quizHasCard(_cid)){ quizStartCard(_cid,_c.title); return; }
+      flipRead(el);
+    } else springBackFlip(el);
     return;
   }
   if(ready&&fire)askCrush(el); else springBack(el);
@@ -3840,6 +3926,9 @@ function loadFeed(onDone){
 }
 loadFeed();
 
+/* `.64`：启动就把题库拉下来（左滑「已读卡」要立刻判断这张卡有没有配题） */
+quizLoad(function(){});
+
 /* ====================== 下拉刷新 ====================== */
 (function(){
   var ptr=document.getElementById('ptr');
@@ -3888,7 +3977,7 @@ loadFeed();
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.63';
+var _APP_VER_ = '2026-11-19.64';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
