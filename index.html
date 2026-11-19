@@ -195,10 +195,11 @@ body{
 
 /* ---------- 频道门户 ---------- */
 .chan{display:flex;align-items:center;gap:14px;padding:18px 16px}
-.chan .ic{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+.chan .ic{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none;margin:0;padding:0}
 .chan .ic.ai{background:var(--ai-soft);color:var(--ai)}
 .chan .ic.data{background:var(--data-soft);color:var(--data)}
 .chan .ic.jp{background:var(--jp-soft);color:var(--jp)}
+.chan .ic.icqa{background:var(--gold-soft);color:var(--gold)}
 .chan .ct{flex:1;min-width:0}
 .chan .ct b{font-size:15.5px;font-weight:600;display:block}
 .chan .ct span{font-size:12px;color:var(--ink-3)}
@@ -361,7 +362,7 @@ body{
 /* 编辑抽屉的样式已随「编辑」功能一起移除（`.38`） */
 
 /* ---------- 待挖掘 ---------- */
-.dgrp{margin-bottom:16px}
+.dgrp{margin-bottom:22px}
 .dgrp .gh{font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.06em;margin:0 2px 9px;display:flex;align-items:center;gap:7px}
 .dgrp .gh .badge{background:var(--gold-soft);color:var(--gold);border-radius:20px;padding:1px 8px;font-size:11px}
 .dig{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden;cursor:pointer;transition:transform .15s var(--spring),box-shadow .15s}
@@ -615,6 +616,25 @@ body{
 .mzseg button.on{color:var(--ai);border-bottom-color:var(--ai);font-weight:800}
 .mzseg button b{font-size:10.5px;background:var(--card-2);border-radius:999px;padding:1px 6px;color:var(--ink-3);font-weight:700}
 .mzseg button.on b{background:var(--ai-soft);color:var(--ai)}
+/* ===== `.65` 琢磨：分类门户 + 学科下钻 ===== */
+.mzphd{font-size:12px;color:var(--ink-3);font-weight:600;letter-spacing:.03em;margin:16px 2px 8px}
+.mzphd:first-child{margin-top:6px}
+.mzportal{display:flex;flex-direction:column;gap:10px}
+.mzch .ct{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mzch .ct b{font-size:15px}
+.mzch .ct span{font-size:11.5px;color:var(--ink-3);display:block;white-space:normal;line-height:1.45}
+.mzfoot{margin-top:16px}
+.mzfoot button{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--card-2);border:1px solid var(--line-2);border-radius:12px;padding:11px 14px;font-size:13px;color:var(--ink-2);font-weight:600;font-family:inherit;cursor:pointer}
+.mzfoot button.dim{opacity:.6}
+.mzchhd{display:flex;align-items:baseline;gap:8px;margin:12px 2px 0}
+.mzchhd b{font-size:15px;color:var(--ink)}
+.mzchhd span{font-size:12px;color:var(--ink-3)}
+.dgrp .gh .chn{font-weight:700;color:var(--ink)}
+.dgrp .gh .chp{color:var(--ink-3);font-weight:400;font-size:11.5px}
+/* 分组后卡上不再挂分类标签：问题在上、日期在下 */
+.dig.nochip{padding:13px 15px 11px}
+.dig .dfoot{font-size:10.5px;color:var(--ink-3);margin-top:7px;letter-spacing:.02em}
+#mzKindSeg{margin:10px 0 12px}
 /* 提问后当场显示 AI 答案的区域（原先要等约 1 小时） */
 .qaans{background:var(--card-2);border-left:3px solid var(--ai);border-radius:var(--r-sm);padding:10px 12px;font-size:13.5px;line-height:1.75;color:var(--ink);white-space:pre-wrap;word-break:break-word;margin-top:10px;max-height:46vh;overflow:auto}
 .qaans.wait{border-left-color:var(--ink-3);color:var(--ink-2)}
@@ -643,7 +663,7 @@ body{
 .qstat b{color:var(--ink);font-weight:700}
 .qfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 /* `.46`：筛选按钮带数字角标（统计条已删，数字挪到这里） */
-.qfilters .filter{display:inline-flex;align-items:center;gap:5px}
+.qfilters .filter{display:inline-flex;align-items:center;gap:5px;margin-left:0}
 .qfilters .filter b{font-size:10.5px;font-weight:700;line-height:1.5;background:var(--line);color:var(--ink-3);border-radius:999px;padding:0 6px;min-width:18px;text-align:center}
 .qfilters .filter.on b{background:rgba(255,255,255,.3);color:#fff}
 .qnew{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:12px}
@@ -796,18 +816,14 @@ body{
       <button id="mzAskGo" aria-label="提问">问</button>
     </div>
     <div class="qaans" id="mzAskAns" style="display:none"></div>
-    <!-- 分段切换 + 归档（`.45`：归档从独立 viewbar 挪到这一行，靠右） -->
-    <div class="mzseg" id="mzSeg">
-      <button class="on" data-mz="dig">待挖掘<b id="mzDigN">0</b></button>
-      <button data-mz="qa">问答<b id="mzQaN">0</b></button>
-      <button class="archbtn" id="mzArchBtn">归档 <b>0</b> ›</button>
-    </div>
-    <!-- 子页 A：待挖掘 -->
-    <div id="mzPaneDig">
+    <!-- 第一级：分类门户（学科 + 我的问答 + 归档） -->
+    <div id="mzPortal"></div>
+    <!-- 第二级 A：某学科下的待挖掘（形态切换 + 按章/模块/场景分组） -->
+    <div id="mzPaneDig" style="display:none">
+      <div class="mzseg" id="mzKindSeg"></div>
       <div id="digList"></div>
     </div>
-    <!-- `.64`：练习已搬到频道页，琢磨页不再有练习分段 -->
-    <!-- 子页 B：问答 -->
+    <!-- 第二级 B：问答 -->
     <div id="mzPaneQa" style="display:none">
       <div class="qaWrap">
         <!-- `.47`：筛选改为 全部 / 待生成 / 已推送 / 未读（原「归档」并入「未读」） -->
@@ -946,6 +962,7 @@ var ICON={
  star:'<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>',
  tag:'<svg viewBox="0 0 24 24"><path d="M3.5 11.5l7.5-7.5a2 2 0 0 1 1.4-.6h6.2a2 2 0 0 1 2 2v6.2a2 2 0 0 1-.6 1.4l-7.5 7.5a2 2 0 0 1-2.8 0l-6-6a2 2 0 0 1 0-2.9z"/><circle cx="15.5" cy="8.5" r="1.4"/></svg>',
  list:'<svg viewBox="0 0 24 24"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>',
+ qa:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1.1 1-1.1 1.8v.3"/><circle cx="12" cy="17.2" r=".9"/></svg>',
   map:'<svg viewBox="0 0 24 24"><path d="M9 3.5 4 6v14l5-2.5 6 2.5 5-2.5V3.5L14 6 9 3.5z"/><path d="M9 3.5v14"/><path d="M14 6v14"/></svg>',
   crush:'<svg viewBox="0 0 24 24"><path d="M12 2.5l1.9 5.1 5.1-1.9-1.9 5.1 5.1 1.9-5.1 1.9 1.9 5.1-5.1-1.9-1.9 5.1-1.9-5.1-5.1 1.9 1.9-5.1-5.1-1.9 5.1-1.9-1.9-5.1 5.1 1.9z"/></svg>'
 };
@@ -1067,7 +1084,7 @@ function switchTab(v){
     var _cs=document.getElementById("chanSearch"),_cclr=document.getElementById("chanClr"),_csr=document.getElementById("searchRes");
     if(_cs)_cs.value=""; if(_cclr)_cclr.style.display="none"; if(_csr){_csr.style.display="none";_csr.innerHTML="";}
   }
-  if(v==="mz"){ setMzSub(mzSub); updateMzBdg(); }
+  if(v==="mz"){ setMzLv("portal"); updateMzBdg(); }
   setBk(false);
   cancelScrollFix();   /* 切页是"整页换新"，本来就该从顶部开始：作废上一张卡的返回复位 */
   window.scrollTo(0,0);
@@ -1266,6 +1283,8 @@ function navBackFromPop(){
     document.getElementById("chanList").style.display="none";
     hdrSub.textContent=TAB_META.channels[1]; setBk(false); cancelScrollFix(); window.scrollTo(0,0); return;
   }
+  /* `.65`：琢磨下钻（学科 / 问答）→ 回分类门户 */
+  if(top==="mzDrill"){ navStack.pop(); setMzLv("portal"); cancelScrollFix(); window.scrollTo(0,0); return; }
   if(top==="shuliDrill"){ navStack.pop(); shuliDrill=null; renderShuli(); cancelScrollFix(); window.scrollTo(0,0); return; }
   /* 兜底：栈里没登记、但面板 / 输入条还开着（异常态）→ 至少收掉它，别把人挡着 */
   var _lp0=document.querySelector(".lp.show");
@@ -2417,6 +2436,8 @@ function renderQA(){
      已读但未满 12h 的仍留在主列表（带划线 done 态）。 */
   function isArch(x){var s=qaState(x);if(s==="ignored")return true;if(s==="read")return archDue(x.id);return false;}
   var live=all.filter(function(x){return !isArch(x);});
+  var _qh=document.getElementById("hdrSub");
+  if(_qh&&MZ_LV==="qa") _qh.textContent=live.length+" 问待看 · 按知识点归组";
   var ng=all.filter(function(x){return qaState(x)==="pending";}).length;
   var pg=all.filter(function(x){return qaState(x)==="pushed";}).length;
   var ag=archCount(mzSub);
@@ -2697,20 +2718,103 @@ function quizAskBind(q,pick){
   btn.addEventListener("click",send);
   inp.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); send(); } });
 }
-function setMzSub(sub){
-  mzSub=(sub==="qa")?"qa":"dig";
-  try{ localStorage.setItem("kb_mzsub",mzSub); }catch(e){}
-  var pd=document.getElementById("mzPaneDig"), pq=document.getElementById("mzPaneQa");
-  if(pd) pd.style.display=(mzSub==="dig")?"":"none";
-  if(pq) pq.style.display=(mzSub==="qa")?"":"none";
-  var bs=document.querySelectorAll("#mzSeg button");
-  for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on",bs[i].getAttribute("data-mz")===mzSub);
-  var st=document.getElementById("mzSubText");
-  if(st) st.innerHTML=MZ_SUB[mzSub][1];
-  var t=document.getElementById("hdrSub"); if(t) t.textContent=MZ_SUB[mzSub][1];
-  if(mzSub==="dig") renderDig();
-  else { checkAndGenDetails(); renderQA(); }
+/* ============ `.65` 琢磨：分类门户 + 学科下钻 ============
+   第一级 = 门户（数据 / AI / 日语 / 我的问答 / 归档）
+   第二级 = 某学科下的待挖掘；数据再按形态（教材考点 / 每日一练）分，
+            组内按章 / 模块 / 场景归组，一类只出现一种卡。 */
+var MZ_LV="portal", MZ_KIND="exam";
+try{ var _mk0=localStorage.getItem("kb_mzkind"); if(_mk0==="quiz"||_mk0==="exam") MZ_KIND=_mk0; }catch(e){}
+
+/* 线索来自哪张卡（dig.link 形如 cards/dig_qp04_1.html） */
+function digSrcId(d){
+  var m=/dig_([A-Za-z0-9]+)_\d+\.html/.exec(String((d&&d.link)||""));
+  if(m) return m[1];
+  return String((d&&d.from)||"").replace(/^(来自|深挖)[:：]\s*/,"").trim();
+}
+/* 形态：exam 教材考点 / quiz 每日一练 / ai AI 资讯 / jp 日语 */
+function digKindOf(d){
+  var id=digSrcId(d);
+  if(/^qp/i.test(id)) return "quiz";
+  var ch=normCh(d&&d.ch);
+  if(ch==="ai") return "ai";
+  if(ch==="jp") return "jp";
+  return "exam";
+}
+function digSrcCard(d){
+  /* 先按 link 里的源卡 id 精确找，再退回 from（from 常写「第 3 期」这类期号，找不到卡） */
+  var id=digSrcId(d),cs=CARDS||[];
+  if(id){ for(var i=0;i<cs.length;i++){ if(String(cs[i].id)===id) return cs[i]; } }
+  var m=digFromMatch(d); return (m&&m.card)||null;
+}
+/* 第 N 章（源卡标题里就有，如「CDGA｜第11章 数据仓库和商务智能｜2/共5」） */
+function digChOf(d){
+  var c=digSrcCard(d),t=String((c&&c.title)||"");
+  var m=/第\s*(\d+)\s*章\s*([^｜|]*)/.exec(t);
+  return m?{n:+m[1],name:String(m[2]||"").trim()}:null;
+}
+/* AI 模块（源卡标题形如「AI知识｜M6-8 版权与标识」） */
+function digModOf(d){
+  var c=digSrcCard(d),t=String((c&&c.title)||"");
+  var m=/M(\d+)-\d+/.exec(t);
+  return m?("M"+m[1]):"其他";
+}
+/* 日语场景（源卡 tags 里带大类，如「情景对话」「五十音」「职场日语」） */
+function digSceneOf(d){
+  var c=digSrcCard(d),tags=(c&&c.tags)||[];
+  if(tags.indexOf("情景对话")>=0)return "情景对话";
+  if(tags.indexOf("五十音")>=0)return "五十音";
+  if(tags.indexOf("职场日语")>=0||tags.indexOf("工作对话")>=0)return "职场日语";
+  return "其他场景";
+}
+/* 主列表池子：未粉碎 + 未归档（已读未满 12h 仍在，划线显示） */
+function digLive(){
+  var read=loadDigRead(),del=loadDigDel();
+  return DIG.filter(function(d){
+    if(del.indexOf(d.q)>=0)return false;
+    if(read.indexOf(d.q)<0)return true;
+    return !archDue("dig:"+d.q);
+  });
+}
+function qaLive(){
+  return loadQA().filter(function(x){
+    var s=qaState(x);
+    if(s==="ignored")return false;
+    if(s==="read")return !archDue(x.id);
+    return true;
+  });
+}
+function mzKindsOf(ch){ return ch==="data"?["exam","quiz"]:[ch]; }
+function mzKindName(k){ return k==="exam"?"教材考点":(k==="quiz"?"每日一练":(k==="ai"?"AI 知识":"日语学习")); }
+
+function setMzLv(lv){
+  MZ_LV=(lv==="data"||lv==="ai"||lv==="jp"||lv==="qa")?lv:"portal";
+  mzSub=(MZ_LV==="qa")?"qa":"dig";
+  var po=document.getElementById("mzPortal"),
+      pd=document.getElementById("mzPaneDig"),
+      pq=document.getElementById("mzPaneQa");
+  if(po)po.style.display=(MZ_LV==="portal")?"":"none";
+  if(pd)pd.style.display=(MZ_LV==="portal"||MZ_LV==="qa")?"none":"";
+  if(pq)pq.style.display=(MZ_LV==="qa")?"":"none";
+  setBk(MZ_LV!=="portal");
+  var t=document.getElementById("hdrSub"), tt=document.getElementById("hdrTitle");
+  if(MZ_LV==="portal"){
+    if(tt)tt.textContent=TAB_META.mz[0];
+    if(t)t.textContent=TAB_META.mz[1];
+  }else if(MZ_LV==="qa"){
+    if(tt)tt.textContent="我的问答";
+    if(t)t.textContent=MZ_SUB.qa[1];
+  }else{
+    if(tt)tt.textContent=CH_META[MZ_LV].n;
+    if(t)t.textContent="待挖掘";
+  }
+  if(MZ_LV==="portal")renderMzPortal();
+  else if(MZ_LV==="qa"){ checkAndGenDetails(); renderQA(); }
+  else renderDigList();
   window.scrollTo(0,0);
+}
+function openMzLv(lv){
+  setMzLv(lv);
+  pushNav("mzDrill"); _ensureGuard();
 }
 function updateMzBdg(){
   var d=0,q=0;
@@ -2721,8 +2825,6 @@ function updateMzBdg(){
   try{ q=(loadQA()||[]).filter(function(x){var s=qaState(x);return s==="pending"||s==="pushed";}).length; }catch(e){}
   var b=document.getElementById("mzBdg");
   if(b){ var n=d+q; b.textContent=n; b.style.display=n?"":"none"; }
-  var dn=document.getElementById("mzDigN"); if(dn) dn.textContent=d;
-  var qn=document.getElementById("mzQaN"); if(qn) qn.textContent=q;
   _archBtn("mzArchBtn",archCount(mzSub));
 }
 function mzAsk(){
@@ -2732,16 +2834,26 @@ function mzAsk(){
   if(!q){toast("先写个问题");return;}
   var _it=addQA(null,q,null);
   inp.value="";
-  if(mzSub!=="qa") setMzSub("qa");   /* 提完自动切到问答，让人看见它进来了 */
+  if(MZ_LV!=="qa") openMzLv("qa");   /* 提完自动进问答，让人看见它进来了 */
   renderQA(); updateMzBdg();
   askAINow(_it,q,"mzAskAns");
 }
 (function(){
-  var go=document.getElementById("mzAskGo"), inp=document.getElementById("mzAskQ"), seg=document.getElementById("mzSeg");
+  var go=document.getElementById("mzAskGo"), inp=document.getElementById("mzAskQ");
   if(go) go.addEventListener("click",mzAsk);
   if(inp) inp.addEventListener("keydown",function(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); mzAsk(); } });
-  if(seg) seg.addEventListener("click",function(e){
-    var b=e.target.closest("button[data-mz]"); if(b) setMzSub(b.getAttribute("data-mz"));
+  var po=document.getElementById("mzPortal");
+  if(po) po.addEventListener("click",function(e){
+    var ab=e.target.closest("#mzArchBtn"); if(ab){ e.stopPropagation(); openArch(mzSub); return; }
+    var ch=e.target.closest("[data-mzch]"); if(ch){ openMzLv(ch.getAttribute("data-mzch")); return; }
+    var lv=e.target.closest("[data-mzlv]"); if(lv){ openMzLv(lv.getAttribute("data-mzlv")); }
+  });
+  var ks=document.getElementById("mzKindSeg");
+  if(ks) ks.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-mzkind]"); if(!b) return;
+    MZ_KIND=b.getAttribute("data-mzkind");
+    try{ localStorage.setItem("kb_mzkind",MZ_KIND); }catch(e2){}
+    renderDigList(); window.scrollTo(0,0);
   });
 })();
 document.getElementById("qaGroups").addEventListener("click",function(e){
@@ -2858,39 +2970,106 @@ function _archBtn(id,n){
   b.innerHTML='归档 <b>'+n+'</b> ›';
   if(n===0)b.classList.add("dim");else b.classList.remove("dim");
 }
+/* `.65`：renderDig 变成「按当前层级分派」——门户态只刷门户，学科态只刷该学科的列表。
+   老调用点（feed 刷新 / 放回 / 初始化）一律不用改，进来自动对上当前层。 */
 function renderDig(){
-  var box=document.getElementById("digList");if(!box)return;
   stampDigFirst(DIG);
-  var read=loadDigRead(),del=loadDigDel();
-  /* `.54`：未读 + 已读未满 12h 的都显示（后者划线）；已读满 12h 或已粉碎的才从主列表消失（归档） */
-  var live=DIG.filter(function(d){
-    if(del.indexOf(d.q)>=0)return false;
-    if(read.indexOf(d.q)<0)return true;                 /* 未读：照常显示 */
-    return !archDue("dig:"+d.q);                         /* 已读：满 12h 才隐藏，否则划线显示 */
-  });
-  var chs=["data","ai","jp"],h=[];
-  if(!live.length)h.push('<div class="qempty">没看过的线索都挖完了 👍 新的会在下次推送后出现。想回顾看过的，点右上角「归档」。</div>');
+  var db=document.getElementById("mzBdg");
+  if(db){
+    var _rd=loadDigRead(),_dl=loadDigDel();
+    var _n=DIG.filter(function(x){return _rd.indexOf(x.q)<0&&_dl.indexOf(x.q)<0;}).length;
+    var _qa=(loadQA()||[]).filter(function(x){var s=qaState(x);return s==="pending"||s==="pushed";}).length;
+    db.textContent=_n+_qa; db.style.display=(_n+_qa)?"":"none";
+  }
+  if(MZ_LV==="portal"){ renderMzPortal(); return; }
+  if(MZ_LV==="qa") return;
+  renderDigList();
+}
+
+/* 第一级：分类门户 —— 一张卡一个学科，只报「这一类有多少、里面怎么分」 */
+function renderMzPortal(){
+  var box=document.getElementById("mzPortal"); if(!box) return;
+  var live=digLive(),h='';
+  var chs=["data","ai","jp"];
+  h+='<div class="mzphd">待挖掘 · 按学科进</div><div class="mzportal">';
   for(var i=0;i<chs.length;i++){
-    var c=chs[i],m=CH_META[c];
-    var items=live.filter(function(d){return normCh(d.ch)===c;});
-    if(!items.length)continue;
-    items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
-    h.push('<div class="dgrp"><div class="gh"><span class="ic">'+ICON[m.ic]+'</span> '+m.n+' <span class="badge">'+items.length+'</span></div>');
-    for(var j=0;j<items.length;j++){
-      var d=items[j],dt=digSourceDate(d),flab=digFromLabel(d),dm=chMeta(d.ch);
-      var _dr=loadDigRead(),_isRead=_dr.indexOf(d.q)>=0;
-      /* 最外层只留：分类标签 + 日期 + 标题；「为什么推荐 / 来源 / 去挖」全收进点开后的抽屉 */
-      h.push('<div class="dig'+(_isRead?' done':'')+'" data-q="'+esc(d.q)+'" data-from="'+esc(flab)+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
-        +'<div class="dtop"><span class="chip '+dm.c+'">'+dm.n+'</span>'
-        +'<span class="dt">'+esc(dt?digDateLabel(dt):"更早")+'</span></div>'
-        +'<div class="q">'+esc(d.q)+'</div></div>');
+    var ch=chs[i],m=CH_META[ch];
+    var items=live.filter(function(d){return normCh(d.ch)===ch;});
+    if(!items.length) continue;
+    var cnt={exam:0,quiz:0};
+    for(var j=0;j<items.length;j++){var k=digKindOf(items[j]);if(cnt[k]!==undefined)cnt[k]++;}
+    var sub=(ch==="data")
+      ? (items.length+" 条 · 教材考点 "+cnt.exam+" / 每日一练 "+cnt.quiz)
+      : (ch==="ai" ? (items.length+" 条 · 按模块看") : (items.length+" 条 · 按场景看"));
+    h+='<div class="card chan mzch" data-mzch="'+ch+'"><div class="ic '+m.c+'">'+ICON[m.ic]+'</div>'
+      +'<div class="ct"><b>'+m.n+'</b><span>'+sub+'</span></div><div class="ar">›</div></div>';
+  }
+  h+='</div>';
+  var qs=qaLive();
+  h+='<div class="mzphd">我提的问题</div><div class="mzportal">'
+    +'<div class="card chan mzch" data-mzlv="qa"><div class="ic icqa">'+ICON.qa+'</div>'
+    +'<div class="ct"><b>我的问答</b><span>'+qs.length+' 问 · 按知识点归组</span></div><div class="ar">›</div></div></div>';
+  h+='<div class="mzfoot"><button id="mzArchBtn">归档 <b>0</b> ›</button></div>';
+  box.innerHTML=h;
+  _archBtn("mzArchBtn",archCount(mzSub));
+}
+
+/* 第二级：某学科的待挖掘列表 —— 组头是章 / 模块 / 场景，卡上不再重复挂分类标签 */
+function renderDigList(){
+  var box=document.getElementById("digList"); if(!box) return;
+  var ch=MZ_LV, meta=CH_META[ch]||CH_META.data;
+  var items=digLive().filter(function(d){return normCh(d.ch)===ch;});
+  var _hs=document.getElementById("hdrSub");
+  if(_hs) _hs.textContent=items.length+" 条待挖 · "+(ch==="data"?"教材考点 / 每日一练分开看":(ch==="ai"?"按模块看":"按场景看"));  var kinds=mzKindsOf(ch), seg=document.getElementById("mzKindSeg");
+  if(seg){
+    if(kinds.length>1){
+      seg.style.display="";
+      seg.innerHTML=kinds.map(function(k){
+        var n=items.filter(function(d){return digKindOf(d)===k;}).length;
+        return '<button data-mzkind="'+k+'" class="'+(k===MZ_KIND?"on":"")+'">'+mzKindName(k)+'<b>'+n+'</b></button>';
+      }).join("");
+    }else{ seg.style.display="none"; seg.innerHTML=""; }
+  }
+  var pool=items.filter(function(d){ return kinds.length>1 ? digKindOf(d)===MZ_KIND : true; });
+  if(!pool.length){ box.innerHTML='<div class="qempty">这一类暂时没有待挖的线索。已挖过的都在「归档」里。</div>'; return; }
+  var groups=[],idx={};
+  function put(key,order,label,sub){
+    if(!idx[key]){ idx[key]={order:order,label:label,sub:sub,items:[]}; groups.push(idx[key]); }
+    return idx[key];
+  }
+  var SC={情景对话:1,五十音:2,职场日语:3,其他场景:9};
+  pool.forEach(function(d){
+    if(ch==="data"){
+      var c=digChOf(d);
+      if(c) put("c"+c.n,c.n,"第 "+c.n+" 章",c.name).items.push(d);
+      else put("c0",999,"早期卡片","").items.push(d);
+    }else if(ch==="ai"){
+      var _sid=digSrcId(d),mo=digModOf(d);
+      if(/^aiqa/i.test(_sid)) put("mqa",90,"问答回顾","");
+      else if(mo==="其他") put("mzz",99,"早期卡片","");
+      else put("m"+mo,(+mo.slice(1)),"模块 "+mo,"");
+      groups[groups.length-1].items.push(d);
+    }else{
+      var sc=digSceneOf(d);
+      put("s"+sc,(SC[sc]||9),sc,"").items.push(d);
+    }
+  });
+  groups.sort(function(a,b){return a.order-b.order;});
+  var h=[];
+  groups.forEach(function(g){
+    g.items.sort(function(a,b){var A=digSourceDate(a)||"",B=digSourceDate(b)||"";if(A===B)return 0;if(!A)return 1;if(!B)return -1;return A<B?1:-1;});
+    h.push('<div class="dgrp"><div class="gh"><span class="chn">'+esc(g.label)+'</span>'
+      +(g.sub?'<span class="chp">'+esc(g.sub)+'</span>':'')
+      +'<span class="badge">'+g.items.length+'</span></div>');
+    for(var j=0;j<g.items.length;j++){
+      var d=g.items[j],dt=digSourceDate(d),_isRead=loadDigRead().indexOf(d.q)>=0;
+      h.push('<div class="dig nochip'+(_isRead?' done':'')+'" data-q="'+esc(d.q)+'" data-from="'+esc(digFromLabel(d))+'" data-why="'+esc(d.why)+'" data-link="'+esc(d.link||"")+'">'
+        +'<div class="q">'+esc(d.q)+'</div>'
+        +'<div class="dfoot">'+esc(dt?digDateLabel(dt):"更早")+'</div></div>');
     }
     h.push('</div>');
-  }
+  });
   box.innerHTML=h.join("");
-  var n=live.length;
-  var db=document.getElementById("mzBdg");if(db){db.textContent=n;db.style.display=n?"":"none";}
-  _archBtn("mzArchBtn",archCount(mzSub));
 }
 /* 待挖掘「已看」记录（本地），角标按未看数显示 */
 var LS_DIGREAD="kb_digread";
@@ -2994,7 +3173,7 @@ document.getElementById("archClose").addEventListener("click",navBack);
    并且按当前分段决定打开哪个归档。`.57` 修：此前同一个元素上挂了两条监听
    （dig 一条、qa 一条），点一次会连着开两个归档，后开的问答归档把前面的盖掉
    —— 结果无论站在哪个分段，点「归档」看到的都是问答归档。 */
-document.getElementById("mzArchBtn").addEventListener("click",function(e){e.stopPropagation();openArch(mzSub);});
+/* `.65`：归档按钮在门户里是动态生成的，点击统一走 #mzPortal 的委托 */
 
 /* ====================== 全屏阅读器（FLIP 生长） ====================== */
 var reader=document.getElementById("reader"),rsc=document.getElementById("rsc");
@@ -3977,7 +4156,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-19.64';
+var _APP_VER_ = '2026-11-19.65';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
