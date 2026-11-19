@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-2 预测下一个词：大模型的本事只有一招——猜"下一个词"｜26/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月20日 · AI 知识</div>
+<h1>AI知识｜M2-2 预测下一个词：大模型的本事只有一招——猜"下一个词"｜26/32</h1>
+<div class="lead">看完这期你就明白：为什么换个说法 AI 的回答就完全不同，也明白它为什么会一本正经地编。</div>
+
+<h2>一句话结论</h2>
+<p>大模型没有藏着什么"想法"，它的全部本事就一招：给你一段话，算出"下一个词"该接什么的概率表，然后一个词一个词往外蹦，直到把整段话接完。</p>
+
+<h2>讲透：一台超级"接龙"机器</h2>
+<p><strong>是什么。</strong>上期说过，AI 先把你的话切成一块块叫 token 的"语义积木"。这期接着说它的核心技能：拿现在已知的所有 token 当上文，给词表里每一个候选 token 算一个"接上去有多顺口"的分数，也就是概率表。选一个接上去，这句变长了，再拿新句子重算一遍概率表，再接一个——如此循环，直到它判定"该收尾了"。这套机制有个学名叫"自回归"，大白话就是<strong>文字接龙</strong>。</p>
+<p><strong>为什么重要。</strong>两个直接后果。第一，它解释了"幻觉"：模型挑的是"接得顺的词"，不是"查证过的事实"，当一段瞎编的话恰好接得很顺，它照样会一本正经地写出来——它不是在撒谎，它压根没在"查"。第二，它解释了提示词为什么这么管用：你写的每个字都是"接龙的上文"，上文一变，概率表就变，AI 接出来的方向就完全不同。</p>
+<p><strong>规模有多大。</strong>GPT 这个名字里，G 是 Generative（生成式），说的就是它靠一个词一个词往外蹦来干活。2019 年 OpenAI 的 GPT-2 论文（Radford 等，《Language Models are Unsupervised Multitask Learners》）给了个著名证据：一个 15 亿参数的模型，训练目标只有"猜下一个词"这一件事，训练数据是约 800 万个网页、40GB 文本（WebText 数据集），结果在 8 个语言测试集里的 7 个上拿到当时最好成绩——没人教过它翻译、答题、总结，这些都是"猜词"副产品。</p>
+<blockquote>生活比方：它像一个玩了几亿局成语接龙的老手。你出"今天天气真"，他脱口接"好"——不是因为他知道今天天气如何，而是因为他背的局太多了，知道"真"后面接什么最顺。你把上文换成"今天天气真糟糕，我想"，他就改接别的方向。</blockquote>
+
+<h2>怎么用：把"上文"喂足（3 步）</h2>
+<ol>
+<li><strong>给背景</strong>：先说清楚"你是谁、写给谁看"，等于替它定好接龙的方向感。</li>
+<li><strong>给材料</strong>：把已有的文字贴进去，比如你写了一半的邮件、上一次的结论。</li>
+<li><strong>给指令</strong>：最后再说"接着写""照这个格式继续"。顺序就是：背景 → 材料 → 指令。</li>
+</ol>
+
+<h2>今天就能用</h2>
+<p>打开任意一个 AI 聊天框，做一个 60 秒的对照实验：</p>
+<ol>
+<li>第一轮输入：<em>"请接着写：早上出门发现楼下的猫……"</em>让它续写两三句。</li>
+<li>第二轮输入：<em>"你是我奶奶，正在给我写信。请接着写：亲爱的娃，早上出门发现楼下的猫……"</em></li>
+<li>对比两轮结果：开头一模一样，接出来的故事方向完全不同。</li>
+</ol>
+<p>这就亲眼验证了本期结论——变的只是"上文"，概率表就整个换了。以后写提示词没头绪时，先问自己一句：我给它的接龙上文够不够？</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>国家数据局启动第二批可信数据空间创新发展试点</strong>。据新华网、央视新闻 2026 年 11 月 19 日报道，国家数据局近日印发通知启动第二批试点，相比第一批更强调"数据与人工智能双向赋能"，并提出探索按词元（token）调用、应用效果等计费和收益分配方式。对普通人意味着：你上期学的 token，正在从技术概念变成计量收费的单位——将来企业用别人家的数据喂 AI，可能真按"喂了多少词元"结账。</li>
+<li><strong>福建省公布 11 月生成式 AI 服务备案公告</strong>。福建网信网 2026 年 11 月 19 日发布，"新宇多模态大模型""汉朝大模型"新增通过备案，并要求已上线的生成式 AI 应用在显著位置标明上线编号。对普通人意味着：在国内公开上线的 AI 服务都要过备案这道门，遇到来路不明的 AI 应用，可以去省级网信部门官网查它有没有备案号。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p><strong>M2-3 上下文窗口</strong>：AI 的"记性"是有刻度的，超了它就"忘了"——下期讲这个刻度怎么算，以及怎么在窗口有限时把话说到点上。</p>
+
+<div class="rel">相关延伸：上一期《AI知识｜M2-1 Token 与分词：AI 眼里没有"字"，只有一块块"语义积木"｜25/32》讲清了"接龙的单位"是什么；本期讲"接龙的玩法"。两者连起来看，你就能自己推演出 AI 生成一句话的全过程。</div>
+<div class="note">来源说明：① GPT-2 数据与结果引自 OpenAI 论文《Language Models are Unsupervised Multitask Learners》（Radford, Wu, Child, Luan, Amodei, Sutskever，2019），原文 https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf ；② 第二批可信数据空间试点：新华网报道（云南网转载，2026-11-19）https://news.yunnan.cn/system/2026/11/19/034198665.shtml ，央视新闻同日报道；③ 福建省备案公告：福建网信网（2026-11-19）https://www.fjwx.gov.cn/gs/20261119/3022267.html 。</div>
+</body>
+</html>
