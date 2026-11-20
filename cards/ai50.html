@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-3 上下文窗口：AI的“办公桌”就这么大，超了就看不见｜27/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月21日 · AI 知识</div>
+<h1>AI知识｜M2-3 上下文窗口：AI的“办公桌”就这么大，超了就看不见｜27/32</h1>
+<div class="lead">看完这期你就明白：AI为什么聊着聊着忘了开头、为什么长文档读不完、为什么对话越长越贵——全是同一张“桌子”的问题。</div>
+
+<h2>一句话结论</h2>
+<p>上下文窗口，就是 AI 一轮回答能“看见”的全部内容的容量上限（按 token 计算）。它解决的问题很根本：模型本身没有记忆，你上一句说了什么、你给了什么资料，全靠每轮重新塞进这个窗口。</p>
+
+<h2>是什么</h2>
+<p>AI 每次回答前，聊天软件都会把系统设定、整个对话历史、你贴的资料重新打包发给模型，模型在这包东西里找线索。这包东西的容量上限就是上下文窗口，单位是 token（上一期讲过：1 token 约等于大半个英文单词）。而且占窗口的不只是你打的字——Anthropic 官方文档列得很清楚：系统提示词、你上传的文件和图片、工具返回的结果、AI 自己上一轮的回答，统统都要占位置。</p>
+<blockquote>Anthropic 官方文档把上下文窗口定义为模型的“工作记忆”（working memory）：它不是模型训练时背下的知识，只是这一轮它眼前摊开的资料。桌面上没有的东西，它就看不见。</blockquote>
+
+<h2>为什么重要</h2>
+<p>你天天遇到的三个现象，全是它造成的：<strong>AI 聊到后面忘了开头的约定</strong>——最早的内容被挤出窗口了；<strong>长文档读不完</strong>——超出窗口直接截断或报错；<strong>对话越长越贵越慢</strong>——每轮都是全量重发，token 按量计费。</p>
+<p>窗口大小也是各家厂商的军备竞赛。OpenAI 在 2023 年 11 月 6 日的 DevDay 发布会上，把 GPT-4 Turbo 的窗口做到 128K token，官方口径约合 300 页文档；Google 2024 年 2 月发布 Gemini 1.5 Pro 时宣布，生产环境可一次处理 100 万 token，约合 70 万英文单词、1 小时视频或 11 小时音频，还在自己的“大海捞针”测试里做到 100 万 token 中插入一句关键事实、99% 能找回。</p>
+<p>但<strong>窗口大不等于记得牢</strong>。Anthropic 的文档同时提醒：token 越多，模型的准确率和召回率会逐步下降，官方管这叫 context rot（上下文腐烂）。桌子堆成山，翻东西反而更容易翻错。</p>
+
+<h2>怎么用（3 步）</h2>
+<ul>
+<li><strong>排顺序</strong>：重要约定放开头，最新要求放结尾——窗口两头的内容，模型看得最清楚，别把关键信息埋在一大段中间。</li>
+<li><strong>会搬家</strong>：长对话快满时，让 AI 先总结“到目前为止的要点”，开个新对话贴上摘要继续——比硬撑更省 token，回答也更准。</li>
+<li><strong>别硬塞</strong>：资料太大塞不下，就别全文粘贴。上传文件或用知识库检索——第 2 期讲过的 RAG（先翻资料再回答），本质就是只把最相关的几段搬进这张桌子。</li>
+</ul>
+
+<h2>生活比方</h2>
+<p>把 AI 想成一个每次干活都用同一张办公桌的人：每一轮开始前，你必须把之前所有材料重新搬上桌；桌子就这么大，搬不上的它根本看不见。一轮干完，桌面清空，下轮再从头摆一遍。所谓“窗口扩容”，就是把桌子换大；但桌子再大，堆成山的资料也会让它翻得慢、翻得错。</p>
+
+<h2>今天就能用</h2>
+<p>试一次“对话搬家法”，3 步可验证：</p>
+<ol>
+<li>在一个聊了很久的对话里输入：“请用 200 字总结我们目前的对话要点、已确定的结论和待办事项。”</li>
+<li>复制这段总结，新开一个对话，粘贴后加一句“基于以上背景继续”。</li>
+<li>验证：新对话里问“我们之前定了什么？下一步做什么？”——答得上的，就是搬家成功。你会发现新对话的回答明显比拖了很长的旧对话更利索。</li>
+</ol>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li>福建省政府办公厅印发《福建省推动“人工智能+”行动方案（2026—2028年）》，围绕科技、产业、消费、民生、治理、国际合作 6 个方面提出 15 项重点任务，其中提出打造 100 个以上“人工智能+制造”典型场景。对普通人/从业者意味着：地方产业政策持续加码，做 AI 应用落地的团队可关注这些场景清单的对接与申报机会。来源：央广网 2026-11-21 报道（https://www.cnr.cn/fj/gstjfj/20261121/t20261121_527878986.shtml）。</li>
+<li>江苏省政府办公厅印发《关于促进平台经济创新和规范健康发展若干措施的通知》，提出 8 个方面举措，明确创新发展人工智能服务平台、培育智能体服务平台等，自 2026 年 12 月 11 日起施行，有效期至 2031 年 12 月 10 日。对普通人/从业者意味着：平台经济方向的企业支持政策落了具体施行时间，相关创业者可据此规划申报节奏。来源：新华日报 2026-11-21 报道（https://xh.xhby.net/pad/con/202611/21/content_1608036.html）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>M2-4 注意力机制：AI 不是整页逐字读你的话，而是学会了“划重点”——下期拆开这个“划重点”的动作到底是怎么发生的。（28/32）</p>
+
+<div class="rel">相关延伸：本期与第 25 期（M2-1 Token 与分词，窗口按 token 计数）直接衔接；第 2 期（M4-2 RAG 全流程）讲的“先翻资料再回答”，正是不把桌子塞满的工程解法。</div>
+<div class="note">来源说明：① OpenAI DevDay 官方公告（2023-11-06，GPT-4 Turbo 128K token 窗口，约 300 页文档）；② Google 官方博客 "Our next-generation model: Gemini 1.5"（2024-02，100 万 token 生产可用、约 70 万英文单词/1 小时视频/11 小时音频、大海捞针测试 99% 召回）；③ Anthropic 官方文档 "Context windows"（工作记忆定义、占窗口内容清单、context rot 提示）。政策动态来源见正文标注链接。</div>
+</body>
+</html>
