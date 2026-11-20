@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：AI聊久了为什么会“失忆”？窗口满了会发生什么</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 6px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:16px}
+h2{font-size:17px;margin:24px 0 8px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:24px;color:var(--ink2);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="meta">27/32 · 下钻解答 · 来自 M2-3 上下文窗口</div>
+<h1>AI聊久了为什么会“失忆”？窗口满了会发生什么</h1>
+
+<h2>满窗之后：不是报错，而是悄悄丢</h2>
+<p>很多人以为窗口满了会弹个“已满”提示，其实大多数聊天应用的做法是<strong>悄悄滚动丢弃</strong>：像排队进场一样，最早的内容先被挤出窗口，新的内容继续往里塞。所以你会看到一种典型现象——对话开头定好的规矩（“以后都给我列表格式”）在几十轮之后突然失效，AI 不是“叛逆”，是那段话已经不在它的办公桌上了。Anthropic 官方文档也提到，聊天界面可以按“先进先出”的滚动方式管理上下文。API 调用则相反：超过窗口直接报错，不会自动丢。</p>
+
+<h2>没满也会“变笨”</h2>
+<p>还有一个更隐蔽的坑：窗口没满，但塞得很满时，回答质量也在下降。Anthropic 文档把这个现象叫做 <strong>context rot（上下文腐烂）</strong>——token 数量增长时，模型的准确率和召回率会逐步走低。一份 30 页的资料整本贴进去，效果往往不如你先翻出相关的 3 页再贴。桌面堆成山，翻对东西的概率反而降了。</p>
+
+<h2>三招防“失忆”</h2>
+<ul>
+<li><strong>规矩放两头</strong>：重要约定写在对话开头，最新要求放在当前这条消息的结尾，别埋中间。</li>
+<li><strong>定期搬家</strong>：每聊几十轮，让 AI 总结要点，开新对话贴摘要继续——丢掉的是废话，留下的是结论。</li>
+<li><strong>关键事项落纸面</strong>：把必须长期遵守的规则单独存成一段文字，每次需要时重新粘贴一遍，别指望它“记得”。</li>
+</ul>
+
+<blockquote>一句话：AI 没有记忆力，只有一张每轮清空的桌子。桌子会悄悄换掉桌上的旧文件，你唯一的自保办法是把重要的东西主动再摆上去。</blockquote>
+
+<div class="note">依据：Anthropic 官方文档 "Context windows"（滚动式上下文管理、context rot）；OpenAI 官方对话状态指南（上下文窗口 = 单次请求可用 token 上限）。本页为 M2-3 主卡的下钻延伸，数字口径以各厂商官方文档为准。</div>
+</body>
+</html>
