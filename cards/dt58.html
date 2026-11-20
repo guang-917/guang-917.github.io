@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDGA｜第12章 元数据管理｜1/共5</title>
+<style>
+  body{background:#12141a;color:#d8dee9;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.75;margin:0;padding:2rem 1rem;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#7f8a9a;font-size:.85rem;margin-bottom:.6rem;}
+  h1{font-size:1.35rem;color:#f0f3f7;line-height:1.5;}
+  .lead{background:#1a1e28;border-left:4px solid #4f8ef7;padding:.8rem 1rem;border-radius:6px;color:#c9d4e3;margin:1rem 0;}
+  h2{font-size:1.05rem;color:#7fb0ff;margin:1.6rem 0 .5rem;}
+  .quote{background:#171b24;border-left:3px solid #3a4459;padding:.6rem .9rem;border-radius:5px;color:#aeb9c8;margin:.5rem 0;font-size:.95rem;}
+  .trap{color:#e8b26a;margin:.3rem 0;}
+  table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.92rem;}
+  th,td{border:1px solid #2a3242;padding:.5rem .6rem;text-align:left;}
+  th{background:#1a2030;color:#9fc0ff;}
+  .quiz{background:#171b24;border:1px solid #2a3242;border-radius:8px;padding:.9rem 1rem;margin:.9rem 0;}
+  .opt{padding:.15rem 0;color:#c3cddc;}
+  .ans{color:#6fd18b;margin-top:.4rem;}
+  .mnemonic{background:#1d2430;border:1px dashed #4f8ef7;border-radius:8px;padding:.8rem 1rem;color:#ffd479;margin:1rem 0;}
+  .check{color:#9aa7b8;font-size:.9rem;white-space:pre-line;background:#171b24;border-radius:6px;padding:.7rem .9rem;margin:.8rem 0;}
+  .rel a{color:#7fb0ff;text-decoration:none;}
+  .source{color:#6f7a8a;font-size:.82rem;margin-top:2rem;border-top:1px solid #2a3242;padding-top:.8rem;white-space:pre-line;}
+  p{margin:.5rem 0;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">dt58 · 2026-11-21（11月21日）· 本张对应教材 p314–p317 · CDGA 考试倒计时 18 天（2026-12-09）</div>
+<h1>CDGA｜第12章 元数据管理｜1/共5 · 定义·图书馆比喻·目标4条·10条好处·5个后果·原则8条</h1>
+<div class="lead">第 12 章开张，又一个 10 分大章。比喻教材自带：一座没有目录卡片的图书馆。这张解决「元数据管理是干什么的、做好有什么好、做砸有多惨、立什么规矩」，以及元数据和数据的界限怎么断。</div>
+
+<h2>开篇</h2>
+<p>教材自己打了个比方（p314）：一座有成千上万本书却没有目录卡片的图书馆——书都还在，可你永远找不到想看的那本。元数据就是图书馆的目录卡片：不是书本身，但决定了你找不找得到书。</p>
+
+<h2>考点 1｜定义</h2>
+<p>人话——管目录卡片的整套活儿：卡片怎么编、怎么放、怎么让人查、怎么防涂改。</p>
+<div class="quote">原话（p315 图 12-1）：「规划、实施和控制活动，这些活动有助于处理、维护、集成、保护、审计和管理其他数据的能力。」</div>
+<p class="trap">坑：题干问定义时，选「管理数据本身」就错——元数据管理管的是关于数据的数据，不是数据本身。</p>
+
+<h2>考点 2｜金句「关于数据的数据」</h2>
+<p>人话——目录卡片上写的是关于书的信息，可卡片自己也是一张纸，一较真就分不清。</p>
+<div class="quote">原话（p314）：「元数据通常被定义为『关于数据的数据』。这个定义好在非常简单，但也极易引起误解。」</div>
+<p class="trap">坑：考「不在元数据范围之内」的题（c12-046），「数据分析」不属于；技术和业务流程、数据规则和约束、逻辑与物理数据结构都在范围内。你以为这个定义背了就能用——其实教材自己都说它「极易引起误解」，真考起来靠的是第 8 个考点的「按用途确定」。</p>
+
+<h2>考点 3｜元数据驱动</h2>
+<p>人话：想让人人借书都快，先把目录建好。</p>
+<div class="quote">原话（p314）：「可以说要成为数据驱动型组织，就必须先实现元数据驱动。」</div>
+<p class="trap">坑：顺序别倒——先元数据驱动，才谈得上数据驱动，选反了就是坑。</p>
+
+<h2>考点 4｜目标 4 条</h2>
+<p>人话：图书馆的四个 KPI——读者都懂书怎么描述（术语）、各分馆目录汇总到一起（整合）、人人有统一入口能查（标准访问）、卡片本身不出错不过期（质量/一致性/时效性/安全）。</p>
+<div class="quote">原话（p315）：①提供对业务术语和使用的组织理解，包括技术沿袭 ②收集和整合不同来源的元数据 ③提供标准的元数据访问方式，并确保数据交换中的信任水平 ④确保元数据的质量、一致性、时效性和安全性。</div>
+<p class="trap">坑（c12-002）：「推广或强制使用业务元数据标准，以实现数据交换」不是目标——目标是「提供标准访问方式」，「强制」俩字一出现就要警惕。</p>
+
+<h2>考点 5｜10 条好处</h2>
+<p>人话：卡片齐全的图书馆——找书快（减少查找和分析数据的时间）、重复采购一眼看出（识别冗余数据和流程）、一本书被谁引用清清楚楚（创建准确的影响分析）、新书上架更快（缩短系统开发生命周期）、新馆员上手快（降低培训成本并减轻员工离职影响）、检查组来了不慌（满足监管合规），加上提高数据可信度、提升主数据等战略数据价值、防止使用过时或错误数据、提高业务与 IT 沟通成效，共 10 条（p315–p316）。</p>
+<p class="trap">坑：把「提高运营效率」偷换成「直接提高数据质量」——教材说的是通过识别冗余数据和流程来提高运营效率。</p>
+
+<h2>考点 6｜管理不善 5 个后果</h2>
+<p>人话：没有统一卡片柜的下场——每个书架自己编一套标签，最后谁也信不过谁。</p>
+<div class="quote">原话（p316）：①冗余的数据和数据管理流程 ②重复冗余的数据字典与元数据库 ③不一致的数据元素定义与滥用风险 ④不同来源版本相互矛盾降低信心 ⑤元数据与数据的可靠性受质疑。</div>
+<p class="trap">坑：五个后果是一条链，从冗余开始越往后越没人信；问最先出现的选冗余。</p>
+
+<h2>易混对比（同一套目录卡片的三个视角）</h2>
+<table>
+<tr><th>视角</th><th>问的是什么</th></tr>
+<tr><td>好处（p315–p316）</td><td>做成了有什么好</td></tr>
+<tr><td>目标（p315）</td><td>做这件事要达成什么</td></tr>
+<tr><td>后果（p316）</td><td>不做会烂成什么样（五连击：冗余→字典重复→定义不一致→版本矛盾→没人信）</td></tr>
+</table>
+
+<h2>考点 7｜原则 8 条</h2>
+<p>人话：图书馆立馆规——馆长拨款（组织承诺：企业高层的管理和经费支持）、先定购书计划再买书（战略规划）、馆舍留扩建余地（企业视角：确保未来可扩展性，但通过迭代和增量方式交付）、教读者用目录（宣导推广）、目录人人能查（访问便利）、编卡片的人对卡片负责（保证元数据质量）、定期查目录编得合规（审计元数据标准）、读者能报错（持续改进）。</p>
+<div class="quote">原话（p316–p317 要点）：保证元数据质量一条是「元数据通常由现有流程（数据建模、SDLC、业务流程定义）产生，流程所有者对质量负责」；持续改进是「建立反馈机制，让使用者反馈错误或过时元数据」。</div>
+<p class="trap">坑（c12-008）：质量责任人是「流程所有者」，不是元数据管理团队。</p>
+
+<h2>考点 8｜元数据与数据的界限</h2>
+<p>人话：一本书的内容提要，对读者是目录，对编辑是要改的稿子——同一份信息在不同人手里身份不同。</p>
+<div class="quote">原话（p317）：「某一个人的元数据可能是另一个人的数据。」教材给的正确做法：不纠结哲理，按用途确定元数据需求——用途 5 种：创建新数据、理解既有数据、促成数据的系统间流转、访问数据、共享数据。</div>
+<p class="trap">坑：考界限别去背抽象层级，答「按用途确定」就对了。</p>
+
+<h2>考试怎么考</h2>
+<p>①目标「说法错误」题——把「提供标准访问方式」偷换成「强制使用标准实现数据交换」；②原则「正确项」题——记住质量归流程所有者；③范围「不属于」题——数据分析不在元数据范围。干扰项长什么样：目标选项里混进「强制」「推广标准」字样；原则题把质量责任人换成管理团队；范围题塞进一个业务动作（数据分析）。</p>
+
+<h2>本卡真题自测</h2>
+<div class="quiz"><p><b>第 1 题（题号 c12-046）</b>：元数据最常见的定义是"关于数据的数据",但却容易引起误解。 可以归类为元数据的信息范围很广，下列哪项不在这个范围之内？</p><div class="opt">A. 技术和业务流程</div><div class="opt">B. 数据规则和约束</div><div class="opt">C. 逻辑与物理数据结构</div><div class="opt">D. 数据分析</div><p class="ans">答案：<b>D</b>　解析：P320</p></div>
+<div class="quiz"><p><b>第 2 题（题号 c12-008）</b>：关于元数据管理原则说法正确的是</p><div class="opt">A. 认识到元数据通常是通过现有流程（数据建模，SDLC，业务流 程定义）生成的，所以流程所有者应对元数据的质量负责。</div><div class="opt">B. 提供标准途径，使元数据使用者（人员，系统和流程）可以访问 元数据</div><div class="opt">C. 记录和管理与数据相关的业务术语的知识体系，以确保人们理解 和使用数据内容的一致性</div><div class="opt">D. 确保元数据质量、一致性、及时性和安全</div><p class="ans">答案：<b>A</b>　解析：DMBOK 2-12.1.2-2P322，目标和原则</p></div>
+
+<div class="mnemonic">一句能背的口诀：元数据是书的说明书；四目标——懂术语、收来源、通访问、保四性；管不好就冗余、矛盾、没人信；质量找流程所有者，界限按用途断。</div>
+<div class="check">覆盖自检：
+本张覆盖考点：定义 · 「关于数据的数据」金句 · 元数据驱动 · 目标 4 条 · 10 条好处 · 5 个后果 · 原则 8 条 · 元数据与数据界限（共 8 个）
+本章剩余考点：3 大类型（业务/技术/操作）· 图书情报 3 分类 · ISO/IEC 11179 · 元数据来源 · 4 种架构 · 5 组活动 · 血缘 · 度量 8 项（留给 2/共5 至 5/共5）。</div>
+
+<h2>相关延伸</h2>
+<div class="rel">
+<p><a href="cards/dt57.html">CDGA｜第11章 数据仓库和商务智能｜5/共5 · 方法三件套·就绪评估·成功因素5条·治理与业务认可·度量3类（本章收官）</a></p>
+</div>
+
+<div class="source">来源说明：概念讲解依据《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》逐页转录底稿 p314–p317（2026-11-10 已回核原句），引号内为底稿转录原句；自测题来自 cdga_pool.json 题库（题号 c12-046、c12-008），题干、选项、答案、解析均照题库原样引用，未做改动。</div>
+</div></body></html>
