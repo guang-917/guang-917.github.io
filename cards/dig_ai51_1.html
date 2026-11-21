@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：注意力算一次要花多少计算？为什么长对话更贵更慢？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">28/32 · 本期深挖</div>
+<h1>注意力算一次要花多少计算？为什么长对话更贵更慢？</h1>
+
+<h2>核心答案：计算量随长度“平方级”增长</h2>
+<p>注意力的基本动作是：每个词都要和<b>其他所有词</b>各算一次相关度。100 个词就是 100×100 = 1 万次配对；1 万个词就是 1 亿级配对——长度翻 100 倍，计算量翻约 1 万倍。这就是为什么模型厂商一边宣传“百万上下文”，一边又按输入 token 收费：你塞进去的每一句，都在和整段材料两两配对。</p>
+
+<blockquote>生活比方：教室里让全班同学互相握手认识一次。20 人的班很快握完，200 人的学校要握的次数不是翻 10 倍，而是翻约 100 倍。人越多，“互相认识”这件事越贵——注意力就是这场大型握手会。</blockquote>
+
+<h2>这对你意味着什么</h2>
+<ul>
+<li><b>长对话更贵</b>：上一期讲过，聊天软件每轮都把全部历史重新发给模型，所以对话越长，每轮的输入 token 越多，费用和响应时间随之上涨。</li>
+<li><b>长文档别硬塞</b>：与其把 200 页全贴给 AI，不如先筛选出相关的几段——这正是 RAG（第 M4 模块讲过）的省钱逻辑：只把最相关的几段搬进“握手会”。</li>
+<li><b>厂商在拼命优化</b>：为绕开平方级成本，业界发展出多种“稀疏注意力”类技术（只让部分词互相关注），各家模型的具体实现不同、效果差异也大，选型时看长文实测表现比看宣传数字更可靠。</li>
+</ul>
+
+<h2>一个可操作的建议</h2>
+<p>日常使用记住一条：<b>材料能短则短</b>。提问前花 10 秒删掉与问题无关的段落，往往能同时省下费用、提升回答准确率——因为注意力不必被无关内容稀释。</p>
+
+<div class="note">来源说明：本文对注意力计算复杂度（与序列长度平方相关）的表述源自原始论文 Vaswani 等《Attention Is All You Need》（arXiv:1706.03714）的标准推导；各家模型的具体优化实现属商业细节，未逐一核实，此处仅作一般性介绍。</div>
+</body>
+</html>
