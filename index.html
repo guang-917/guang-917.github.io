@@ -3519,7 +3519,8 @@ function quizOpenTitle(t){ var e=document.getElementById("qzTitle"); if(e) e.tex
 /* `.64`：频道页里的练习入口（数据频道专用） */
 function quizEntryHTML(){
   if(!QUIZ) return '<div class="qzentry"><div class="qzeT"><span class="qzeTag">练习</span><span class="qzeS">途径二 · 按章刷题</span></div><p class="qzeP">题库加载中…</p></div>';
-  var rec=quizRec(), chs=Object.keys(QUIZ.chapters).sort(function(a,b){return (+a)-(+b);});
+  /* `.74` 只认 CDGA 的数字章：jp / ai 频道有自己的入口（quizEntryHTML2），不能混进「已开放 N 章」 */
+  var rec=quizRec(), chs=Object.keys(QUIZ.chapters).filter(function(c){return /^\d+$/.test(c);}).sort(function(a,b){return (+a)-(+b);});
   var ready=chs.filter(function(c){return QUIZ.chapters[c].ready&&quizByCh(c).length>0;});
   var lastCh=null,lastTs=0;
   Object.keys(rec).forEach(function(qid){var q=quizQ(qid);var t=(rec[qid]||{}).ts||0;if(q&&t>lastTs){lastTs=t;lastCh=String(q.ch);}});
@@ -3611,7 +3612,7 @@ function quizStartChapter(ch,count){
    章内优先出没做过的题；错题照常进错题本；未答的题计分按错但不进错题本（没看过题不污染错因）。 */
 function quizStartMock(){
   if(!QUIZ||!QUIZ.questions.length){ toast("题库还没加载好"); return; }
-  /* `.74` 只认 CDGA 的数字章：jp / ai 频道有自己的入口（quizEntryHTML2），不能混进「已开放 N 章」 */
+  /* `.74` 组卷只取 CDGA 的 17 个数字章（jp / ai 是频道题，不进模拟考） */
   var chs=Object.keys(QUIZ.chapters).filter(function(c){return /^\d+$/.test(c);}).sort(function(a,b){return (+a)-(+b);});
   var rec=quizRec(), ids=[];
   chs.forEach(function(c){
@@ -5402,7 +5403,7 @@ quizLoad(function(){ kbStorageWarn(); });
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-21.73';
+var _APP_VER_ = '2026-11-21.74';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
