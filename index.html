@@ -947,6 +947,10 @@ body{
 .ptr .ptr-ic.spin{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 /* `.62`：右上角「刷新」按钮已删（有下拉刷新，按钮多余）。CSS 一并清掉。 */
+/* `.74` 键盘可达：可聚焦元素统一焦点环，别让键盘用户「看不见自己在哪」 */
+[data-kb-tb]:focus-visible{outline:2px solid var(--data);outline-offset:2px;border-radius:10px}
+.tab:focus-visible{outline:2px solid var(--data);outline-offset:-2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-apple.png">
@@ -1646,6 +1650,27 @@ themeBtn.addEventListener("click",function(){var cur=document.documentElement.ge
 /* ====================== Tab 切换 ====================== */
 var hdr=document.getElementById("hdr"),hdrTitle=document.getElementById("hdrTitle"),hdrSub=document.getElementById("hdrSub");
 var backBtn=document.getElementById("backBtn"),tabbar=document.getElementById("tabbar");
+/* `.72` 存储水位：21 个 kb_ 键全在本机 localStorage（约 5MB 上限），写满后所有保存会静默失效。
+   ① 全局劫持 setItem：kb_ 键写入失败必须弹提示，不再静默吞；② 启动算一次占用，超 70% 提醒导出备份。 */
+function kbStorageBytes(){var n=0;try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i)||'';n+=(k.length+String(localStorage.getItem(k)||'').length)*2;}}catch(e){}return n;}
+(function(){
+  try{
+    var _set=Storage.prototype.setItem;
+    Storage.prototype.setItem=function(k,v){
+      try{ _set.call(this,k,v); }
+      catch(e){
+        try{ if(String(k).indexOf('kb_')===0&&typeof toast==='function')toast('本机存储写不下了：先「备份到文件」导出，再清理可再生成缓存（梳理图/详解）'); }catch(_e){}
+        throw e;
+      }
+    };
+  }catch(e){}
+})();
+function kbStorageWarn(){
+  try{
+    var n=kbStorageBytes();
+    if(n>3.5*1048576) setTimeout(function(){ toast('本机存储已用 '+(n/1048576).toFixed(1)+'MB（超 70%），建议「备份到文件」后清理缓存'); },2500);
+  }catch(e){}
+}
 var TAB_META={today:["知识工作台","今天 · 10月3日 周六"],channels:["学习频道","三个方向，各有节奏"],tree:["知识树","你走过的路，长成的形状"],mz:["琢磨","有待想透的，也有待问清的"]};
 /* `.44`：原 dig / qa 两个 tab 合并为 mz（琢磨），内置两个子页；旧 key 保留映射，防止旧调用点取不到值 */
 TAB_META.dig=TAB_META.mz; TAB_META.qa=TAB_META.mz;
@@ -2370,13 +2395,10 @@ function renderChanList(ch){
   if(!h.length)h.push('<div class="empty">这个频道还没有内容。</div>');
   /* `.64`：数据频道顶部插入「练习」入口（途径二 · 按章刷题） */
   var _qz="";
-  if(ch==="data"){
-    _qz=quizEntryHTML();
-    body.innerHTML=_qz+h.join("");
-    bindQuizEntry(body);
-  }else{
-    body.innerHTML=h.join("");
-  }
+  if(ch==="data") _qz=quizEntryHTML();
+  else if(ch==="jp"||ch==="ai") _qz=quizEntryHTML2(ch);
+  if(_qz){ body.innerHTML=_qz+h.join(""); bindQuizEntry(body); }
+  else body.innerHTML=h.join("");
   fitTagLines(body);
   document.getElementById("chanPortal").style.display="none";
   document.getElementById("chanList").style.display="";
@@ -3049,7 +3071,9 @@ function mergeDetailsIntoCards(){var m=loadDetails();for(var k in m){if(!getCard
 /* 【挡板】正在生成详解的提问 id（见 checkAndGenDetails 上方说明）：先占位再发请求，防止同一批被反复抓取 */
 var _genInflight={};
 /* 本地备份 / 恢复 + 同步云端导出 */
-function allKB(){return {qa:loadQA(),interest:loadInt(),local:loadLocal(),topics:TOPICS,mesh:MESH,focus:loadFocus()};}
+/* `.72` 备份升级：原来只导出 6 项，错题本/做题记录/掌握度/已读时间戳全丢。
+   现在遍历 localStorage 里全部 kb_ 前缀键做整机快照（新键自动纳入），带 _appVer 防跨版本误恢复。 */
+function allKB(){var o={_appVer:_APP_VER_,_v:2};try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf("kb_")===0)o[k]=localStorage.getItem(k);}}catch(e){}return o;}
 /* ====================== AI 占位接口 + 详解自动生成（混合触发：设备端 + 云端兜底） ====================== */
 var SETTINGS={aiKey:"", relayToken:"349493"}; /* 国内中转路线：密钥放腾讯云 CloudBase 云函数环境变量（LLM_API_KEY），前端不裸用；relayToken 填你在腾讯云设的 RELAY_TOKEN，与函数端一致即开锁 */
 var AI_ENDPOINT='https://guang-777-d6gos4xfd8674c765-1502603004.ap-shanghai.app.tcloudbase.com/kb-ai-relay'; /* 腾讯云 CloudBase 云函数 HTTP 地址（由 relay.js 中转，密钥在服务端、前端零密钥） */
@@ -3362,8 +3386,20 @@ function checkAndGenDetails(){
     genDetailFor(qs);
   });
 }
-function downloadKB(){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的知识备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('已导出备份文件');}
-function restoreKB(obj){if(!obj||typeof obj!=="object"){toast('文件格式不对');return;}if(obj.qa)saveQA(obj.qa);if(obj.interest)saveInt(obj.interest);if(obj.local)saveLocal(obj.local);if(obj.topics){TOPICS=mergeTopics(obj.topics);saveTopics(TOPICS);}if(obj.mesh){MESH=mergeMeshObj(obj.mesh);saveMesh(MESH);}if(obj.focus)mergeFocus(obj.focus);renderTree();updateMzBdg();toast('已从文件恢复');}
+function downloadKB(silent){var data=allKB();var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(silent?'我的知识备份_恢复前_':'我的知识备份_')+new Date().toISOString().slice(0,10)+'.json';a.click();if(!silent)toast('已导出备份（含错题本/做题记录/掌握度）');}
+/* `.72` 恢复升级：新格式=整机快照覆盖（kb_* 键逐一写回）；旧格式（qa/interest/local/… 六字段）兼容；
+   恢复前先用当前状态自动导出一份「恢复前」备份防误操作；恢复后整页刷新重算所有内存态。 */
+function restoreKB(obj){if(!obj||typeof obj!=='object'){toast('文件格式不对');return;}
+  try{downloadKB(true);}catch(e){}
+  var n=0,old=!obj._v&&!obj._appVer;
+  function put(k,v){try{localStorage.setItem(k,v);n++;}catch(e){}}
+  if(old){
+    if(obj.qa)put(LS_QA,JSON.stringify(obj.qa));if(obj.interest)put(LS_INT,JSON.stringify(obj.interest));if(obj.local)put(LS_KEY,JSON.stringify(obj.local));
+    if(obj.topics)put(LS_TOPICS,JSON.stringify(obj.topics));if(obj.mesh)put(LS_MESH,JSON.stringify(obj.mesh));if(obj.focus)put(LS_FOC,JSON.stringify(obj.focus));
+  }else{for(var k in obj){if(k.indexOf('kb_')===0)put(k,String(obj[k]));}}
+  toast('已恢复 '+n+' 项'+(obj._appVer?'（备份自 '+obj._appVer+'）':'')+'，页面即将刷新');
+  setTimeout(function(){location.reload();},700);
+}
 /* `.57` 删掉了一份重复的 updateMzBdg（同名函数后者覆盖前者，这份是死代码，
    而且只算问答角标；留着以后改哪份都不对）。现役版本在 setMzSub 下面。 */
 /* 阅读器里渲染某卡的问答（底部「我在这张卡上的提问」块） */
@@ -3502,6 +3538,9 @@ function quizEntryHTML(){
       +'<div class="qzeBar"><i style="width:'+Math.min(100,Math.round(doneAll/Math.max(1,tot)*100))+'%"></i></div>'
       +'<button class="qzbtn" data-qch="'+lastCh+'">'+(doneAll?'继续练 · 第 '+lastCh+' 章':'开始练 · 第 '+lastCh+' 章')+'</button></div>';
   }
+  if(ready.length>=5){
+    html+='<div class="qzrow" data-qmock="1"><div class="l"><b>模拟考</b><span>100 题 · 100 分钟 · 按考纲分值组卷 · 60 分及格</span></div><div class="r">开考 ›</div></div>';
+  }
   if(typeof wbStats==="function"){
     var _ws=wbStats();
     html+='<div class="qzrow" data-wbopen="1"><div class="l"><b>错题本</b><span>'+_ws.open+' 条待复习 · 已掌握 '+_ws.mastered+' 条 · 总正确率 '+_ws.acc+'%</span></div><div class="r">进去看 ›</div></div>';
@@ -3517,11 +3556,27 @@ function quizEntryHTML(){
   }).join("");
   return html;
 }
+/* `.74` 日语 / AI 频道的练习入口：一张卡 2 道题，按频道整组抽 10 题 */
+function quizEntryHTML2(ch){
+  if(!QUIZ||!QUIZ.chapters||!QUIZ.chapters[ch]) return '';
+  var qs=quizByCh(ch); if(!qs.length) return '';
+  var info=QUIZ.chapters[ch], rec=quizRec(), done=0, right=0;
+  qs.forEach(function(q){var r=rec[q.id];if(r&&r.n){done++;if(r.lastRight)right++;}});
+  var acc=done?Math.round(right/done*100):0;
+  var nm=info.name||ch;
+  return '<div class="qzentry"><div class="qzeT"><span class="qzeTag">练习</span><span class="qzeS">'+esc(nm)+' · 卡片配套题</span></div>'
+    +'<div class="qzeH">共 '+qs.length+' 题 · 一张卡两道</div>'
+    +'<p class="qzeP">已做 '+done+' 题 · 正确率 '+acc+'%</p>'
+    +'<div class="qzeBar"><i style="width:'+Math.min(100,Math.round(done/Math.max(1,qs.length)*100))+'%"></i></div>'
+    +'<button class="qzbtn" data-qch="'+ch+'">'+(done?'继续练':'开始练')+' · '+esc(nm)+'</button></div>';
+}
 function bindQuizEntry(root){
   if(!root)return;
   root.addEventListener("click",function(e){
     var wb=e.target.closest("[data-wbopen]");
     if(wb){ e.stopPropagation(); wbOpen("list"); return; }
+    var mk=e.target.closest("[data-qmock]");
+    if(mk){ e.stopPropagation(); quizStartMock(); return; }
     var el=e.target.closest("[data-qch]"); if(!el)return;
     e.stopPropagation();
     quizStartChapter(el.getAttribute("data-qch"));
@@ -3531,7 +3586,7 @@ function bindQuizEntry(root){
 function qzOpen(){ var e=document.getElementById("qzFull"); if(!e)return; e.classList.add("on"); pushNav("qzFull"); _ensureGuard(); }
 function qzClose(){ var e=document.getElementById("qzFull"); if(e)e.classList.remove("on"); QS=null; }
 /* `.64`：✕ 走统一的 navBack（与系统返回手势同一条路径，避免两套逻辑） */
-document.getElementById("qzExit").addEventListener("click",function(){ navBack(); });
+document.getElementById("qzExit").addEventListener("click",function(){ quizMockStop(); navBack(); });
 document.getElementById("scExit").addEventListener("click",function(){ navBack(); });
 document.getElementById("wbExit").addEventListener("click",function(){ navBack(); });
 function quizStartChapter(ch,count){
@@ -3545,10 +3600,63 @@ function quizStartChapter(ch,count){
   });
   var pick=qs.slice(0,Math.min(count||10,qs.length));
   QS={mode:"ch",ch:ch, ids:pick.map(function(q){return q.id;}), i:0, ans:[], t0:Date.now(), wrong:[]};
-  /* `.71`：按钮写「练这章」、实际抽 min(10, 题数)——把抽了几题写进标题，别让人以为整章都要做完 */
-  quizOpenTitle("第 "+ch+" 章 · "+((QUIZ.chapters[ch]||{}).name||"")+" · 抽 "+pick.length+" 题");
+  /* `.71`：按钮写「练这章」、实际抽 min(10, 题数)——把抽了几题写进标题，别让人以为整章都要做完
+     `.74`：jp / ai 是频道不是章，标题改成「日语 · 全部 · 抽 N 题」 */
+  var _nm=(QUIZ.chapters[ch]||{}).name||"";
+  var _lb=/^\d+$/.test(String(ch))?("第 "+ch+" 章 · "+_nm):(_nm+" · 全部");
+  quizOpenTitle(_lb+" · 抽 "+pick.length+" 题");
   qzOpen(); quizRenderQ();
 }
+/* `.72` 模拟考：按考纲分值组卷 100 题（10 分章 10 题…2 分章 2 题）、100 分钟倒计时、到点自动交卷、每题 1 分 60 过线。
+   章内优先出没做过的题；错题照常进错题本；未答的题计分按错但不进错题本（没看过题不污染错因）。 */
+function quizStartMock(){
+  if(!QUIZ||!QUIZ.questions.length){ toast("题库还没加载好"); return; }
+  /* `.74` 只认 CDGA 的数字章：jp / ai 频道有自己的入口（quizEntryHTML2），不能混进「已开放 N 章」 */
+  var chs=Object.keys(QUIZ.chapters).filter(function(c){return /^\d+$/.test(c);}).sort(function(a,b){return (+a)-(+b);});
+  var rec=quizRec(), ids=[];
+  chs.forEach(function(c){
+    var pts=(QUIZ.chapters[c]||{}).points||0;
+    var want=Math.max(2,Math.round(pts));
+    var qs=quizByCh(c).slice();
+    qs.sort(function(a,b){
+      var ra=(rec[a.id]||{}).n||0, rb=(rec[b.id]||{}).n||0;
+      if(ra!==rb)return ra-rb;
+      return Math.random()-0.5;
+    });
+    ids=ids.concat(qs.slice(0,want).map(function(q){return q.id;}));
+  });
+  if(ids.length<80){ toast("题库题目不足，组不了卷"); return; }
+  QS={mode:"mock",ch:0,ids:ids,i:0,ans:[],t0:Date.now(),wrong:[],mockEnd:Date.now()+100*60*1000};
+  quizOpenTitle("模拟考 · 第 1 / "+ids.length+" 题");
+  qzOpen(); quizRenderQ(); quizMockTick();
+}
+var _mockTimer=null;
+function quizMockStop(){ if(_mockTimer){ clearInterval(_mockTimer); _mockTimer=null; } }
+function quizMockClock(ms){
+  var s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;
+  return (h?h+':':'')+(m<10&&h?'0':'')+m+':'+(ss<10?'0':'')+ss;
+}
+function quizMockTick(){
+  quizMockStop();
+  _mockTimer=setInterval(function(){
+    if(!QS||QS.mode!=="mock"||!document.getElementById("qzFull").classList.contains("on")){ quizMockStop(); return; }
+    var left=QS.mockEnd-Date.now();
+    quizOpenTitle("模拟考 "+quizMockClock(Math.max(0,left))+" · 第 "+(QS.i+1)+" / "+QS.ids.length+" 题");
+    if(left<=0){ quizMockStop(); toast("时间到，自动交卷"); quizFinish(); }
+  },1000);
+}
+/* `.73` 后台节流补偿：切到后台/锁屏时浏览器会把 setInterval 节流到 1 分钟一次，
+   倒计时会「看起来停了」。绝对时间交卷不受影响，但显示要跟上——切回来时立刻重算标题。 */
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible')return;
+  if(!QS||QS.mode!=="mock")return;
+  var full=document.getElementById('qzFull');
+  if(!full||!full.classList.contains('on'))return;
+  var left=QS.mockEnd-Date.now();
+  if(left<=0){ quizMockStop(); toast("时间到，自动交卷"); quizFinish(); return; }
+  quizOpenTitle("模拟考 "+quizMockClock(left)+" · 第 "+(QS.i+1)+" / "+QS.ids.length+" 题");
+  if(!_mockTimer) quizMockTick();
+});
 /* `.67`：按节抽 5 题——知识树里「3.3 组织与角色 正确率 33%」点一下就练这一节 */
 function quizStartSec(ch,sec){
   var qs=quizByCh(ch).filter(function(q){ return String(q.sec)===String(sec); });
@@ -3566,7 +3674,13 @@ function quizStartSec(ch,sec){
 }
 function quizCardIds(cardId){
   var m=(QUIZCARDS&&QUIZCARDS[cardId])||[];
-  return m.filter(function(id){ return !!quizQ(id); });
+  var ids=m.filter(function(id){ return !!quizQ(id); });
+  if(ids.length) return ids;
+  /* `.74`：日语 / AI 的配套题直接挂在题目的 card 字段上，不用另维护一份映射表 */
+  var auto=[];
+  var all=(QUIZ&&QUIZ.questions)||[];
+  for(var i=0;i<all.length;i++) if(all[i].card===cardId) auto.push(all[i].id);
+  return auto;
 }
 function quizHasCard(cardId){ return quizCardIds(cardId).length>0; }
 function quizStartCard(cardId,cardTitle){
@@ -3579,7 +3693,10 @@ function quizStartCard(cardId,cardTitle){
 function quizRenderQ(){
   var box=document.getElementById("qzBody"); if(!box||!QS)return;
   var q=quizQ(QS.ids[QS.i]); if(!q){ quizFinish(); return; }
-  quizOpenTitle("第 "+(QS.i+1)+" / "+QS.ids.length+" 题"+(QS.mode==="card"?" · 这张卡":(QS.mode==="sec"?" · "+QS.sec:" · 第 "+QS.ch+" 章")));
+  if(QS.mode!=="mock"){
+    var _tail=(QS.mode==="card")?" · 这张卡":(QS.mode==="sec")?(" · "+QS.sec):(/^\d+$/.test(String(QS.ch))?(" · 第 "+QS.ch+" 章"):(" · "+((QUIZ.chapters[QS.ch]||{}).name||"")));
+    quizOpenTitle("第 "+(QS.i+1)+" / "+QS.ids.length+" 题"+_tail);
+  }
   var html='';
   html+='<div class="qzstem">'+esc(q.stem)+'</div><div class="qzopts">';
   q.options.forEach(function(o,i){
@@ -3656,13 +3773,21 @@ function quizDeep(q,pick){
   });
 }
 function quizFinish(){
+  quizMockStop();
   var box=document.getElementById("qzBody"); if(!box||!QS)return;
-  quizOpenTitle("本组结果");
-  var n=QS.ids.length, right=0;
-  QS.ans.forEach(function(a,i){ var q=quizQ(QS.ids[i]); if(q&&a===q.ans) right++; });
+  var n=QS.ids.length, right=0, answered=0;
+  QS.ans.forEach(function(a,i){ var q=quizQ(QS.ids[i]); if(q&&a===q.ans) right++; if(a!==undefined)answered++; });
   var secs=Math.max(1,Math.round((Date.now()-QS.t0)/1000));
-  var html='<div class="qzsum"><div class="qzn">'+right+' / '+n+'</div>'
-    +'<div class="qza">正确率 '+Math.round(right/n*100)+'% · 用时 '+Math.floor(secs/60)+' 分 '+(secs%60)+' 秒</div></div>';
+  var html='';
+  if(QS.mode==="mock"){
+    quizOpenTitle(right>=60?"模拟考 · 过线 ✓":"模拟考 · 未过线");
+    html='<div class="qzsum"><div class="qzn">'+right+' / 100</div>'
+      +'<div class="qza">'+(right>=60?'✓ 达到及格线 60 分':'未过线 · 还差 '+(60-right)+' 分')+' · 用时 '+Math.floor(secs/60)+' 分 '+(secs%60)+' 秒'+((n-answered)?(' · 未答 '+(n-answered)+' 题按错计'):'')+'</div></div>';
+  }else{
+    quizOpenTitle("本组结果");
+    html='<div class="qzsum"><div class="qzn">'+right+' / '+n+'</div>'
+      +'<div class="qza">正确率 '+Math.round(right/n*100)+'% · 用时 '+Math.floor(secs/60)+' 分 '+(secs%60)+' 秒</div></div>';
+  }
   if(QS.wrong.length){
     html+='<div class="qzwrong"><div class="qzsh">本组错题 '+QS.wrong.length+' 道（已记录）</div>';
     QS.wrong.forEach(function(id){ var q=quizQ(id); if(q) html+='<div class="qzwi"><b>'+esc('ABCD'[q.ans])+'</b> '+esc(q.stem)+'</div>'; });
@@ -3671,13 +3796,14 @@ function quizFinish(){
     html+='<div class="qzgood">全对，这章可以过了 ✓</div>';
   }
   var _m=QS.mode, _ch=QS.ch, _cid=QS.cardId, _ct=QS.cardTitle, _sec=QS.sec, _qsIds=QS.ids.slice();
-  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':('sec'===_m?'再练这一节':('one'===_m?'再做一遍':'再来一组')))+'</button>'
+  html+='<button class="qznext" id="qzAgain">'+(('card'===_m)?'再来一遍':('sec'===_m?'再练这一节':('one'===_m?'再做一遍':('mock'===_m?'再考一套（重新组卷）':'再来一组'))))+'</button>'
        +'<button class="qzquit2" id="qzHome">'+('card'===_m?'关掉':'回频道')+'</button>';
   box.innerHTML=html;
   document.getElementById("qzAgain").addEventListener("click",function(){
     if('card'===_m) quizStartCard(_cid,_ct);
     else if('sec'===_m) quizStartSec(_ch,_sec);
     else if('one'===_m) quizStartOne(_qsIds[0]);
+    else if('mock'===_m) quizStartMock();
     else quizStartChapter(_ch);
   });
   document.getElementById("qzHome").addEventListener("click",function(){ navBack(); });
@@ -5137,6 +5263,37 @@ function addDig(id){
 var toastT=null;
 function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("on");},1600);}
 
+/* `.74` 键盘可达：给可点元素补 tabindex/role，Enter 或空格触发点击；MutationObserver 跟随重渲染补挂。
+   只加属性、不改原有事件，触屏行为完全不变。 */
+(function(){
+  var SEL='.tab,.card,.cardrow,.topic .th,.kn-hd,.qitem,.aitem,.dig,.qzrow,.kn-sq,.kn-mk,.kn-btn,.qzeT';
+  function enhance(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){
+      var el=els[i];
+      if(el.dataset.kbTb)continue;
+      el.dataset.kbTb='1';
+      if(!el.getAttribute('tabindex'))el.setAttribute('tabindex','0');
+      if(!el.getAttribute('role'))el.setAttribute('role','button');
+    }
+  }
+  function boot(){
+    enhance();
+    try{
+      var t=null;
+      new MutationObserver(function(){ clearTimeout(t); t=setTimeout(enhance,200); })
+        .observe(document.body,{childList:true,subtree:true});
+    }catch(e){}
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var el=e.target&&e.target.closest?e.target.closest(SEL):null;
+    if(!el)return;
+    e.preventDefault(); el.click();
+  });
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+
 /* ====================== 初始 ====================== */
 initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));checkAndGenDetails();
 /* `.67`：知识树的掌握度要读题库记录（每题做几次/错几次/连对），所以启动就把题库拉进来，
@@ -5181,6 +5338,13 @@ function loadFeed(onDone){
       renderToday();renderChannels();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));
       if(!CARDS.some(function(c){return normCh(c.ch)===treeCh;}))initTreeCh();
       renderTreePills();renderTree();if(document.getElementById("segMap").classList.contains("on"))renderShuli();
+      /* `.73` 保鲜提示：feed.updated 距今超 2 天，说明云端推送任务可能停了 —— 提醒一下，别让「没新内容」被当成「没内容」。 */
+      try{
+        var fd=d&&d.updated?new Date(d.updated):null;
+        if(fd&&(Date.now()-fd.getTime())>2*86400000){
+          setTimeout(function(){ toast('最近没收到新推送（上次 '+(d.updated||'?')+'），推送任务可能停了'); },3200);
+        }
+      }catch(e){}
     })
     .catch(function(e){/* 离线或首次部署：用内置兜底，不报错 */})
     .then(function(){ if(onDone)onDone(); });
@@ -5188,7 +5352,7 @@ function loadFeed(onDone){
 loadFeed();
 
 /* `.64`：启动就把题库拉下来（左滑「已读卡」要立刻判断这张卡有没有配题） */
-quizLoad(function(){});
+quizLoad(function(){ kbStorageWarn(); });
 
 /* ====================== 下拉刷新 ====================== */
 (function(){
@@ -5238,7 +5402,7 @@ quizLoad(function(){});
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-21.71';
+var _APP_VER_ = '2026-11-21.73';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
