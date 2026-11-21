@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>下钻｜元数据 3 大类型先记个轮廓</title>
+<style>
+  body{background:#12141a;color:#d8dee9;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.75;margin:0;padding:2rem 1rem;}
+  .wrap{max-width:680px;margin:0 auto;}
+  .meta{color:#7f8a9a;font-size:.85rem;margin-bottom:.6rem;}
+  h1{font-size:1.35rem;color:#f0f3f7;line-height:1.5;}
+  .lead{background:#1a1e28;border-left:4px solid #4f8ef7;padding:.8rem 1rem;border-radius:6px;color:#c9d4e3;margin:1rem 0;}
+  h2{font-size:1.05rem;color:#7fb0ff;margin:1.6rem 0 .5rem;}
+  .quote{background:#171b24;border-left:3px solid #3a4459;padding:.6rem .9rem;border-radius:5px;color:#aeb9c8;margin:.5rem 0;font-size:.95rem;}
+  .trap{color:#e8b26a;margin:.3rem 0;}
+  table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.92rem;}
+  th,td{border:1px solid #2a3242;padding:.5rem .6rem;text-align:left;}
+  th{background:#1a2030;color:#9fc0ff;}
+  .quiz{background:#171b24;border:1px solid #2a3242;border-radius:8px;padding:.9rem 1rem;margin:.9rem 0;}
+  .opt{padding:.15rem 0;color:#c3cddc;}
+  .ans{color:#6fd18b;margin-top:.4rem;}
+  .mnemonic{background:#1d2430;border:1px dashed #4f8ef7;border-radius:8px;padding:.8rem 1rem;color:#ffd479;margin:1rem 0;}
+  .check{color:#9aa7b8;font-size:.9rem;white-space:pre-line;background:#171b24;border-radius:6px;padding:.7rem .9rem;margin:.8rem 0;}
+  .rel a{color:#7fb0ff;text-decoration:none;}
+  .source{color:#6f7a8a;font-size:.82rem;margin-top:2rem;border-top:1px solid #2a3242;padding-top:.8rem;white-space:pre-line;}
+  p{margin:.5rem 0;}
+</style>
+</head>
+<body><div class="wrap">
+<div class="meta">下钻页 · 配套卡片 dt58 · 2026-11-21</div>
+<h1>业务 / 技术 / 操作：元数据 3 大类型的分界线</h1>
+<div class="lead">这是第 12 章最常考的分类题。明天的 2/共5 会逐条展开清单，今天先把三类的分界记个轮廓。</div>
+
+<h2>一句话分家</h2>
+<p>继续图书馆的比喻：业务元数据是「写给读者和馆长看的卡片」（这书讲什么、归谁管）；技术元数据是「写给书库管理员的技术档案」（书架编号、搬运路线）；操作元数据是「图书馆的运行日志」（几点开门、谁借过、坏了几本书）。</p>
+
+<h2>1. 业务元数据</h2>
+<p>教材定位（p317–p319）：主要关注数据的内容和状态，包含与数据治理相关的详细信息，与技术无关的名称、概念定义、主题域、实体和属性。典型内容：数据集/表/字段定义、业务规则与计算公式、数据质量规则和检核结果、指定的记录系统、利益相关方联系信息（数据所有者、数据管理专员）、数据的安全及隐私级别。</p>
+
+<h2>2. 技术元数据</h2>
+<p>教材定位：提供数据的技术细节、存储数据的系统，以及数据在系统内、系统间流转的流程。典型内容：物理表名和字段名、物理数据模型（表名、键、索引）、CRUD 规则、ETL 作业详情、源到目标映射文档、数据血缘文档、恢复和备份规则。</p>
+
+<h2>3. 操作元数据</h2>
+<p>教材定位：描述了数据处理和访问的细节。典型内容：批处理程序作业执行日志、错误日志、报告和查询的访问模式与执行时间、SLA 要求和规定、容量和使用模式、备份保留策略。</p>
+
+<h2>先记一个坑</h2>
+<div class="mnemonic">教材特别提醒（p317）：「最好是依据元数据的生成方式而非其用法看待元数据分类」——因为技术人员也会用「业务」元数据。另外图书情报还有一套「描述/结构/管理」三分类，别和教材的业务/技术/操作混为一谈。</div>
+
+<div class="source">来源说明：依据《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》转录底稿 p317–p320（2026-11-10 已回核原句）。</div>
+</div></body></html>
