@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>合格评定功能法基本概念｜选取，确定，复核、决定与证明各环…</title><style>
+
+/* 主题随知识台：data-theme / 系统暗色 / ?t= */
+:root{
+  --bg:#F2F6FB; --card:#FFFFFF; --card-2:#F7FAFD; --card-3:#EFF6FD;
+  --ink:#12293F; --ink-2:#4E6C8B; --ink-3:#8098B0;
+  --line:#DCE9F6; --line-2:#E8F1FA;
+  --accent:#1F6FB2; --accent-soft:#E3F0FA; --accent-line:#B9D6EE;
+  --s:#C0392B; --s-soft:#FBEAE7;
+  --ok:#1E8E5A; --ok-soft:#E4F4EC;
+  --shadow:0 6px 22px rgba(20,98,172,.09);
+}
+html[data-theme="dark"]{
+  --bg:#12141A; --card:#1A1D26; --card-2:#20242E; --card-3:#232835;
+  --ink:#E9E6E0; --ink-2:#A8A396; --ink-3:#78736A;
+  --line:#2A2F3A; --line-2:#232833;
+  --accent:#6FB4EE; --accent-soft:#1B2E42; --accent-line:#2F5A80;
+  --s:#F2765F; --s-soft:#3A211D;
+  --ok:#4FC38A; --ok-soft:#16302A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.78);
+}
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]){
+    --bg:#12141A; --card:#1A1D26; --card-2:#20242E; --card-3:#232835;
+    --ink:#E9E6E0; --ink-2:#A8A396; --ink-3:#78736A;
+    --line:#2A2F3A; --line-2:#232833;
+    --accent:#6FB4EE; --accent-soft:#1B2E42; --accent-line:#2F5A80;
+    --s:#F2765F; --s-soft:#3A211D;
+    --ok:#4FC38A; --ok-soft:#16302A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.78);
+  }
+}
+html,body{background:var(--bg)}
+body{margin:0;padding:18px 13px 40px;color:var(--ink);
+ font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+ font-size:15px;line-height:1.72;-webkit-text-size-adjust:100%}
+.wrap{max-width:430px;margin:0 auto}
+
+/* ── 卡头 ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+ overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px}
+.hd{padding:14px 16px 15px;background:linear-gradient(180deg,var(--card-3),var(--card));
+ border-bottom:1px solid var(--line-2)}
+.row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.lv{font-size:11.5px;font-weight:800;letter-spacing:.03em;padding:3px 9px;border-radius:6px;line-height:1.5}
+.lv-s{background:var(--s);color:#fff}
+.lv-a{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-line)}
+.lv-b,.lv-c,.lv-n{background:var(--card-2);color:var(--ink-2);border:1px solid var(--line)}
+.code{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);
+ padding:3px 8px;border-radius:6px;font-family:ui-monospace,Menlo,monospace}
+.hd h1{margin:0;font-size:19px;font-weight:700;line-height:1.42;letter-spacing:-.01em}
+.hd .meta1{margin:8px 0 0;font-size:11.5px;color:var(--ink-3);line-height:1.6}
+
+/* ── 一句话结论 ── */
+.tldr{margin:12px 13px 0;padding:12px 14px;background:var(--accent-soft);
+ border-radius:10px;border-left:3px solid var(--accent)}
+.tldr .lb{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);
+ margin-bottom:5px}
+.tldr .tx{font-size:14.5px;line-height:1.66;color:var(--ink);font-weight:600}
+.tldr .tx b{font-weight:800;color:var(--accent)}
+
+/* ── 数据条 ── */
+.stats{display:flex;gap:8px;margin:12px 13px 0}
+.stat{flex:1;background:var(--card-2);border:1px solid var(--line-2);border-radius:9px;
+ padding:8px 6px;text-align:center}
+.stat .n{font-size:17px;font-weight:800;color:var(--accent);line-height:1.25;
+ font-variant-numeric:tabular-nums}
+.stat .l{font-size:10.5px;color:var(--ink-3);margin-top:1px}
+
+/* ── 正文分区 ── */
+.bd{padding:6px 13px 14px}
+.blk{margin:14px 0 0;background:var(--card-2);border-radius:11px;
+ border:1px solid var(--line-2);overflow:hidden}
+.blk.key{border-color:var(--accent-line)}
+.bh{display:flex;align-items:center;gap:8px;padding:10px 13px;background:var(--card-3);
+ border-bottom:1px solid var(--line-2)}
+.bh .no{flex:none;width:20px;height:20px;border-radius:50%;background:var(--accent);
+ color:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;
+ justify-content:center;font-variant-numeric:tabular-nums}
+.bh .tt{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.45}
+.bb{padding:11px 13px 12px}
+.bb p{margin:0 0 8px;font-size:14.5px;line-height:1.74;color:var(--ink)}
+.bb p:last-child{margin-bottom:0}
+/* 要点符号列表 */
+ul.pts{margin:0;padding:0;list-style:none}
+ul.pts li{position:relative;padding-left:16px;margin:0 0 7px;font-size:14.5px;line-height:1.72}
+ul.pts li:last-child{margin-bottom:0}
+ul.pts li::before{content:"";position:absolute;left:3px;top:.66em;width:5px;height:5px;
+ border-radius:50%;background:var(--accent)}
+ul.pts li.err::before{background:var(--s);border-radius:1px;transform:rotate(45deg)}
+/* 流程链 */
+.flow{display:flex;align-items:stretch;gap:0;margin:2px 0 4px;flex-wrap:nowrap}
+.flow .st{flex:1;min-width:0;background:var(--card);border:1px solid var(--accent-line);
+ border-radius:8px;padding:7px 4px;text-align:center}
+.flow .st .n{font-size:12.5px;font-weight:800;color:var(--accent);line-height:1.35}
+.flow .st .d{font-size:10.5px;color:var(--ink-3);margin-top:1px;line-height:1.4}
+.flow .ar{flex:none;width:14px;display:flex;align-items:center;justify-content:center;
+ color:var(--accent);font-size:13px}
+.flow .st.opt{border-style:dashed;background:transparent}
+/* 行内强调 */
+b.hl{color:var(--accent);font-weight:700;background:var(--accent-soft);
+ padding:0 3px;border-radius:4px}
+b.err{color:var(--s);font-weight:700;background:var(--s-soft);padding:0 3px;border-radius:4px}
+/* 引用出处 */
+.src{display:block;margin-top:8px;font-size:11.5px;color:var(--ink-3);
+ border-top:1px dashed var(--line);padding-top:7px;line-height:1.6}
+
+/* ── 易错清单 ── */
+.errs{padding:0}
+.errs li{list-style:none;display:flex;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.errs li:last-child{border-bottom:0}
+.errs .bx{flex:none;width:15px;height:15px;border:1.5px solid var(--s);border-radius:4px;
+ margin-top:4px;opacity:.65}
+.errs .ct{font-size:14px;line-height:1.68}
+
+/* ── 速记 ── */
+.mn{margin:14px 0 0;border-radius:11px;background:var(--accent-soft);
+ border-left:3px solid var(--accent);padding:12px 14px}
+.mn .lb{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);margin-bottom:5px}
+.mn .tx{font-size:14.5px;line-height:1.7;font-weight:600}
+
+/* ── 溯源 ── */
+.meta{margin:14px 0 0;background:var(--card);border:1px solid var(--line);border-radius:11px;
+ padding:12px 14px}
+.meta .mh{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--ink-3);margin-bottom:7px}
+.mi{display:flex;font-size:12px;line-height:1.8;padding:2px 0}
+.mk{color:var(--ink-3);width:62px;flex:none}
+.mv{color:var(--ink-2);flex:1;word-break:break-word}
+.fn{text-align:center;font-size:11px;color:var(--ink-3);margin-top:14px;line-height:1.7}
+
+.qa{padding:9px 0;border-bottom:1px dashed var(--line)}
+.qa:last-child{border-bottom:0;padding-bottom:0}
+.qa .qs{font-size:14px;line-height:1.7;font-weight:600}
+.qmeta2{display:flex;gap:8px;align-items:center;margin:5px 0 4px;flex-wrap:wrap}
+.qans{font-size:11.5px;font-weight:800;color:var(--ok);background:var(--ok-soft);
+ padding:1px 7px;border-radius:5px}
+.qsrc{font-size:11px;color:var(--ink-3)}
+.qana{font-size:12.5px;line-height:1.68;color:var(--ink-2);
+ background:var(--card);border-left:2px solid var(--accent-line);padding:6px 9px;border-radius:0 6px 6px 0}
+</style></head><body>
+<script>(function(){try{var q=(location.search.match(/[?&]t=(dark|light)/)||[])[1];var t=q||localStorage.getItem("kb_theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();</script>
+<div class="wrap">
+<div class="card">
+<div class="hd">
+  <div class="row"><span class="lv lv-s">S 级 · 重点</span><span class="code">3.1.5-a</span></div>
+  <h1>合格评定功能法基本概念｜选取，确定，复核、决定与证明各环…</h1>
+  <p class="meta1">合格评定基础知识 · 3.1.5 · 考频排名 1</p>
+</div>
+<div class="tldr"><div class="lb">一句话结论</div><div class="tx">合格评定功能法是开展合格评定活动的基本方法，适用于所有合格评定活动，其目的在于证实规定要求的满足，并增加使用者信任。</div></div>
+<div class="stats"><div class="stat"><div class="n">47</div><div class="l">历年题数</div></div><div class="stat"><div class="n">63</div><div class="l">累计分值</div></div><div class="stat"><div class="n">7/7</div><div class="l">出现卷数</div></div></div>
+</div>
+<div class="card"><div class="bd">
+<div class="blk key"><div class="bh"><span class="no">1</span><span class="tt">大纲怎么要求</span></div><div class="bb"><ul class="pts"><li>合格评定功能法的选取，确定，复核、决定与证明各环节的内涵、特征、方法、相互关系等（3.1.5，合格评定功能法基本概念）</li></ul></div></div><div class="blk"><div class="bh"><span class="no">2</span><span class="tt">笔记原文要点</span></div><div class="bb"><ul class="pts"><li>合格评定功能法是开展合格评定活动的基本方法，适用于所有合格评定活动，其目的在于证实规定要求的满足，并增加使用者信任。</li><li>三项功能按顺序运行，构成合格评定基本过程。</li><li>选取:确定范围、要求、方案、方法和抽样等。</li><li>确定:通过检测、检验、审核、评审等获取符合性证据。</li><li>复核、决定与证明:核查证据，做出结论，并以声明、证书、报告等形式表示。</li><li>监督不属于基本三功能，但在认证、认可等持续性活动中常常需要。</li></ul></div></div><div class="blk"><div class="bh"><span class="no">3</span><span class="tt">真题怎么考</span></div><div class="bb"><div class="qa"><div class="qs">抽样方案应当考虑检查的结果是计数还是计量的。()</div><div class="qmeta2"><span class="qans">答案 正确</span><span class="qsrc">2023年5月 · 2023-05-J06</span></div><div class="qana">抽样方案应当考虑检查的结果是计数的还是计量的。</div></div><div class="qa"><div class="qs">在不同的合格评定活动中，“确定”可以涉及()活动。</div><div class="qmeta2"><span class="qans">答案 BC</span><span class="qsrc">2023年5月 · 2023-05-M09</span></div><div class="qana">进行合格评定确定活动的目的是获得关于合格评定对象或其样品满足规定要求情况的完整信息，在此基础上作出评价。确定活动可能涉及检测、检查、审核或评审、同行评审等。</div></div><div class="qa"><div class="qs">认证的复核是对证据的充分性、合格评定活动的()所进行的风险把关与决策工作。</div><div class="qmeta2"><span class="qans">答案 AB</span><span class="qsrc">2023年5月 · 2023-05-M13</span></div><div class="qana">从合格评定责任角度，复核是对合格评定活动所获取的合格评定对象满足规定要求的证据的充分性、合格评定活动规范性以及评价的准确性等进行的风险把关与决策工作，是合格评定的关键活动之一。</div></div></div></div><div class="blk"><div class="bh"><span class="tt">易错提醒 · 原文点出的坑</span></div><div class="bb"><ul class="errs" style="margin:0;padding:0"><li><span class="bx"></span><span class="ct">监督不属于基本三功能，但在认证、认可等持续性活动中常常需要。</span></li></ul></div></div>
+<div class="meta"><div class="mh">溯源 · 备考库原文定位</div><div class="mi"><span class="mk">考点编号</span><span class="mv">3.1.5-a</span></div><div class="mi"><span class="mk">考频分层</span><span class="mv">S 级（排名 1）</span></div><div class="mi"><span class="mk">大纲条目</span><span class="mv">3.1.5 合格评定功能法基本概念</span></div><div class="mi"><span class="mk">题型构成</span><span class="mv">单选38·多选7·判断1·问答1</span></div><div class="mi"><span class="mk">笔记出处</span><span class="mv">三色笔记《合格评定基础》V3.0 · 对应学习要点</span></div></div>
+<div class="fn">内容取自 IMA「CCAA备考」知识库 · 三色笔记 + 真题回挂数据集</div>
+</div></div>
+</div></body></html>
