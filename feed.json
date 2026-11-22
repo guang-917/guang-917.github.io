@@ -1,6 +1,29 @@
 {
   "cards": [
     {
+      "id": "ccdemo01",
+      "ch": "ccaa",
+      "ccseq": null,
+      "title": "格式样板 · 不是知识点",
+      "date": "2026-11-22",
+      "date2": "11月22日",
+      "read": false,
+      "star": false,
+      "sum": "仅用于说明卡池字段结构，推送时按 sample 规则跳过。",
+      "tags": [
+        "CCAA",
+        "样板"
+      ],
+      "lead": "这不是一张知识点卡片。",
+      "body": [
+        "这张卡说明 CCAA 卡池的字段结构，不会被推送到手机。"
+      ],
+      "rel": [],
+      "level": "未考",
+      "point": "-",
+      "link": "cards/ccdemo01.html"
+    },
+    {
       "id": "jp51",
       "ch": "jp",
       "title": "早会打招呼 · は行假名 · 「〜ています」进行句（敬语分级文化）",
