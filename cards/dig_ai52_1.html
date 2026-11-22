@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：想让 AI 更懂你的业务，什么时候改提示词就够，什么时候才值得微调？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="meta">29/32 · 本期深挖</div>
+<h1>想让 AI 更懂你的业务，什么时候改提示词就够，什么时候才值得微调？</h1>
+
+<h2>核心答案：按成本从低到高，三道闸依次过</h2>
+<p>九成“AI 不懂我”的问题，都不需要微调。依次问自己三个问题，过不了闸才往下走：</p>
+<ul>
+<li><b>闸门一：是它“不知道”，还是“不会说”？</b>缺公司制度、产品参数这类新知识，微调帮不上忙——用知识库/RAG（M4 系列讲过）把资料喂给它现查，知识更新零成本。</li>
+<li><b>闸门二：是输出格式、口气不稳？</b>在提示词里固定结构、贴 3~5 条你的真实好例子，通常一次见效。这是“岗前培训”级别的零成本做法。</li>
+<li><b>闸门三：以上都试过，任务模式仍然固定且量大？</b>比如每天几百条工单都要按同一套口径分类——这时才用各家平台的微调入口，把攒下的几百到几千条真实好例子交上去。</li>
+</ul>
+
+<blockquote>生活比方：新员工写邮件不合规矩，你是先给他几封标准邮件照着写（提示词+例子），还是直接送他去重读一个学位（微调）？多数时候，几封样例就够了。</blockquote>
+
+<h2>两个容易踩的坑</h2>
+<ul>
+<li><b>拿微调当“塞知识”的工具</b>：微调改变的是“做事习惯”，不是往仓库里存新资料；往里硬灌事实，既贵又容易过期。</li>
+<li><b>例子质量不到位就开工</b>：LIMA 论文的结论是“贵在精不在多”——喂进去十条平庸例子，不如一条你亲手改到满意的标准答案。</li>
+</ul>
+
+<div class="note">来源说明：LIMA 论文（Zhou 等，arXiv:2305.11206，2023年5月）；InstructGPT 论文（Ouyang 等，arXiv:2203.02155，2022年3月）。各平台微调功能的具体价格与限制差异较大，使用前以官方文档为准。</div>
+</body>
+</html>
