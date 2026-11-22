@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>挖掘：集中式和分布式元数据架构，选型时到底在权衡什么？</title>
+<style>body{background:#121212;color:#d8d4c8;font-family:-apple-system,'PingFang SC',sans-serif;margin:0;padding:24px 16px 48px;line-height:1.9;}h1{font-size:19px;color:#f2efe6;}strong{color:#f5c96b;}</style>
+</head><body><div style="max-width:680px;margin:0 auto;">
+<h1>挖掘｜集中式和分布式元数据架构，选型时到底在权衡什么？</h1>
+<p>把教材 p324–p326 的优缺点清单摊开看，其实就是在三个东西之间讨价还价：<strong>新鲜度、省事度、可靠度</strong>。</p>
+<p><strong>集中式</strong>：卡片抄一份放总目录室。换来的是「高可用性，因为它独立于源系统」「快速的元数据检索」，抽取时还能转换、自定义、补充增强，提高质量；付出的代价是源头一改就得快速同步、维护成本高昂，抽取可能还要自定义模块或中间件。所以教材提醒：IT 资源有限或追求尽可能自动化的组织「可能需要避免这种架构选项」。</p>
+<p><strong>分布式</strong>：不存副本、单一接入点实时到源系统现查。换来的是元数据始终尽可能最新且有效、减少批处理无须复制同步、自动化查询处理更简单；付出的代价是无法支持用户定义或手动插入的条目、源系统不可用则查询能力直接受影响、质量完全取决于源系统，还要面对标准化挑战。</p>
+<p><strong>混合式</strong>：存储库只放用户添加的、关键的标准化元数据和手动处理来源的元数据，其余近实时从源头取——使用时尽可能最新，但「并不提高系统可用性」。<strong>双向</strong>则更进一步，允许任何部分修改并把变更从存储库同步回原始源，代价是必须构建并维护回写接口、系统捕获并解决变更。</p>
+<p>一句话收尾：选型题先把「独立于源系统」判给集中式、把「保持最新」判给分布式，再看题目问的是优点还是缺点，就不会被对调顺序的选项骗到。</p>
+</div></body></html>
