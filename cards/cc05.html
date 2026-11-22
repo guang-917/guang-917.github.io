@@ -1,9 +1,7 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark light">
-<title>审核技术｜基本方法</title><style>
-
-/* 主题随知识台：data-theme / 系统暗色 / ?t= */
+<title>认证的基本概念｜认证类型（产品认证、管理体系认证…</title><style>*{box-sizing:border-box}
 :root{
   --bg:#F2F6FB; --card:#FFFFFF; --card-2:#F7FAFD; --card-3:#EFF6FD;
   --ink:#12293F; --ink-2:#4E6C8B; --ink-3:#8098B0;
@@ -11,6 +9,7 @@
   --accent:#1F6FB2; --accent-soft:#E3F0FA; --accent-line:#B9D6EE;
   --s:#C0392B; --s-soft:#FBEAE7;
   --ok:#1E8E5A; --ok-soft:#E4F4EC;
+  --gold:#B4862A; --gold-soft:#FAF1DF;
   --shadow:0 6px 22px rgba(20,98,172,.09);
 }
 html[data-theme="dark"]{
@@ -20,6 +19,7 @@ html[data-theme="dark"]{
   --accent:#6FB4EE; --accent-soft:#1B2E42; --accent-line:#2F5A80;
   --s:#F2765F; --s-soft:#3A211D;
   --ok:#4FC38A; --ok-soft:#16302A;
+  --gold:#D6AB5C; --gold-soft:#2E2718;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.78);
 }
 @media (prefers-color-scheme: dark){
@@ -30,131 +30,99 @@ html[data-theme="dark"]{
     --accent:#6FB4EE; --accent-soft:#1B2E42; --accent-line:#2F5A80;
     --s:#F2765F; --s-soft:#3A211D;
     --ok:#4FC38A; --ok-soft:#16302A;
+    --gold:#D6AB5C; --gold-soft:#2E2718;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.78);
   }
 }
 html,body{background:var(--bg)}
-body{margin:0;padding:18px 13px 40px;color:var(--ink);
+body{margin:0;padding:16px 13px 40px;color:var(--ink);
  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
- font-size:15px;line-height:1.72;-webkit-text-size-adjust:100%}
+ font-size:15px;line-height:1.7;-webkit-text-size-adjust:100%}
 .wrap{max-width:430px;margin:0 auto}
-
-/* ── 卡头 ── */
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
  overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px}
-.hd{padding:14px 16px 15px;background:linear-gradient(180deg,var(--card-3),var(--card));
- border-bottom:1px solid var(--line-2)}
-.row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.lv{font-size:11.5px;font-weight:800;letter-spacing:.03em;padding:3px 9px;border-radius:6px;line-height:1.5}
-.lv-s{background:var(--s);color:#fff}
-.lv-a{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-line)}
-.lv-b,.lv-c,.lv-n{background:var(--card-2);color:var(--ink-2);border:1px solid var(--line)}
-.code{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);
- padding:3px 8px;border-radius:6px;font-family:ui-monospace,Menlo,monospace}
-.hd h1{margin:0;font-size:19px;font-weight:700;line-height:1.42;letter-spacing:-.01em}
-.hd .meta1{margin:8px 0 0;font-size:11.5px;color:var(--ink-3);line-height:1.6}
+
+/* ── 卡头 ── */
+.hd{padding:15px 16px 13px;background:var(--card-2);border-bottom:1px solid var(--line-2)}
+.hrow{display:flex;align-items:center;gap:7px;margin-bottom:9px;flex-wrap:wrap}
+.lv{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.4px;border:1px solid}
+.lv-s{background:var(--s);border-color:var(--s);color:#fff}
+.lv-a{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+.lv-b,.lv-c,.lv-n{color:var(--ink-3);border-color:var(--line);background:transparent}
+.code{font-size:10.5px;font-weight:700;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-variant-numeric:tabular-nums}
+.part{font-size:11px;color:var(--ink-3);margin-left:auto}
+h1{margin:0 0 8px;font-size:19px;font-weight:800;line-height:1.45;letter-spacing:-.2px}
+.sub1{margin:0 0 7px;font-size:13px;font-weight:600;color:var(--ink-2);line-height:1.6}
+.meta1{margin:0;font-size:11.5px;color:var(--ink-3)}
 
 /* ── 一句话结论 ── */
-.tldr{margin:12px 13px 0;padding:12px 14px;background:var(--accent-soft);
- border-radius:10px;border-left:3px solid var(--accent)}
-.tldr .lb{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);
- margin-bottom:5px}
-.tldr .tx{font-size:14.5px;line-height:1.66;color:var(--ink);font-weight:600}
-.tldr .tx b{font-weight:800;color:var(--accent)}
+.tldr{padding:13px 16px;background:var(--accent-soft);border-left:4px solid var(--accent)}
+.tldr .lb{font-size:10px;font-weight:800;color:var(--accent);letter-spacing:1px;margin-bottom:5px}
+.tldr .tx{font-size:14.5px;line-height:1.7;font-weight:600}
 
-/* ── 数据条 ── */
-.stats{display:flex;gap:8px;margin:12px 13px 0}
-.stat{flex:1;background:var(--card-2);border:1px solid var(--line-2);border-radius:9px;
- padding:8px 6px;text-align:center}
-.stat .n{font-size:17px;font-weight:800;color:var(--accent);line-height:1.25;
- font-variant-numeric:tabular-nums}
-.stat .l{font-size:10.5px;color:var(--ink-3);margin-top:1px}
+/* ── 考情条 ── */
+.stats{display:flex;padding:0;border-bottom:1px solid var(--line-2)}
+.stat{flex:1;text-align:center;padding:11px 4px;border-right:1px solid var(--line-2)}
+.stat:last-child{border-right:0}
+.stat .n{font-size:18px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat .l{font-size:10.5px;color:var(--ink-3);margin-top:2px}
 
 /* ── 正文分区 ── */
-.bd{padding:6px 13px 14px}
-.blk{margin:14px 0 0;background:var(--card-2);border-radius:11px;
- border:1px solid var(--line-2);overflow:hidden}
-.blk.key{border-color:var(--accent-line)}
-.bh{display:flex;align-items:center;gap:8px;padding:10px 13px;background:var(--card-3);
- border-bottom:1px solid var(--line-2)}
-.bh .no{flex:none;width:20px;height:20px;border-radius:50%;background:var(--accent);
- color:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;
- justify-content:center;font-variant-numeric:tabular-nums}
-.bh .tt{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.45}
-.bb{padding:11px 13px 12px}
-.bb p{margin:0 0 8px;font-size:14.5px;line-height:1.74;color:var(--ink)}
-.bb p:last-child{margin-bottom:0}
-/* 要点符号列表 */
-ul.pts{margin:0;padding:0;list-style:none}
-ul.pts li{position:relative;padding-left:16px;margin:0 0 7px;font-size:14.5px;line-height:1.72}
-ul.pts li:last-child{margin-bottom:0}
-ul.pts li::before{content:"";position:absolute;left:3px;top:.66em;width:5px;height:5px;
- border-radius:50%;background:var(--accent)}
-ul.pts li.err::before{background:var(--s);border-radius:1px;transform:rotate(45deg)}
-/* 流程链 */
-.flow{display:flex;align-items:stretch;gap:0;margin:2px 0 4px;flex-wrap:nowrap}
-.flow .st{flex:1;min-width:0;background:var(--card);border:1px solid var(--accent-line);
- border-radius:8px;padding:7px 4px;text-align:center}
-.flow .st .n{font-size:12.5px;font-weight:800;color:var(--accent);line-height:1.35}
-.flow .st .d{font-size:10.5px;color:var(--ink-3);margin-top:1px;line-height:1.4}
-.flow .ar{flex:none;width:14px;display:flex;align-items:center;justify-content:center;
- color:var(--accent);font-size:13px}
-.flow .st.opt{border-style:dashed;background:transparent}
-/* 行内强调 */
-b.hl{color:var(--accent);font-weight:700;background:var(--accent-soft);
- padding:0 3px;border-radius:4px}
-b.err{color:var(--s);font-weight:700;background:var(--s-soft);padding:0 3px;border-radius:4px}
-/* 引用出处 */
-.src{display:block;margin-top:8px;font-size:11.5px;color:var(--ink-3);
- border-top:1px dashed var(--line);padding-top:7px;line-height:1.6}
+.bd{padding:6px 16px 16px}
+.blk{padding:13px 0;border-bottom:1px dashed var(--line)}
+.blk:last-child{border-bottom:0}
+.bh{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.bh .no{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;
+ font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.bh .tt{font-size:12px;font-weight:800;letter-spacing:.6px;color:var(--ink-2)}
+.pts{margin:0;padding:0;list-style:none}
+.pts li{position:relative;padding-left:15px;margin-bottom:7px;font-size:14px;line-height:1.72;color:var(--ink)}
+.pts li:last-child{margin-bottom:0}
+.pts li:before{content:"";position:absolute;left:3px;top:9px;width:5px;height:5px;border-radius:50%;background:var(--accent-line)}
+.pts li b{color:var(--accent);font-weight:800}
+.errs{margin:0;padding:0;list-style:none}
+.errs li{position:relative;padding:9px 11px 9px 30px;background:var(--s-soft);border-radius:9px;
+ font-size:13.5px;line-height:1.65;margin-bottom:7px;color:var(--ink)}
+.errs li:last-child{margin-bottom:0}
+.errs .bx{position:absolute;left:11px;top:12px;width:12px;height:12px;border-radius:3px;background:var(--s);opacity:.9}
+.errs .bx:after{content:"!";position:absolute;inset:0;color:#fff;font-size:9px;font-weight:800;text-align:center;line-height:12px}
 
-/* ── 易错清单 ── */
-.errs{padding:0}
-.errs li{list-style:none;display:flex;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line)}
-.errs li:last-child{border-bottom:0}
-.errs .bx{flex:none;width:15px;height:15px;border:1.5px solid var(--s);border-radius:4px;
- margin-top:4px;opacity:.65}
-.errs .ct{font-size:14px;line-height:1.68}
-
-/* ── 速记 ── */
-.mn{margin:14px 0 0;border-radius:11px;background:var(--accent-soft);
- border-left:3px solid var(--accent);padding:12px 14px}
-.mn .lb{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);margin-bottom:5px}
-.mn .tx{font-size:14.5px;line-height:1.7;font-weight:600}
+/* ── 练题指向 ── */
+.quiz{background:var(--card-3);border-radius:11px;padding:12px 13px;margin:12px 0 4px;border:0}
+.quiz .qh{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.6px;margin-bottom:6px}
+.quiz .ql{font-size:13.5px;color:var(--ink-2);line-height:1.65}
+.quiz .ql b{color:var(--ink);font-weight:800;font-size:15px}
+.quiz .qg{font-size:12px;color:var(--accent);font-weight:700;margin-top:6px}
 
 /* ── 溯源 ── */
-.meta{margin:14px 0 0;background:var(--card);border:1px solid var(--line);border-radius:11px;
- padding:12px 14px}
-.meta .mh{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--ink-3);margin-bottom:7px}
-.mi{display:flex;font-size:12px;line-height:1.8;padding:2px 0}
-.mk{color:var(--ink-3);width:62px;flex:none}
-.mv{color:var(--ink-2);flex:1;word-break:break-word}
-.fn{text-align:center;font-size:11px;color:var(--ink-3);margin-top:14px;line-height:1.7}
-
-.qa{padding:9px 0;border-bottom:1px dashed var(--line)}
-.qa:last-child{border-bottom:0;padding-bottom:0}
-.qa .qs{font-size:14px;line-height:1.7;font-weight:600}
-.qmeta2{display:flex;gap:8px;align-items:center;margin:5px 0 4px;flex-wrap:wrap}
-.qans{font-size:11.5px;font-weight:800;color:var(--ok);background:var(--ok-soft);
- padding:1px 7px;border-radius:5px}
-.qsrc{font-size:11px;color:var(--ink-3)}
-.qana{font-size:12.5px;line-height:1.68;color:var(--ink-2);
- background:var(--card);border-left:2px solid var(--accent-line);padding:6px 9px;border-radius:0 6px 6px 0}
+.meta{padding:12px 16px;background:var(--card-2);border-top:1px solid var(--line-2)}
+.mh{font-size:10px;font-weight:800;color:var(--ink-3);letter-spacing:1px;margin-bottom:8px}
+.mi{display:flex;gap:10px;font-size:11.5px;margin-bottom:5px;line-height:1.6}
+.mi:last-child{margin-bottom:0}
+.mk{color:var(--ink-3);flex:0 0 62px}
+.mv{color:var(--ink-2);flex:1;min-width:0;word-break:break-word}
+.fn{padding:10px 16px;font-size:10.5px;color:var(--ink-3);text-align:center;border-top:1px solid var(--line-2)}
 </style></head><body>
 <script>(function(){try{var q=(location.search.match(/[?&]t=(dark|light)/)||[])[1];var t=q||localStorage.getItem("kb_theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();</script>
 <div class="wrap">
-<div class="card">
-<div class="hd">
-  <div class="row"><span class="lv lv-s">S 级 · 重点</span><span class="code">3.2.3-c</span></div>
-  <h1>审核技术｜基本方法</h1>
-  <p class="meta1">审核通用知识 · 3.2.3 · 考频排名 5</p>
+<div class="card"><div class="hd">
+<div class="hrow"><span class="lv lv-s">S 级</span><span class="code">3.1.7-a</span><span class="part">合格评定基础知识 3.1.7</span></div>
+<h1>认证的基本概念</h1>
+<p class="sub1">认证类型（产品认证、管理体系认证</p>
 </div>
-<div class="tldr"><div class="lb">一句话结论</div><div class="tx">3 认证技术的特点综合性强方法多样规范有序服务市场 4 管理体系认证中常见的专项认证技术审核方案管理认证范围和审核范围确定确定 33 34 认证靠技术,核心是合格评定;本质在传递信任,关键在可信、公正、有效。</div></div>
-<div class="stats"><div class="stat"><div class="n">13</div><div class="l">历年题数</div></div><div class="stat"><div class="n">29</div><div class="l">累计分值</div></div><div class="stat"><div class="n">7/7</div><div class="l">出现卷数</div></div></div>
+<div class="tldr"><div class="lb">一句话结论</div><div class="tx">决定前必须审查三点:①审核组信息足以确定认证要求满足情况和范围;②所有严重不符合的纠正和纠正措施已被审查…</div></div>
+<div class="stats"><div class="stat"><div class="n">22</div><div class="l">历年真题</div></div><div class="stat"><div class="n">S</div><div class="l">考频等级</div></div><div class="stat"><div class="n" style="font-size:13px;font-weight:700;padding-top:4px">3.1.7</div><div class="l">大纲条目</div></div></div>
+<div class="bd">
+<div class="blk"><div class="bh"><span class="no">1</span><span class="tt">大纲怎么要求</span></div><ul class="pts"><li>认证类型（产品认证、管理体系认证、服务认证、过程认证、人员认证等）及基本特征（3.1.7，认证的基本概念）</li></ul></div>
+<div class="blk"><div class="bh"><span class="no">2</span><span class="tt">知识要点</span></div><ul class="pts"><li>决定前必须审查三点:①审核组信息足以确定认证要求满足情况和范围</li><li>②所有严重不符合的纠正和纠正措施已被审查、接受和验证</li><li>③所有轻微不符合的纠正和纠正措施计划已被审查和接受</li><li>正式认证文件至少应能辨识：认证机构名称和地址、获证日期、获证组织名称和地址、认证范围、有效期/终止日期、方案要求的其他信息，以及认证机构指定负责人的签名或其他授权签署</li><li>确定审核时间主要考虑：标准要求、体系复杂程度、技术/法规、分包、以往审核、场所数量/规模/地理位置、多场所、相关风险、结…</li></ul></div>
+<div class="quiz"><div class="qh">练题</div><div class="ql">本考点历年真题 <b>22</b> 道（单选 10 · 多选 4 · 判断 7）</div><div class="qg">去「学习频道 › CCAA › 练题」或「知识树 › CCAA」做 →</div></div>
 </div>
-<div class="card"><div class="bd">
-<div class="blk key"><div class="bh"><span class="no">1</span><span class="tt">大纲怎么要求</span></div><div class="bb"><ul class="pts"><li>审核的基本方法（3.2.3，审核技术）</li></ul></div></div><div class="blk"><div class="bh"><span class="no">2</span><span class="tt">笔记原文要点</span></div><div class="bb"><ul class="pts"><li>3 认证技术的特点综合性强方法多样规范有序服务市场 4 管理体系认证中常见的专项认证技术审核方案管理认证范围和审核范围确定确定 33 34 认证靠技术,核心是合格评定;本质在传递信任,关键在可信、公正、有效。</li><li>关键技术两大块：懂专业、会方法；</li><li>四门功课不能缺，专业判断是灵魂。</li></ul></div></div><div class="blk"><div class="bh"><span class="no">3</span><span class="tt">真题怎么考</span></div><div class="bb"><div class="qa"><div class="qs">现场审核时，在受审核方参与、互动的情况下，可以采用的审核技术有（）。</div><div class="qmeta2"><span class="qans">答案 ABCD</span><span class="qsrc">2023年5月 · 2023-05-M05</span></div><div class="qana">见《合格评定基础》P9表3-5可选的审核方法。这道题在2021年5月考过，但是当时的选项中没有面谈，而是交谈。选项的关键字有所变化，所以答案也有变化。</div></div><div class="qa"><div class="qs">在受审核方不参与，与受审核方无互动的情况下，可以采用的审核技术有( )。</div><div class="qmeta2"><span class="qans">答案 ABCD</span><span class="qsrc">2023年10月 · 2023-10-M02</span></div><div class="qana">见GBT19011-2021标准表A.1</div></div><div class="qa"><div class="qs">对虚拟场所的审核有时被称作虚拟审核。</div><div class="qmeta2"><span class="qans">答案 正确</span><span class="qsrc">2024年3月 · 2024-03-J06</span></div><div class="qana">参看GB/&amp; 39;T19011-2021标准A16</div></div></div></div>
-<div class="meta"><div class="mh">溯源 · 备考库原文定位</div><div class="mi"><span class="mk">考点编号</span><span class="mv">3.2.3-c</span></div><div class="mi"><span class="mk">考频分层</span><span class="mv">S 级（排名 5）</span></div><div class="mi"><span class="mk">大纲条目</span><span class="mv">3.2.3 审核技术</span></div><div class="mi"><span class="mk">题型构成</span><span class="mv">单选4·多选7·判断1·问答1</span></div><div class="mi"><span class="mk">笔记出处</span><span class="mv">三色笔记《审核概论》V3.0 · 对应学习要点</span></div></div>
+<div class="meta"><div class="mh">溯源 · 备考库原文定位</div>
+<div class="mi"><span class="mk">考点编号</span><span class="mv">3.1.7-a 认证的基本概念</span></div>
+<div class="mi"><span class="mk">考频分层</span><span class="mv">S 级</span></div>
+<div class="mi"><span class="mk">大纲条目</span><span class="mv">合格评定基础知识 3.1.7</span></div>
+<div class="mi"><span class="mk">历年真题</span><span class="mv">22 道（单选 10 · 多选 4 · 判断 7）</span></div>
+<div class="mi"><span class="mk">笔记出处</span><span class="mv">三色笔记《合格评定基础》V3.0 / 《审核概论》· 对应学习要点</span></div>
+</div>
 <div class="fn">内容取自 IMA「CCAA备考」知识库 · 三色笔记 + 真题回挂数据集</div>
-</div></div>
-</div></body></html>
+</div></div></body></html>
