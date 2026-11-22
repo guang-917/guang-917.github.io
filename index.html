@@ -16,6 +16,7 @@
   --ai:#5b5bd6; --ai-soft:#ececfa;
   --data:#0f8f7d; --data-soft:#e2f3ef;
   --jp:#e8604c; --jp-soft:#fbeae7;
+  --ccaa:#1f6fb2; --ccaa-soft:#e3f0fa;
   --gold:#c9a227; --gold-soft:#f5ecd4;
   --shadow:0 1px 2px rgba(35,32,25,.05), 0 8px 24px -12px rgba(35,32,25,.16);
   --shadow-sm:0 1px 2px rgba(35,32,25,.05);
@@ -111,6 +112,7 @@ body{
 .chip.ai{background:var(--ai-soft);color:var(--ai)}
 .chip.data{background:var(--data-soft);color:var(--data)}
 .chip.jp{background:var(--jp-soft);color:var(--jp)}
+.chip.ccaa{background:var(--ccaa-soft);color:var(--ccaa)}
 .card h3{font-size:15.5px;font-weight:600;line-height:1.4;flex:1;min-width:0}
 .card .sum{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.6}
 .card .meta{font-size:11.5px;color:var(--ink-3);margin-top:10px;display:flex;gap:10px;align-items:center}
@@ -199,6 +201,7 @@ body{
 .chan .ic.ai{background:var(--ai-soft);color:var(--ai)}
 .chan .ic.data{background:var(--data-soft);color:var(--data)}
 .chan .ic.jp{background:var(--jp-soft);color:var(--jp)}
+.chan .ic.ccaa{background:var(--ccaa-soft);color:var(--ccaa)}
 .chan .ic.icqa{background:var(--gold-soft);color:var(--gold)}
 .chan .ct{flex:1;min-width:0}
 .chan .ct b{font-size:15.5px;font-weight:600;display:block}
@@ -425,6 +428,7 @@ body{
 .chpills button .dotc.data{background:var(--data)}
 .chpills button .dotc.ai{background:var(--ai)}
 .chpills button .dotc.jp{background:var(--jp)}
+.dotc.ccaa{background:var(--ccaa)}
 /* 主题节点 */
 .topic{margin-bottom:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow-sm);overflow:hidden}
 .topic .th{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
@@ -1149,14 +1153,14 @@ body{
 <script>
 "use strict";
 /* ====================== 数据 ====================== */
-var CH_META={ai:{n:"AI 知识",c:"ai",ic:"ai"},data:{n:"数据知识",c:"data",ic:"data"},jp:{n:"日语学习",c:"jp",ic:"jp"}};
-var CH_ALIAS={"ai":"ai","AI":"ai","人工智能":"ai","ai知识":"ai","数据":"data","data":"data","数据知识":"data","日语":"jp","日文":"jp","jp":"jp","日语学习":"jp"};
+var CH_META={ai:{n:"AI 知识",c:"ai",ic:"ai"},data:{n:"数据知识",c:"data",ic:"data"},jp:{n:"日语学习",c:"jp",ic:"jp"},ccaa:{n:"CCAA 备考",c:"ccaa",ic:"ccaa"}};
+var CH_ALIAS={"ai":"ai","AI":"ai","人工智能":"ai","ai知识":"ai","数据":"data","data":"data","数据知识":"data","日语":"jp","日文":"jp","jp":"jp","日语学习":"jp","ccaa":"ccaa","CCAA":"ccaa","CCAA备考":"ccaa","ccaa备考":"ccaa","认证通用基础":"ccaa"};
 /* 容错：任何未知/变体的频道代号都归一到 ai/data/jp 之一，避免渲染崩溃 */
 function normCh(ch){
   if(CH_META[ch])return ch;
   var a=CH_ALIAS[ch];
   if(a)return a;
-  if(ch){var s=String(ch).toLowerCase();if(s.indexOf("ai")>=0)return "ai";if(s.indexOf("data")>=0||String(ch).indexOf("数据")>=0)return "data";if(s.indexOf("jp")>=0||String(ch).indexOf("日")>=0)return "jp";}
+  if(ch){var s=String(ch).toLowerCase();if(s.indexOf("ccaa")>=0||String(ch).indexOf("认证通用")>=0)return "ccaa";if(s.indexOf("ai")>=0)return "ai";if(s.indexOf("data")>=0||String(ch).indexOf("数据")>=0)return "data";if(s.indexOf("jp")>=0||String(ch).indexOf("日")>=0)return "jp";}
   return "ai";
 }
 function chMeta(ch){var k=normCh(ch);return CH_META[k]||CH_META.ai;}
@@ -1165,6 +1169,7 @@ var ICON={
  channels:'<svg viewBox="0 0 24 24"><path d="M12 3l8 4.5-8 4.5-8-4.5 8-4.5z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16l8 4.5 8-4.5"/></svg>',
  tree:'<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="12" r="2.4"/><path d="M6 8.4v7.2"/><path d="M8.2 7.1l7.4 3.5"/><path d="M8.2 16.9l7.4-3.5"/></svg>',
  dig:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.4 10.9c.7.5 1.1 1.3 1.2 2.1h4.4c.1-.8.5-1.6 1.2-2.1A6 6 0 0 0 12 3z"/></svg>',
+ ccaa:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9.2" r="5.2"/><path d="M8.6 13.8 7.2 21l4.8-2.3 4.8 2.3-1.4-7.2"/></svg>',
  ai:'<svg viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2.5"/><path d="M9.5 2.5v4"/><path d="M14.5 2.5v4"/><path d="M9.5 17.5v4"/><path d="M14.5 17.5v4"/><path d="M2.5 9.5h4"/><path d="M2.5 14.5h4"/><path d="M17.5 9.5h4"/><path d="M17.5 14.5h4"/><path d="M9.5 9.5h5v5h-5z"/></svg>',
  data:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v13c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-13"/><path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/></svg>',
  jp:'<svg viewBox="0 0 24 24"><path d="M20.5 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.4A8 8 0 1 1 20.5 11.5z"/><path d="M8.5 11.5h7"/><path d="M8.5 8.5h7"/></svg>',
@@ -1196,6 +1201,11 @@ var DIG_EMBED=[{"q": "为什么同一个提示词，AI 每次回答都不一样�
    - 卡片按 标题/标签/摘要 关键词自动归入主题
    - 主题间「延伸」由用户定义，存本地，画成网状（无跨频道连线） */
 var SEED_TOPICS={
+  ccaa:[
+    {id:"t_ccaa_base",name:"合格评定基础",kw:["合格评定","认证","认可","检验","检测","功能法"]},
+    {id:"t_ccaa_audit",name:"审核通用知识",kw:["审核","审核方案","审核员","不符合","审核发现"]},
+    {id:"t_ccaa_law",name:"法规与标准",kw:["法规","标准","GB/T","条例","准则"]}
+  ],
   data:[
     {id:"t_data_gov",name:"数据治理",kw:["治理","数据治理"]},
     {id:"t_data_sec",name:"数据安全",kw:["安全","隐私","泄露","加密"]},
@@ -1214,12 +1224,12 @@ var SEED_TOPICS={
   ]
 };
 var LS_TOPICS="kb_topics",LS_MESH="kb_mesh";
-function loadTopics(){try{var s=JSON.parse(localStorage.getItem(LS_TOPICS)||"{}");if(s&&typeof s==="object"&&Object.keys(s).length)return s;}catch(e){}
-  // 首次：写入预设种子
-  var seed={data:SEED_TOPICS.data.slice(),ai:SEED_TOPICS.ai.slice(),jp:SEED_TOPICS.jp.slice()};
+function loadTopics(){try{var s=JSON.parse(localStorage.getItem(LS_TOPICS)||"{}");if(s&&typeof s==="object"&&Object.keys(s).length){var _need=false;for(var _k in SEED_TOPICS){if(!s[_k]||!s[_k].length)_need=true;}if(_need){for(var _k2 in SEED_TOPICS){if(!s[_k2]||!s[_k2].length)s[_k2]=SEED_TOPICS[_k2].slice();}saveTopics(s);}return s;}}catch(e){}
+  // 首次：写入预设种子（含 ccaa；老用户本地已存的其他频道主题会在上面补种）
+  var seed={data:SEED_TOPICS.data.slice(),ai:SEED_TOPICS.ai.slice(),jp:SEED_TOPICS.jp.slice(),ccaa:SEED_TOPICS.ccaa.slice()};
   saveTopics(seed);return seed;}
 function saveTopics(o){try{localStorage.setItem(LS_TOPICS,JSON.stringify(o));}catch(e){}}
-function loadMesh(){try{var s=JSON.parse(localStorage.getItem(LS_MESH)||"{}");if(s&&typeof s==="object")return s;}catch(e){}return {data:[],ai:[],jp:[]};}
+function loadMesh(){try{var s=JSON.parse(localStorage.getItem(LS_MESH)||"{}");if(s&&typeof s==="object"){if(!s.data)s.data=[];if(!s.ai)s.ai=[];if(!s.jp)s.jp=[];if(!s.ccaa)s.ccaa=[];return s;}}catch(e){}return {data:[],ai:[],jp:[],ccaa:[]};}
 function saveMesh(o){try{localStorage.setItem(LS_MESH,JSON.stringify(o));}catch(e){}}
 var TOPICS={},MESH={};
 TOPICS=loadTopics();MESH=loadMesh();
@@ -2363,7 +2373,7 @@ function lpHTML(id){
 
 /* ====================== 渲染：频道门户 ====================== */
 function renderChannels(){
-  var box=document.getElementById("chanPortal");var h=[];var chs=["ai","data","jp"];
+  var box=document.getElementById("chanPortal");var h=[];var chs=["ccaa","ai","data","jp"];
   for(var i=0;i<chs.length;i++){var c=chs[i],m=CH_META[c];
     var nc=0;CARDS.forEach(function(x){if(normCh(x.ch)===c)nc++;});
     var nt=(TOPICS[c]||[]).length;
