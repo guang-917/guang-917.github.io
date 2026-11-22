@@ -5413,7 +5413,7 @@ quizLoad(function(){ kbStorageWarn(); });
    1) updateViaCache:'none'    → 每次联网都去拿最新 sw.js，绕过 CDN 的 600 秒缓存；
    2) 监听 SW_UPDATED 消息     → 新 SW 一接管，立即拉最新 index.html 并原地刷新；
    3) 每 30 分钟 + 回到前台时   → 主动 reg.update() + 比对线上版本号，发现新版自动刷新。 */
-var _APP_VER_ = '2026-11-22.75';
+var _APP_VER_ = '2026-11-22.76';
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
     navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
@@ -5463,9 +5463,19 @@ if('serviceWorker' in navigator){
   // 控制器切换（新 SW 接管）也兜底刷新一次
   navigator.serviceWorker.addEventListener('controllerchange',function(){ _applyUpdate(); });
   // 定时 + 回前台：主动比对线上版本号，发现新版自动刷新
+  /* `.76` 修复无限重载：原先发现 d.v!==_APP_VER_ 就立刻 reload。若服务器上
+     index.html 与 version.json 本身不一致（上传只完成一半 / CDN 新旧参差），
+     刷新拿到的还是旧页面 → 版本号永远对不上 → 无限重载（.75 事故真机复现 15 秒刷 12 次）。
+     现在先拉服务器 index.html 核对：只有服务器上两者确实配对，才认为「只是本机旧了」
+     而刷新一次；配不上就不刷，等下一次检查（30 分钟定时 / 回前台触发）。 */
   function _checkVer(){
     fetch('version.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
-      if(d&&d.v&&d.v!==_APP_VER_) _applyUpdate();
+      if(!(d&&d.v)||d.v===_APP_VER_) return;
+      fetch('index.html?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():null;}).then(function(t){
+        var m=t&&t.match(/_APP_VER_\s*=\s*['"]([^'"]+)['"]/);
+        if(m&&m[1]===d.v){ _applyUpdate(); }
+        else{ console.warn('版本对不上，暂不自动刷新：本机='+_APP_VER_+' version.json='+d.v+' 服务器index='+(m?m[1]:'未取到')); }
+      }).catch(function(){});
     }).catch(function(){});
   }
   setInterval(_checkVer,30*60*1000);
