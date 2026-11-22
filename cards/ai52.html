@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-5 预训练·微调·对齐：AI的“九年义务教育、岗前培训和入职考核”是怎么排的｜29/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月23日 · AI 知识</div>
+<h1>AI知识｜M2-5 预训练·微调·对齐：AI的“九年义务教育、岗前培训和入职考核”是怎么排的｜29/32</h1>
+<div class="lead">同一个AI，为什么有时对答如流、有时答非所问？答案藏在它出厂前的三步：预训练、微调、对齐。今天讲透这三步各自管什么，你就能知道自己该在哪一层使劲。</div>
+
+<h2>一句话结论</h2>
+<p>预训练、微调、对齐这三步解决的问题是：怎么把一个只会“接着写”的机器，变成一个“听得懂指令、答得像样、不乱来”的助手——分别好比九年义务教育、岗前培训、入职考核。</p>
+
+<h2>是什么</h2>
+<table>
+<tr><th>步骤</th><th>干什么</th><th>生活比方</th></tr>
+<tr><td>预训练</td><td>读海量文本，学“下一个词怎么接”</td><td>九年义务教育</td></tr>
+<tr><td>微调</td><td>用少量高质量问答例子，教它“干活的样子”</td><td>岗前培训</td></tr>
+<tr><td>对齐</td><td>用人的评价管住“说话的分寸”（RLHF）</td><td>入职考核+客户评分</td></tr>
+</table>
+<p><b>预训练</b>的量级有个参照：2020年5月 OpenAI 发布 GPT-3（论文 arXiv:2005.14165），参数量 1750 亿，读了约 3000 亿个 token 的文本。这一步造出来的是“博览群书但只会续写”的基础模型——你问“帮我写张请假条”，它可能接着编出十张别的假条，因为它只管“像样地往下写”。</p>
+<p><b>微调</b>贵在例子精、不在数量多：2023年5月的 LIMA 论文（Zhou 等，arXiv:2305.11206）只用 1000 条精挑例子微调，效果就能比肩对齐得更重的大模型——像岗前培训，给几百份标准工作样例，比再读一个学位管用。</p>
+<p><b>对齐</b>的标准流程叫 RLHF，由 2022年3月 OpenAI 的 InstructGPT 论文（Ouyang 等，arXiv:2203.02155）定型：第一步人写示范答案，第二步人对多个答案排序、训出一个“打分员”，第三步让主模型朝高分方向修正。最有说服力的实证：13 亿参数的 InstructGPT，输出被测试者明显偏好于比它大 100 倍的 1750 亿参数 GPT-3——<b>听话来自对齐，不只靠块头</b>。</p>
+
+<h2>为什么重要</h2>
+<p>这三步解释了两个常见困惑。其一：“同一个模型，为什么有时对答如流、有时答非所问？”——能力来自预训练，好用来自微调和对齐；块头决定上限，对齐决定下限。其二：为什么日常用 AI 没法“把某个新知识塞进去”？因为三步在出厂时就已完成，你每次对话改的是输入，不是模型本身——想补知识要靠知识库（M4 系列），想改习惯才轮到微调。</p>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li>日常用 AI，把“给例子+说要求”当第一手段：这是在“岗前培训”层面影响它，零成本、见效快；</li>
+<li>想让它稳定输出固定格式（如每周报告），先试“提示词 + 3~5 条你的真实好例子”，多数场景这就够了；</li>
+<li>只有当任务模式非常固定、且攒了几百到几千条真实好例子时，才用平台的微调入口真做一次微调——记住微调改的是“做事习惯”，不是“塞新知识”。</li>
+</ol>
+
+<h2>今天就能用：一个对照实验</h2>
+<p>同一句“帮我写一张请假条”问两轮：第一轮只发这一句；第二轮先发一条你自己写过的真实请假条当例子，再说“照这个口气，写一张明天请年假一天的”。对比两轮输出——第二轮在格式和口气上的贴合度提升，就是“微调”思想在提示词里的零成本版本。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><b>Thinking Machines Lab 开源 Inkling 2 Mini，本地微调门槛再降</b>：11月22日，Thinking Machines Lab（Mira Murati 创办）发布并开放 Inkling 2 Mini 权重：总参数 26B、支持文本和图像输入、上下文最长 100 万 token，按 Apache 2.0 许可开源，官方称配备 48GB 内存的 MacBook Pro 可离线本地运行，并可通过其 Tinker 服务做推理与微调。对普通人意味着：在一台笔记本上跑并微调一个“能干事”的模型，不再是数据中心的专利。来源：机器之心（网易号转载），2026-11-22，https://www.163.com/dy/article/LCC0TUTO0511AQHO.html；Thinking Machines Lab 官方博客，https://thinkingmachines.ai/news/inkling-2-mini/</li>
+<li><b>新一代“文鳐”海洋大模型发布，行业模型从“微调适配”走向“场景原生”</b>：11月22日，厦门理工学院联合哈尔滨工程大学、众数文鳐等 18 家产学研单位在厦门发布新一代“文鳐”海洋原生多模态大模型。据发布方介绍，前代模型已在招商局南京油运的船舶上实船运行 7 个月，覆盖 59 个设备监测点位，误报率从 79% 降到 15%，可提前 48~72 小时预警故障风险。对从业者意味着：垂类 AI 的新机会在“懂行业数据、懂行业机理”，通用模型直接套用的空间正被专门团队快速填补。来源：人民网福建频道，2026-11-22，https://fj.people.com.cn/n2/2026/1122/c181466-41757641.html；厦门理工学院官网，2026-11-22，https://www.xmut.edu.cn/info/1042/17522.htm</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>下一期：AI知识｜M2-6 幻觉成因：AI 为什么一本正经地编瞎话｜30/32</p>
+
+<div class="rel">相关延伸：M2-2 讲过“预测下一个词”是模型唯一的本事——预训练就是把这一招练到极致；而微调和对齐，教的是“这一招该往哪儿使”。上期讲的注意力机制，则是这三步训练全部依赖的底层计算引擎。</div>
+<div class="note">来源说明：① Brown T. 等，《Language Models are Few-Shot Learners》（GPT-3），arXiv:2005.14165，2020年5月；② Ouyang L. 等，《Training language models to follow instructions with human feedback》（InstructGPT），arXiv:2203.02155，2022年3月；③ Zhou C. 等，《LIMA: Less Is More for Alignment》，arXiv:2305.11206，2023年5月；④ 行业动态来源见正文所附链接（机器之心、人民网福建频道、厦门理工学院官网）。本文对训练流程的解释为科普化简化表述，细节以原始论文为准；“文鳐”模型各项指标均转引自发布方及媒体口径，未经独立实测核验。</div>
+</body>
+</html>
