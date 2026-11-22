@@ -955,6 +955,155 @@ body{
 [data-kb-tb]:focus-visible{outline:2px solid var(--data);outline-offset:2px;border-radius:10px}
 .tab:focus-visible{outline:2px solid var(--data);outline-offset:-2px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+/* ===== CCAA 练题模块（自动注入，勿手改） ===== */
+/* CCAA 练题模块 · 样式
+   只暖色；暗色跟随站点 html[data-theme="dark"] */
+
+/* ---- 频道页 / 知识树的练题入口卡 ---- */
+.cq-entry{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:12px;position:relative;overflow:hidden}
+.cq-entry:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ccaa)}
+.cqe-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cqe-tag{font-size:10.5px;padding:2px 8px;border-radius:6px;background:var(--ccaa-soft);color:var(--ccaa);font-weight:800;letter-spacing:.5px}
+.cqe-s{font-size:11px;color:var(--ink-3)}
+.cqe-big{display:flex;align-items:baseline;gap:6px;margin:2px 0 6px}
+.cqe-big b{font-size:27px;font-weight:800;letter-spacing:-.5px;color:var(--ink)}
+.cqe-big i{font-size:12px;color:var(--ink-3);font-style:normal}
+.cqe-row{display:flex;gap:12px;font-size:11.5px;color:var(--ink-2);flex-wrap:wrap}
+.cqe-row b{color:var(--ink);font-weight:800}
+.cqe-bar{height:6px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin:9px 0 4px}
+.cqe-bar i{display:block;height:100%;background:var(--ccaa);border-radius:99px}
+.cqe-acts{margin-top:10px}
+.cqe-note{font-size:11px;color:var(--ink-3);margin-top:9px;line-height:1.55;border-top:1px dashed var(--line);padding-top:8px}
+
+/* ---- 通用按钮 ---- */
+.cq-btn{background:var(--bg-2);color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:11px 16px;font-size:14px;font-weight:800;font-family:inherit;width:100%;margin-top:8px}
+.cq-btn.main{background:var(--ccaa);color:#fff;border-color:var(--ccaa)}
+.cq-btn.ghost{background:transparent}
+.cq-btn.sm{width:auto;padding:8px 13px;font-size:12.5px;margin:0}
+.cq-btn.sm2{width:auto;padding:9px 14px;font-size:12.5px;margin:0;flex:0 0 auto}
+.cq-btn[disabled]{opacity:.45}
+
+/* ---- 卡片行下方的「N 道题」条 ---- */
+.cq-ptline{display:flex;align-items:center;gap:8px;margin:7px 0 3px;padding:8px 11px;border-radius:10px;
+  background:var(--ccaa-soft);border:1px solid transparent;cursor:pointer}
+.cq-ptn{font-size:11.5px;font-weight:800;color:var(--ccaa);flex:0 0 auto}
+.cq-pts{font-size:11px;color:var(--ink-2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cq-ptgo{font-size:11.5px;font-weight:800;color:var(--ccaa);flex:0 0 auto}
+
+/* ---- 练题面板 ---- */
+.cqfull{background:var(--bg)}
+.cq-loading{text-align:center;color:var(--ink-3);font-size:13px;padding:60px 0}
+.cq-hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:12px}
+.cq-hero-t{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.4px}
+.cq-hero-n{display:flex;align-items:baseline;gap:7px;margin:5px 0 7px}
+.cq-hero-n b{font-size:30px;font-weight:800;letter-spacing:-1px}
+.cq-hero-n i{font-size:12px;color:var(--ink-3);font-style:normal}
+.cq-hero-r{display:flex;gap:14px;font-size:11.5px;color:var(--ink-2)}
+.cq-hero-r b{color:var(--ink);font-weight:800}
+
+.cq-modes{margin-bottom:12px}
+.cq-mode{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;color:var(--ink);margin-bottom:8px}
+.cq-mode b{display:block;font-size:15px;font-weight:800;margin-bottom:3px}
+.cq-mode span{font-size:11.5px;color:var(--ink-3);line-height:1.5}
+.cq-mode.main{background:var(--ccaa);border-color:var(--ccaa)}
+.cq-mode.main b,.cq-mode.main span{color:#fff}
+.cq-mode.main span{opacity:.82}
+.cq-mode-row{display:flex;gap:8px}
+.cq-mode.sm{flex:1;margin:0;padding:11px 13px}
+.cq-mode.sm b{font-size:13.5px}
+
+.cq-sect{display:flex;align-items:baseline;justify-content:space-between;margin:16px 2px 8px}
+.cq-sect span{font-size:12.5px;font-weight:800;color:var(--ink)}
+.cq-sect i{font-size:11px;color:var(--ink-3);font-style:normal}
+.cq-part{font-size:11px;color:var(--ink-3);font-weight:700;margin:12px 2px 6px;letter-spacing:.3px}
+
+.cq-pt,.cq-tnode{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line-2);
+  border-radius:11px;padding:10px 12px;margin-bottom:7px;cursor:pointer}
+.cq-pt.off,.cq-tnode.off{opacity:.5;cursor:default}
+.cq-pt-t,.cq-tn-t{flex:1;min-width:0}
+.cq-pt-t b,.cq-tn-t b{display:block;font-size:13px;font-weight:700;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cq-pt-t i,.cq-tn-t i{display:block;font-size:10.5px;color:var(--ink-3);font-style:normal;margin-top:2px}
+.cq-pt-m{width:34px;height:5px;border-radius:99px;background:var(--bg-2);overflow:hidden;flex:0 0 auto}
+.cq-pt-m i{display:block;height:100%;background:var(--ccaa);border-radius:99px}
+.cq-pt-m i.hi{background:var(--data)}
+.cq-pt-m i.mid{background:var(--gold)}
+.cq-lv{font-size:9.5px;font-weight:800;padding:2px 5px;border-radius:5px;flex:0 0 auto;line-height:1.35;
+  border:1px solid var(--line);color:var(--ink-3)}
+.cq-lv.lv-S{background:#c8302e;border-color:#c8302e;color:#fff}
+.cq-lv.lv-A{border-color:#2b6cb0;color:#2b6cb0}
+.cq-lv.lv-B{border-color:#6b7280;color:#6b7280}
+
+/* ---- 答题 ---- */
+.cq-q{padding-bottom:20px}
+.cq-qtags{display:flex;align-items:center;gap:7px;margin:4px 0 10px;flex-wrap:wrap}
+.cq-tagtype,.cq-tagsrc{font-size:10.5px;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.cq-stem{font-size:15.5px;line-height:1.72;font-weight:600;color:var(--ink);margin-bottom:14px}
+.cq-opts{display:flex;flex-direction:column;gap:8px}
+.cq-opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);min-height:48px}
+.cq-opt b{flex:0 0 auto;width:22px;height:22px;border-radius:7px;background:var(--bg-2);color:var(--ink-2);
+  font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.cq-opt .cq-ov{font-size:12px;color:var(--ink-3)}
+.cq-opt.sel{border-color:var(--ccaa);background:var(--ccaa-soft)}
+.cq-opt.sel b{background:var(--ccaa);color:#fff}
+.cq-opt.ok{border-color:var(--data);background:var(--data-soft)}
+.cq-opt.ok b{background:var(--data);color:#fff}
+.cq-opt.no{border-color:#c8302e;background:rgba(200,48,46,.09)}
+.cq-opt.no b{background:#c8302e;color:#fff}
+.cq-hint{font-size:11px;color:var(--ink-3);margin:10px 2px 0;line-height:1.6}
+.cq-sub{margin-top:14px}
+
+.cq-res{font-size:14.5px;font-weight:800;margin:16px 0 10px}
+.cq-res.r{color:var(--data)}
+.cq-res.w{color:#c8302e}
+.cq-sure{background:var(--gold-soft);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.cq-sure-t{font-size:12px;color:var(--ink-2);line-height:1.55}
+.cq-sure-q{font-size:13.5px;font-weight:800;margin:7px 0 9px}
+.cq-sure-b{display:flex;gap:8px}
+.cq-sure-ok{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.cq-exp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.cq-exp-h{font-size:10.5px;font-weight:800;color:var(--ink-3);letter-spacing:.5px;margin-bottom:6px}
+.cq-exp p{margin:0;font-size:13px;line-height:1.78;color:var(--ink-2)}
+.cq-ask{display:flex;gap:8px;margin-top:12px}
+.cq-askin{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;font-size:13px;font-family:inherit;color:var(--ink)}
+.cq-askbtn{flex:0 0 auto;background:var(--ccaa);color:#fff;border:none;border-radius:11px;padding:0 16px;font-size:13px;font-weight:800;font-family:inherit}
+.cq-askq{font-size:12.5px;color:var(--ink-3);margin:10px 2px 4px}
+.cq-aska{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px;line-height:1.75;color:var(--ink-2)}
+.cq-next{width:100%;margin-top:14px;background:var(--ccaa);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14.5px;font-weight:800;font-family:inherit}
+.cq-card{display:flex;align-items:center;gap:9px;margin-top:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:11px 13px;text-decoration:none;color:var(--ink)}
+.cq-card-t{font-size:10.5px;color:var(--ink-3);flex:0 0 auto}
+.cq-card-n{flex:1;min-width:0;font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cq-card-a{font-size:12px;font-weight:800;color:var(--ccaa);flex:0 0 auto}
+
+/* ---- 结算 ---- */
+.cq-sum{text-align:center;padding:26px 0 18px}
+.cq-big{font-size:38px;font-weight:800;letter-spacing:-1px}
+.cq-sub2{font-size:12.5px;color:var(--ink-3);margin-top:6px}
+.cq-wrongsec{margin:6px 0 14px}
+.cq-wh{font-size:12px;font-weight:800;color:var(--ink-2);margin-bottom:8px}
+.cq-wq{background:var(--card);border:1px solid var(--line-2);border-radius:11px;padding:10px 12px;margin-bottom:7px}
+.cq-ws{font-size:12.5px;line-height:1.6;color:var(--ink)}
+.cq-wm{font-size:10.5px;color:var(--ink-3);margin-top:4px}
+.cq-fin-acts{margin-top:6px}
+
+/* ---- 知识树 CCAA 视图 ---- */
+.cq-treehero{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;padding:13px 14px;margin-bottom:6px}
+.cq-th-l{font-size:10.5px;font-weight:800;color:var(--ccaa);background:var(--ccaa-soft);border-radius:6px;padding:2px 7px;flex:0 0 auto}
+.cq-th-n{flex:1;font-size:12px;color:var(--ink-2)}
+.cq-th-n b{font-size:15px;color:var(--ink);font-weight:800}
+.cq-tn-card{font-size:10px;font-weight:800;color:var(--ccaa);border:1px solid var(--ccaa);border-radius:6px;padding:2px 6px;flex:0 0 auto}
+.cq-tn-card.off{color:var(--ink-3);border-color:var(--line)}
+
+/* ---- 暗色 ---- */
+html[data-theme="dark"] .cq-lv.lv-S{background:#d1403c;border-color:#d1403c}
+html[data-theme="dark"] .cq-lv.lv-A{color:#7fb2e5;border-color:#3d6d9e}
+html[data-theme="dark"] .cq-opt.no{background:rgba(209,64,60,.16)}
+html[data-theme="dark"] .cq-res.w{color:#ef6b66}
+
+/* ===== /CCAA 练题模块 ===== */
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-apple.png">
@@ -993,6 +1142,7 @@ body{
       <button data-ch="data"><span class="dotc data"></span>数据</button>
       <button data-ch="ai"><span class="dotc ai"></span>AI</button>
       <button data-ch="jp"><span class="dotc jp"></span>日语</button>
+      <button data-ch="ccaa"><span class="dotc ccaa"></span>CCAA</button>
     </div>
     <div class="sub" style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
       <span id="treeHint">按主题梳理知识结构</span>
@@ -1042,6 +1192,15 @@ body{
   </section>
 </div>
 
+<!-- CCAA 练题模块 · 独立面板（题不进知识卡位） -->
+<div class="qzfull cqfull" id="cqFull">
+  <div class="qzftop">
+    <button class="qzx" id="cqExit" aria-label="退出练题">✕</button>
+    <div class="qzti" id="cqTitle">CCAA 练题</div>
+    <div class="qzx" style="visibility:hidden">✕</div>
+  </div>
+  <div class="qfb" id="cqBody"></div>
+</div>
 <!-- `.64` 全屏练习层（频道入口 / 卡片二次左滑 都进这里） -->
 <div class="qzfull" id="qzFull">
   <div class="qzftop">
@@ -1717,7 +1876,8 @@ tabbar.addEventListener("click",function(e){
   var t=e.target.closest(".tab"); if(!t)return;
   var v=t.getAttribute("data-tab");
   /* `.35`：面板/输入条/下钻现在也占历史条目，而切 tab 会 push 并截断历史 → 先同步摘掉它们的栈项 */
-  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("qzFull"); if(qzOn())qzClose(); _dropNav("scFull"); if(scOn())scClose(); _dropNav("wbFull"); if(wbOn())wbClose();
+  _dropNav("lp"); _dropNav("askFab"); _dropNav("chanDrill"); _dropNav("shuliDrill"); _dropNav("cqFull"); if(cqOn())cqClose();
+  _dropNav("qzFull"); if(qzOn())qzClose(); _dropNav("scFull"); if(scOn())scClose(); _dropNav("wbFull"); if(wbOn())wbClose();
   var _tlp=document.querySelector(".lp.show"); if(_tlp)closeLp(_tlp);   /* 切 tab 时长按面板自动收起 */
   if(archEl.classList.contains("on")){var k=navStack.lastIndexOf("arch"); if(k>=0)navStack.splice(k,1); closeArch();}
   if(cdlg&&cdlg.classList.contains("on")){var m=navStack.lastIndexOf("cdlg"); if(m>=0)navStack.splice(m,1); closeCrushDlg();}
@@ -2176,7 +2336,7 @@ function quizStartOne(qid){
   qzOpen(); quizRenderQ();
 }
 function qzOn(){ var e=document.getElementById("qzFull"); return !!(e&&e.classList.contains("on")); }
-function anyOn(){ return qzOn()||scOn()||wbOn(); }
+function anyOn(){ return qzOn()||scOn()||wbOn()||cqOn(); }
 function _dropNav(name){ var k=navStack.lastIndexOf(name); if(k>=0)navStack.splice(k,1); }
 function _closeLayerByCode(name, closeFn){
   var i=navStack.lastIndexOf(name);
@@ -2243,6 +2403,7 @@ function navBackFromPop(){
   /* `.35`：长按面板 / 提问输入条 / 频道下钻 / 梳理下钻 —— 这四类界面现在也各占一条**真实历史条目**，
      所以按「栈顶匹配」pop 掉自己那一层。
      （旧版它们不占条目 → 真机上"用返回收起它"会白吃上一层的历史，累积后提前掉出 App。） */
+  if(top==="cqFull"){ navStack.pop(); cqClose(); return; }
   if(top==="qzFull"){ navStack.pop(); qzClose(); return; }
   if(top==="scFull"){ navStack.pop(); scClose(); return; }
   if(top==="wbFull"){ navStack.pop(); wbClose(); return; }
@@ -2341,7 +2502,7 @@ window.addEventListener("resize",fitTagLinesSoon);
 window.addEventListener("orientationchange",fitTagLinesSoon);
 function renderToday(){
   var box=document.getElementById("todayList");var h=[];
-  var list=CARDS.filter(function(c){return c.date===todayStr();});
+  var list=CARDS.filter(function(c){return c.date===todayStr()&&!cqIsDrillCard(c);});
   for(var i=0;i<list.length;i++){
     var c=list[i],m=chMeta(c.ch);
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card">'
@@ -2393,7 +2554,7 @@ function renderChanList(ch){
      旧写法直接按 CARDS 数组顺序输出，而问答生成的「详解卡」是 unshift 进来的（日期又是今天）
      → 一进频道先看到的全是问答。这里①排除详解卡 ②按 date 倒序，同一天保持原顺序。 */
   var list=[];
-  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;if(c.isDetail)continue;list.push({c:c,i:i});}
+  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(normCh(c.ch)!==ch)continue;if(c.isDetail)continue;if(cqIsDrillCard(c))continue;list.push({c:c,i:i});}
   list.sort(function(a,b){var A=String(a.c.date||""),B=String(b.c.date||"");if(A!==B)return A<B?1:-1;return a.i-b.i;});
   for(var k=0;k<list.length;k++){var c=list[k].c;
     h.push('<div class="card'+(c.read?' done':'')+'" data-id="'+esc(c.id)+'" data-type="card"><div class="row"><span class="dot'+(c.read?' read':'')+'"></span>'
@@ -2407,7 +2568,12 @@ function renderChanList(ch){
   var _qz="";
   if(ch==="data") _qz=quizEntryHTML();
   else if(ch==="jp"||ch==="ai") _qz=quizEntryHTML2(ch);
-  if(_qz){ body.innerHTML=_qz+h.join(""); bindQuizEntry(body); }
+  /* CCAA：知识卡只放教材卡（演练卡不进频道），题走独立练题面板 */
+  if(ch==="ccaa"){
+    body.innerHTML=cqEntryHTML()+h.join("");
+    cqBind(body);
+  }
+  else if(_qz){ body.innerHTML=_qz+h.join(""); bindQuizEntry(body); }
   else body.innerHTML=h.join("");
   fitTagLines(body);
   document.getElementById("chanPortal").style.display="none";
@@ -2431,7 +2597,7 @@ chanClr.addEventListener("click",function(){chanSearch.value="";chanClr.style.di
 function doSearch(q){
   var box=document.getElementById("searchRes");var low=q.toLowerCase();var h=[];var n=0;
   if(q.trim().length>=2)addInterest(q.trim(),"search");
-  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];
+  for(var i=0;i<CARDS.length;i++){var c=CARDS[i];if(cqIsDrillCard(c))continue;
     var hay=(c.title+" "+(c.tags?c.tags.join(" "):"")+" "+c.sum+" "+(c.body?c.body.join(" "):"")).toLowerCase();
     if(hay.indexOf(low)<0)continue;n++;
     var sm=chMeta(c.ch);
@@ -2472,6 +2638,8 @@ function cardRowHTML(c){
 function renderTree(){
   /* `.67`：数据频道 = CDGA 考纲诊断图，另一套渲染；AI / 日语仍走主题树 */
   if(normCh(treeCh)==="data"){ renderKnTree(); return; }
+  /* CCAA：知识树只放练题（题不进卡位） */
+  if(normCh(treeCh)==="ccaa"){ renderCqTree(); return; }
   TAB_META.tree[1]="主题与卡片的结构";
   if(curView==="tree"&&hdrSub)hdrSub.textContent=TAB_META.tree[1];
   var box=document.getElementById("treeList");
@@ -2846,10 +3014,11 @@ document.getElementById("segMap").addEventListener("click",function(){
 });
 document.getElementById("treeChPills").addEventListener("click",function(e){
   var b=e.target.closest("[data-ch]");if(!b)return;treeCh=b.getAttribute("data-ch");shuliDrill=null;
+  var _sg=document.querySelector('[data-view="tree"] .seg');if(_sg)_sg.style.display=(normCh(treeCh)==="ccaa"?"none":"");
   renderTreePills();renderTree();if(treeMode==="shuli")renderShuli();
   /* `.67`：两个频道的提示语不一样，切频道要跟着换 */
   var hint=document.getElementById("treeHint");
-  if(hint)hint.textContent=(normCh(treeCh)==="data"?"CDGA 17 章考纲 · 点一章看它薄在哪":"按主题梳理知识结构");
+  if(hint)hint.textContent=(normCh(treeCh)==="data"?"CDGA 17 章考纲 · 点一章看它薄在哪":(normCh(treeCh)==="ccaa"?"59 个考点 · 题在这里，卡只讲考点":"按主题梳理知识结构"));
 });
 
 /* 知识树点击：主题展开 / 卡片打开 / 标星 */
@@ -5482,6 +5651,442 @@ if('serviceWorker' in navigator){
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_checkVer();});
   window.addEventListener('load',function(){setTimeout(_checkVer,1500);});
 }
+/* ===== CCAA 练题模块 JS（自动注入，勿手改） ===== */
+/* ===== CCAA 练题模块 =====
+   设计原则：
+   1) 知识卡只讲、练题只练 —— 演练卡不再出现在「今日 / 频道 / 搜索 / 知识树」，
+      原位替换成「这个考点有 N 道真题」，点一下进练题面板。
+   2) 练题是独立入口：频道页一张练题卡 + 知识树「练题」分段，都进 #cqFull。
+   3) 题干无干扰项（源数据只有正确答案），选项 A/B/C/D 满屏但不显示内容，
+      这是为了让「蒙对」可被识别：系统会追问一次"你确定吗"，
+      答对但说不清选项 → 记为「蒙对」，不计入掌握度。 */
+
+/* ---------- 屏蔽演练卡：它们的内容已进题库 ---------- */
+function cqIsDrillCard(c){
+  if (!c) return false;
+  if (normCh(c.ch) !== 'ccaa') return false;
+  if (c.cardType === 'drill') return true;
+  return /真题演练/.test(String(c.title || ''));
+}
+
+/* ---------- 数据加载（与主题库分离，不互相拖慢） ---------- */
+var CQ = null, CQ_BUSY = false, CQ_WAIT = [];
+var LS_CCQ = 'kb_ccq';                    /* {qid:{n,wrong,streak,lastRight,ts,guess}} */
+function cqRec(){ try { return JSON.parse(localStorage.getItem(LS_CCQ) || '{}') || {}; } catch (e) { return {}; } }
+function cqSave(m){ try { localStorage.setItem(LS_CCQ, JSON.stringify(m)); } catch (e) {} }
+function cqLoad(cb){
+  if (CQ) { cb && cb(); return; }
+  if (cb) CQ_WAIT.push(cb);
+  if (CQ_BUSY) return;
+  CQ_BUSY = true;
+  fetch('quiz_bank.json?v=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      var qs = ((d && d.questions) || []).filter(function (q) { return String(q.ch) === 'ccaa'; });
+      var chs = {};
+      /* 章节 = 考点号（q.point）；q.ch 只是频道路由字段，别拿它当 key */
+      qs.forEach(function (q) { var k = String(q.point || q.sec); if (k && !chs[k]) chs[k] = { name: q.name + '（' + k + '）', part: q.part, level: q.level, cardId: q.cardId }; });
+      CQ = { chapters: chs, questions: qs };
+      CQ_BUSY = false;
+      CQ_WAIT.splice(0).forEach(function (f) { try { f(); } catch (e) {} });
+    })
+    .catch(function () {
+      CQ = { chapters: {}, questions: [] }; CQ_BUSY = false;
+      if (typeof toast === 'function') toast('练题库加载失败，检查网络');
+      CQ_WAIT.splice(0).forEach(function (f) { try { f(); } catch (e) {} });
+    });
+}
+function cqQs(point){ return (CQ && CQ.questions ? CQ.questions : []).filter(function (q) { return String(q.point || q.sec) === String(point); }); }
+function cqQ(id){ var a = (CQ && CQ.questions) || []; for (var i = 0; i < a.length; i++) if (a[i].id === id) return a[i]; return null; }
+function cqPts(){
+  var a = CQ ? Object.keys(CQ.chapters) : [];
+  a.sort(function (x, y) {
+    var lv = { S: 0, A: 1, B: 2, C: 3 };
+    var lx = lv[CQ.chapters[x].level], ly = lv[CQ.chapters[y].level];
+    if (lx !== ly) return (lx === undefined ? 9 : lx) - (ly === undefined ? 9 : ly);
+    return x.localeCompare(y, undefined, { numeric: true });
+  });
+  return a;
+}
+function cqStat(){
+  var rec = cqRec(), tot = CQ ? CQ.questions.length : 0, done = 0, right = 0, guess = 0, wrongOpen = 0;
+  (CQ ? CQ.questions : []).forEach(function (q) {
+    var r = rec[q.id];
+    if (r && r.n) { done++; if (r.lastRight) right++; if (r.guess) guess++; }
+  });
+  return { tot: tot, done: done, right: right, acc: done ? Math.round(right / done * 100) : 0, guess: guess, left: tot - done };
+}
+/* 某考点掌握度 0~4：与知识树口径一致（做过 → 正确率 1.5/0.8/0.3，连对 2 次 +0.5，7 天内 +1） */
+function cqPtScore(point){
+  var qs = cqQs(point), rec = cqRec(), n = 0, right = 0, st = 0, ts = 0;
+  qs.forEach(function (q) {
+    var r = rec[q.id];
+    if (r && r.n) { n++; if (r.lastRight) right++; if ((r.streak || 0) > st) st = r.streak || 0; if ((r.ts || 0) > ts) ts = r.ts || 0; }
+  });
+  if (!qs.length) return { m: 0, n: 0, total: 0, acc: 0 };
+  var m = 0;
+  if (n > 0) { var acc = right / n; m += acc >= 0.8 ? 1.5 : (acc >= 0.5 ? 0.8 : 0.3); }
+  if (st >= 2) m += 0.5;
+  if (ts && (Date.now() - ts) <= 7 * 86400000) m += 1;
+  return { m: Math.min(4, Math.round(m * 10) / 10), n: n, right: right, total: qs.length, acc: n ? right / n : 0, ts: ts };
+}
+
+/* ---------- 面板开合 ---------- */
+function cqOn(){ var e = document.getElementById('cqFull'); return !!(e && e.classList.contains('on')); }
+function cqClose(){ var e = document.getElementById('cqFull'); if (e) e.classList.remove('on'); CQ_S = null; }
+function cqOpenView(){
+  var e = document.getElementById('cqFull'); if (!e) return;
+  if (!e.classList.contains('on')) { e.classList.add('on'); pushNav('cqFull'); if (typeof _ensureGuard === 'function') _ensureGuard(); }
+}
+
+/* ---------- 会话状态 ---------- */
+var CQ_S = null;
+
+/* 抽题：先出没做过的，再出错得多的；同考点内随机 */
+function cqPick(point, count){
+  var qs = cqQs(point).slice(); if (!qs.length) return [];
+  var rec = cqRec();
+  qs.sort(function (a, b) {
+    var ra = rec[a.id] || {}, rb = rec[b.id] || {};
+    var na = ra.n || 0, nb = rb.n || 0;
+    if (na !== nb) return na - nb;
+    return (rb.wrong || 0) - (ra.wrong || 0) || Math.random() - 0.5;
+  });
+  return qs.slice(0, Math.min(count || 10, qs.length));
+}
+
+/* ---------- 频道页 / 知识树的练题入口卡 ---------- */
+function cqEntryHTML(){
+  if (!CQ) {
+    cqLoad(function () { if (typeof renderChanList === 'function' && chanDrill && curChan === 'ccaa') renderChanList('ccaa'); });
+    return '<div class="cq-entry"><div class="cqe-h"><span class="cqe-tag">练题</span><span class="cqe-s">题干与监考页面同构</span></div><p class="cqe-p">题库加载中…</p></div>';
+  }
+  var s = cqStat(), pts = cqPts(), ready = pts.filter(function (p) { return cqQs(p).length; });
+  var html = '<div class="cq-entry">'
+    + '<div class="cqe-h"><span class="cqe-tag">练题</span><span class="cqe-s">' + ready.length + ' 个考点 · 按考纲归档</span></div>'
+    + '<div class="cqe-big"><b>' + s.tot + '</b><i>道历年真题</i></div>'
+    + '<div class="cqe-row"><span>已做 <b>' + s.done + '</b> 题</span><span>正确率 <b>' + (s.done ? s.acc + '%' : '—') + '</b></span><span>待练 <b>' + s.left + '</b> 题</span></div>'
+    + '<div class="cqe-bar"><i style="width:' + Math.min(100, Math.round(s.done / Math.max(1, s.tot) * 100)) + '%"></i></div>'
+    + '<div class="cqe-acts">'
+    + '<button class="cq-btn main" data-cq="weak">' + (s.done ? '继续练 · 错得最多的考点' : '开始练 · 从 S 级考点起') + '</button>'
+    + '</div>'
+    + '<div class="cqe-note">这张频道里不再出现「真题演练」卡 —— 题在练题里做，卡只讲考点。</div>'
+    + '</div>';
+  return html;
+}
+function cqChanHTML(){
+  return cqEntryHTML();
+}
+/* 卡片行下方的「N 道题」按钮：替代原来的演练卡位置 */
+function cqPtQuizHTML(point){
+  var qs = cqQs(point);
+  if (!qs.length) return '';
+  var st = cqPtScore(point);
+  return '<div class="cq-ptline" data-cqpt="' + esc(point) + '">'
+    + '<span class="cq-ptn">' + qs.length + ' 道真题</span>'
+    + '<span class="cq-pts">' + (st.n ? ('已做 ' + st.n + ' · 正确率 ' + Math.round(st.acc * 100) + '%') : '还没练') + '</span>'
+    + '<span class="cq-ptgo">练 ›</span></div>';
+}
+
+/* ---------- 视图：练题首页 ---------- */
+function cqTitle(t){ var e = document.getElementById('cqTitle'); if (e) e.textContent = t; }
+function cqRenderHome(){
+  var box = document.getElementById('cqBody'); if (!box) return;
+  if (!CQ) { box.innerHTML = '<div class="cq-loading">题库加载中…</div>'; cqLoad(cqRenderHome); return; }
+  var s = cqStat(), pts = cqPts();
+  var h = [];
+  h.push('<div class="cq-hero"><div class="cq-hero-t">CCAA 认证通用基础</div>'
+    + '<div class="cq-hero-n"><b>' + s.tot + '</b><i>道真题 · ' + pts.filter(function (p) { return cqQs(p).length; }).length + ' 个考点</i></div>'
+    + '<div class="cq-hero-r"><span>已做 <b>' + s.done + '</b></span><span>正确率 <b>' + (s.done ? s.acc + '%' : '—') + '</b></span><span>待练 <b>' + s.left + '</b></span></div></div>');
+
+  /* 三档入口 */
+  var weak = cqWeakPoint();
+  h.push('<div class="cq-modes">');
+  h.push('<button class="cq-mode main" data-cq="weak"><b>' + (s.done ? '接着练' : '开始练') + '</b><span>' + (weak ? ('错得最多：' + weak + ' · ' + cqQs(weak).length + ' 题') : ('从 S 级考点起 · ' + (cqQs('3.1.5-a').length || 10) + ' 题一组')) + '</span></button>');
+  h.push('<div class="cq-mode-row">');
+  h.push('<button class="cq-mode sm" data-cq="random"><b>随机 10 题</b><span>跨考点混练</span></button>');
+  h.push('<button class="cq-mode sm" data-cq="slevel"><b>S 级专练</b><span>只刷 S 级考点</span></button>');
+  h.push('</div></div>');
+
+  /* 考点列表 */
+  h.push('<div class="cq-sect"><span>按考点练</span><i>点一个考点，抽 10 题</i></div>');
+  var partNow = '';
+  pts.forEach(function (p) {
+    var info = CQ.chapters[p], qs = cqQs(p), st = cqPtScore(p);
+    var part = String(info.part || '').replace(/\s*[\d.]+$/, '');
+    if (part !== partNow) { partNow = part; h.push('<div class="cq-part">' + esc(part || '其他') + '</div>'); }
+    var lv = info.level || '未考';
+    var pct = qs.length ? Math.round(st.n / qs.length * 100) : 0;
+    h.push('<div class="cq-pt' + (qs.length ? '' : ' off') + '"' + (qs.length ? ' data-cqp="' + esc(p) + '"' : '') + '>'
+      + '<span class="cq-lv lv-' + lv + '">' + lv + '</span>'
+      + '<div class="cq-pt-t"><b>' + esc(p) + ' ' + esc(String(info.name).replace(/（[^）]*）$/, '')) + '</b>'
+      + '<i>' + (qs.length ? (qs.length + ' 题 · ' + (st.n ? ('已做 ' + st.n + ' · ' + Math.round(st.acc * 100) + '%') : '还没练')) : '这个考点暂时没题') + '</i></div>'
+      + (qs.length ? '<span class="cq-pt-m">' + cqMiniBar(pct) + '</span>' : '')
+      + '</div>');
+  });
+  box.innerHTML = h.join('');
+  box.scrollTop = 0;
+}
+function cqMiniBar(pct){
+  var on = pct >= 80 ? 'hi' : (pct > 0 ? 'mid' : '');
+  return '<i class="' + on + '" style="width:' + Math.max(4, pct) + '%"></i>';
+}
+function cqWeakPoint(){
+  var rec = cqRec(), best = null, bestN = -1;
+  cqPts().forEach(function (p) {
+    var qs = cqQs(p); if (!qs.length) return;
+    var n = 0, w = 0;
+    qs.forEach(function (q) { var r = rec[q.id]; if (r && r.n) { n++; if (!r.lastRight) w++; } });
+    var sc = w * 2 + (n ? 0 : qs.length * 0.2);
+    if (sc > bestN) { bestN = sc; best = p; }
+  });
+  return best;
+}
+
+/* ---------- 会话：开一组题 ---------- */
+function cqStart(point, count){
+  var pick;
+  if (point === 'weak') {
+    var wp = cqWeakPoint(); if (!wp) { toast('题库里还没有可练的考点'); return; }
+    pick = cqPick(wp, 10);
+    point = wp;
+  } else if (point === 'random') {
+    var all = (CQ ? CQ.questions : []).slice();
+    var rec = cqRec();
+    all.sort(function (a, b) { var ra = (rec[a.id] || {}).n || 0, rb = (rec[b.id] || {}).n || 0; return ra - rb || Math.random() - 0.5; });
+    pick = all.slice(0, 10); point = '';
+  } else if (point === 'slevel') {
+    var s1 = cqPts().filter(function (p) { return CQ.chapters[p].level === 'S' && cqQs(p).length; });
+    pick = []; var rec2 = cqRec();
+    var pool = [];
+    s1.forEach(function (p) { pool = pool.concat(cqQs(p)); });
+    pool.sort(function (a, b) { var ra = (rec2[a.id] || {}).n || 0, rb = (rec2[b.id] || {}).n || 0; return ra - rb || Math.random() - 0.5; });
+    pick = pool.slice(0, 10);
+  } else {
+    pick = cqPick(point, count || 10);
+  }
+  if (!pick || !pick.length) { toast('这组还没题'); return; }
+  CQ_S = { point: point, ids: pick.map(function (q) { return q.id; }), i: 0, ans: [], t0: Date.now(), wrong: [], sure: {} };
+  cqOpenView(); cqRenderQ();
+}
+
+/* ---------- 渲染一道题 ---------- */
+function cqRenderQ(){
+  var box = document.getElementById('cqBody'); if (!box || !CQ_S) return;
+  var q = cqQ(CQ_S.ids[CQ_S.i]); if (!q) { cqFinish(); return; }
+  var tail = CQ_S.point ? (' · ' + CQ_S.point) : ' · 混合';
+  cqTitle('第 ' + (CQ_S.i + 1) + ' / ' + CQ_S.ids.length + ' 题' + tail);
+  var isTF = q.type === '判断';
+  var opts = isTF ? ['正确', '错误'] : ['A', 'B', 'C', 'D'];
+  var isMulti = q.type === '多选';
+  var h = '<div class="cq-q">';
+  h += '<div class="cq-qtags"><span class="cq-lv lv-' + (q.level || '未考') + '">' + (q.level || '未考') + '</span>'
+    + '<span class="cq-tagtype">' + q.type + '</span><span class="cq-tagsrc">' + esc(q.paper || '') + '</span></div>';
+  h += '<div class="cq-stem">' + esc(q.stem) + '</div>';
+  h += '<div class="cq-opts">';
+  opts.forEach(function (o, i) {
+    h += '<button class="cq-opt" data-i="' + i + '"><b>' + o + '</b><span class="cq-ov">' + (isTF ? o : '选项内容未收录') + '</span></button>';
+  });
+  h += '</div>';
+  if (!isTF) h += '<div class="cq-hint">' + (isMulti ? '多选题：选好后点「提交」' : '单选题：点一下就提交') + '　·　选项正文未随题库保存，按你记忆中的选项作答</div>';
+  h += '<div class="cq-sub"><button class="cq-btn main" id="cqSubmit"' + (isMulti ? ' disabled' : '') + '>提交</button></div>';
+  h += '<div id="cqAfter"></div></div>';
+  box.innerHTML = h; box.scrollTop = 0;
+  var picks = [];
+  box.querySelectorAll('.cq-opt').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var i = +b.getAttribute('data-i');
+      if (isMulti) {
+        if (picks.indexOf(i) >= 0) { picks.splice(picks.indexOf(i), 1); b.classList.remove('sel'); }
+        else { picks.push(i); b.classList.add('sel'); }
+        var sb = document.getElementById('cqSubmit'); if (sb) sb.disabled = !picks.length;
+      } else {
+        cqAnswer(i);
+      }
+    });
+  });
+  var sb = document.getElementById('cqSubmit');
+  if (sb) sb.addEventListener('click', function () { if (picks.length) cqAnswer(picks.slice().sort()); });
+}
+
+function cqNormAns(a) { return Array.isArray(a) ? a.slice().sort().join(',') : String(a); }
+
+function cqAnswer(pick){
+  if (!CQ_S) return;
+  if (CQ_S.ans[CQ_S.i] !== undefined) return;
+  var q = cqQ(CQ_S.ids[CQ_S.i]);
+  var right = cqNormAns(pick) === cqNormAns(q.ans);
+  CQ_S.ans[CQ_S.i] = pick;
+  if (!right) CQ_S.wrong.push(q.id);
+  var rec = cqRec(), r = rec[q.id] || { n: 0, wrong: 0, lastRight: false, streak: 0 };
+  r.n++; if (!right) r.wrong = (r.wrong || 0) + 1;
+  r.lastRight = right; r.streak = right ? ((r.streak || 0) + 1) : 0; r.ts = Date.now();
+  if (!right) r.guess = 0;
+  rec[q.id] = r; cqSave(rec);
+
+  var box = document.getElementById('cqBody');
+  var sb = document.getElementById('cqSubmit'); if (sb) sb.parentNode.style.display = 'none';
+  box.querySelectorAll('.cq-opt').forEach(function (b) {
+    b.disabled = true;
+    var k = +b.getAttribute('data-i');
+    var isRight = Array.isArray(q.ans) ? q.ans.indexOf(k) >= 0 : k === q.ans;
+    var isPick = Array.isArray(pick) ? pick.indexOf(k) >= 0 : k === pick;
+    if (isRight) b.classList.add('ok');
+    if (isPick && !right) b.classList.add('no');
+    b.classList.remove('sel');
+  });
+  var after = document.getElementById('cqAfter');
+  var ansTxt = Array.isArray(q.ans) ? q.ans.map(function (i) { return 'ABCD'[i]; }).join('') : (q.type === '判断' ? (q.ans === 0 ? '正确' : '错误') : 'ABCD'[q.ans]);
+  var h = '<div class="cq-res ' + (right ? 'r' : 'w') + '">' + (right ? '✓ 答对' : '✗ 答错 · 正确答案 ' + ansTxt) + '</div>';
+  /* 答对但科目是「无选项」的题：追问一次是否真的确定 —— 把蒙对识别出来 */
+  if (right && q.type !== '判断') {
+    h += '<div class="cq-sure"><div class="cq-sure-t">这题如果只是运气好，下次还是会错。</div>'
+      + '<div class="cq-sure-q">你能说出正确选项写的是什么吗？</div>'
+      + '<div class="cq-sure-b"><button class="cq-btn sm" data-cq="say">说得出来 ›</button><button class="cq-btn sm ghost" data-cq="nod">其实是蒙的</button></div></div>';
+  }
+  h += '<div class="cq-exp"><div class="cq-exp-h">解析</div><p>' + esc(q.exp || '（这题暂无预写解析）') + '</p></div>';
+  h += '<div class="cq-ask"><input class="cq-askin" id="cqAskIn" type="text" placeholder="还要问：为什么不是 B / 这两个概念怎么分"><button class="cq-askbtn" id="cqAskBtn">问</button></div><div id="cqAskLog"></div>';
+  h += '<button class="cq-next" id="cqNext">' + ((CQ_S.i + 1 < CQ_S.ids.length) ? '下一题' : '看本组结果') + '</button>';
+  /* 考点卡：这道题背后的教材卡 */
+  if (q.cardId) h += '<a class="cq-card" href="cards/' + q.cardId + '.html"><span class="cq-card-t">考点卡 · ' + esc(q.point) + '</span><span class="cq-card-n">' + esc(String(q.name || '')) + '</span><span class="cq-card-a">看卡 ›</span></a>';
+  after.innerHTML = h;
+  after.querySelectorAll('[data-cq]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var act = b.getAttribute('data-cq');
+      var sheet = after.querySelector('.cq-sure');
+      if (act === 'nod') {
+        var rm = cqRec(); var rr = rm[q.id] || {}; rr.guess = 1; rr.lastRight = true; rm[q.id] = rr; cqSave(rm);
+        toast('记下了 · 这题算「蒙对」，不计入掌握度');
+        sheet.innerHTML = '<div class="cq-sure-ok">已标为蒙对。下次再抽到它，还会先出。</div>';
+      } else {
+        sheet.innerHTML = '<div class="cq-sure-ok">好 —— 那这题算你会了。</div>';
+      }
+    });
+  });
+  var ab = document.getElementById('cqAskBtn');
+  if (ab) ab.addEventListener('click', function () {
+    var inp = document.getElementById('cqAskIn'); var txt = (inp.value || '').trim(); if (!txt) return;
+    var log = document.getElementById('cqAskLog');
+    log.innerHTML += '<div class="cq-askq">' + esc(txt) + '</div><div class="cq-aska">思考中…</div>';
+    inp.value = '';
+    var prompt = 'CCAA（认证通用基础）真题答疑。\n考点：' + q.point + ' ' + (q.name || '') + '\n题干：' + q.stem
+      + '\n正确答案：' + ansTxt + '\n教材解析：' + (q.exp || '') + '\n\n考生追问：' + txt
+      + '\n\n请直接回答这一问，3~5 句，先给结论再给依据（尽量点出教材原文关键词），不要复述题干、不要客套。';
+    callAI(prompt, '你是 CCAA 认证通用基础备考教练，只讲考点本身和区分方法，简洁具体。', true).then(function (t) {
+      var as = log.querySelectorAll('.cq-aska'); if (as.length) as[as.length - 1].innerHTML = esc(t).replace(/\n/g, '<br>');
+    }).catch(function () {
+      var as = log.querySelectorAll('.cq-aska'); if (as.length) as[as.length - 1].textContent = '没拿到回答，检查网络后再问一次。';
+    });
+  });
+  var nx = document.getElementById('cqNext');
+  if (nx) nx.addEventListener('click', function () {
+    if (CQ_S.i + 1 < CQ_S.ids.length) { CQ_S.i++; cqRenderQ(); } else { cqFinish(); }
+  });
+  after.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ---------- 结算 ---------- */
+function cqFinish(){
+  var box = document.getElementById('cqBody'); if (!box || !CQ_S) return;
+  var n = CQ_S.ids.length, right = 0;
+  CQ_S.ans.forEach(function (a, i) { var q = cqQ(CQ_S.ids[i]); if (q && a !== undefined && cqNormAns(a) === cqNormAns(q.ans)) right++; });
+  var secs = Math.max(1, Math.round((Date.now() - CQ_S.t0) / 1000));
+  cqTitle('本组结果');
+  var h = '<div class="cq-sum"><div class="cq-big">' + right + ' / ' + n + '</div>'
+    + '<div class="cq-sub2">正确率 ' + Math.round(right / n * 100) + '% · 用时 ' + Math.floor(secs / 60) + ' 分 ' + (secs % 60) + ' 秒</div></div>';
+  if (CQ_S.wrong.length) {
+    h += '<div class="cq-wrongsec"><div class="cq-wh">本组错题 ' + CQ_S.wrong.length + ' 道</div>';
+    CQ_S.wrong.forEach(function (id) {
+      var q = cqQ(id); if (!q) return;
+      h += '<div class="cq-wq" data-cqwq="' + esc(id) + '"><div class="cq-ws">' + esc(q.stem) + '</div><div class="cq-wm">' + esc(q.point) + ' · ' + esc(q.paper || '') + '</div></div>';
+    });
+    h += '</div>';
+  }
+  h += '<div class="cq-fin-acts"><button class="cq-btn main" data-cq="again">再练一组</button>'
+    + '<button class="cq-btn" data-cq="home">回考点列表</button></div>';
+  box.innerHTML = h;
+  box.querySelectorAll('[data-cq]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var act = b.getAttribute('data-cq');
+      if (act === 'again') { cqStart(CQ_S.point || 'weak', 10); }
+      else { cqRenderHome(); }
+    });
+  });
+  box.scrollTop = 0;
+}
+
+/* ---------- 事件绑定 ---------- */
+function cqBind(root){
+  if (!root || root.__cqBound) return;
+  root.__cqBound = 1;
+  root.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-cq]');
+    if (el) {
+      e.stopPropagation();
+      var act = el.getAttribute('data-cq');
+      if (act === 'home') { cqRenderHome(); }
+      else { cqStart(act, 10); }
+      return;
+    }
+    var pt = e.target.closest('[data-cqp]');
+    if (pt) { e.stopPropagation(); cqStart(pt.getAttribute('data-cqp'), 10); return; }
+    var pl = e.target.closest('[data-cqpt]');
+    if (pl) { e.stopPropagation(); cqStart(pl.getAttribute('data-cqpt'), 10); return; }
+  });
+}
+
+/* ---------- 知识树：CCAA 频道 ---------- */
+function renderCqTree(){
+  var box = document.getElementById('treeList'); if (!box) return;
+  if (typeof hdrSub !== 'undefined' && hdrSub && curView === 'tree') hdrSub.textContent = 'CCAA · 按考点练题';
+  if (!CQ) { box.innerHTML = '<div class="cq-loading">题库加载中…</div>'; cqLoad(function () { if (normCh(treeCh) === 'ccaa') renderCqTree(); }); return; }
+  var s = cqStat();
+  var h = [];
+  h.push('<div class="cq-treehero"><div class="cq-th-l">练题</div>'
+    + '<div class="cq-th-n"><b>' + s.tot + '</b> 道真题 · 已做 ' + s.done + ' · 正确率 ' + (s.done ? s.acc + '%' : '—') + '</div>'
+    + '<button class="cq-btn main sm2" data-cq="weak">' + (s.done ? '接着练' : '开始练') + '</button></div>');
+  h.push('<div class="cq-sect"><span>按考点</span><i>点考点抽 10 题 · 卡片是讲解，题在练题里</i></div>');
+  var pts = cqPts(), partNow = '';
+  pts.forEach(function (p) {
+    var info = CQ.chapters[p], qs = cqQs(p), st = cqPtScore(p);
+    var part = String(info.part || '').replace(/\s*[\d.]+$/, '');
+    if (part !== partNow) { partNow = part; h.push('<div class="cq-part">' + esc(part || '其他') + '</div>'); }
+    var card = getCard(info.cardId);
+    h.push('<div class="cq-tnode' + (qs.length ? '' : ' off') + '"' + (qs.length ? ' data-cqp="' + esc(p) + '"' : '') + '>'
+      + '<span class="cq-lv lv-' + (info.level || '未考') + '">' + (info.level || '未考') + '</span>'
+      + '<div class="cq-tn-t"><b>' + esc(p) + ' ' + esc(String(info.name).replace(/（[^）]*）$/, '')) + '</b>'
+      + '<i>' + (qs.length ? (qs.length + ' 题 · ' + (st.n ? ('已做 ' + st.n + ' · ' + Math.round(st.acc * 100) + '%') : '还没练')) : '暂无真题') + '</i></div>'
+      + (card ? '<span class="cq-tn-card" data-cqcard="' + esc(card.id) + '">卡</span>' : '<span class="cq-tn-card off">待推</span>')
+      + '</div>');
+  });
+  box.innerHTML = h.join('');
+  box.scrollTop = 0;
+}
+
+/* ---------- 初始化 ---------- */
+(function () {
+  var ex = document.getElementById('cqExit');
+  if (ex) ex.addEventListener('click', function () { navBack(); });
+  var body = document.getElementById('cqBody');
+  cqBind(body);
+  var tl = document.getElementById('treeList');
+  if (tl) tl.addEventListener('click', function (e) {
+    var cc = e.target.closest('[data-cqcard]');
+    if (cc) { e.stopPropagation(); if (typeof openReader === 'function') openReader(cc.getAttribute('data-cqcard')); return; }
+  });
+  /* 知识树频道切成 CCAA：渲染练题视图（列表态） */
+  var pills = document.getElementById('treeChPills');
+  if (pills) pills.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ch]'); if (!b) return;
+    setTimeout(function () {
+      if (normCh(treeCh) === 'ccaa') { var tl2 = document.getElementById('treeList'); if (tl2) renderCqTree(); }
+    }, 0);
+  });
+  /* 预取题库，进频道即有数 */
+  setTimeout(function () { cqLoad(); }, 1200);
+})();
+
+/* ===== /CCAA 练题模块 JS ===== */
 </script>
 </body>
 </html>
