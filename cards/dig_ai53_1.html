@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜为什么AI不能百分百消灭幻觉？</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:20px 16px 60px}
+h1{font-size:20px}
+h2{font-size:17px;padding-left:10px;border-left:4px solid #4f8cff}
+p,li{font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0}
+.note{color:#9aa3b2;font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<h1>深挖：为什么AI不能百分百消灭幻觉？业界在用什么办法缓解？</h1>
+<p>一句话：幻觉是“猜下一个词”这个工作原理的副产品，只要模型还靠“接得顺”来生成文字，“没有开关能彻底关掉它”。但缓解手段已经不少，下面按靠谱程度排给你。</p>
+<h2>业界主流的四类缓解办法</h2>
+<ul>
+<li><strong>检索增强（RAG）</strong>：回答前先去指定资料库里翻，再“照着资料说”。这是目前最实用的一招——把“凭记忆答”改成“看着资料答”，编造空间大幅缩小。个人知识库（模块4会细讲）就是这一招的落地。</li>
+<li><strong>允许它说不知道</strong>：在提示词里明确写“不确定就直说没有”。对齐训练也在往这个方向使劲：新版主流模型比早期版本更敢说“我不确定”，但用户一逼问，它仍可能顺着你改口。</li>
+<li><strong>标注不确定度</strong>：让模型给出出处或置信度，把“它说的”变成“它依据什么说的”。验证成本从“全信或全不信”降到“抽查关键引用”。</li>
+<li><strong>工具校验</strong>：把计算、日期、代码这类可验证的事交给工具跑，而不是让模型“脑算”。算错数、算错日期，是最常见的幻觉场景。</li>
+</ul>
+<h2>一个必须记住的边界</h2>
+<blockquote>再好的缓解办法也只是“降低概率”，不是“清零”。任何要求100%准确的任务（法律条文、医疗剂量、财务数字），都必须有人做最终核对——这是现在的行业共识，不是你对AI要求太高。</blockquote>
+<p>而且责任在你这边：2026年11月20日，中国证监会与公安部公布4起编造传播资本市场虚假信息典型案例，其中一起就是有人利用AI生成“证监会暂缓IPO”的假消息、用20余个账号发布，相关人员被行政处罚（来源：新华社）。AI编的，传出去算你的。</p>
+<p class="note">来源说明：GPT-5 系统卡（OpenAI，2025年8月发布，承认幻觉为固有局限）；证监会、公安部典型案例通报（新华社，2026-11-20）。缓解手段为业界通行做法的一般性介绍，不同产品的具体效果以官方文档为准。</p>
+</body>
+</html>
