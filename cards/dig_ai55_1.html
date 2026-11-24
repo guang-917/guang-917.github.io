@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜温度、top_p 到底先调哪个？</title>
+<style>
+body{margin:0 auto;max-width:640px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 18px 60px;font-size:15px}
+h1{font-size:20px}
+h2{font-size:17px;border-left:4px solid #4f8cff;padding-left:10px;margin-top:24px}
+blockquote{background:#171a21;border-left:4px solid #ff5a5f;border-radius:0 10px 10px 0;padding:10px 14px;margin:12px 0}
+.note{color:#9aa3b2;font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<h1>深挖：温度、top_p 到底先调哪个？</h1>
+<p>先给结论：<strong>只调一个，优先调温度。</strong></p>
+<p>两个旋钮都在干一件事——控制AI挑词时的"冒险程度"，只是出手的位置不一样。温度是把整张概率表"重新加热或冷却"：温度低，概率差距被拉大，冷门词几乎没机会；温度高，概率被抹平，冷门词也有戏。top_p 是不改编号，直接划一条分数线：只留下概率合计到 0.9（或你设的值）的那批词，剩下的全部踢出考场。</p>
+<h2>为什么优先动温度</h2>
+<p>因为温度的"手感"更直接：要稳就往 0 拧，要活就往 1 拧，方向明确。top_p 更像安全网——它的本职是拦住离谱选项，而不是调节风格。一般场景下 top_p 保持默认（常见是 0.9~1.0）不动，单靠温度就能覆盖 90% 的需求。</p>
+<h2>两个一起调会怎样</h2>
+<p>温度调高本来给了冷门词出场机会，但 top_p 又把冷门词的准考证收走了——两个旋钮互相抵消，你根本说不清是哪个在起作用，效果无法预测。所以 OpenAI 等厂商的官方建议就是：一次只调一个。</p>
+<blockquote>实用口诀：要事实→温度 0~0.3，top_p 不动；要创意→温度 0.7~1.0，top_p 不动；输出复读卡死→把 top_p 降到 0.9 左右当保险。</blockquote>
+<p>最后提醒：调参数不会让模型"变聪明"，只改变它挑词的风格。答案是错的，调温度救不了。</p>
+<div class="note">依据：OpenAI API 文档及 Holtzman et al., ICLR 2020（nucleus sampling 原始论文）。具体默认值以你所用的厂商文档为准。</div>
+</body>
+</html>
