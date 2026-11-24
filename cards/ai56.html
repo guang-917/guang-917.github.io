@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-7 温度与采样：同一个问题，AI每次答得不一样，旋钮在这儿｜31/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月25日 · AI 知识</div>
+<h1>AI知识｜M2-7 温度与采样：同一个问题，AI每次答得不一样，旋钮在这儿｜31/32</h1>
+<div class="lead">同一个问题问两遍，AI给的答案居然不一样——不是它记性差，是背后有个叫"温度"的旋钮在起作用。今天讲透这个旋钮怎么转、什么时候该调低、什么时候该调高。</div>
+
+<h2>一句话结论</h2>
+<p>温度与采样解决的问题是：模型算出每个候选词的概率之后，到底怎么"挑下一个词"——挑得太死，答案千篇一律；挑得太野，答案胡说八道。</p>
+
+<h2>是什么</h2>
+<p>上一期说过，大模型的本事是"猜下一个词"。猜完之后，它手里其实握着一张概率表："苹果"20%、"香蕉"15%、"桌子"0.1%……温度（temperature）就是控制怎么从这张表里挑词的旋钮。</p>
+
+<h2>生活比方</h2>
+<p>这就像公司招人：温度低等于"只招笔试第一名"，次次招同一类人，稳但没惊喜；温度高等于"前几名抽签决定"，偶尔捞到黑马，也偶尔招来不靠谱的。温度不是换了一个AI，只是换了同一个AI挑词的胆量。</p>
+
+<h2>为什么重要</h2>
+<p>它直接决定AI的"性格"。同一个模型，温度0.2和温度1.5答出来像两个员工：一个严谨的会计，一个发散的文案。很多人觉得"AI不好用"，其实是旋钮没拧对位置。</p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li>要事实、要代码、要数据提取：把温度调到0或接近0（0到0.3），答案最稳、最可复现。</li>
+<li>要写文案、起标题、头脑风暴：调到0.7到1.0，让AI敢用不那么常见的词。</li>
+<li>配套旋钮 top_p（核采样）：只保留概率加起来够到某个阈值的那批词再挑，比如0.9表示只在最可能的、合计90%的词里选——等于先筛掉明显离谱的选项。</li>
+</ol>
+<blockquote>OpenAI 的接口里，温度取值范围是 0 到 2，默认为 1。</blockquote>
+
+<h2>注意坑</h2>
+<ul>
+<li>温度高不会让AI"更聪明"，只会让它更大胆；调高温度治不了幻觉，答案乱跳反而更容易编。</li>
+<li>temperature 和 top_p 官方建议一次只调一个，两个一起动，效果没法预测。</li>
+</ul>
+
+<h2>一个有出处的冷知识</h2>
+<p>"温度调太低会让文本复读"不是玄学。Holtzman 等人2020年在 ICLR 发表的论文《The Curious Case of Neural Text Degeneration》发现：按最高概率逐词选（贪心/束搜索）会让模型陷入循环，输出"今天天气很好今天天气很好"式的复读，于是提出了 nucleus sampling（即 top_p）。这个方法如今已是主流采样方式。</p>
+
+<h2>今天就能用</h2>
+<p>打开你常用的AI工具的设置（网页版一般在"设置-模型参数"，开发者看API参数），把温度从默认值改成0，让它"把下面这段话总结成一句话"连跑3次——你会看到3次结果几乎一字不差；再改回1.0跑3次，差异明显。一分钟验证完，你就亲手摸到这个旋钮了。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>市场监管总局11月24日召开人工智能国际标准化工作专题新闻发布会</strong>：宣布在上海、河北等5个自贸试验区开展首批标准化自主开放试点，对标DEPA等国际规则，在人工智能数据跨境、产品合规互认上先行先试。对普通人意味着：AI企业出海合规成本有望下降，相关岗位（合规、标准）需求会增加。（来源：市场监管总局发布会，证券时报网2026-11-24报道，https://www.stcn.com/article/detail/4350751.html）</li>
+<li><strong>工信部同场披露产业数据</strong>：2026年上半年我国人工智能核心产业规模预计超7500亿元，核心企业数量超6600家，设立600亿元国家人工智能基金。（来源：工业和信息化部科技司副司长姚佳在11月24日发布会介绍，中新经纬2026-11-24报道，https://cj.sina.com.cn/articles/view/5993531560/1653e08a802001qpdv）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>下一期：M2-8 知识截止与联网——AI为什么不知道"昨天"发生的事，以及联网搜索是怎么补上这块短板的。</p>
+
+<div class="rel">相关延伸：上一期 M2-6 讲了幻觉为什么会发生；本期讲的温度是"选词的胆量"，调高温度会放大幻觉风险，两个知识点合起来看更完整。</div>
+<div class="note">来源说明：① OpenAI API 文档（temperature 取值 0–2，默认 1）：platform.openai.com/docs/api-reference/chat；② Holtzman, A. et al., "The Curious Case of Neural Text Degeneration", ICLR 2020, arXiv:1904.09751；③ 政策动态来自市场监管总局2026-11-24新闻发布会（证券时报网、中新经纬、财联社多源交叉一致）。模型内部概率与温度机制的描述为业界通行解释，具体数值行为因厂商实现而异。</div>
+</body>
+</html>
