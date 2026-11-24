@@ -3679,8 +3679,28 @@ var QUIZ=null, QUIZCARDS=null, QS=null;
 var LS_QUIZ="kb_quiz";
 function quizRec(){try{return JSON.parse(localStorage.getItem(LS_QUIZ)||"{}")||{};}catch(e){return {};}}
 function quizSaveRec(m){try{localStorage.setItem(LS_QUIZ,JSON.stringify(m));}catch(e){}}
+var QUIZ_BUSY=false, QUIZ_WAIT=[];
+/* 会话级缓存：同一次打开 App，题库只下载一次；version.json 变了才重新拉 */
+function kbSessGet(k){ try{ var raw=sessionStorage.getItem(k); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+function kbSessSet(k,v){ try{ sessionStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 function quizLoad(cb){
   if(QUIZ){cb&&cb();return;}
+  if(cb)QUIZ_WAIT.push(cb);
+  if(QUIZ_BUSY)return;          /* `.perf` 互斥锁：并发调用只发一次请求 */
+  QUIZ_BUSY=true;
+  function _done(){
+    QUIZ_BUSY=false;
+    var fs=QUIZ_WAIT.splice(0);
+    fs.forEach(function(f){ try{f();}catch(e){} });
+  }
+  var cached=kbSessGet("kb_quiz_bank");
+  if(cached&&cached.d){
+    QUIZCARDS=cached.cards||{};
+    QUIZ=cached.d;
+    if(!QUIZ.questions)QUIZ.questions=[];
+    if(!QUIZ.chapters)QUIZ.chapters={};
+    setTimeout(_done,0);return;   /* `.perf` 与网络路径同为异步，避免同步重入 */
+  }
   fetch("quiz_cards.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(m){
     QUIZCARDS=m||{};
   }).catch(function(){ QUIZCARDS={}; }).then(function(){
@@ -3688,8 +3708,9 @@ function quizLoad(cb){
     QUIZ=d||{chapters:{},questions:[]};
     if(!QUIZ.questions)QUIZ.questions=[];
     if(!QUIZ.chapters)QUIZ.chapters={};
-    cb&&cb();
-  }).catch(function(){ QUIZ={chapters:{},questions:[]}; if(typeof toast==="function")toast("题库加载失败，检查网络"); cb&&cb(); });
+    kbSessSet("kb_quiz_bank",{d:QUIZ,cards:QUIZCARDS});
+    _done();
+  }).catch(function(){ QUIZ={chapters:{},questions:[]}; if(typeof toast==="function")toast("题库加载失败，检查网络"); _done(); });
 }
 function quizByCh(ch){ return (QUIZ&&QUIZ.questions?QUIZ.questions:[]).filter(function(q){return String(q.ch)===String(ch);}); }
 function quizQ(id){ var a=(QUIZ&&QUIZ.questions)||[]; for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i]; return null; }
@@ -5478,7 +5499,13 @@ function toast(msg){var el=document.getElementById("toast");el.textContent=msg;e
 initTreeCh();renderTreePills();renderToday();renderChannels();renderTree();renderDig();updateMzBdg();_archBtn("mzArchBtn",archCount(mzSub));checkAndGenDetails();
 /* `.67`：知识树的掌握度要读题库记录（每题做几次/错几次/连对），所以启动就把题库拉进来，
    拉完重渲染一次——否则第一次进「知识树」全是「未读」，看着像没生效。 */
-quizLoad(function(){ renderTree(); if(curView==="channels"&&chanDrill&&curChan==="data")renderChanList("data"); });
+/* `.perf` 题库不抢首屏：等 feed.json 渲染完、浏览器空闲再拉，拉完刷新知识树 */
+function kbLoadQuizIdle(){
+  var run=function(){ quizLoad(function(){ renderTree(); if(curView==="channels"&&chanDrill&&curChan==="data")renderChanList("data"); }); };
+  if(window.requestIdleCallback) requestIdleCallback(run,{timeout:4000});
+  else setTimeout(run,1500);
+}
+kbLoadQuizIdle();
 TAB_META.today[1]=todaySub();
 document.getElementById("hdrSub").textContent=TAB_META.today[1];
 /* 建立历史基线：replaceState 占住当前条目（首页），再压一条「守卫」。
@@ -5679,22 +5706,19 @@ function cqLoad(cb){
   if (cb) CQ_WAIT.push(cb);
   if (CQ_BUSY) return;
   CQ_BUSY = true;
-  fetch('quiz_bank.json?v=' + Date.now(), { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (d) {
-      var qs = ((d && d.questions) || []).filter(function (q) { return String(q.ch) === 'ccaa'; });
-      var chs = {};
-      /* 章节 = 考点号（q.point）；q.ch 只是频道路由字段，别拿它当 key */
-      qs.forEach(function (q) { var k = String(q.point || q.sec); if (k && !chs[k]) chs[k] = { name: q.name + '（' + k + '）', part: q.part, level: q.level, cardId: q.cardId }; });
-      CQ = { chapters: chs, questions: qs };
-      CQ_BUSY = false;
-      CQ_WAIT.splice(0).forEach(function (f) { try { f(); } catch (e) {} });
-    })
-    .catch(function () {
-      CQ = { chapters: {}, questions: [] }; CQ_BUSY = false;
-      if (typeof toast === 'function') toast('练题库加载失败，检查网络');
-      CQ_WAIT.splice(0).forEach(function (f) { try { f(); } catch (e) {} });
-    });
+  /* `.perf` 不再独立 fetch quiz_bank.json —— 复用主题库 QUIZ，只过滤出 CCAA 部分。
+     修复前这里会触发整份题库的第 3 次下载（674KB）。 */
+  quizLoad(function () {
+    var qs = ((QUIZ && QUIZ.questions) || []).filter(function (q) { return String(q.ch) === 'ccaa'; });
+    var chs = {};
+    qs.forEach(function (q) { var k = String(q.point || q.sec); if (k && !chs[k]) chs[k] = { name: q.name + '（' + k + '）', part: q.part, level: q.level, cardId: q.cardId }; });
+    CQ = { chapters: chs, questions: qs };
+    CQ_BUSY = false;
+    var fs = CQ_WAIT.splice(0);
+    /* `.perf` 必须异步派发：cqEntryHTML 是在 body.innerHTML=... 的求值过程中被调用的，
+       若在这里同步 renderChanList 会重入渲染，随后外层的旧 HTML 又把新内容盖掉（表现为永远停在"加载中"）。 */
+    setTimeout(function () { fs.forEach(function (f) { try { f(); } catch (e) {} }); }, 0);
+  });
 }
 function cqQs(point){ return (CQ && CQ.questions ? CQ.questions : []).filter(function (q) { return String(q.point || q.sec) === String(point); }); }
 function cqQ(id){ var a = (CQ && CQ.questions) || []; for (var i = 0; i < a.length; i++) if (a[i].id === id) return a[i]; return null; }
@@ -6082,8 +6106,7 @@ function renderCqTree(){
       if (normCh(treeCh) === 'ccaa') { var tl2 = document.getElementById('treeList'); if (tl2) renderCqTree(); }
     }, 0);
   });
-  /* 预取题库，进频道即有数 */
-  setTimeout(function () { cqLoad(); }, 1200);
+  /* `.perf` 删除启动预取：题库由 quizLoad 统一在首屏之后加载一次，cqLoad 只复用它 */
 })();
 
 /* ===== /CCAA 练题模块 JS ===== */
