@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M2-8 知识截止与联网：AI的“课本”只印到某一天，新事得让它现查｜32/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月26日 · AI 知识</div>
+<h1>AI知识｜M2-8 知识截止与联网：AI的“课本”只印到某一天，新事得让它现查｜32/32</h1>
+<div class="lead">为什么 AI 答“最新价格、上周新闻”时特别笃定又特别不可靠？因为它的“课本”印完就定格了。这期讲清知识截止日期是什么、官方文档去哪查、怎么让它老老实实现查现答。本期是 32 点课程表的最后一张。</div>
+
+<h2>一句话结论</h2>
+<p>知识截止与联网解决的问题是：模型的训练资料只收工到某一天，之后的世界它没学过——问新事必须让它联网现查或你喂新资料，否则它会按旧记忆一本正经地脑补。</p>
+
+<h2>是什么：方便面的生产日期</h2>
+<p>大模型出厂前要用海量资料训练一遍，资料收工的那天，就是它的<strong>知识截止日期</strong>。之后世界再变，模型脑子不会自动更新，除非你让它联网查，或者把新资料贴给它。这不是故障，是训练这件事本身的特性——教材印完就定格，学生不会因为过了一个月自动多懂一段。</p>
+<p>生活比方：知识截止就像方便面包装上的<strong>生产日期</strong>，印得清清楚楚，出厂那天之后“肚子里”就没有新料了。想让菜新鲜，要么让它下楼现买菜（联网检索），要么你自己把新料递进去（贴资料）；不联网硬答，就是把老面饼泡水再撒点想象出来的调料。</p>
+<p>这个日期不是秘密，官方文档都写明，两个可核实的例子：</p>
+<table>
+<tr><th>模型</th><th>官方标注</th><th>来源</th></tr>
+<tr><td>OpenAI GPT-4o</td><td>知识截止时间：2023年10月1日</td><td>OpenAI 官方模型文档</td></tr>
+<tr><td>Anthropic Claude Opus 4.5</td><td>可靠的知识截止日期：2025年5月（训练数据截止2025年8月）</td><td>Claude 官方文档模型页</td></tr>
+</table>
+<blockquote>买方便面看生产日期，用 AI 查截止日期，一个道理。官方文档里每个模型都有一行写着它“读到哪天”。</blockquote>
+
+<h2>为什么重要：过时和幻觉是一对搭档</h2>
+<p>你问截止之后的事（新版本号、新价格、上周新闻），它通常不答“不知道”，而是按旧模式接着猜，语气照样笃定——这是幻觉（M2-6）的一个固定来源。更麻烦的是，模型自己意识不到自己过时了。好比一位出国后手机断网的朋友，你问他“现在地铁多少钱起步”，他不会说“我不在国内不清楚”，而是按老票价答你，说得还特别像真的。</p>
+
+<h2>怎么用（3 步）</h2>
+<ol>
+<li><strong>先判断新旧</strong>：凡带“最新、现在、今天、价格、版本、近期”这类词的提问，默认属于截止后的地雷区，别直接裸问。</li>
+<li><strong>让它现查</strong>：明确写“请联网搜索后回答，并给出信息来源链接”。主流产品（ChatGPT、Kimi、文心一言等）都有联网开关或自动触发机制，别指望它每次都主动开。</li>
+<li><strong>核对再信</strong>：点它给的链接验证；给不出链接、或链接打不开，就当线索不当结论。没有联网功能时，自己把最新资料贴给它——这正是 RAG“先给资料再答题”的思路（M4-2）。</li>
+</ol>
+
+<h2>今天就能用：2 分钟实验</h2>
+<p>打开你常用的 AI：第一步，问它“你的知识截止到什么时候？”——它的自我报告未必准，真正的准数以官方模型文档为准；第二步，问一个你确定发生在它截止日期之后的事，看它的反应：是老实承认不知道，还是一本正经地编。编得越像，越说明“涉新事先开联网、再要出处”这个习惯有多值钱。从今天起把它变成肌肉记忆。</p>
+
+<h2>政策/行业动态（上期 11 月 25 日之后新增）</h2>
+<ul>
+<li><strong>全球首个生成式 AI 治理国际标准提案</strong>：11 月 24 日市场监管总局发布会上介绍，我国联合多国编制《信息技术 人工智能 生成式人工智能系统风险应对指南》国际标准提案，针对深度伪造、模型“投毒”等全球共性风险，是全球首个针对生成式 AI 治理的国际标准提案。（来源：环球网 2026-11-25 报道）</li>
+<li><strong>5 个自贸区试点 AI 标准化开放</strong>：同一发布会上，市场监管总局宣布已在上海、河北等 5 个自贸试验区开展 AI 标准化自主开放试点，在数据跨境、产品合规互认方面先行先试；工信部科技司副司长姚佳同场介绍，2026 年上半年我国 AI 核心产业规模预计超 7500 亿元、核心企业超 6600 家。（来源：香港中通社 2026-11-25 电；环球网 2026-11-25 报道，两个独立来源一致）</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>32 点课程表至此走完，进入第二轮。下一期：<strong>AI知识｜M3-7 上下文管理</strong>——长对话聊着聊着就“崩”？学会帮你和 AI 一起打扫办公桌（第二轮第 1 期）。</p>
+
+<div class="rel">相关延伸：本期与 M2-6（幻觉成因）配套食用——截止日期是幻觉的一大来源；没有联网时的解法就是 M4-2 讲过的 RAG 全流程；想让 AI 真的“会查”，还要等 M5-2 工具调用那套本事。</div>
+<div class="note">来源说明：① GPT-4o 知识截止时间 2023-10-01：OpenAI 官方模型文档 platform.openai.com/docs/models/gpt-4o（检索日期 2026-11-26）；② Claude Opus 4.5 知识截止 2025年5月：Claude 官方文档 platform.claude.com/docs/zh-CN/models/opus-4-5/overview（检索日期 2026-11-26）；③ 国际标准提案与自贸区试点、AI 产业规模数据：环球网 2026-11-25 报道（163.com/dy/article/LCIOE30R0514R9OJ.html）、香港中通社 2026-11-25 电（hkcna.hk/cn/content/s6b0681a3e4b0f1a1d8daf169.html）。模型自我报告的截止日期可能与文档不符，以官方文档为准。</div>
+</body>
+</html>
