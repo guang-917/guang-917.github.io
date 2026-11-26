@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第14章 大数据和数据科学｜3/共3（本章收官）</title>
+<style>
+  body { background:#12141a; color:#d6d9e0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.75; margin:0; padding:24px 16px 60px; }
+  .wrap { max-width:680px; margin:0 auto; }
+  .meta { color:#8a93a6; font-size:13px; margin-bottom:10px; }
+  h1 { color:#f2f4f8; font-size:21px; line-height:1.5; margin:0 0 8px; }
+  .lead { color:#a8b3c7; font-size:15px; background:#1b1f2a; border-left:3px solid #4c8dff; padding:12px 14px; border-radius:6px; margin:14px 0 22px; }
+  .sec { background:#171b24; border:1px solid #262c3a; border-radius:8px; padding:16px 18px; margin-bottom:16px; font-size:15px; }
+  .sec h2 { color:#4c8dff; font-size:16px; margin:0 0 8px; }
+  .quote { color:#c9d4e8; background:#1e2534; border-left:3px solid #7a5cff; padding:8px 12px; border-radius:4px; margin:8px 0; font-size:14px; }
+  .warn { color:#e8b56a; font-size:14px; }
+  table { width:100%; border-collapse:collapse; margin:8px 0; font-size:14px; }
+  th,td { border:1px solid #2b3244; padding:6px 8px; text-align:left; }
+  th { color:#4c8dff; background:#1b2230; }
+  .quiz { background:#10141d; border:1px dashed #3a4358; border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:15px; }
+  .quiz b { color:#63d68f; }
+  .mnemo { background:#1c2433; border:1px solid #33405c; border-radius:8px; padding:14px 16px; font-size:15px; white-space:pre-line; }
+  .rel { font-size:14px; }
+  .rel a, .src a { color:#6ea8ff; text-decoration:none; word-break:break-all; }
+  .src { color:#8a93a6; font-size:13px; border-top:1px solid #262c3a; padding-top:14px; margin-top:20px; }
+  .tag { color:#5b6478; font-size:12px; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026年11月27日 · 第14章 大数据和数据科学（p382–p410 · 考试 4 分） · 本张 p394–p410 · 3/共3 · 本章收官</div>
+  <h1>CDGA｜第14章 大数据和数据科学｜3/共3 · 9活动·选源5标准·重组风险·MPP与MapReduce·过拟合·就绪4因素·治理5问·度量3类（本章收官）</h1>
+  <div class="lead">中央厨房今天开分店（本章收官）：先评估再上马、食材选得好不好、安全怎么防「还原术」、日常怎么考核，最后一句口诀把全章带走。</div>
+
+  <div class="sec"><h2>开篇比喻</h2>
+  还是那个超大中央厨房，今天讲「开分店」：开之前先做可行性评估（就绪评估 4 因素），食材从哪进（选源 5 标准）、客人隐私怎么防「还原术」（数据重组风险）、后厨怎么排灶台（MPP）、出菜走哪三步（MapReduce）、学徒考试怎么防死记硬背（过拟合），以及日常管理（治理 5 问、度量 3 类）。这是第 14 章最后一张。</div>
+
+  <div class="sec"><h2>考点1 语境关系图 9 个活动</h2>
+  ①人话——开分店的 9 件事分四类工种：定战略和选数据源是「想清楚」（P 规划），建环境、收数据、定假设、加工、用模型、传达结果是「动手干」（D 开发），部署和监控既是「运行」也是「看住它」（O 运营、C 控制）——9 个活动里只有它是 O＋C。
+  <div class="quote">原话 p384 图 14-2 九项：定义大数据战略和业务需求（P）、建立大数据环境（D）、选择数据源（P）、获取和采集数据（D）、设定数据假设和方法（D）、数据整合加工处理（D）、利用模型探索数据（D）、向利益相关方传达输出结果（D）、部署和监控（O、C）。</div>
+  <span class="warn">③坑——题目最爱问「哪个活动属于 P」「哪个是 O＋C」，把「部署和监控」归成纯 D 就错。</span></div>
+
+  <div class="sec"><h2>考点2 大数据战略评估 5 项＋低延迟的代价</h2>
+  ①人话——开店前盘家底：要解决什么问题、用哪些数据源、数据来得多快多全、动不动现有数据结构、影不影响已有模型。
+  <div class="quote">原话 p394 五项：①组织试图解决什么问题、数据分析目的是什么 ②要使用或获取的数据源有哪些 ③提供数据的及时性和范围 ④对其他数据集结构的影响和关系 ⑤对现有模型数据的影响。</div>
+  其中 p394 一句反常识原话：「低延迟通常是理想的，但会以牺牲机器学习能力为代价——静态数据与流式数据算法差别很大」。
+  <span class="warn">③坑——「你以为…其实…」就藏在这：你以为数据来得越快越好，其实要得越快，能用的算法越受限——现炒的菜永远只有那几样，慢炖才能上硬菜。</span></div>
+
+  <div class="sec"><h2>考点3 选数据源：5 个基本问题＋5 个选源标准</h2>
+  ①人话——进货前问五句：货从哪来（数据源头）、什么包装（数据格式）、标签写的啥（数据元素代表什么）、跟别的货怎么拼（如何与其他数据连接）、多久补一次货（更新频率如何）。挑货五标准 p395：基础数据（Foundational Data）、粒度（理想是以最细粒度获取未聚合数据）、一致性、可靠性、检查/分析新来源。②以上均照 p394–p395 原句。
+  <span class="warn">③坑——5 标准少一项、或把「最细粒度」偷换成「最粗粒度」/「聚合后的数据」就是错项。</span></div>
+
+  <div class="sec"><h2>考点4 隐私重组风险与数据重组（Recombination）</h2>
+  ①人话——客人单看每张小票没问题，但把一万张小票拼起来，就能还原出某个人住哪、几口人、生什么病——这就是「拼图还原术」。
+  <div class="quote">原话 p395：「大规模快速采集和整合多源数据集能力，使得原本受到保护的不同数据集能够重新整合，而这带来了风险」——汇总数据在邮编或家庭层级筛选后发布时，可能暴露个人身份信息。</div>
+  <div class="quote">p407：「数据重组（Recombination）——衡量重新复原敏感数据或个人隐私数据的能力，必须将此能力作为大数据安全实践的一部分进行管理」。</div>
+  <span class="warn">③坑——题目把风险说成只防「黑客攻击」就错；书上的风险是「合法数据拼在一起也能泄露隐私」，答案认准「重新整合／复原」。</span></div>
+
+  <div class="sec"><h2>考点5 工具三件套：MPP、MapReduce、数据库内算法</h2>
+  ①人话——MPP 是一人一个独立灶台：数据分给多台服务器，各炒各的菜，互不抢锅；MapReduce 是出菜三步：映射→洗牌→归并；数据库内算法是把锅直接搬到冰箱旁边，省得来回端菜。
+  <div class="quote">原话 p400：「数据在多个处理服务器（计算节点）之间进行分区（逻辑分布），每个服务器都有自己的专用内存来处理本地数据」，通信由管理节点（Master Host）控制，「不存在磁盘共享或内存争用的情况」→性能线性扩展。</div>
+  <div class="quote">p401 MapReduce 三步：映射（Map，识别和获取需要分析的数据）→洗牌（Shuffle，依据分析模式组合数据）→归并（Reduce，删除重复或执行聚合）；数据库内算法「把计算移动到数据附近，最大限度减少数据拷贝」。</div>
+  <span class="warn">③坑——把 MapReduce 三步写成「提取、转换、加载」（那是 ETL）或「映射、修正、转换」都错；MPP 的关键词是「无共享」。</span></div>
+
+  <div class="sec"><h2>考点6 过拟合与数据三分</h2>
+  ①人话——学徒把练习题背得滚瓜烂熟，考试换套卷就不会了，这叫过拟合。防法：用交叉验证，别拿训练误差当考试分数；数据通常随机分成 3 部分——训练集、测试集、验证集（p403）。
+  <div class="quote">原话 p403 过拟合 3 个成因：训练数据集不具有代表性、模型与数据关系过于复杂、把少量噪声数据的特性当作大部分数据的共性；p397：训练误差不能作为测试误差的有效估计。</div>
+  <span class="warn">③坑——三份数据被换成「训练集、测试集、生产集」就是编的；三个成因里塞「学习速度太慢」也不在书上。</span></div>
+
+  <div class="sec"><h2>考点7 就绪评估 4 因素</h2>
+  ①人话——开分店前过四道关：这门生意跟我主业相关吗（业务相关性）、我准备好了吗（业务准备情况）、钱够不够（经济可行性）、先开个样板间试试（原型）。
+  <div class="quote">原话 p405：「就绪评估 4 个关键成功因素：业务相关性、业务准备情况、经济可行性、原型」。</div>
+  <span class="warn">③坑——把「原型」换成「试点上线」「全面推广」都不行；题库还考过配套细节：数字资料存储的来源并非都需要内部拥有和运营——说「都需要」反而是错的。</span></div>
+
+  <div class="sec"><h2>考点8 治理 5 问与度量 3 类</h2>
+  ①人话——分店日常管理要回答五个问题：数据寻源、数据共享、元数据、数据增强、数据访问发布；考核看三本账：技术使用指标（数据热点、数据增长）、加载和扫描指标、学习和故事场景（已开发模型的数量与准确性、从识别机会中实现的收入、规避风险减少的成本）。
+  <div class="quote">原话 p406「治理要解决的 5 个问题」、p408–p409「度量指标 3 类」，均已照底稿原句转录。</div>
+  <span class="warn">③坑——治理 5 问混进「数据定价」「数据删除」就是编的；度量 3 类里把「学习和故事场景」漏掉也常见。</span></div>
+
+  <div class="sec"><h2>易混对比表</h2>
+  <table>
+    <tr><th>易串的数字组</th><th>内容</th></tr>
+    <tr><td>战略评估 5 项</td><td>问题与目的、数据源、及时性与范围、对其他数据集结构的影响、对现有模型的影响</td></tr>
+    <tr><td>选源 5 标准</td><td>基础数据、粒度、一致性、可靠性、检查/分析新来源</td></tr>
+    <tr><td>过拟合 3 成因</td><td>样本不代表性、模型过复杂、噪声当共性</td></tr>
+    <tr><td>就绪评估 4 因素</td><td>业务相关性、业务准备情况、经济可行性、原型</td></tr>
+  </table></div>
+
+  <div class="sec"><h2>考试怎么考</h2>
+  数字题和归类题为主。正确项关键词：部署和监控＝O＋C、最细粒度未聚合、无共享、映射洗牌归并、交叉验证、训练/测试/验证、业务相关性·业务准备情况·经济可行性·原型、数据寻源·数据共享·元数据·数据增强·数据访问发布。干扰项长什么样：低延迟「总是」值得、训练误差当测试误差、数据集三分里冒出「生产集」、MPP 说成「共享内存争用」、就绪评估把「原型」换成「上线推广」。四组数字 5/5/3/4 最容易互相串。</div>
+
+  <div class="quiz"><h2 style="color:#63d68f;font-size:16px;margin:0 0 8px;">本卡真题自测</h2>
+  <b>第 1 题（题号 c14-005）</b>：MapReduce 模型有三个主要步骤：<br>
+  A. 剖析、关联、聚类　B. 提取、转换、加载　C. 映射、修正、转换　D. 映射、洗牌、归并<br>
+  答案：D　解析：DMBOK2 第 14 章 14.3.2（本卡考点 5：映射→洗牌→归并，B 是 ETL 来捣乱的）</div>
+
+  <div class="quiz"><b>第 2 题（题号 c14-007）</b>：某企业反映其数据库响应时间太慢，虽然增加了计算平台投入，仍然要花费数小时甚至好几天才能完成某项大规模表的计算，对此，你应该推荐该企业使用如下哪种工具或技术予以改善：<br>
+  A. ERP　B. MPP　C. ECM　D. 数据可视化<br>
+  答案：B　解析：DMBOK2 第 14 章 14.3（本卡考点 5：大规模表算得慢，上 MPP 无共享架构，各节点并行算自己的数据）</div>
+
+  <div class="mnemo">【一句口诀】九事一 OC，选源粒度最细；还原术要防，无共享并行；过拟合三宗罪，数据分三份；相关、准备、经济加原型，寻源共享元数据、增强发布治理五问。
+覆盖自检：本张覆盖考点——9 个活动 · 战略评估 5 项 · 选源 5 标准 · 隐私重组与数据重组 · MPP/MapReduce/数据库内算法 · 过拟合与数据三分 · 就绪评估 4 因素 · 治理 5 问与度量 3 类（共 8 个）
+本章剩余考点——无（本章 3 张已收官）
+本章没讲到的点：①各大数据云厂商产品的具体能力对比（p401 只讲「云存储＋集成整合能力」的通用模式）；②深度学习网络结构与训练细节（p390 只提「黑匣子」与伦理问题）；③IoT 具体协议与边缘计算（p387 只给定义与数据量级）。</div>
+
+  <div class="sec rel"><h2>相关延伸</h2>
+  · <a href="https://guang-917.github.io/cards/dt69.html">CDGA｜第14章 大数据和数据科学｜2/共3 · ETL对ELT·数据湖与沼泽·SBA三层·机器学习3类·挖掘5技术·预测对规范</a><br>
+  · <a href="https://guang-917.github.io/cards/dt68.html">CDGA｜第14章 大数据和数据科学｜1/共3 · 后视镜vs前挡风·最大驱动力·表14-1一句对比·7步流程·6V全表·4个依赖</a><br>
+  · <a href="https://guang-917.github.io/cards/dig_dt70_1.html">延伸：数据科学项目为什么最后会变成数据仓库项目？治理五问怎么答？</a></div>
+
+  <div class="src"><b>来源说明</b><br>
+  1. 概念、原句、页码：转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 14 章底稿（p394–p410，2026-11-10 已逐页回核教材原页）。<br>
+  2. 自测题：来自题库 cdga_pool.json 原题（c14-005、c14-007），题干、选项、答案未做改动。<br>
+  3. 本章卡未涉及行业动态；考点内容仅依据教材底稿。</div>
+  <div class="tag">#CDGA #第14章 #大数据 #数据科学 #收官</div>
+</div>
+</body>
+</html>
