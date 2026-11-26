@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDGA｜第14章 大数据和数据科学｜2/共3</title>
+<style>
+  body { background:#12141a; color:#d6d9e0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.75; margin:0; padding:24px 16px 60px; }
+  .wrap { max-width:680px; margin:0 auto; }
+  .meta { color:#8a93a6; font-size:13px; margin-bottom:10px; }
+  h1 { color:#f2f4f8; font-size:21px; line-height:1.5; margin:0 0 8px; }
+  .lead { color:#a8b3c7; font-size:15px; background:#1b1f2a; border-left:3px solid #4c8dff; padding:12px 14px; border-radius:6px; margin:14px 0 22px; }
+  .sec { background:#171b24; border:1px solid #262c3a; border-radius:8px; padding:16px 18px; margin-bottom:16px; font-size:15px; }
+  .sec h2 { color:#4c8dff; font-size:16px; margin:0 0 8px; }
+  .quote { color:#c9d4e8; background:#1e2534; border-left:3px solid #7a5cff; padding:8px 12px; border-radius:4px; margin:8px 0; font-size:14px; }
+  .warn { color:#e8b56a; font-size:14px; }
+  table { width:100%; border-collapse:collapse; margin:8px 0; font-size:14px; }
+  th,td { border:1px solid #2b3244; padding:6px 8px; text-align:left; }
+  th { color:#4c8dff; background:#1b2230; }
+  .quiz { background:#10141d; border:1px dashed #3a4358; border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:15px; }
+  .quiz b { color:#63d68f; }
+  .mnemo { background:#1c2433; border:1px solid #33405c; border-radius:8px; padding:14px 16px; font-size:15px; white-space:pre-line; }
+  .rel { font-size:14px; }
+  .rel a, .src a { color:#6ea8ff; text-decoration:none; word-break:break-all; }
+  .src { color:#8a93a6; font-size:13px; border-top:1px solid #262c3a; padding-top:14px; margin-top:20px; }
+  .tag { color:#5b6478; font-size:12px; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026年11月27日 · 第14章 大数据和数据科学（p382–p410 · 考试 4 分） · 本张 p387–p393 · 2/共3</div>
+  <h1>CDGA｜第14章 大数据和数据科学｜2/共3 · ETL对ELT·数据湖与沼泽·SBA三层·机器学习3类·挖掘5技术·预测对规范</h1>
+  <div class="lead">昨天 1/共3 讲完「大数据是什么」，今天讲它怎么干活：进料顺序跟老仓库正好相反、超大冷库怎么防烂库、中央厨房的三个区、机器学徒的三种学法。学完当场做 2 道真题。</div>
+
+  <div class="sec"><h2>开篇比喻</h2>
+  把大数据环境想成一个「超大中央厨房」：你家老厨房（传统数据仓库）是菜买回来先洗好切好，再入库下锅；中央厨房是菜先整车倒进大冷库（数据湖），要用哪道再拿出来洗切。这一张解决三件事：数据先进来还是先加工？大冷库怎么管才不烂？机器是怎么「学」的？</div>
+
+  <div class="sec"><h2>考点1 ETL 对 ELT</h2>
+  ①人话——老仓库先洗菜再进库，叫 ETL（抽取、转换、加载）；大数据中央厨房先整车进冷库再洗切，叫 ELT（抽取、加载、转换），顺序整个反了过来，因为有些大数据场景传统的预处理根本来不及做。
+  <div class="quote">原话 p387：「传统数据仓库中，数据按照 ETL（抽取、转换、加载）的顺序在进仓的时候处理；而在大数据环境中，数据则是按照 ELT（抽取、加载、转换）的顺序，先采集、加载入湖/仓，再进行转换处理，数据采集和加载是在数据集成之前完成的」。</div>
+  <span class="warn">③坑——把两种顺序对调就是错项；题目爱拿 ODS、SOA、CDC 这些缩写当烟雾弹，认准「ELT＝抽取、加载、转换」。</span></div>
+
+  <div class="sec"><h2>考点2 数据湖与数据沼泽</h2>
+  ①人话——数据湖就是那个超大冷库，生的熟的、袋装的散装的（不同类型和结构）全都能往里放；但冷库不管理就是灾难现场：东西乱堆、标签全丢、过期没人清，最后谁都不敢动。
+  <div class="quote">原话 p387：「数据湖是一种可以采集、存储、评估和分析海量不同类型和结构数据的环境，可供多重场景使用。」</div>
+  p388 五种用途：给数据科学家当挖掘分析环境／原始数据集中存储（仅按需最小转换）／数据仓库历史明细数据的备用存储／信息记录的在线存档／自动识别并采集流式数据。
+  <div class="quote">p388 风险原话：「如果管理不善，很快就会变成一个数据沼泽——杂乱、不干净、不一致。」</div>
+  对策：采集时做好元数据管理，用唯一键、语义模型、数据模型表达关联。
+  <span class="warn">③坑——5 种用途少一项、把「备用存储」偷换成「主存储」都算错；问「怎么防沼泽」，正确项永远挂在元数据管理那一边，不是多买存储设备。</span></div>
+
+  <div class="sec"><h2>考点3 SBA 三层</h2>
+  ①人话——中央厨房三个区：大冷库存全部历史食材（批量处理层 Batch Layer，由数据湖充当）、明档现炒只管刚送到的活鱼活虾（快速处理层 Speed Layer，仅含实时流式数据）、传菜窗口把两边打通（服务层 Serving Layer，提供接口连接两者）。
+  <div class="quote">原话 p389：「这种架构可以规避时间同步问题，因为同时创建当前状态和历史层。」</div>
+  <span class="warn">③坑——干扰项爱塞书里没有的层：「源数据层」「流处理层」都是编的；书上是批量、快速、服务三层，一层都不能多。</span></div>
+
+  <div class="sec"><h2>考点4 机器学习 3 类</h2>
+  ①人话——厨子学做菜三条路：师傅示范照着学（监督学习，如垃圾邮件分类）、没人教自己逛后厨摸规律（无监督学习，数据挖掘就是它）、靠输赢挨打长记性（强化学习，如在国际象棋中击败对手）。
+  <div class="quote">原话 p390 三种类型：监督学习（基于现有规则）、无监督学习（发现隐藏规律）、强化学习（实现目标达成）。</div>
+  伦理提醒 p390：「深度学习神经网络能够有效工作并实现自我学习，但是人们并不清楚它们是如何学习的」——算法越来越像「黑匣子」。
+  <span class="warn">③坑——拿「深度学习」「联邦学习」「识别学习」冒充三分类之一，直接排除；机器学习可视作无监督学习＋监督学习的结合，第三个分支是强化学习。</span></div>
+
+  <div class="sec"><h2>考点5 数据挖掘 5 技术</h2>
+  ①人话——盘点家底（数据剖析 Profiling）、精简菜单只留主料（数据降维 Data Reduction）、发现「买啤酒的常顺手买尿布」（关联分析 Association：频繁项集、规则发现、推荐系统）、把客人分桌（聚类分析 Clustering：客户细分）、把厚菜单压成一页示意图（自组织映射 Self-organizing Maps，又称科霍宁映射／拓扑有序映射，把高维映射到低维）。②以上 5 种为 p391 原句所列。
+  <span class="warn">③坑——最爱塞一个「向上卷积（Roll-up）」混进来，那是数仓 OLAP 的操作，不在 5 技术里，见了就选它「不属于」。</span></div>
+
+  <div class="sec"><h2>考点6 预测性 vs 规范性分析</h2>
+  ①人话——预测性分析是「明晚大概来 200 桌」；规范性分析更进一步：「来 200 桌，你该备 30 斤鱼、多开 2 个灶，这样才能最优」——不光预测，还告诉你怎么做。
+  <div class="quote">原话 p391：预测性分析「是监督学习的一种」，结合预测算法建模，用概率估算预测未来结果；p392：规范性分析「比预测性分析更进一步，它不仅仅是根据已发生的动作预测结果，还会告诉用户怎么做才能得到最优结果」。</div>
+  <span class="warn">③坑——把「监督学习的一种」这顶帽子扣给规范性分析就是错项；说预测性分析「会告诉用户怎么做」同样是偷换。</span></div>
+
+  <div class="sec"><h2>你以为…其实…</h2>
+  你以为数据越干净越该先处理再入库，其实大数据恰恰反过来——先「生」着进湖，用的时候再洗（ELT），这正是传统 DW 与大数据处理之间最大的区别；你以为「无监督学习」是新潮玩意，其实教材说数据科学「历久弥新，只是过去被称为应用统计学」，无监督学习就是老熟人数据挖掘。</div>
+
+  <div class="sec"><h2>易混对比表</h2>
+  <table>
+    <tr><th>概念</th><th>一句话分清</th></tr>
+    <tr><td>ETL</td><td>抽取→转换→加载，老仓库进仓时处理</td></tr>
+    <tr><td>ELT</td><td>抽取→加载→转换，大数据先入湖/仓再转换</td></tr>
+    <tr><td>数据湖</td><td>多类型多结构海量数据环境，供多重场景用</td></tr>
+    <tr><td>预测性 vs 规范性</td><td>预测性＝监督学习的一种、概率估算未来；规范性＝还告诉你怎么做最优</td></tr>
+  </table></div>
+
+  <div class="sec"><h2>考试怎么考</h2>
+  单选概念辨析为主。正确项关键词：抽取加载转换、数据沼泽、批量/快速/服务层、监督无监督强化、剖析降维关联聚类自组织。干扰项长什么样：ELT 顺序被改成「抽取转换加载」、SBA 里塞「源数据层」「流处理层」、机器学习三分类里混进「深度学习」「联邦学习」、挖掘技术里混进「向上卷积 Roll-up」。数字要抠死：5 种用途、5 种技术、3 种学习类型、3 个层。</div>
+
+  <div class="sec"><h2>今日行业动态</h2>
+  ① 国家数据局 2026-11-26 就《关于完善数据规则 赋能人工智能创新发展的若干意见》（公开征求意见稿）向社会公开征求意见（2026-11-26 至 12-06），提出推动数据产权制度在人工智能用数领域运用、支持和鼓励为数据付费、建立数据质量评价机制、加强人工智能用数安全保障等举措。<br>
+  来源：新华社/新华网 2026-11-26（<a href="https://www.news.cn/tech/20261126/134151d541c445c0987c3f8fd3b012c8/c.html">news.cn</a>）；上海证券报·中国证券网 2026-11-26（<a href="https://www.cnstock.com/commonDetail/834143">cnstock.com</a>）。<br><br>
+  ② 国家数据局综合司印发《关于组织开展第二批可信数据空间创新发展试点工作的通知》（国数综资源〔2026〕53 号，2026-11-13 印发、官网 2026-11-18 公布），面向企业、行业、城市三类可信数据空间开展试点，以可信数据空间与人工智能双向赋能为突破口，线上申报截止 2026-12-04。<br>
+  来源：国家数据局官网 2026-11-18（<a href="https://www.nda.gov.cn/sjj/zwgk/tzgg/1118/20261118203149832876736_pc.html">nda.gov.cn</a>）；人民网 2026-11-26 报道（乌海市发改委网站转载 <a href="https://fgw.wuhai.gov.cn/xywh/ttxw/7884204.jhtml">fgw.wuhai.gov.cn</a>）。</div>
+
+  <div class="quiz"><h2 style="color:#63d68f;font-size:16px;margin:0 0 8px;">本卡真题自测</h2>
+  <b>第 1 题（题号 c14-009）</b>：传统数据仓库（DW）与大数据处理之间最大的区别在于：<br>
+  A. ODS　B. ELT　C. SOA　D. CDC<br>
+  答案：B　解析：DMBOK2 第 14 章 14.1.3-4（对照本卡考点 1：大数据用 ELT，先加载再转换，这正是本卡讲的「先装后转」）</div>
+
+  <div class="quiz"><b>第 2 题（题号 c14-001）</b>：以下选项中不属于数据挖掘经常使用的技术是：<br>
+  A. 剖析（Profiling）　B. 向上卷积（Roll-up）　C. 数据缩减（Data reduction）　D. 自组织映射（Self-organizing maps）<br>
+  答案：B　解析：DMBOK2 第 14 章 14.1.3-10（本卡考点 5：5 种技术是剖析、降维、关联、聚类、自组织映射；Roll-up 是 OLAP 操作，不在其中）</div>
+
+  <div class="mnemo">【一句口诀】老仓 ETL 先转再装，大湖 ELT 先装再转；湖不管就成沼泽；带学、自学、练输赢，三类学法记心中。
+覆盖自检：本张覆盖考点——ETL 对 ELT · 数据湖与数据沼泽 · SBA 三层 · 机器学习 3 类 · 数据挖掘 5 技术 · 预测性对规范性（共 6 个）
+本章剩余考点——9 个活动 · 战略评估 5 项 · 选源 5 标准 · 隐私重组风险 · MPP/MapReduce · 过拟合与验证 · 就绪评估 4 因素 · 治理 5 问 · 度量 3 类（留给 3/共3）</div>
+
+  <div class="sec rel"><h2>相关延伸</h2>
+  · <a href="https://guang-917.github.io/cards/dt68.html">CDGA｜第14章 大数据和数据科学｜1/共3 · 后视镜vs前挡风·最大驱动力·表14-1一句对比·7步流程·6V全表·4个依赖</a><br>
+  · <a href="https://guang-917.github.io/cards/dig_dt69_1.html">延伸：数据湖和数据仓库到底差在哪？为什么大数据要先装湖再加工？</a></div>
+
+  <div class="src"><b>来源说明</b><br>
+  1. 概念、原句、页码：转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 14 章底稿（p387–p393，2026-11-10 已逐页回核教材原页）。<br>
+  2. 自测题：来自题库 cdga_pool.json 原题（c14-009、c14-001），题干、选项、答案未做改动。<br>
+  3. 行业动态来源见「今日行业动态」一节所列链接（新华社/新华网、上海证券报、国家数据局官网、人民网）。</div>
+  <div class="tag">#CDGA #第14章 #大数据 #数据科学 #数据湖</div>
+</div>
+</body>
+</html>
