@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>延伸｜数据科学项目为什么最后会变成数据仓库项目</title>
+<style>
+  body { background:#12141a; color:#d6d9e0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.8; margin:0; padding:24px 16px 60px; }
+  .wrap { max-width:680px; margin:0 auto; }
+  .meta { color:#8a93a6; font-size:13px; margin-bottom:10px; }
+  h1 { color:#f2f4f8; font-size:20px; line-height:1.5; margin:0 0 14px; }
+  p { font-size:15px; margin:10px 0; }
+  .quote { color:#c9d4e8; background:#1e2534; border-left:3px solid #7a5cff; padding:8px 12px; border-radius:4px; margin:10px 0; font-size:14px; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:14px; }
+  th,td { border:1px solid #2b3244; padding:6px 8px; text-align:left; }
+  th { color:#4c8dff; background:#1b2230; }
+  .src { color:#8a93a6; font-size:13px; border-top:1px solid #262c3a; padding-top:14px; margin-top:20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026年11月27日 · 由卡 dt70「第14章 大数据和数据科学 3/共3（本章收官）」延伸 · 对应教材 p386、p404–p409</div>
+  <h1>数据科学项目为什么最后会变成数据仓库项目？</h1>
+
+  <p>书上有一句很容易被忽略的原话：数据科学流程的第 7 步「部署和监控」里写着——<b>「数据科学项目通常演变为数据仓库项目」</b>（p386）。为什么？打个比方：中央厨房刚开业时靠明星大厨现炒（探索性分析、预测模型），生意好了，客人每天都要那几道菜，你就得把它变成标准化流程：固定菜谱、固定进货渠道、固定质检——这就是数据仓库式的日常运营。</p>
+
+  <p>落到教材语言上：模型要长期跑，就得引入更严格的 ETL、数据质量管理、主数据管理等流程（p386 要点）。所以别觉得学完第 14 章就「跳出」前面几章了——它恰恰是把数据仓库、数据质量、元数据管理那一套又请了回来。</p>
+
+  <p>那么让这条演变走得稳，治理要解决 5 个问题（p406 原句）：<b>数据寻源、数据共享、元数据、数据增强、数据访问发布</b>。用开店的话说：货从哪进（寻源）、能不能分给别家店用（共享）、每箱货的标签齐不齐（元数据）、能不能加工增值（增强）、谁能买谁不能买（访问发布）。</p>
+
+  <p>日常考核看三本账（p408–p409）：<b>技术使用指标</b>（数据热点、数据增长）、<b>加载和扫描指标</b>、<b>学习和故事场景</b>（已开发模型的数量与准确性、从识别机会中实现的收入、规避风险减少的成本）。注意第三类——考试喜欢考它：度量不只看机器跑得快不快，还要看「这模型到底给业务挣了多少钱、省了多少事」。</p>
+
+  <table>
+    <tr><th>治理 5 问</th><th>开店的比方</th></tr>
+    <tr><td>数据寻源</td><td>货从哪家进的？靠不靠谱？</td></tr>
+    <tr><td>数据共享</td><td>能不能分给分店/合作伙伴用？</td></tr>
+    <tr><td>元数据</td><td>每箱货的标签和入库单齐不齐？</td></tr>
+    <tr><td>数据增强</td><td>半成品能不能加工成高价值菜？</td></tr>
+    <tr><td>数据访问发布</td><td>谁能点这道菜、谁不能？</td></tr>
+  </table>
+
+  <p>考场提醒：这一段最常考三个点——①「数据科学项目通常演变为数据仓库项目」这句话本身（判断/单选直接考）；②治理 5 问里挑「不属于」（干扰项爱放「数据定价」「数据删除」这种书上没有的）；③度量 3 类的名称，尤其「学习和故事场景」这个别致的名字。</p>
+
+  <div class="src">来源说明：本文概念与原句均转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 14 章底稿 p386、p404–p409（2026-11-10 已逐页回核）；页码为书内印刷页码。</div>
+</div>
+</body>
+</html>
