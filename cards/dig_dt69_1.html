@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>延伸｜数据湖 vs 数据仓库：为什么大数据要先装湖再加工</title>
+<style>
+  body { background:#12141a; color:#d6d9e0; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.8; margin:0; padding:24px 16px 60px; }
+  .wrap { max-width:680px; margin:0 auto; }
+  .meta { color:#8a93a6; font-size:13px; margin-bottom:10px; }
+  h1 { color:#f2f4f8; font-size:20px; line-height:1.5; margin:0 0 14px; }
+  p { font-size:15px; margin:10px 0; }
+  .quote { color:#c9d4e8; background:#1e2534; border-left:3px solid #7a5cff; padding:8px 12px; border-radius:4px; margin:10px 0; font-size:14px; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:14px; }
+  th,td { border:1px solid #2b3244; padding:6px 8px; text-align:left; }
+  th { color:#4c8dff; background:#1b2230; }
+  .src { color:#8a93a6; font-size:13px; border-top:1px solid #262c3a; padding-top:14px; margin-top:20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta">2026年11月27日 · 由卡 dt69「第14章 大数据和数据科学 2/共3」延伸 · 对应教材 p387–p388</div>
+  <h1>数据湖 vs 数据仓库：为什么大数据要先装湖再加工？</h1>
+
+  <p>先说结论：这不是「谁更高级」的问题，而是干活顺序整个反了。老数据仓库像你家小厨房——菜买回来先洗好切好（转换），再下锅入库（加载），所以它叫 <b>ETL</b>：抽取、转换、加载。大数据环境像超大中央厨房——菜先整车倒进大冷库（数据湖）存着，要用哪道菜再拿出来洗切，所以它叫 <b>ELT</b>：抽取、加载、转换，「先采集、加载入湖/仓，再进行转换处理」。</p>
+
+  <p>为什么要反过来？教材给的答案是：某些大数据场景里，传统意义上的数据预处理根本没法提前做——比如构建预测模型时，要按调试情况临时汇聚特殊数据集，你事先根本不知道该「洗」什么。所以只能先把原料全部存起来，等明确了分析目的再加工。</p>
+
+  <p>两者分工也不一样。数据湖的定义是「一种可以采集、存储、评估和分析海量不同类型和结构数据的环境，可供多重场景使用」，什么格式都收；数据仓库里放的则是进仓前已经按 ETL 处理好的数据，讲究整齐划一。教材 p388 还列了数据湖的 5 种用途：给数据科学家当挖掘分析环境、原始数据集中存储（仅按需最小转换）、当数据仓库历史明细数据的备用存储、信息记录的在线存档、自动识别并采集流式数据。</p>
+
+  <p>但大冷库有个致命毛病：没人管就烂掉。原话是「如果管理不善，很快就会变成一个数据沼泽——杂乱、不干净、不一致」。沼泽的可怕之处不是存不了数据，而是谁都不敢用——标签丢了、来源说不清、数据之间对不上号。对策也很明确：<b>采集时就做好元数据管理</b>，用唯一键、语义模型、数据模型把关联表达清楚。你可以把元数据想成冷库里每箱食材的标签和入库单——标签齐全，五年后还能找到那箱鱼；标签一丢，整库都是废品。</p>
+
+  <table>
+    <tr><th></th><th>数据仓库</th><th>数据湖</th></tr>
+    <tr><td>进料顺序</td><td>ETL：先转换再加载</td><td>ELT：先加载再转换</td></tr>
+    <tr><td>装什么</td><td>处理整齐的结构化数据</td><td>任意类型和结构，海量</td></tr>
+    <tr><td>风险</td><td>建模成本高、灵活性低</td><td>管理不善变「数据沼泽」</td></tr>
+    <tr><td>保命招</td><td>规范建模</td><td>采集时做好元数据管理</td></tr>
+  </table>
+
+  <p>考场提醒：这一节最爱考三个点——①ETL 与 ELT 的顺序（选项把「加载」和「转换」对调就是错项）；②数据湖 5 种用途里挑「不属于」（干扰项常写成「信息记录的收集」这类模糊说法）；③「数据沼泽」出现时，正确答案几乎都落在「元数据管理」上。</p>
+
+  <div class="src">来源说明：本文概念与原句均转录自《DAMA 数据管理知识体系指南（原书第 2 版 修订版）》第 14 章底稿 p387–p388（2026-11-10 已逐页回核）；页码为书内印刷页码。</div>
+</div>
+</body>
+</html>
