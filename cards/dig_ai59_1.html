@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖：长对话到底怎么“失忆”的，摘要会不会丢关键信息？</title>
+<style>
+body{margin:0 auto;max-width:680px;background:#0f1115;color:#e8eaed;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.8;padding:24px 16px 50px}
+h1{font-size:20px}h2{font-size:17px;border-left:4px solid #ff5a5f;padding-left:10px;margin:24px 0 8px}
+p,li{font-size:15px;color:#e8eaed}
+.meta{color:#9aa3b2;font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:#171a21;border-left:4px solid #4f8cff;border-radius:0 10px 10px 0;color:#c9d1dc}
+</style>
+</head>
+<body>
+<div class="meta">下钻解答 · 配套 M3-7 上下文管理 · 第二轮 1/9</div>
+<h1>长对话到底怎么“失忆”的？摘要会不会丢关键信息？</h1>
+
+<h2>失忆的两种机制</h2>
+<p>第一种是<strong>挤出</strong>：窗口有上限，超长对话里最早的内容被整体截掉，AI真的“看不见”你第一句话说什么。第二种是<strong>稀释</strong>：内容还在窗口里，但中间夹了几十条无关对话，AI的注意力（M2-4）分给了大量杂讯，关键要求的影响被冲淡——表现为“记得大概，忘了细节”，比如忘了“只输出JSON”这种硬格式。</p>
+
+<h2>摘要一定会丢信息吗？</h2>
+<p>会丢，所以要分层。判别标准只有一条：<strong>这条信息后面还会不会用到？</strong></p>
+<ul>
+<li>会用的（结论、约定、格式、待办）→ 必须进摘要或外挂文件，逐条列出，宁多勿少；</li>
+<li>过程性的（中间试错的草稿、已推翻的方案）→ 大胆扔，留在桌上只会干扰AI。</li>
+</ul>
+<p>实操上让AI自己分拣最省力：“列出本对话中所有仍有效的约束和结论，其余视为过程草稿。”它的输出你扫一眼补漏即可，比人工整理快得多。</p>
+
+<h2>一个容易踩的坑</h2>
+<blockquote>别把“摘要”和“原始要求”混为一谈：硬性格式要求（如输出模板、字数、禁用词）要原文照抄进新对话开头，不要让AI转述——转述一次，走样一分。软背景（项目来龙去脉）才适合压缩成摘要。</blockquote>
+
+<h2>多久收割一次？</h2>
+<p>经验值：普通任务聊到10~15轮，或发现AI开始重复问你已答过的问题，就该做一次“总结-换新对话”。日常建议每周固定清理一次，像整理办公桌一样形成习惯。</p>
+<p class="meta">本期配套卡片：AI知识｜M3-7 上下文管理｜1/9</p>
+</body>
+</html>
