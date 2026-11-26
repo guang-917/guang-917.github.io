@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M3-7 上下文管理：AI的“办公桌”有限，东西怎么摆是门手艺｜1/9</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月27日 · AI 知识 · 第二轮 1/9</div>
+<h1>AI知识｜M3-7 上下文管理：AI的“办公桌”有限，东西怎么摆是门手艺｜1/9</h1>
+<div class="lead">AI不是记性差，而是桌小。跟它聊久了，最早的东西会从桌上被挤下去。上下文管理就是教你：什么东西放桌上、什么东西写进备忘录、什么干脆扔掉。</div>
+
+<h2>一句话结论</h2>
+<p>上下文管理解决的问题是：在AI“记性有限”（M2-3讲过的上下文窗口）的前提下，怎么让它在长对话里始终记住该记的、忘掉该忘的，还能少花点钱。</p>
+
+<h2>是什么：AI的桌面整理术</h2>
+<p>AI每次回答，只能“看见”你喂给它的那一屏内容（系统提示+历史对话+资料）。桌就这么大，你往桌上堆得越多，三件事越糟：一是最开头的关键要求可能被挤出去；二是桌上的杂讯会干扰它（比如你前面随口说的错信息）；三是桌上每件东西都要按字数收“桌租”——多数API按输入字数计费，垃圾越多账单越厚。</p>
+<p>上下文管理就是三种手法：</p>
+<ul>
+<li><strong>精简</strong>：把长历史压缩成几行摘要再喂回去，相当于把十页聊天记录抄成一张便利贴。</li>
+<li><strong>外挂</strong>：重要约定不靠对话记，写到文件里（如 CLAUDE.md、项目说明），每次开工先读一遍——像把规矩贴在墙上，而不是指望同事记性。</li>
+<li><strong>隔离</strong>：不同任务开不同对话，别在一个窗口里又问菜谱又写代码，好比厨房案板切完生肉先洗干净再切水果。</li>
+</ul>
+
+<h2>为什么重要</h2>
+<p>两个实打实的后果。第一，长对话“失忆”：很多人发现AI聊到几十轮后忘了开头的要求，这不是它懒，是开头内容已经滑出窗口或被中间内容稀释了注意力。第二，成本：上下文每轮全量重发，一份10万字的对话历史每轮都付一遍钱。管理好上下文，回答质量和账单会同时改善。</p>
+
+<h2>怎么用（3步）</h2>
+<ol>
+<li><strong>开工先立规矩</strong>：新任务第一句话就把硬要求说完（角色、格式、禁区），别指望“前面说过”。例：“你是编辑，只改语病，不重写段落，输出用批注格式。”</li>
+<li><strong>阶段性收割</strong>：每完成一段，让AI自己总结：“用5条要点总结我们目前的结论和待办。”下个新对话里贴这份摘要当开场——像交班时写的交接单。</li>
+<li><strong>大材料走附件、小结论走对话</strong>：几十页文档让AI读文件并只留下结论，别把全文反复贴进对话；闲聊和正事分窗口。</li>
+</ol>
+
+<blockquote>生活比方：AI像一个每天下班桌子就被清空的新同事。你留便利贴（摘要）、贴墙上的规矩（说明文件）、按活分工位（分对话），它就能一直靠谱；全靠嘴嘱咐，第三天它准忘。</blockquote>
+
+<h2>今天就能用</h2>
+<p>打开你现在最长的一个AI对话，发这句：“请把本对话的固定要求、已确定结论、待办清单各用不超过3条总结出来。”然后把这段总结复制，开一个全新对话粘贴进去继续干活。对比一下：新对话的回答是不是更稳、更快也更便宜？这就是一次完整的上下文管理操作，以后每周做一次即可。</p>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>国家数据局发布数据规则征求意见稿</strong>：11月26日，国家数据局发布《关于完善数据规则 赋能人工智能创新发展的若干意见》公开征求意见稿，提出三大方面十二项举措，明确数据可有序、依法合规用于AI训练和推理，并鼓励“为数据付费”。来源：新华社，2026-11-26，<a href="https://news.qq.com/rain/a/20261126A0HHFN00">转载链接</a>。对普通人：你在网上发的内容将来怎么被AI用、能不能收钱，规则正在成形。</li>
+<li><strong>官方披露AI核心产业规模口径</strong>：工信部科技司副司长姚佳11月24日在市场监管总局发布会透露，2026年上半年我国AI核心产业规模预计超7500亿元，核心企业超6600家，智算规模超2592EFLOPS。来源：中证网，2026-11-24，<a href="https://www.cs.com.cn/ssgs/cj2020/2026/11/24/detail_2026112410054415.html">原文链接</a>。对从业者：这是谈融资、写方案可直接引用的官方数字。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>第二轮 2/9：M3-9 结构化模板——把“说清楚”变成“填空题”，让AI输出稳定不跑偏。</p>
+
+<div class="rel">相关延伸：上下文窗口的大小与“失忆”原理见 M2-3《上下文窗口》；把外挂文件用起来就接近 M4-6《从零搭个人知识库》的思路——只是知识库检索得更聪明。</div>
+<div class="note">来源说明：政策动态部分来自新华社（2026-11-26）与中证网（2026-11-24），链接见正文；上下文管理与计费方式为通用的主流大模型机制描述，具体窗口大小与定价以各厂商官方文档为准。本期进度：第二轮 1/9。</div>
+</body>
+</html>
