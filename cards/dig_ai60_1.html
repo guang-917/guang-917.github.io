@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深挖｜敏感文件已经传进知识库了，怎么补救？</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:20px;margin:8px 0 4px}
+h2{font-size:17px;margin:24px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ol{padding-left:22px}
+li{margin:8px 0;font-size:15px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+.tag{color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<p class="tag">深挖 · 来自 AI知识｜M4-8 权限与隐私｜8/32</p>
+<h1>敏感文件已经传进知识库了，现在补救来得及吗？</h1>
+<p>来得及，但要按顺序做，因为很多人第一步就做错——他们只删原文件。记住机制：<strong>RAG 回答靠的是切好的“资料卡”和向量索引，不是原文件本身</strong>。原文件删了，索引还在，AI 照样能翻出内容引用。</p>
+<h2>补救四步</h2>
+<ol>
+<li><strong>停止扩散</strong>：立刻暂停该知识库对外的提问入口（尤其多人共用的助手/群机器人），先止血再清理。如果它接了外部在线服务，确认该服务有没有“用于改进模型”的开关，能关就关。</li>
+<li><strong>清干净索引</strong>：删除原文件后，必须清掉它对应的切块和向量——多数知识库工具有“删除文档/重建索引”功能，重建一遍最稳。自建向量库（如本地方案）要按来源 ID 删对应 chunk。删完后用一句“最敏感的问题”去问 AI 验证：答不出，才算真删了。</li>
+<li><strong>降敏回库</strong>：需要留的资料，把身份证号、手机号、金额等字段替换成【张三】【138****】占位符后再重新入库——检索照样能按人名、事由命中，但泄了也伤不到人。</li>
+<li><strong>查访问记录</strong>：多人库里翻一遍问答历史，看这段时间谁问过、AI 引用过哪些段落，必要时通知当事人（这是对他人个人信息负责，也是《个人信息保护法》要求的处置思路）。</li>
+</ol>
+<blockquote>一句话收尾：知识库是保险柜不是云盘——清理也按保险柜的逻辑来：先锁门（停服务），再清柜（删索引），最后重摆东西（降敏回库）。</blockquote>
+</body>
+</html>
