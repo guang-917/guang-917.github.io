@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI知识｜M4-8 权限与隐私：搭知识库先装“门禁”，别让AI变成泄密广播站｜8/32</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaed;--ink2:#9aa3b2;--line:#262b34;--accent:#ff5a5f;--accent2:#4f8cff}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:20px 16px 60px}
+h1{font-size:22px;margin:8px 0 4px}
+.meta{color:var(--ink2);font-size:13px;margin-bottom:18px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:15px}
+h2{font-size:18px;margin:26px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+p{margin:10px 0;font-size:15px}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:7px 0;font-size:15px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card)}
+.rel{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink2);font-size:14px}
+.note{margin-top:20px;color:var(--ink2);font-size:13px}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="meta">11月28日 · AI 知识</div>
+<h1>AI知识｜M4-8 权限与隐私：搭知识库先装“门禁”，别让AI变成泄密广播站｜8/32</h1>
+<div class="lead">模块4收官篇：知识库越好用，泄密风险越集中。这期讲三道门禁——文件入库前怎么分拣、谁能访问哪些资料、工具怎么选留退路。</div>
+
+<h2>一句话结论</h2>
+<p>权限与隐私解决的问题是：<strong>让AI只读它该读的、只答给该看的人</strong>，别让一个检索功能把全公司或全家的秘密一锅端。</p>
+
+<h2>是什么，为什么重要</h2>
+<p>知识库检索默认是“万能钥匙视角”：只要文件进了库，任何提问都可能把它翻出来。好比公司档案室平时分部门上锁，你雇了个图书管理员却没交代规矩，他把所有柜子都配了钥匙——谁问都给翻。</p>
+<p>更麻烦的是，<strong>事后删原文件往往没用</strong>：切好的“资料卡”（M4-3）和向量索引（M4-4）可能还留在库里。你删了《客户名单.xlsx》，但那张写着客户手机号的资料卡还躺在向量柜里，AI照样能翻出来引用。所以门禁要在<strong>入库之前</strong>装，不是出事之后拆。</p>
+
+<h2>怎么用：三步装门禁</h2>
+<ol>
+<li><strong>入库前分拣</strong>：身份证号、银行卡、密码、客户联系方式这类内容，删掉或打码再入库。判断标准一句话——“这文件贴到大门口我慌不慌”，慌就别喂。</li>
+<li><strong>设门禁</strong>：多人共用的知识库必须做<strong>检索级过滤</strong>——每个人提问时只在他有权看的范围内搜，而不是先搜出来再拦（拦不住的会被模型写进答案）。个人单机库可简化为：不同密级的资料分不同库，敏感库平时不连。</li>
+<li><strong>留退路</strong>：优先选本地部署、或条款明确“你的数据不用于训练”的服务；每季度清点一次库里有什么、谁在用、有没有过期的索引。</li>
+</ol>
+
+<h2>生活比方</h2>
+<blockquote>知识库是<strong>保险柜</strong>，不是共享云盘。云盘求“方便”，保险柜求“只有对的人开得了”。装门禁就是故意牺牲一点方便换安全——这笔账怎么算都划算。</blockquote>
+
+<h2>法律红线（可核实的硬信息）</h2>
+<table>
+<tr><th>要点</th><th>内容</th><th>出处</th></tr>
+<tr><td>施行时间</td><td>《中华人民共和国个人信息保护法》自2021年11月1日起施行</td><td>全国人大常委会公布的法律文本</td></tr>
+<tr><td>敏感个人信息</td><td>第二十八条：一旦泄露或非法使用容易导致人格尊严受侵害或人身财产安全受危害的个人信息，包括生物识别、宗教信仰、特定身份、医疗健康、金融账户、行踪轨迹等，以及不满十四周岁未成年人的个人信息</td><td>《个人信息保护法》第二十八条</td></tr>
+<tr><td>处理条件</td><td>只有在具有特定目的和充分必要性，并采取严格保护措施的情形下，方可处理敏感个人信息，且应取得个人的单独同意</td><td>《个人信息保护法》第二十八、二十九条</td></tr>
+</table>
+<p>落到你自己身上：把别人的个人信息喂给在线AI服务，本身就是一次“处理”——你既没告知对方、也没取得单独同意，可能已经踩线。</p>
+
+<h2>今天就能用</h2>
+<p>现在花5分钟，给正在用的知识库做一次“贴大门口测试”：</p>
+<ol>
+<li>打开库里全部文件清单，逐个自问“这份贴到公司大门口我慌不慌”；</li>
+<li>慌的文件：直接删除，或把敏感字段（身份证、手机号、金额）替换成【张三】【138****】这类占位符后重新入库；</li>
+<li>注意：只删原文件不够——把知识库的<strong>重建索引</strong>功能跑一遍，清掉残留的旧资料卡和向量，这是大多数人漏掉的一步。</li>
+</ol>
+
+<h2>政策/行业动态</h2>
+<ul>
+<li><strong>86款App因违法违规收集使用个人信息被通报</strong>（2026年11月24-25日报道）：在中央网信办、工信部、公安部联合发布的《关于开展2026年个人信息保护系列专项行动的公告》框架下，国家计算机病毒应急处理中心检测发现86款移动应用存在违法违规收集使用个人信息问题，其中含邮储信用卡、中信百信银行等金融类应用；上期通报的应用复测仍有27款存在问题、已被下架。对普通人意味着：App过度索权正在被点名整治，遇到可举报。来源：国家网络安全通报中心通报（据山西网信网转载，2026-11-25，http://www.casx.gov.cn/content/2026-11/25/content_13718530.htm）。</li>
+<li><strong>生成式AI备案再扩容</strong>（2026-11-20）：国家网信办公告，2026年9月至10月新增133款生成式AI服务完成备案、224款应用完成登记；截至10月31日累计1245款生成式AI服务完成备案、955款应用完成登记。对普通人意味着：挑AI工具时可查备案号，已备案服务受监管约束、出事有处追责。来源：中国网信网（2026-11-20，https://www.cac.gov.cn/2026-11/20/c_1796918603542950.htm）。</li>
+</ul>
+
+<h2>下期预告</h2>
+<p>模块4到此收官。下期开新模块：<strong>M5-1 Agent 是什么：不是更聪明的聊天，而是会动手干活的AI</strong>（9/32）。</p>
+
+<div class="rel">相关延伸：M4-3 讲了文件怎么切成资料卡——本期补上“哪些文件根本不该进库”；M4-4 讲了向量柜怎么存——本期讲“删文件要连柜子一起清”；M4-7 讲了什么问题别指望知识库——权限是它的安全版回答。</div>
+
+<div class="note">来源说明：《个人信息保护法》条文引自全国人大常委会公布的法律文本；政策动态分别来自中国网信网（2026-11-20）与国家网络安全通报中心通报（据山西网信网转载，2026-11-25），关键事实经两个独立来源交叉核对。本期为一般性知识介绍，不构成法律意见。</div>
+</body>
+</html>
